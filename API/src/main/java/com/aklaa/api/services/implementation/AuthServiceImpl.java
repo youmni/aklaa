@@ -4,20 +4,20 @@ import com.aklaa.api.dao.UserRepository;
 import com.aklaa.api.dtos.RegistrationDTO;
 import com.aklaa.api.mapper.UserMapper;
 import com.aklaa.api.model.User;
-import com.aklaa.api.services.contract.UserService;
+import com.aklaa.api.services.contract.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class AuthServiceImpl implements AuthService {
 
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
 
     @Autowired
-    public UserServiceImpl(UserMapper userMapper, PasswordEncoder passwordEncoder, UserRepository userRepository) {
+    public AuthServiceImpl(UserMapper userMapper, PasswordEncoder passwordEncoder, UserRepository userRepository) {
         this.userMapper = userMapper;
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
