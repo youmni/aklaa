@@ -2,6 +2,7 @@ package com.aklaa.api.services.implementation;
 
 import com.aklaa.api.dao.UserRepository;
 import com.aklaa.api.dtos.RegistrationDTO;
+import com.aklaa.api.dtos.UserDTO;
 import com.aklaa.api.mapper.UserMapper;
 import com.aklaa.api.model.User;
 import com.aklaa.api.services.contract.AuthService;
@@ -24,10 +25,10 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public User register(RegistrationDTO registrationDTO) {
+    public UserDTO register(RegistrationDTO registrationDTO) {
         User user = userMapper.toEntity(registrationDTO);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
-        return user;
+        return userMapper.toDTO(user);
     }
 }

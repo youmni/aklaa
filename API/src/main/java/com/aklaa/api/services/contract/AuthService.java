@@ -1,8 +1,8 @@
 package com.aklaa.api.services.contract;
 
 import com.aklaa.api.dtos.RegistrationDTO;
-import com.aklaa.api.model.User;
+import com.aklaa.api.dtos.UserDTO;
 
 public interface AuthService {
-    User register(RegistrationDTO registrationDTO);
+    UserDTO register(RegistrationDTO registrationDTO);
 }
