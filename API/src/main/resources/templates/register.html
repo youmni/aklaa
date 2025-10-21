@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome to Aklaa!</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 5px;
+            max-width: 600px;
+            margin: 40px auto;
+        }
+        h1 {
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+        p {
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: #ffffff !important;
+            text-decoration: none;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+        .footer {
+            font-size: 12px;
+            line-height: 1.4;
+            margin-top: 20px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Welcome to Aklaa!</h1>
+    <p>
+        Thank you for registering. Please activate your account by clicking the button below:
+    </p>
+    <a href="{{activationLink}}" class="button">Activate Account</a>
+    <p class="footer">
+        If you did not register, please ignore this email.
+    </p>
+</div>
+</body>
+</html>

@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 public class AuthServiceImpl implements AuthService {
 
@@ -26,9 +28,15 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public UserDTO register(RegistrationDTO registrationDTO) {
+        if (!registrationDTO.getPassword().equals(registrationDTO.getConfirmPassword())) {
+            throw new IllegalArgumentException("Passwords do not match");
+        }
+
         User user = userMapper.toEntity(registrationDTO);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setActivationToken(UUID.randomUUID().toString());
         userRepository.save(user);
+
         return userMapper.toDTO(user);
     }
 }

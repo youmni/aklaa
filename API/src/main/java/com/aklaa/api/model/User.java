@@ -33,6 +33,12 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    @Column(nullable = false)
+    private boolean enabled = false;
+
+    @Column(unique = true)
+    private String activationToken;
+
     @CreationTimestamp
     @Column(updatable = false)
     private LocalDateTime createdAt;
