@@ -1,6 +1,6 @@
-package com.aklaa.api.daos;
+package com.aklaa.api.dao;
 
-import com.aklaa.api.models.User;
+import com.aklaa.api.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

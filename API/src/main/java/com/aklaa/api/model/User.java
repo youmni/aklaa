@@ -1,4 +1,4 @@
-package com.aklaa.api.models;
+package com.aklaa.api.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

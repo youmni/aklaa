@@ -1,8 +1,8 @@
-package com.aklaa.api.mappers;
+package com.aklaa.api.mapper;
 
-import com.aklaa.api.dtos.RegistratieDTO;
+import com.aklaa.api.dtos.RegistrationDTO;
 import com.aklaa.api.dtos.UserDTO;
-import com.aklaa.api.models.User;
+import com.aklaa.api.model.User;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -16,12 +16,12 @@ public class UserMapper {
                 .build();
     }
 
-    public User toEntity(RegistratieDTO registratieDTO){
+    public User toEntity(RegistrationDTO registrationDTO){
         return User.builder()
-                .firstName(registratieDTO.getFirstName())
-                .lastName(registratieDTO.getLastName())
-                .email(registratieDTO.getEmail())
-                .password(registratieDTO.getPassword())
+                .firstName(registrationDTO.getFirstName())
+                .lastName(registrationDTO.getLastName())
+                .email(registrationDTO.getEmail())
+                .password(registrationDTO.getPassword())
                 .build();
     }
 }
