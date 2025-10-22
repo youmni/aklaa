@@ -6,10 +6,13 @@ import com.aklaa.api.dtos.UserDTO;
 import com.aklaa.api.mapper.UserMapper;
 import com.aklaa.api.model.User;
 import com.aklaa.api.services.contract.AuthService;
+import com.aklaa.api.services.contract.EmailService;
+import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.UUID;
 
 @Service
@@ -18,12 +21,14 @@ public class AuthServiceImpl implements AuthService {
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
+    private final EmailService emailService;
 
     @Autowired
-    public AuthServiceImpl(UserMapper userMapper, PasswordEncoder passwordEncoder, UserRepository userRepository) {
+    public AuthServiceImpl(UserMapper userMapper, PasswordEncoder passwordEncoder, UserRepository userRepository, EmailService emailService) {
         this.userMapper = userMapper;
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
+        this.emailService = emailService;
     }
 
     @Override
@@ -37,6 +42,11 @@ public class AuthServiceImpl implements AuthService {
         user.setActivationToken(UUID.randomUUID().toString());
         userRepository.save(user);
 
+        try {
+            emailService.sendActivationEmail(user, user.getActivationToken());
+        } catch (IOException | MessagingException e) {
+            e.printStackTrace();
+        }
         return userMapper.toDTO(user);
     }
 }

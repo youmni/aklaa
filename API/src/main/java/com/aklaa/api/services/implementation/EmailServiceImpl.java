@@ -6,11 +6,13 @@ import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
@@ -29,7 +31,11 @@ public class EmailServiceImpl implements EmailService {
     @Override
     public void sendActivationEmail(User user, String token) throws IOException, MessagingException {
         ClassPathResource resource = new ClassPathResource("templates/register.html");
-        String html = Files.readString(resource.getFile().toPath(), StandardCharsets.UTF_8);
+
+        String html;
+        try (InputStream inputStream = resource.getInputStream()) {
+            html = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
+        }
 
         String activationLink = frontendUrl + "/activate?token=" + token;
         html = html.replace("{{activationLink}}", activationLink);
