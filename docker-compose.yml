@@ -64,7 +64,7 @@ services:
     build:
       context: ./web
       args:
-        VITE_API_URL: ${VITE_API_URL}
+        VITE_BACKEND_URL: ${VITE_BACKEND_URL}
     container_name: aklaa-frontend
     ports:
       - "3000:80"
