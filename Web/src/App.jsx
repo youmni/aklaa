@@ -1,13 +1,17 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Register from "./pages/shared/Register";
+import AccountActivation from "./pages/shared/AccountActivation";
 import NotFound from "./pages/shared/NotFound";
 
 const App = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/register" element={<Register />} />
+        <Route path="/auth">
+          <Route path="register" element={<Register />} />
+          <Route path="activate" element={<AccountActivation />} />
+        </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>

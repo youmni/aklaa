@@ -37,7 +37,7 @@ public class EmailServiceImpl implements EmailService {
             html = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
         }
 
-        String activationLink = frontendUrl + "/activate?token=" + token;
+        String activationLink = frontendUrl + "/auth/activate?token=" + token;
         html = html.replace("{{activationLink}}", activationLink);
 
         MimeMessage message = mailSender.createMimeMessage();
