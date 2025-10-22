@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from "axios";
 import {
   Button,
   Field,
@@ -96,17 +97,15 @@ const Register = () => {
         confirmPassword: form.confirmPassword,
       };
 
-      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/auth/register`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(sanitizedData),
-      });
-
-      if (!response.ok) {
-        throw new Error('Registration failed');
-      }
+      await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/api/auth/register`,
+        sanitizedData,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
 
       setSuccessMessage(`Registration successful! An activation email has been sent to ${form.email}. Please check your inbox and follow the instructions to activate your account.`);
       
