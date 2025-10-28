@@ -70,22 +70,22 @@ public class JwtService {
         }
     }
 
-    private static boolean isTokenExpired(SignedJWT signedJWT) throws java.text.ParseException {
+    private boolean isTokenExpired(SignedJWT signedJWT) throws java.text.ParseException {
         Date expirationTime = signedJWT.getJWTClaimsSet().getExpirationTime();
         return expirationTime.before(new Date());
     }
 
-    public static String getSubject(String token) throws java.text.ParseException {
+    public String getSubject(String token) throws java.text.ParseException {
         SignedJWT signedJWT = SignedJWT.parse(token);
         return signedJWT.getJWTClaimsSet().getSubject();
     }
 
-    public static UserType getRoleFromToken(String token) throws java.text.ParseException {
+    public UserType getRoleFromToken(String token) throws java.text.ParseException {
         SignedJWT signedJWT = SignedJWT.parse(token);
         String role = (String) signedJWT.getJWTClaimsSet().getClaim("role");
         return UserType.valueOf(role);
     }
-    public static String getClaim(String token, String claim) throws ParseException {
+    public String getClaim(String token, String claim) throws ParseException {
         SignedJWT signedJWT = SignedJWT.parse(token);
         return signedJWT.getJWTClaimsSet().getStringClaim(claim);
     }

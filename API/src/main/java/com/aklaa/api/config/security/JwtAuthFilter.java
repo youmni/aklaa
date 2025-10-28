@@ -30,12 +30,8 @@ public class JwtAuthFilter  extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException, ServletException, IOException {
-        String path = request.getRequestURI();
-        if (path.equals("/api/auth/register") || path.equals("/api/auth/login")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+
 
         final String authorizationHeader = request.getHeader("Authorization");
 
@@ -45,7 +41,7 @@ public class JwtAuthFilter  extends OncePerRequestFilter {
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             jwt = authorizationHeader.substring(7);
             try {
-                username = JwtService.getSubject(jwt);
+                username = jwtService.getSubject(jwt);
             } catch (Exception e) {
                 logger.error("Cannot get token or token has expired");
             }
@@ -56,16 +52,21 @@ public class JwtAuthFilter  extends OncePerRequestFilter {
                 List<SimpleGrantedAuthority> authorities = new ArrayList<>();
                 UserType role = null;
                 try {
-                    String tokenType = JwtService.getClaim(jwt, "type");
+                    String tokenType = jwtService.getClaim(jwt, "type");
                     if (!"access".equals(tokenType)) {
                         logger.error("Invalid token type: Only access tokens are allowed");
                         filterChain.doFilter(request, response);
                         return;
                     }
-                    role = JwtService.getRoleFromToken(jwt);
+                    role = jwtService.getRoleFromToken(jwt);
                 } catch (ParseException e) {
-                    throw new RuntimeException(e);
+                    logger.warn("Failed to parse JWT token");
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    response.setContentType("application/json");
+                    response.getWriter().write("{\"error\": \"Invalid or malformed JWT token\"}");
+                    return;
                 }
+
                 authorities.add(new SimpleGrantedAuthority("ROLE_" + role));
 
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, null, authorities);

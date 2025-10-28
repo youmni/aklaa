@@ -1,10 +1,13 @@
 package com.aklaa.api.controller;
 
 import com.aklaa.api.dao.UserRepository;
+import com.aklaa.api.dtos.AuthResponseDTO;
+import com.aklaa.api.dtos.LoginDTO;
 import com.aklaa.api.dtos.RegistrationDTO;
 import com.aklaa.api.dtos.UserDTO;
 import com.aklaa.api.model.User;
 import com.aklaa.api.services.contract.AuthService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -34,6 +37,20 @@ public class AuthController {
                 .toUri();
 
         return ResponseEntity.created(location).body(user);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<AuthResponseDTO> login(@RequestBody LoginDTO loginDTO) {
+        AuthResponseDTO auth = authService.login(loginDTO);
+
+        if (!auth.isSuccess()) {
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(auth);
+        }
+
+        return ResponseEntity
+                .ok(auth);
     }
 
     @GetMapping("/activate")
