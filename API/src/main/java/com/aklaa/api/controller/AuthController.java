@@ -7,6 +7,8 @@ import com.aklaa.api.dtos.RegistrationDTO;
 import com.aklaa.api.dtos.UserDTO;
 import com.aklaa.api.model.User;
 import com.aklaa.api.services.contract.AuthService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -40,7 +42,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponseDTO> login(@RequestBody LoginDTO loginDTO) {
+    public ResponseEntity<AuthResponseDTO> login(@RequestBody LoginDTO loginDTO, HttpServletResponse response) {
         AuthResponseDTO auth = authService.login(loginDTO);
 
         if (!auth.isSuccess()) {
@@ -48,6 +50,20 @@ public class AuthController {
                     .status(HttpStatus.UNAUTHORIZED)
                     .body(auth);
         }
+
+        Cookie accessTokenCookie = new Cookie("accessToken", auth.getAccessToken());
+        accessTokenCookie.setHttpOnly(true);
+        accessTokenCookie.setSecure(true);
+        accessTokenCookie.setPath("/");
+        accessTokenCookie.setMaxAge(10 * 60);
+        response.addCookie(accessTokenCookie);
+
+        Cookie refreshTokenCookie = new Cookie("refreshToken", auth.getRefreshToken());
+        refreshTokenCookie.setHttpOnly(true);
+        refreshTokenCookie.setSecure(true);
+        refreshTokenCookie.setPath("/api/auth/refresh");
+        refreshTokenCookie.setMaxAge(7 * 24 * 60 * 60);
+        response.addCookie(refreshTokenCookie);
 
         return ResponseEntity
                 .ok(auth);

@@ -22,7 +22,7 @@ public class JwtService {
 
     public String generateToken(long id, UserType role) throws JOSEException {
         Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.HOUR, 1);
+        cal.add(Calendar.MINUTE, 10);
 
         JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
                 .subject(String.valueOf(id))
@@ -89,5 +89,4 @@ public class JwtService {
         SignedJWT signedJWT = SignedJWT.parse(token);
         return signedJWT.getJWTClaimsSet().getStringClaim(claim);
     }
-
 }
