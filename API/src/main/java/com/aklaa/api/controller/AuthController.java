@@ -11,10 +11,13 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -68,6 +71,29 @@ public class AuthController {
         return ResponseEntity
                 .ok(auth);
     }
+
+    @GetMapping("/me")
+    public ResponseEntity<UserDTO> getCurrentUser(@AuthenticationPrincipal UserDetails userDetails) {
+        Optional<User> optionalUser = userRepository.findByEmail(userDetails.getUsername());
+
+        if (optionalUser.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(null);
+        }
+
+        User user = optionalUser.get();
+
+        UserDTO dto = UserDTO.builder()
+                .id(user.getId())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .email(user.getEmail())
+                .userType(user.getUserType().name())
+                .build();
+
+        return ResponseEntity.ok(dto);
+    }
+
 
     @GetMapping("/activate")
     public ResponseEntity<String> activateAccount(@RequestParam String token) {

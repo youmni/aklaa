@@ -83,6 +83,9 @@ public class JwtService {
     public UserType getRoleFromToken(String token) throws java.text.ParseException {
         SignedJWT signedJWT = SignedJWT.parse(token);
         String role = (String) signedJWT.getJWTClaimsSet().getClaim("role");
+        if (role == null) {
+            throw new IllegalArgumentException("JWT token missing 'role' claim");
+        }
         return UserType.valueOf(role);
     }
     public String getClaim(String token, String claim) throws ParseException {
