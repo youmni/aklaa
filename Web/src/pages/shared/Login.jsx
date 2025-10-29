@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import api from "../../api/axiosConfig";
 import { useAuth } from "../../hooks/useAuth";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link as RouterLink } from "react-router-dom";
 import {
     Button,
     Field,
@@ -10,6 +10,7 @@ import {
     Input,
     Stack,
     Box,
+    Spinner,
 } from "@chakra-ui/react"
 
 const Login = () => {
@@ -113,7 +114,25 @@ const Login = () => {
                 boxShadow="lg"
                 w="full"
                 maxW="md"
+                position="relative"
             >
+                {isLoading && (
+                    <Box
+                        position="absolute"
+                        top={0}
+                        left={0}
+                        right={0}
+                        bottom={0}
+                        bg="rgba(255,255,255,0.6)"
+                        display="flex"
+                        alignItems="center"
+                        justifyContent="center"
+                        borderRadius="lg"
+                        zIndex={10}
+                    >
+                        <Spinner size="xl" thickness="4px" color="teal.500" />
+                    </Box>
+                )}
                 <form onSubmit={handleSubmit}>
                     <Fieldset.Root size="lg">
                         <Stack>
@@ -176,7 +195,12 @@ const Login = () => {
                                 )}
                             </Field.Root>
                         </Fieldset.Content>
-
+                        <Box mt={4} textAlign="center" fontSize="sm">
+                            Not registered yet?{' '}
+                            <RouterLink to="/auth/register" style={{ color: '#319795', fontWeight: 600 }}>
+                                Register
+                            </RouterLink>
+                        </Box>
                         <Button
                             type="submit"
                             colorScheme="teal"
@@ -186,7 +210,7 @@ const Login = () => {
                             spinnerPlacement="center"
                             isDisabled={isLoading}
                         >
-                            {isLoading ? null : "Login"}
+                            Login
                         </Button>
                     </Fieldset.Root>
                 </form>
