@@ -7,4 +7,5 @@ import java.io.IOException;
 
 public interface EmailService {
     void sendActivationEmail(User user, String token) throws IOException, MessagingException;
+    void sendPasswordResetEmail(User user, String token) throws IOException, MessagingException;
 }

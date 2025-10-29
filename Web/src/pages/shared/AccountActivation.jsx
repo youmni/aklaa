@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Box, Heading, Text, Button, Stack, Spinner } from '@chakra-ui/react';
+import { Box, Heading, Spinner, Text } from '@chakra-ui/react';
+import StatusCard from '../../components/StatusMessageCard';
 
 function AccountActivation() {
   const [searchParams] = useSearchParams();
@@ -41,82 +42,42 @@ function AccountActivation() {
     navigate('/');
   };
 
-  return (
-    <Box
-      minH="100vh"
-      bg="gray.50"
-      display="flex"
-      alignItems="center"
-      justifyContent="center"
-      px={4}
-    >
+  if (isLoading) {
+    return (
       <Box
-        p={8}
-        bg="white"
-        borderRadius="lg"
-        boxShadow="lg"
-        w="full"
-        maxW="md"
-        textAlign="center"
+        minH="100vh"
+        bg="gray.50"
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        px={4}
       >
-        <Stack spacing={6} align="center">
-          {isLoading ? (
-            <>
-              <Spinner size="xl" color="teal.500" thickness="4px" />
-              <Heading size="lg" color="gray.700">
-                {message}
-              </Heading>
-            </>
-          ) : (
-            <>
-              <Box
-                w={16}
-                h={16}
-                borderRadius="full"
-                bg={isSuccess ? "green.100" : "red.100"}
-                display="flex"
-                alignItems="center"
-                justifyContent="center"
-              >
-                <Text fontSize="4xl" color={isSuccess ? "green.600" : "red.600"}>
-                  {isSuccess ? "✓" : "✕"}
-                </Text>
-              </Box>
-
-              <Heading size="lg" color={isSuccess ? "green.700" : "red.700"}>
-                {isSuccess ? "Activation Successful!" : "Activation Failed"}
-              </Heading>
-
-              <Text fontSize="md" color="gray.600" maxW="sm">
-                {message}
-              </Text>
-
-              <Stack direction={{ base: "column", sm: "row" }} spacing={4} w="full">
-                {isSuccess ? (
-                  <Button
-                    colorScheme="teal"
-                    size="lg"
-                    width="full"
-                    onClick={handleGoToLogin}
-                  >
-                    Go to Login
-                  </Button>
-                ) : (
-                  <Button
-                    colorScheme="teal"
-                    size="lg"
-                    width="full"
-                    onClick={handleGoHome}
-                  >
-                    Go to Home
-                  </Button>
-                )}
-              </Stack>
-            </>
-          )}
-        </Stack>
+        <Box
+          p={8}
+          bg="white"
+          borderRadius="lg"
+          boxShadow="lg"
+          w="full"
+          maxW="md"
+          textAlign="center"
+        >
+          <Spinner size="xl" color="teal.500" thickness="4px" />
+          <Heading size="lg" color="gray.700" mt={4}>
+            {message}
+          </Heading>
+        </Box>
       </Box>
-    </Box>
+    );
+  }
+
+  return (
+    <StatusCard
+      success={isSuccess}
+      title={isSuccess ? "Activation Successful!" : "Activation Failed"}
+      message={message}
+      onPrimaryClick={isSuccess ? handleGoToLogin : handleGoHome}
+      primaryText={isSuccess ? "Go to Login" : "Go to Home"}
+    />
   );
 }
 

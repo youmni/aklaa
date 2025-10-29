@@ -1,8 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
 import api from "../../api/axiosConfig";
-import RedirectToPath from "../../components/Redirect";
-import { useAuth } from "../../hooks/useAuth";
 import { useNavigate, Link as RouterLink } from "react-router-dom";
 import {
     Button,
@@ -12,48 +9,28 @@ import {
     Stack,
     Box,
     Spinner,
-} from "@chakra-ui/react"
+    Text,
+} from "@chakra-ui/react";
 
-const Login = () => {
+const PasswordReset = () => {
     const navigate = useNavigate();
-    const [form, setForm] = useState({
-        email: "",
-        password: ""
-    });
-
+    const [email, setEmail] = useState("");
     const [errors, setErrors] = useState({});
     const [isLoading, setIsLoading] = useState(false);
     const [successMessage, setSuccessMessage] = useState("");
-    const { user, setUser } = useAuth();
 
     const handleChange = (e) => {
-        const { name, value } = e.target;
-        setForm({
-            ...form,
-            [name]: value
-        });
-
-        if (errors[name]) {
-            setErrors({
-                ...errors,
-                [name]: ""
-            });
-        }
-
-        if (successMessage) {
-            setSuccessMessage("");
-        }
+        setEmail(e.target.value);
+        if (errors.email) setErrors({ ...errors, email: "" });
+        if (successMessage) setSuccessMessage("");
     };
 
     const validateForm = () => {
         const newErrors = {};
-        if (!form.email || form.email.trim() === "") {
-            newErrors.email = "Email is verplicht";
-        } else if (!/\S+@\S+\.\S+/.test(form.email.trim())) {
-            newErrors.email = "Ongeldig e-mailadres";
-        }
-        if (!form.password || form.password === "") {
-            newErrors.password = "Wachtwoord is verplicht";
+        if (!email.trim()) {
+            newErrors.email = "Email is required.";
+        } else if (!/\S+@\S+\.\S+/.test(email.trim())) {
+            newErrors.email = "Invalid email address.";
         }
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
@@ -61,53 +38,33 @@ const Login = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        if (!validateForm()) {
-            return;
-        }
+        if (!validateForm()) return;
 
         setIsLoading(true);
-        setSuccessMessage("");
         setErrors({});
+        setSuccessMessage("");
 
         try {
-            const sanitizedData = {
-                email: form.email.trim().toLowerCase(),
-                password: form.password,
-            };
-
-            const response = await api.post('/auth/login', sanitizedData);
-
-            const me = await api.get("/auth/me");
-            setUser(me.data || null);
+            const response = await api.post("/auth/reset-password", { email: email.trim().toLowerCase() });
 
             const successMsg = response?.data?.message
                 ? response.data.message
-                : `Login successful for ${form.email}.`;
+                : "If an account with that email exists, a password reset link has been sent.";
 
             setSuccessMessage(successMsg);
-            setForm({
-                email: "",
-                password: ""
-            });
-
+            setEmail("");
+            // optional: navigate("/auth/login"); // uncomment if you want to redirect immediately
         } catch (error) {
-            const errMsg =
-                error?.response?.data?.message ||
-                error?.message ||
-                'Login failed. Please check your email and password and try again.';
-
             setErrors({
-                submit: errMsg
+                submit:
+                    error?.response?.data?.message ||
+                    error?.message ||
+                    "Password reset failed. Please check your email and try again.",
             });
         } finally {
             setIsLoading(false);
         }
     };
-
-    if (user) {
-        return <RedirectToPath />;
-    }
 
     return (
         <Box minH="100vh" bg="gray.50" display="flex" alignItems="center" justifyContent="center">
@@ -120,6 +77,12 @@ const Login = () => {
                 maxW="md"
                 position="relative"
             >
+                <Box position="absolute" top={4} right={4} fontSize="sm">
+                    <RouterLink to="/auth/login" style={{ textDecoration: 'underline', color: '#000000ff', fontWeight: 600 }}>
+                        Back to login
+                    </RouterLink>
+                </Box>
+
                 {isLoading && (
                     <Box
                         position="absolute"
@@ -137,17 +100,13 @@ const Login = () => {
                         <Spinner size="xl" thickness="4px" color="teal.500" />
                     </Box>
                 )}
+
                 <form onSubmit={handleSubmit}>
-                    <Box position="absolute" top={4} right={4} fontSize="sm">
-                        <RouterLink to="/auth/password-reset" style={{ textDecoration: 'underline', color: '#000000ff', fontWeight: 600 }}>
-                            Forgot password?
-                        </RouterLink>
-                    </Box>
                     <Fieldset.Root size="lg">
                         <Stack>
-                            <Fieldset.Legend>Login</Fieldset.Legend>
+                            <Fieldset.Legend>Reset Password</Fieldset.Legend>
                             <Fieldset.HelperText>
-                                Please fill in the Login form below to access your account.
+                                Enter your email address to receive a password reset link.
                             </Fieldset.HelperText>
                         </Stack>
 
@@ -158,8 +117,9 @@ const Login = () => {
                                     bg="green.50"
                                     color="green.800"
                                     borderRadius="md"
-                                    mb={4}
                                     fontSize="sm"
+                                    textAlign="center"
+                                    mb={4}
                                 >
                                     {successMessage}
                                 </Box>
@@ -171,38 +131,28 @@ const Login = () => {
                                     bg="red.50"
                                     color="red.800"
                                     borderRadius="md"
-                                    mb={4}
                                     fontSize="sm"
+                                    textAlign="center"
+                                    mb={4}
                                 >
                                     {errors.submit}
                                 </Box>
                             )}
 
                             <Field.Root invalid={!!errors.email}>
-                                <Field.Label>Email address</Field.Label>
+                                <Field.Label>Email</Field.Label>
                                 <Input
                                     name="email"
                                     type="email"
-                                    value={form.email}
+                                    value={email}
                                     onChange={handleChange}
+                                    placeholder="example@mail.com"
                                 />
                                 {errors.email && (
                                     <Field.ErrorText>{errors.email}</Field.ErrorText>
                                 )}
                             </Field.Root>
 
-                            <Field.Root invalid={!!errors.password}>
-                                <Field.Label>Password</Field.Label>
-                                <Input
-                                    name="password"
-                                    type="password"
-                                    value={form.password}
-                                    onChange={handleChange}
-                                />
-                                {errors.password && (
-                                    <Field.ErrorText>{errors.password}</Field.ErrorText>
-                                )}
-                            </Field.Root>
                         </Fieldset.Content>
                         <Button
                             type="submit"
@@ -213,11 +163,11 @@ const Login = () => {
                             spinnerPlacement="center"
                             isDisabled={isLoading}
                         >
-                            Login
+                            Send Reset Link
                         </Button>
                         <Box mt={4} textAlign="center" fontSize="sm">
-                            Not registered yet?{' '}
-                            <RouterLink to="/auth/register" style={{ textDecoration: 'underline', color: '#319795', fontWeight: 600 }}>
+                            Don't have an account?{' '}
+                            <RouterLink to="/auth/register" style={{ color: '#319795', fontWeight: 600 }}>
                                 Register
                             </RouterLink>
                         </Box>
@@ -225,7 +175,7 @@ const Login = () => {
                 </form>
             </Box>
         </Box>
-    )
+    );
 };
 
-export default Login;
+export default PasswordReset;
