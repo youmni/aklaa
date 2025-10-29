@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate, Link as RouterLink } from "react-router-dom";
 import axios from "axios";
 import {
   Button,
@@ -7,6 +8,7 @@ import {
   Input,
   Stack,
   Box,
+  Spinner,
 } from "@chakra-ui/react"
 
 const Register = () => {
@@ -79,7 +81,7 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       return;
     }
@@ -108,7 +110,7 @@ const Register = () => {
       );
 
       setSuccessMessage(`Registration successful! An activation email has been sent to ${form.email}. Please check your inbox and follow the instructions to activate your account.`);
-      
+
       setForm({
         firstName: "",
         lastName: "",
@@ -116,7 +118,7 @@ const Register = () => {
         password: "",
         confirmPassword: ""
       });
-      
+
     } catch (error) {
       setErrors({
         submit: 'Registration failed. This email address may already be in use or there was a problem with the registration. Please try again or contact support if the problem persists.'
@@ -128,14 +130,32 @@ const Register = () => {
 
   return (
     <Box minH="100vh" bg="gray.50" display="flex" alignItems="center" justifyContent="center">
-      <Box 
-        p={8} 
-        bg="white" 
-        borderRadius="lg" 
-        boxShadow="lg"
-        w="full"
-        maxW="md"
-      >
+            <Box
+                p={8}
+                bg="white"
+                borderRadius="lg"
+                boxShadow="lg"
+                w="full"
+                maxW="md"
+                position="relative"
+            >
+                {isLoading && (
+                    <Box
+                        position="absolute"
+                        top={0}
+                        left={0}
+                        right={0}
+                        bottom={0}
+                        bg="rgba(255,255,255,0.6)"
+                        display="flex"
+                        alignItems="center"
+                        justifyContent="center"
+                        borderRadius="lg"
+                        zIndex={10}
+                    >
+                        <Spinner size="xl" thickness="4px" color="teal.500" />
+                    </Box>
+                )}
         <form onSubmit={handleSubmit}>
           <Fieldset.Root size="lg">
             <Stack>
@@ -147,11 +167,11 @@ const Register = () => {
 
             <Fieldset.Content>
               {successMessage && (
-                <Box 
-                  p={4} 
-                  bg="green.50" 
-                  color="green.800" 
-                  borderRadius="md" 
+                <Box
+                  p={4}
+                  bg="green.50"
+                  color="green.800"
+                  borderRadius="md"
                   mb={4}
                   fontSize="sm"
                 >
@@ -160,11 +180,11 @@ const Register = () => {
               )}
 
               {errors.submit && (
-                <Box 
-                  p={4} 
-                  bg="red.50" 
-                  color="red.800" 
-                  borderRadius="md" 
+                <Box
+                  p={4}
+                  bg="red.50"
+                  color="red.800"
+                  borderRadius="md"
                   mb={4}
                   fontSize="sm"
                 >
@@ -174,8 +194,8 @@ const Register = () => {
 
               <Field.Root invalid={!!errors.firstName}>
                 <Field.Label>First Name</Field.Label>
-                <Input 
-                  name="firstName" 
+                <Input
+                  name="firstName"
                   value={form.firstName}
                   onChange={handleChange}
                 />
@@ -186,8 +206,8 @@ const Register = () => {
 
               <Field.Root invalid={!!errors.lastName}>
                 <Field.Label>Last Name</Field.Label>
-                <Input 
-                  name="lastName" 
+                <Input
+                  name="lastName"
                   value={form.lastName}
                   onChange={handleChange}
                 />
@@ -198,8 +218,8 @@ const Register = () => {
 
               <Field.Root invalid={!!errors.email}>
                 <Field.Label>Email address</Field.Label>
-                <Input 
-                  name="email" 
+                <Input
+                  name="email"
                   type="email"
                   value={form.email}
                   onChange={handleChange}
@@ -211,8 +231,8 @@ const Register = () => {
 
               <Field.Root invalid={!!errors.password}>
                 <Field.Label>Password</Field.Label>
-                <Input 
-                  name="password" 
+                <Input
+                  name="password"
                   type="password"
                   value={form.password}
                   onChange={handleChange}
@@ -224,8 +244,8 @@ const Register = () => {
 
               <Field.Root invalid={!!errors.confirmPassword}>
                 <Field.Label>Confirm Password</Field.Label>
-                <Input 
-                  name="confirmPassword" 
+                <Input
+                  name="confirmPassword"
                   type="password"
                   value={form.confirmPassword}
                   onChange={handleChange}
@@ -236,12 +256,20 @@ const Register = () => {
               </Field.Root>
             </Fieldset.Content>
 
-            <Button 
-              type="submit" 
-              colorScheme="teal" 
+            <Box mt={4} textAlign="center" fontSize="sm">
+              Already have an account?{' '}
+              <RouterLink to="/auth/login" style={{ color: '#319795', fontWeight: 600 }}>
+                Login
+              </RouterLink>
+            </Box>
+            <Button
+              type="submit"
+              colorScheme="teal"
               width="full"
               mt={4}
-              loading={isLoading}
+              isLoading={isLoading}
+                                          spinnerPlacement="center"
+                            isDisabled={isLoading}
             >
               Submit
             </Button>
