@@ -1,10 +1,7 @@
 package com.aklaa.api.controller;
 
 import com.aklaa.api.dao.UserRepository;
-import com.aklaa.api.dtos.AuthResponseDTO;
-import com.aklaa.api.dtos.LoginDTO;
-import com.aklaa.api.dtos.RegistrationDTO;
-import com.aklaa.api.dtos.UserDTO;
+import com.aklaa.api.dtos.*;
 import com.aklaa.api.model.User;
 import com.aklaa.api.services.contract.AuthService;
 import jakarta.servlet.http.Cookie;
@@ -92,6 +89,12 @@ public class AuthController {
                 .build();
 
         return ResponseEntity.ok(dto);
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<String> requestReset(@RequestBody PasswordResetRequestDTO passwordResetRequestDTO) {
+        authService.processPasswordResetRequest(passwordResetRequestDTO);
+        return ResponseEntity.ok("If the email is registered, you'll get a reset link");
     }
 
 
