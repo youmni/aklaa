@@ -138,6 +138,11 @@ const Login = () => {
                     </Box>
                 )}
                 <form onSubmit={handleSubmit}>
+                    <Box position="absolute" top={4} right={4} fontSize="sm">
+                        <RouterLink to="/auth/reset-password" style={{ textDecoration: 'underline', color: '#000000ff', fontWeight: 600 }}>
+                            Forgot password?
+                        </RouterLink>
+                    </Box>
                     <Fieldset.Root size="lg">
                         <Stack>
                             <Fieldset.Legend>Login</Fieldset.Legend>
