@@ -1,7 +1,9 @@
 package com.aklaa.api.controller;
 
+import com.aklaa.api.dao.ResetPasswordRepository;
 import com.aklaa.api.dao.UserRepository;
 import com.aklaa.api.dtos.*;
+import com.aklaa.api.model.PasswordResetToken;
 import com.aklaa.api.model.User;
 import com.aklaa.api.services.contract.AuthService;
 import jakarta.servlet.http.Cookie;
@@ -10,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -22,10 +25,14 @@ public class AuthController {
 
     private final AuthService authService;
     private final UserRepository userRepository;
+    private final ResetPasswordRepository resetPasswordRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public AuthController(AuthService authService, UserRepository userRepository) {
+    public AuthController(AuthService authService, UserRepository userRepository, ResetPasswordRepository resetPasswordRepository, PasswordEncoder passwordEncoder) {
         this.authService = authService;
         this.userRepository = userRepository;
+        this.resetPasswordRepository = resetPasswordRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @PostMapping("/register")
@@ -97,16 +104,47 @@ public class AuthController {
         return ResponseEntity.ok("If the email is registered, you'll get a reset link");
     }
 
+    @PostMapping("/reset-password/confirm")
+    public ResponseEntity<String> resetPassword(@RequestBody PasswordResetConfirmDTO passwordResetConfirmDTO) {
+        Optional<PasswordResetToken> tokenOpt = resetPasswordRepository.findByToken(passwordResetConfirmDTO.getToken());
+
+        if (tokenOpt.isEmpty() || tokenOpt.get().isExpired()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Token is invalid or expired");
+        }
+
+        PasswordResetToken token = tokenOpt.get();
+        User user = token.getUser();
+
+        user.setPassword(passwordEncoder.encode(passwordResetConfirmDTO.getNewPassword()));
+        userRepository.save(user);
+        resetPasswordRepository.delete(token);
+
+        return ResponseEntity.ok("Password updated");
+    }
 
     @GetMapping("/activate")
     public ResponseEntity<String> activateAccount(@RequestParam String token) {
-        User user = userRepository.findByActivationToken(token)
-                .orElseThrow(() -> new RuntimeException("Invalid token"));
+        Optional<User> userOpt = userRepository.findByActivationToken(token);
 
+        if (userOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid or expired token");
+        }
+        User user = userOpt.get();
         user.setEnabled(true);
         user.setActivationToken(null);
         userRepository.save(user);
 
         return ResponseEntity.ok("Account activated!");
+    }
+
+    @GetMapping("/reset-password")
+    public ResponseEntity<String> passwordReset(@RequestParam String token) {
+        Optional<PasswordResetToken> tokenOpt = resetPasswordRepository.findByToken(token);
+
+        if (tokenOpt.isEmpty() || tokenOpt.get().isExpired()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid or expired token");
+        }
+
+        return ResponseEntity.ok("Token is valid");
     }
 }
