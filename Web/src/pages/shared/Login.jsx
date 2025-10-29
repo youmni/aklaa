@@ -139,7 +139,7 @@ const Login = () => {
                 )}
                 <form onSubmit={handleSubmit}>
                     <Box position="absolute" top={4} right={4} fontSize="sm">
-                        <RouterLink to="/auth/reset-password" style={{ textDecoration: 'underline', color: '#000000ff', fontWeight: 600 }}>
+                        <RouterLink to="/auth/password-reset" style={{ textDecoration: 'underline', color: '#000000ff', fontWeight: 600 }}>
                             Forgot password?
                         </RouterLink>
                     </Box>
@@ -204,12 +204,6 @@ const Login = () => {
                                 )}
                             </Field.Root>
                         </Fieldset.Content>
-                        <Box mt={4} textAlign="center" fontSize="sm">
-                            Not registered yet?{' '}
-                            <RouterLink to="/auth/register" style={{ color: '#319795', fontWeight: 600 }}>
-                                Register
-                            </RouterLink>
-                        </Box>
                         <Button
                             type="submit"
                             colorScheme="teal"
@@ -221,6 +215,12 @@ const Login = () => {
                         >
                             Login
                         </Button>
+                        <Box mt={4} textAlign="center" fontSize="sm">
+                            Not registered yet?{' '}
+                            <RouterLink to="/auth/register" style={{ textDecoration: 'underline', color: '#319795', fontWeight: 600 }}>
+                                Register
+                            </RouterLink>
+                        </Box>
                     </Fieldset.Root>
                 </form>
             </Box>

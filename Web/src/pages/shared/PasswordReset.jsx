@@ -1,17 +1,19 @@
 import React, { useState } from "react";
 import api from "../../api/axiosConfig";
-import RedirectToPath from "../../components/Redirect";
 import { useNavigate, Link as RouterLink } from "react-router-dom";
 import {
     Button,
-    Box,
+    Field,
+    Fieldset,
     Input,
-    Spinner,
     Stack,
+    Box,
+    Spinner,
     Text,
 } from "@chakra-ui/react";
 
 const PasswordReset = () => {
+    const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [errors, setErrors] = useState({});
     const [isLoading, setIsLoading] = useState(false);
@@ -19,7 +21,6 @@ const PasswordReset = () => {
 
     const handleChange = (e) => {
         setEmail(e.target.value);
-
         if (errors.email) setErrors({ ...errors, email: "" });
         if (successMessage) setSuccessMessage("");
     };
@@ -27,9 +28,9 @@ const PasswordReset = () => {
     const validateForm = () => {
         const newErrors = {};
         if (!email.trim()) {
-            newErrors.email = "Email is required";
+            newErrors.email = "Email is required.";
         } else if (!/\S+@\S+\.\S+/.test(email.trim())) {
-            newErrors.email = "Invalid email address";
+            newErrors.email = "Invalid email address.";
         }
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
@@ -37,7 +38,6 @@ const PasswordReset = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         if (!validateForm()) return;
 
         setIsLoading(true);
@@ -53,10 +53,11 @@ const PasswordReset = () => {
 
             setSuccessMessage(successMsg);
             setEmail("");
+            // optional: navigate("/auth/login"); // uncomment if you want to redirect immediately
         } catch (error) {
             setErrors({
                 submit:
-                    error?.response?.data?.message || 
+                    error?.response?.data?.message ||
                     error?.message ||
                     "Password reset failed. Please check your email and try again.",
             });
@@ -66,14 +67,7 @@ const PasswordReset = () => {
     };
 
     return (
-        <Box
-            minH="100vh"
-            bg="gray.50"
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-            p={4}
-        >
+        <Box minH="100vh" bg="gray.50" display="flex" alignItems="center" justifyContent="center">
             <Box
                 p={8}
                 bg="white"
@@ -83,6 +77,12 @@ const PasswordReset = () => {
                 maxW="md"
                 position="relative"
             >
+                <Box position="absolute" top={4} right={4} fontSize="sm">
+                    <RouterLink to="/auth/login" style={{ textDecoration: 'underline', color: '#000000ff', fontWeight: 600 }}>
+                        Back to login
+                    </RouterLink>
+                </Box>
+
                 {isLoading && (
                     <Box
                         position="absolute"
@@ -102,79 +102,76 @@ const PasswordReset = () => {
                 )}
 
                 <form onSubmit={handleSubmit}>
-                    <Stack spacing={4}>
-                        <Text fontSize="2xl" fontWeight="bold" textAlign="center">
-                            Reset Password
-                        </Text>
-                        <Text fontSize="sm" color="gray.600" textAlign="center">
-                            Enter your email address to receive a password reset link.
-                        </Text>
+                    <Fieldset.Root size="lg">
+                        <Stack>
+                            <Fieldset.Legend>Reset Password</Fieldset.Legend>
+                            <Fieldset.HelperText>
+                                Enter your email address to receive a password reset link.
+                            </Fieldset.HelperText>
+                        </Stack>
 
-                        {successMessage && (
-                            <Box
-                                p={4}
-                                bg="green.50"
-                                color="green.800"
-                                borderRadius="md"
-                                fontSize="sm"
-                                textAlign="center"
-                            >
-                                {successMessage}
-                            </Box>
-                        )}
-
-                        {errors.submit && (
-                            <Box
-                                p={4}
-                                bg="red.50"
-                                color="red.800"
-                                borderRadius="md"
-                                fontSize="sm"
-                                textAlign="center"
-                            >
-                                {errors.submit}
-                            </Box>
-                        )}
-
-                        <Box>
-                            <Text mb={1} fontWeight="medium">
-                                Email
-                            </Text>
-                            <Input
-                                name="email"
-                                type="email"
-                                value={email}
-                                onChange={handleChange}
-                                isInvalid={!!errors.email}
-                                placeholder="example@mail.com"
-                            />
-                            {errors.email && (
-                                <Text mt={1} fontSize="sm" color="red.500">
-                                    {errors.email}
-                                </Text>
+                        <Fieldset.Content>
+                            {successMessage && (
+                                <Box
+                                    p={4}
+                                    bg="green.50"
+                                    color="green.800"
+                                    borderRadius="md"
+                                    fontSize="sm"
+                                    textAlign="center"
+                                    mb={4}
+                                >
+                                    {successMessage}
+                                </Box>
                             )}
-                        </Box>
 
+                            {errors.submit && (
+                                <Box
+                                    p={4}
+                                    bg="red.50"
+                                    color="red.800"
+                                    borderRadius="md"
+                                    fontSize="sm"
+                                    textAlign="center"
+                                    mb={4}
+                                >
+                                    {errors.submit}
+                                </Box>
+                            )}
+
+                            <Field.Root invalid={!!errors.email}>
+                                <Field.Label>Email</Field.Label>
+                                <Input
+                                    name="email"
+                                    type="email"
+                                    value={email}
+                                    onChange={handleChange}
+                                    placeholder="example@mail.com"
+                                />
+                                {errors.email && (
+                                    <Field.ErrorText>{errors.email}</Field.ErrorText>
+                                )}
+                            </Field.Root>
+
+                        </Fieldset.Content>
                         <Button
                             type="submit"
                             colorScheme="teal"
                             width="full"
+                            mt={4}
                             isLoading={isLoading}
                             spinnerPlacement="center"
+                            isDisabled={isLoading}
                         >
                             Send Reset Link
                         </Button>
-
-                        <Text fontSize="sm" textAlign="center">
-                            Don't have an account?{" "}
-                            <RouterLink
-                                to="/auth/register"
-                                style={{ color: "#319795", fontWeight: 600 }}
-                            >
+                        <Box mt={4} textAlign="center" fontSize="sm">
+                            Don't have an account?{' '}
+                            <RouterLink to="/auth/register" style={{ color: '#319795', fontWeight: 600 }}>
                                 Register
                             </RouterLink>
-                        </Text>
-                    </Stack>
+                        </Box>
+                    </Fieldset.Root>
                 </form>
             </Box>
         </Box>

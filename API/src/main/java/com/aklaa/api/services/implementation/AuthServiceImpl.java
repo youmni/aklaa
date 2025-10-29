@@ -18,6 +18,8 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.Base64;
 import java.util.Optional;
 import java.util.UUID;
@@ -115,7 +117,7 @@ public class AuthServiceImpl implements AuthService {
             PasswordResetToken resetToken = new PasswordResetToken();
             resetToken.setToken(token);
             resetToken.setUser(user);
-            resetToken.setExpiresAt(LocalDateTime.now().plusMinutes(15));
+            resetToken.setExpiresAt(OffsetDateTime.now(ZoneOffset.UTC).plusMinutes(15));
 
             resetPasswordRepository.save(resetToken);
             emailService.sendPasswordResetEmail(user, token);

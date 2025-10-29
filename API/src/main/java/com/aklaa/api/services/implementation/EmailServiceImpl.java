@@ -57,7 +57,7 @@ public class EmailServiceImpl implements EmailService {
             html = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
         }
 
-        String passwordResetLink = frontendUrl + "/auth/password-reset?token=" + token;
+        String passwordResetLink = frontendUrl + "/auth/password-reset/confirm?token=" + token;
         html = html.replace("{{passwordResetLink}}", passwordResetLink);
 
         MimeMessage message = mailSender.createMimeMessage();

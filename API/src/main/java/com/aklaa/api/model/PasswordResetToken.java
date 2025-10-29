@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 
 @Data
 @AllArgsConstructor
@@ -21,12 +23,12 @@ public class PasswordResetToken {
 
     private String token;
 
-    private LocalDateTime expiresAt;
+    private OffsetDateTime expiresAt;
 
     @ManyToOne
     private User user;
 
     public boolean isExpired() {
-        return expiresAt.isBefore(LocalDateTime.now());
+        return expiresAt.isBefore(OffsetDateTime.now(ZoneOffset.UTC));
     }
 }

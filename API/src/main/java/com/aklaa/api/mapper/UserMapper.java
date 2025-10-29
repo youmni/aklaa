@@ -3,6 +3,7 @@ package com.aklaa.api.mapper;
 import com.aklaa.api.dtos.RegistrationDTO;
 import com.aklaa.api.dtos.UserDTO;
 import com.aklaa.api.model.User;
+import com.aklaa.api.model.enums.UserType;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -23,6 +24,7 @@ public class UserMapper {
                 .lastName(registrationDTO.getLastName())
                 .email(registrationDTO.getEmail())
                 .password(registrationDTO.getPassword())
+                .userType(UserType.USER)
                 .build();
     }
 }

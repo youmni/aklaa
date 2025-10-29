@@ -130,32 +130,32 @@ const Register = () => {
 
   return (
     <Box minH="100vh" bg="gray.50" display="flex" alignItems="center" justifyContent="center">
-            <Box
-                p={8}
-                bg="white"
-                borderRadius="lg"
-                boxShadow="lg"
-                w="full"
-                maxW="md"
-                position="relative"
-            >
-                {isLoading && (
-                    <Box
-                        position="absolute"
-                        top={0}
-                        left={0}
-                        right={0}
-                        bottom={0}
-                        bg="rgba(255,255,255,0.6)"
-                        display="flex"
-                        alignItems="center"
-                        justifyContent="center"
-                        borderRadius="lg"
-                        zIndex={10}
-                    >
-                        <Spinner size="xl" thickness="4px" color="teal.500" />
-                    </Box>
-                )}
+      <Box
+        p={8}
+        bg="white"
+        borderRadius="lg"
+        boxShadow="lg"
+        w="full"
+        maxW="md"
+        position="relative"
+      >
+        {isLoading && (
+          <Box
+            position="absolute"
+            top={0}
+            left={0}
+            right={0}
+            bottom={0}
+            bg="rgba(255,255,255,0.6)"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            borderRadius="lg"
+            zIndex={10}
+          >
+            <Spinner size="xl" thickness="4px" color="teal.500" />
+          </Box>
+        )}
         <form onSubmit={handleSubmit}>
           <Fieldset.Root size="lg">
             <Stack>
@@ -255,24 +255,23 @@ const Register = () => {
                 )}
               </Field.Root>
             </Fieldset.Content>
-
-            <Box mt={4} textAlign="center" fontSize="sm">
-              Already have an account?{' '}
-              <RouterLink to="/auth/login" style={{ color: '#319795', fontWeight: 600 }}>
-                Login
-              </RouterLink>
-            </Box>
             <Button
               type="submit"
               colorScheme="teal"
               width="full"
               mt={4}
               isLoading={isLoading}
-                                          spinnerPlacement="center"
-                            isDisabled={isLoading}
+              spinnerPlacement="center"
+              isDisabled={isLoading}
             >
               Submit
             </Button>
+            <Box mt={4} textAlign="center" fontSize="sm">
+              Already have an account?{' '}
+              <RouterLink to="/auth/login" style={{ textDecoration: 'underline', color: '#319795', fontWeight: 600 }}>
+                Login
+              </RouterLink>
+            </Box>
           </Fieldset.Root>
         </form>
       </Box>
