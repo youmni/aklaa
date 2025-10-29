@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import api from "../../api/axiosConfig";
+import RedirectToPath from "../../components/Redirect";
 import { useAuth } from "../../hooks/useAuth";
 import { useNavigate, Link as RouterLink } from "react-router-dom";
 import {
@@ -23,7 +24,7 @@ const Login = () => {
     const [errors, setErrors] = useState({});
     const [isLoading, setIsLoading] = useState(false);
     const [successMessage, setSuccessMessage] = useState("");
-    const { setUser } = useAuth();
+    const { user, setUser } = useAuth();
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -89,7 +90,6 @@ const Login = () => {
                 email: "",
                 password: ""
             });
-            navigate("/");
 
         } catch (error) {
             const errMsg =
@@ -104,6 +104,10 @@ const Login = () => {
             setIsLoading(false);
         }
     };
+
+    if (user) {
+        return <RedirectToPath />;
+    }
 
     return (
         <Box minH="100vh" bg="gray.50" display="flex" alignItems="center" justifyContent="center">
