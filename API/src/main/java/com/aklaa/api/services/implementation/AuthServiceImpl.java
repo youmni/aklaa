@@ -131,4 +131,43 @@ public class AuthServiceImpl implements AuthService {
         secureRandom.nextBytes(randomBytes);
         return Base64.getUrlEncoder().withoutPadding().encodeToString(randomBytes);
     }
+
+    @Override
+    public AuthResponseDTO login(LoginDTO loginDTO) {
+        try {
+            Optional<User> userOpt = userRepository.findByEmail(loginDTO.getEmail()).stream().findFirst();
+
+            if (userOpt.isEmpty() || !passwordEncoder.matches(loginDTO.getPassword(), userOpt.get().getPassword())) {
+                return AuthResponseDTO.builder()
+                        .success(false)
+                        .message("Invalid email or password")
+                        .build();
+            }
+
+            if (!userOpt.get().isEnabled() || userOpt.get().getActivationToken() != null) {
+                return AuthResponseDTO.builder()
+                        .success(false)
+                        .message("Account not activated yet")
+                        .build();
+            }
+
+            User user = userOpt.get();
+
+            String refreshToken = jwtService.generateRefreshToken(user.getId(), user.getUserType());
+            String token = jwtService.generateToken(user.getId(), user.getUserType());
+
+            return AuthResponseDTO.builder()
+                    .success(true)
+                    .message("Login successful")
+                    .accessToken(token)
+                    .refreshToken(refreshToken)
+                    .build();
+
+        } catch (JOSEException e) {
+            return AuthResponseDTO.builder()
+                    .success(false)
+                    .message("Could not generate token: " + e.getMessage())
+                    .build();
+        }
+    }
 }
