@@ -27,6 +27,12 @@ export const sidebarItems = [
     id: 'home',
     label: 'Home',
     href: '/',
-    roles: ['user', 'admin'],
+    roles: ['USER', 'ADMIN'],
+  },
+  {
+    id: 'logout',
+    label: 'Logout',
+    href: '/auth/logout',
+    roles: ['USER', 'ADMIN'],
   },
 ];

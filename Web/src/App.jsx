@@ -9,6 +9,7 @@ import PasswordReset from "./pages/shared/PasswordReset";
 import PasswordResetConfirm from "./pages/shared/PasswordResetConfirm";
 import NotFound from "./pages/shared/NotFound";
 import Layout from "./components/layout/Layout";
+import Logout from "./pages/shared/Logout";
 
 const App = () => {
   return (
@@ -20,6 +21,9 @@ const App = () => {
           <Route path="activate" element={<AccountActivation />} />
           <Route path="password-reset" element={<PasswordReset />} />
           <Route path="password-reset/confirm" element={<PasswordResetConfirm />} />
+          <Route element={<PrivateRoute allowedRoles={['USER', 'ADMIN']} />}>
+            <Route path="/auth/logout" element={<Logout />} />
+          </Route>
         </Route>
 
         <Route element={<PrivateRoute allowedRoles={['USER', 'ADMIN']} />}>
