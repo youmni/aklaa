@@ -8,6 +8,7 @@ import AccountActivation from "./pages/shared/AccountActivation";
 import PasswordReset from "./pages/shared/PasswordReset";
 import PasswordResetConfirm from "./pages/shared/PasswordResetConfirm";
 import NotFound from "./pages/shared/NotFound";
+import Layout from "./components/layout/Layout";
 
 const App = () => {
   return (
@@ -22,14 +23,19 @@ const App = () => {
         </Route>
 
         <Route element={<PrivateRoute allowedRoles={['USER', 'ADMIN']} />}>
+          <Route element={<Layout />}>
             <Route path="/" element={<Home />} />
+          </Route>
         </Route>
 
         <Route element={<PrivateRoute allowedRoles={['ADMIN']} />}>
+          <Route element={<Layout />}>
             <Route path="/admin" element={<Home />} />
+          </Route>
         </Route>
-        <Route path="/not-found" element={<NotFound />} />
-        <Route path="*" element={<NotFound />} />
+
+        <Route path="/not-found" element={<Layout><NotFound /></Layout>} />
+        <Route path="*" element={<Layout><NotFound /></Layout>} />
       </Routes>
     </Router>
   );
