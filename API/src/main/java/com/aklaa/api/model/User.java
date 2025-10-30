@@ -54,7 +54,7 @@ public class User implements UserDetails {
     private String password;
 
     @Enumerated(EnumType.STRING)
-    private UserType userType = UserType.USER;
+    private UserType userType;
 
     @Column(nullable = false)
     private boolean enabled = false;
