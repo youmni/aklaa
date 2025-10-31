@@ -1,5 +1,6 @@
 package com.aklaa.api.model;
 
+import com.aklaa.api.annotations.ValidEnum;
 import com.aklaa.api.model.enums.IngredientCategory;
 import com.aklaa.api.model.enums.MeasurementUnit;
 import jakarta.persistence.*;
@@ -36,9 +37,11 @@ public class Ingredient {
     private String description;
 
     @Enumerated(EnumType.STRING)
+    @ValidEnum(enumClass = IngredientCategory.class)
     private IngredientCategory category;
 
     @Enumerated(EnumType.STRING)
+    @ValidEnum(enumClass = MeasurementUnit.class)
     private MeasurementUnit unit;
 
     @CreationTimestamp

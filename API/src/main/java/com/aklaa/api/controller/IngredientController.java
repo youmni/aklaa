@@ -14,7 +14,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 
 @RestController
-@RequestMapping(name = "/api/ingredients")
+@RequestMapping("/api/ingredients")
 public class IngredientController {
 
     private final IngredientServiceImpl ingredientService;
