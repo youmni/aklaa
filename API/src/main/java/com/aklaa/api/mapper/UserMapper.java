@@ -1,7 +1,7 @@
 package com.aklaa.api.mapper;
 
-import com.aklaa.api.dtos.RegistrationDTO;
-import com.aklaa.api.dtos.UserDTO;
+import com.aklaa.api.dtos.request.RegistrationDTO;
+import com.aklaa.api.dtos.response.UserDTO;
 import com.aklaa.api.model.User;
 import com.aklaa.api.model.enums.UserType;
 import org.springframework.stereotype.Component;
