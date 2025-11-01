@@ -96,7 +96,6 @@ public class IngredientServiceImpl implements IngredientService {
                         .description(ingredient.getDescription())
                         .category(ingredient.getCategory())
                         .unit(ingredient.getUnit())
-                        .userId(ingredient.getUser().getId())
                         .build())
                 .toList();
 

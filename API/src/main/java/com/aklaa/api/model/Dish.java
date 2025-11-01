@@ -12,6 +12,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -61,8 +62,13 @@ public class Dish {
     @Max(value = 100, message = "People cannot exceed 100")
     private int people;
 
+    @ManyToOne
+    @JoinColumn(name="user_id", nullable=false)
+    private User user;
+
     @OneToMany(mappedBy = "dish", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<DishIngredient> dishIngredients;
+    @Builder.Default
+    private List<DishIngredient> dishIngredients = new ArrayList<>();
 
     @CreationTimestamp
     @Column(updatable = false)

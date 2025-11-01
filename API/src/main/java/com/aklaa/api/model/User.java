@@ -66,6 +66,9 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Ingredient> ingredients;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Dish> dishes;
+
     @CreationTimestamp
     @Column(updatable = false)
     private LocalDateTime createdAt;

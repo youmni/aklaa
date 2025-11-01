@@ -1,11 +1,13 @@
 package com.aklaa.api.dtos.request;
 
+import com.aklaa.api.dtos.shared.DishIngredientInfoDTO;
 import com.aklaa.api.model.enums.CuisineType;
 import com.aklaa.api.model.enums.DishTag;
 import jakarta.persistence.Column;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Lob;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,7 +22,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class DishIngredientRequestDTO {
+public class DishRequestDTO {
     @NotBlank(message = "Name is required")
     @Size(min = 1, max = 100, message = "Name must be between 1 and 100 characters")
     private String name;
@@ -55,6 +57,6 @@ public class DishIngredientRequestDTO {
 
     @NotNull(message = "Ingredients cannot be null")
     @NotEmpty(message = "At least one ingredient is required")
-    private HashMap<@NotNull Long,
-            @NotNull @DecimalMin(value = "0.001") @DecimalMax(value = "1000000") BigDecimal> ingredients;
+    @Valid
+    private List<@Valid DishIngredientInfoDTO> ingredients;
 }

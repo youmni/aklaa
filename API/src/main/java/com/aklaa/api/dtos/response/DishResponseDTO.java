@@ -1,5 +1,6 @@
 package com.aklaa.api.dtos.response;
 
+import com.aklaa.api.dtos.shared.DishIngredientInfoDTO;
 import com.aklaa.api.model.enums.CuisineType;
 import com.aklaa.api.model.enums.DishTag;
 import lombok.AllArgsConstructor;
