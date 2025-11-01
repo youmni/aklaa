@@ -36,9 +36,9 @@ public class Dish {
     @Size(min = 10, max = 500, message = "Description must be between 10 and 500 characters")
     private String description;
 
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = DishTagListConverter.class)
     @NotNull(message = "Tags list cannot be null")
-    private List<DishTag> tags;
+    private List<DishTag> tags = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     @NotNull(message = "Cuisine type is required")
