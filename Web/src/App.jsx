@@ -13,6 +13,7 @@ import Logout from "./pages/shared/Logout";
 import CreateIngredient from "./pages/user/ingredients/CreateIngredient";
 import UpdateIngredient from "./pages/user/ingredients/UpdateIngredient";
 import DeleteIngredient from "./pages/user/ingredients/DeleteIngredient";
+import GetIngredients from "./pages/user/ingredients/GetIngredients";
 
 const App = () => {
   return (
@@ -33,6 +34,7 @@ const App = () => {
           <Route element={<Layout />}>
             <Route path="/" element={<Home />} />
             <Route path="/ingredients">
+              <Route index element={<GetIngredients />} />
               <Route path="add" element={<CreateIngredient />} />
               <Route path="update" element={<UpdateIngredient />} />
               <Route path="delete/:id" element={<DeleteIngredient />} />
