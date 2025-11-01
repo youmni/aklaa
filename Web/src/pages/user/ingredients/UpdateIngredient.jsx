@@ -1,11 +1,11 @@
-import { use, useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Button, Input, Stack, Spinner } from "@chakra-ui/react";
 import { Field, Fieldset } from "@chakra-ui/react";
 import { useSnackbar } from 'notistack';
 import api from "../../../api/axiosConfig";
 
-const CreateIngredient = () => {
+const UpdateIngredient = ({ ingredient }) => {
     const navigate = useNavigate();
     const { enqueueSnackbar } = useSnackbar();
     const [form, setForm] = useState({
@@ -32,6 +32,17 @@ const CreateIngredient = () => {
         "HOUSEHOLD",
         "OTHER"
     ];
+
+    useEffect(() => {
+        if (ingredient) {
+            setForm({
+                name: ingredient.name || "",
+                description: ingredient.description || "",
+                category: ingredient.category || "",
+                unit: ingredient.unit || ""
+            });
+        }
+    }, [ingredient]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -96,26 +107,20 @@ const CreateIngredient = () => {
                 unit: form.unit
             };
 
-            const response = await api.post('/ingredients', sanitizedData);
+            const response = await api.put(`/ingredients/${ingredient.id}`, sanitizedData);
 
             const successMsg = response?.data?.message
                 ? response.data.message
-                : `Ingredient created successfully.`;
+                : `Ingredient updated successfully.`;
 
             setSuccessMessage(successMsg);
             enqueueSnackbar(successMsg, { variant: 'success' });
-            setForm({
-                name: "",
-                description: "",
-                category: "",
-                unit: ""
-            });
             navigate('/ingredients');
         } catch (error) {
             const errMsg =
                 error?.response?.data?.message ||
                 error?.message ||
-                'Ingredient creation failed. Please check your input and try again.';
+                'Ingredient update failed. Please check your input and try again.';
 
             setErrors({
                 submit: errMsg
@@ -124,6 +129,23 @@ const CreateIngredient = () => {
             setIsLoading(false);
         }
     };
+
+    if (!ingredient) {
+        return (
+            <Box
+                p={8}
+                maxW="1200px"
+                mx="auto"
+                bg="white"
+                minH="calc(100vh - 73px)"
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+            >
+                <Spinner size="xl" thickness="4px" color="#083951" />
+            </Box>
+        );
+    }
 
     return (
         <Box p={8} maxW="1200px" mx="auto" bg="white" minH="calc(100vh - 73px)">
@@ -147,10 +169,10 @@ const CreateIngredient = () => {
                 <Fieldset.Root size="lg">
                     <Stack>
                         <Fieldset.Legend fontSize="3xl" fontWeight="bold" color={'#083951'}>
-                            Add Ingredient
+                            Update Ingredient
                         </Fieldset.Legend>
                         <Fieldset.HelperText>
-                            Please fill in the ingredient details below.
+                            Please update the ingredient details below.
                         </Fieldset.HelperText>
                     </Stack>
 
@@ -276,12 +298,12 @@ const CreateIngredient = () => {
                             bg: "#0a4a63"
                         }}
                     >
-                        Create Ingredient
+                        Update Ingredient
                     </Button>
                 </Fieldset.Root>
             </form>
         </Box>
-    )
+    );
 };
 
-export default CreateIngredient;
+export default UpdateIngredient;
