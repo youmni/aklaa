@@ -107,6 +107,17 @@ public class IngredientServiceImpl implements IngredientService {
                 .build();
     }
 
+    @Override
+    public IngredientResponseDTO get(Long id, User user) {
+        Ingredient ingredient = ingredientRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Ingredient not found"));
+
+        if(!ingredient.getUser().equals(user)){
+            throw new AccessDeniedException("Access denied");
+        }
+        return ingredientMapper.toResponseDTO(ingredient);
+    }
+
     private Specification<Ingredient> hasCategoriesSpec(List<IngredientCategory> categories) {
         return (root, query, builder) -> {
             if (categories == null || categories.isEmpty()) {

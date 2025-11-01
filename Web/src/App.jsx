@@ -36,7 +36,7 @@ const App = () => {
             <Route path="/ingredients">
               <Route index element={<GetIngredients />} />
               <Route path="add" element={<CreateIngredient />} />
-              <Route path="update" element={<UpdateIngredient />} />
+              <Route path="update/:id" element={<UpdateIngredient />} />
               <Route path="delete/:id" element={<DeleteIngredient />} />
             </Route>
           </Route>

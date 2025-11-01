@@ -38,7 +38,7 @@ const GetIngredients = () => {
     const fetchIngredients = async () => {
         setIsLoading(true);
         try {
-            const categoryParams = selectedCategories.length > 0 
+            const categoryParams = selectedCategories.length > 0
                 ? selectedCategories.map(cat => `${cat}`).join(',')
                 : '';
 
@@ -83,7 +83,7 @@ const GetIngredients = () => {
     };
 
     const handleEdit = (ingredient) => {
-        navigate('/ingredients/update', { state: { ingredient } });
+        navigate(`/ingredients/update/${ingredient.id}`);
     };
 
     const handleDelete = (ingredient) => {
@@ -136,11 +136,11 @@ const GetIngredients = () => {
 
                 <Stack direction={{ base: "column", md: "row" }} gap={4}>
                     <Box position="relative" flex={2}>
-                        <Box 
-                            position="absolute" 
-                            left="3" 
-                            top="50%" 
-                            transform="translateY(-50%)" 
+                        <Box
+                            position="absolute"
+                            left="3"
+                            top="50%"
+                            transform="translateY(-50%)"
                             zIndex={1}
                             pointerEvents="none"
                         >
@@ -211,8 +211,8 @@ const GetIngredients = () => {
                                     borderRadius="xl"
                                     borderColor="gray.200"
                                     bg="white"
-                                    _hover={{ 
-                                        shadow: "xl", 
+                                    _hover={{
+                                        shadow: "xl",
                                         transform: "translateY(-4px)",
                                         borderColor: "#083951"
                                     }}
@@ -220,15 +220,18 @@ const GetIngredients = () => {
                                 >
                                     <Stack gap={{ base: 3, md: 4 }}>
                                         <HStack justify="space-between" align="start">
-                                            <Text 
-                                                fontSize={{ base: "lg", md: "xl" }} 
-                                                fontWeight="bold" 
-                                                color="#083951" 
+                                            <Text
+                                                fontSize={{ base: "lg", md: "xl" }}
+                                                fontWeight="bold"
+                                                color="#083951"
                                                 flex={1}
-                                                wordBreak="break-word"
+                                                isTruncated
+                                                title={ingredient.name}
+                                                sx={{ wordBreak: 'break-all', overflowWrap: 'anywhere' }}
                                             >
                                                 {ingredient.name}
                                             </Text>
+
                                             <HStack gap={1} flexShrink={0}>
                                                 <IconButton
                                                     size="sm"
@@ -253,16 +256,15 @@ const GetIngredients = () => {
                                             </HStack>
                                         </HStack>
 
-                                        {ingredient.description && (
-                                            <Text 
-                                                fontSize="sm" 
-                                                color="gray.600" 
-                                                noOfLines={2} 
-                                                minH={{ base: "32px", md: "40px" }}
-                                            >
-                                                {ingredient.description}
-                                            </Text>
-                                        )}
+                                        <Text
+                                            fontSize="sm"
+                                            color={ingredient.description && ingredient.description.trim() ? "gray.600" : "gray.400"}
+                                            noOfLines={3}
+                                            title={ingredient.description && ingredient.description.trim() ? ingredient.description : "no description"}
+                                            sx={{ overflowWrap: 'anywhere', wordBreak: 'break-word', whiteSpace: 'normal' }}
+                                        >
+                                            {ingredient.description && ingredient.description.trim() ? ingredient.description : "no description"}
+                                        </Text>
 
                                         <HStack justify="space-between" pt={2} flexWrap="wrap" gap={2}>
                                             <Box
@@ -326,7 +328,7 @@ const GetIngredients = () => {
                                 >
                                     <FiChevronLeft />
                                 </IconButton>
-                                
+
                                 {[...Array(totalPages)].map((_, index) => {
                                     if (
                                         index === 0 ||

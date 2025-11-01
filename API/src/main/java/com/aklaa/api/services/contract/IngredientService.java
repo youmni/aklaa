@@ -14,4 +14,5 @@ public interface IngredientService {
     IngredientResponseDTO update(IngredientRequestDTO ingredientRequestDTO, Long id, User user);
     IngredientResponseDTO delete(Long id, User user);
     IngredientListResponseDTO filter(String search, List<String> categories, Pageable pageable, User user);
+    IngredientResponseDTO get(Long id, User user);
 }

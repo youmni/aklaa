@@ -4,6 +4,7 @@ import { Box, Button, Input, Stack, Spinner } from "@chakra-ui/react";
 import { Field, Fieldset } from "@chakra-ui/react";
 import { useSnackbar } from 'notistack';
 import api from "../../../api/axiosConfig";
+import { FiArrowLeft } from 'react-icons/fi';
 
 const CreateIngredient = () => {
     const navigate = useNavigate();
@@ -127,6 +128,17 @@ const CreateIngredient = () => {
 
     return (
         <Box p={8} maxW="1200px" mx="auto" bg="white" minH="calc(100vh - 73px)">
+            <Box mb={4}>
+                <Button
+                    variant="ghost"
+                    color="#083951"
+                    onClick={() => navigate('/ingredients')}
+                    aria-label="Terug naar ingredients"
+                >
+                    <FiArrowLeft />
+                </Button>
+            </Box>
+
             {isLoading && (
                 <Box
                     position="fixed"

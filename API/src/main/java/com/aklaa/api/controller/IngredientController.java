@@ -80,6 +80,19 @@ public class IngredientController {
         return ResponseEntity.ok(ingredient);
     }
 
+    @GetMapping("{id}")
+    public ResponseEntity<IngredientResponseDTO> getIngredient(@PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails) {
+        Optional<User> optionalUser = userRepository.findByEmail(userDetails.getUsername());
+
+        if (optionalUser.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(null);
+        }
+        User user = optionalUser.get();
+        IngredientResponseDTO ingredientResponseDTO = ingredientService.get(id, user);
+        return ResponseEntity.ok(ingredientResponseDTO);
+    }
+
     @GetMapping
     public ResponseEntity<IngredientListResponseDTO> filterIngredients(
             @RequestParam(required = false) String search,
