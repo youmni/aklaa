@@ -126,7 +126,7 @@ const CreateIngredient = () => {
     };
 
     return (
-        <Box p={8} maxW="1200px" mx="auto">
+        <Box p={8} maxW="1200px" mx="auto" bg="white" minH="calc(100vh - 73px)">
             {isLoading && (
                 <Box
                     position="fixed"
@@ -140,13 +140,13 @@ const CreateIngredient = () => {
                     justifyContent="center"
                     zIndex={10}
                 >
-                    <Spinner size="xl" thickness="4px" color="teal.500" />
+                    <Spinner size="xl" thickness="4px" color="#083951" />
                 </Box>
             )}
             <form onSubmit={handleSubmit}>
                 <Fieldset.Root size="lg">
                     <Stack>
-                        <Fieldset.Legend fontSize="3xl" fontWeight="bold">
+                        <Fieldset.Legend fontSize="3xl" fontWeight="bold" color={'#083951'}>
                             Create Ingredient
                         </Fieldset.Legend>
                         <Fieldset.HelperText>
@@ -189,6 +189,7 @@ const CreateIngredient = () => {
                                 value={form.name}
                                 onChange={handleChange}
                                 maxLength={100}
+                                focusBorderColor="#083951"
                             />
                             {errors.name && (
                                 <Field.ErrorText>{errors.name}</Field.ErrorText>
@@ -203,6 +204,7 @@ const CreateIngredient = () => {
                                 value={form.description}
                                 onChange={handleChange}
                                 maxLength={250}
+                                focusBorderColor="#083951"
                             />
                             {errors.description && (
                                 <Field.ErrorText>{errors.description}</Field.ErrorText>
@@ -263,12 +265,16 @@ const CreateIngredient = () => {
                     </Fieldset.Content>
                     <Button
                         type="submit"
-                        colorScheme="teal"
+                        bg="#083951"
+                        color="white"
                         width="full"
                         mt={4}
                         isLoading={isLoading}
                         spinnerPlacement="center"
                         isDisabled={isLoading}
+                        _hover={{
+                            bg: "#0a4a63"
+                        }}
                     >
                         Create Ingredient
                     </Button>

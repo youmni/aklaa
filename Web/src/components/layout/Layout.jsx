@@ -12,7 +12,7 @@ import { sidebarItems, sidebarFooterItems } from '../navigation/sidebarConfig';
 import SidebarItem from '../navigation/SidebarItem';
 import { Outlet } from 'react-router-dom';
 
-const Layout = ({ children }) => {
+const Layout = () => {
   const { user, loading } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -157,7 +157,7 @@ const Layout = ({ children }) => {
           </Box>
         </Box>
 
-        <Box flex="1" bg="gray.50" minH="calc(100vh - 73px)">
+        <Box flex="1" bg="white" minH="calc(100vh - 73px)">
           <Outlet />
         </Box>
       </Flex>
