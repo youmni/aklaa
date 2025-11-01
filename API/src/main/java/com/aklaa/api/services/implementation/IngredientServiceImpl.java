@@ -47,4 +47,17 @@ public class IngredientServiceImpl implements IngredientService {
         ingredientRepository.save(ingredient);
         return ingredientMapper.toResponseDTO(ingredient);
     }
+
+    @Override
+    public IngredientResponseDTO delete(Long id, User user) {
+        Ingredient ingredient = ingredientRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Ingredient not found"));
+
+        if(!ingredient.getUser().equals(user)){
+            throw new AccessDeniedException("Access denied");
+        }
+
+        ingredientRepository.delete(ingredient);
+        return ingredientMapper.toResponseDTO(ingredient);
+    }
 }

@@ -62,4 +62,17 @@ public class IngredientController {
         IngredientResponseDTO ingredient = ingredientService.update(ingredientRequestDTO,id,user);
         return ResponseEntity.ok(ingredient);
     }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<IngredientResponseDTO> delete(@PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails) {
+        Optional<User> optionalUser = userRepository.findByEmail(userDetails.getUsername());
+
+        if (optionalUser.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(null);
+        }
+        User user = optionalUser.get();
+        IngredientResponseDTO ingredient = ingredientService.delete(id,user);
+        return ResponseEntity.ok(ingredient);
+    }
 }
