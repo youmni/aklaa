@@ -33,14 +33,14 @@ export const sidebarItems = [
         label: 'Ingredients',
         href: '/ingredients',
         roles: ['USER', 'ADMIN'],
+      },
+            {
+        id: 'dishes',
+        label: 'Dishes',
+        href: '/dishes',
+        roles: ['USER', 'ADMIN'],
       }
     ],
-  },
-  {
-    id: 'home',
-    label: 'Home',
-    href: '/',
-    roles: ['USER', 'ADMIN'],
   },
 ];
 

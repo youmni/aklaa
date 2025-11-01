@@ -14,6 +14,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -45,6 +46,9 @@ public class Ingredient {
     @ManyToOne
     @JoinColumn(name="user_id", nullable=false)
     private User user;
+
+    @OneToMany(mappedBy = "ingredient", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<DishIngredient> dishIngredients;
 
     @CreationTimestamp
     @Column(updatable = false)

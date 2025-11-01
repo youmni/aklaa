@@ -1,36 +1,30 @@
-package com.aklaa.api.model;
+package com.aklaa.api.dtos.request;
 
 import com.aklaa.api.model.enums.CuisineType;
 import com.aklaa.api.model.enums.DishTag;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.Lob;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
-import java.time.LocalDateTime;
+import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
-@Entity
-@Table(name = "dishes")
-public class Dish {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(nullable = false, length = 100)
+public class DishIngredientRequestDTO {
     @NotBlank(message = "Name is required")
     @Size(min = 1, max = 100, message = "Name must be between 1 and 100 characters")
     private String name;
 
-    @Column(nullable = false, length = 500)
     @NotBlank(message = "Description is required")
     @Size(min = 10, max = 500, message = "Description must be between 10 and 500 characters")
     private String description;
@@ -47,7 +41,6 @@ public class Dish {
     @Column(columnDefinition = "TEXT")
     private String cookingSteps;
 
-    @Column(nullable = false)
     @NotBlank(message = "Image URL is required")
     @Size(max = 255, message = "Image URL must be shorter than 255 characters")
     @Pattern(
@@ -56,18 +49,12 @@ public class Dish {
     )
     private String imageUrl;
 
-    @Column(nullable = false)
     @Min(value = 1, message = "People must be at least 1")
     @Max(value = 100, message = "People cannot exceed 100")
     private int people;
 
-    @OneToMany(mappedBy = "dish", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<DishIngredient> dishIngredients;
-
-    @CreationTimestamp
-    @Column(updatable = false)
-    private LocalDateTime createdAt;
-
-    @UpdateTimestamp
-    private LocalDateTime updatedAt;
+    @NotNull(message = "Ingredients cannot be null")
+    @NotEmpty(message = "At least one ingredient is required")
+    private HashMap<@NotNull Long,
+            @NotNull @DecimalMin(value = "0.001") @DecimalMax(value = "1000000") BigDecimal> ingredients;
 }
