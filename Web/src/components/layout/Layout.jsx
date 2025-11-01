@@ -8,7 +8,7 @@ import {
 } from '@chakra-ui/react';
 import { FiMenu, FiX } from 'react-icons/fi';
 import { useAuth } from '../../hooks/useAuth';
-import { sidebarItems } from '../navigation/sidebarConfig';
+import { sidebarItems, sidebarFooterItems } from '../navigation/sidebarConfig';
 import SidebarItem from '../navigation/SidebarItem';
 import { Outlet } from 'react-router-dom';
 
@@ -50,6 +50,7 @@ const Layout = ({ children }) => {
   };
 
   const filteredItems = filterItems(sidebarItems);
+  const filteredFooterItems = filterItems(sidebarFooterItems);
 
   return (
     <Box minH="100vh" position="relative">
@@ -89,7 +90,9 @@ const Layout = ({ children }) => {
           borderRight="1px solid"
           borderColor="gray.200"
           w={{ base: '0', md: '260px' }}
-          display={{ base: 'none', md: 'block' }}
+          display={{ base: 'none', md: 'flex' }}
+          flexDirection="column"
+          justifyContent="space-between"
           p={3}
           position="sticky"
           top="73px"
@@ -99,6 +102,11 @@ const Layout = ({ children }) => {
           <VStack align="stretch" spacing={1}>
             {filteredItems.map((item) => (
               <SidebarItem key={item.id} {...item} />
+            ))}
+          </VStack>
+          <VStack align="stretch" spacing={1} mt={4} pt={4} borderTop="1px solid" borderColor="gray.200">
+            {filteredFooterItems.map((item) => (
+              <SidebarItem key={item.id} {...item} isFooter={true} />
             ))}
           </VStack>
         </Box>
@@ -126,7 +134,9 @@ const Layout = ({ children }) => {
           w="280px"
           bg="white"
           zIndex="1095"
-          display={{ base: 'block', md: 'none' }}
+          display={{ base: 'flex', md: 'none' }}
+          flexDirection="column"
+          justifyContent="space-between"
           transition="left 0.3s ease"
           shadow="xl"
           overflowY="auto"
@@ -135,6 +145,13 @@ const Layout = ({ children }) => {
             <VStack align="stretch" spacing={1}>
               {filteredItems.map((item) => (
                 <SidebarItem key={item.id} {...item} />
+              ))}
+            </VStack>
+          </Box>
+          <Box p={3} borderTop="1px solid" borderColor="gray.200">
+            <VStack align="stretch" spacing={1}>
+              {filteredFooterItems.map((item) => (
+                <SidebarItem key={item.id} {...item} isFooter={true} />
               ))}
             </VStack>
           </Box>

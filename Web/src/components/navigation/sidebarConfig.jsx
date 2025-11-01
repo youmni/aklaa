@@ -24,15 +24,32 @@ export const sidebarItems = [
     ],
   },
   {
+    id: 'groceries',
+    label: 'Groceries',
+    roles: [],
+    children: [
+      {
+        id: 'ingredients',
+        label: 'Ingredients',
+        href: '/ingredients',
+        roles: ['USER', 'ADMIN'],
+      }
+    ],
+  },
+  {
     id: 'home',
     label: 'Home',
     href: '/',
     roles: ['USER', 'ADMIN'],
   },
+];
+
+export const sidebarFooterItems = [
   {
     id: 'logout',
     label: 'Logout',
     href: '/auth/logout',
     roles: ['USER', 'ADMIN'],
+    isFooter: true,
   },
 ];

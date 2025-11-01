@@ -3,7 +3,7 @@ import { Link as RouterLink, useLocation } from 'react-router-dom';
 import { Box, Text, Link, VStack } from '@chakra-ui/react';
 import { FiChevronDown, FiChevronRight } from 'react-icons/fi';
 
-const SidebarItem = ({ id, label, href, children, level = 0 }) => {
+const SidebarItem = ({ id, label, href, children, level = 0, isFooter = false }) => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
   const hasChildren = children && children.length > 0;
@@ -56,35 +56,30 @@ const SidebarItem = ({ id, label, href, children, level = 0 }) => {
     <Link
       as={RouterLink}
       to={href}
-      _hover={{ textDecoration: 'none' }}
+      display="block"
+      px={paddingLeft}
+      py={3}
+      borderRadius="md"
+      bg={isFooter ? (isActive ? 'red.100' : 'transparent') : (isActive ? 'blue.50' : 'transparent')}
+      borderLeft="3px solid"
+      borderLeftColor={isFooter ? (isActive ? 'red.500' : 'transparent') : (isActive ? '#083951' : 'transparent')}
+      _hover={{
+        textDecoration: 'none',
+        bg: isFooter ? 'red.50' : 'blue.50',
+        borderLeftColor: isFooter ? 'red.500' : '#083951',
+      }}
       _focus={{ boxShadow: 'none', outline: 'none' }}
       _active={{ boxShadow: 'none', outline: 'none' }}
       _focusVisible={{ boxShadow: 'none', outline: 'none' }}
+      transition="all 0.2s"
     >
-      <Box
-        px={paddingLeft}
-        py={3}
-        borderRadius="md"
-        bg={isActive ? 'blue.50' : 'transparent'}
-        borderLeft="3px solid"
-        borderLeftColor={isActive ? '#083951' : 'transparent'}
-        _hover={{
-          bg: 'blue.50',
-          borderLeftColor: '#083951',
-        }}
-        _focus={{ boxShadow: 'none', outline: 'none', border: 'none' }}
-        _focusVisible={{ boxShadow: 'none', outline: 'none' }}
-        _active={{ boxShadow: 'none', outline: 'none', border: 'none' }}
-        transition="all 0.2s"
+      <Text
+        fontWeight={isActive ? 'semibold' : 'medium'}
+        fontSize="sm"
+        color={isFooter ? (isActive ? 'red.700' : 'red.600') : (isActive ? 'blue.700' : 'gray.700')}
       >
-        <Text
-          fontWeight={isActive ? 'semibold' : 'medium'}
-          fontSize="sm"
-          color={isActive ? 'blue.700' : 'gray.700'}
-        >
-          {label}
-        </Text>
-      </Box>
+        {label}
+      </Text>
     </Link>
   );
 };
