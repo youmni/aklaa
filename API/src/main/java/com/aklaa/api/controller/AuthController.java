@@ -2,7 +2,12 @@ package com.aklaa.api.controller;
 
 import com.aklaa.api.dao.ResetPasswordRepository;
 import com.aklaa.api.dao.UserRepository;
-import com.aklaa.api.dtos.*;
+import com.aklaa.api.dtos.request.LoginDTO;
+import com.aklaa.api.dtos.request.PasswordResetConfirmDTO;
+import com.aklaa.api.dtos.request.PasswordResetRequestDTO;
+import com.aklaa.api.dtos.request.RegistrationDTO;
+import com.aklaa.api.dtos.response.AuthResponseDTO;
+import com.aklaa.api.dtos.response.UserDTO;
 import com.aklaa.api.model.PasswordResetToken;
 import com.aklaa.api.model.User;
 import com.aklaa.api.services.contract.AuthService;

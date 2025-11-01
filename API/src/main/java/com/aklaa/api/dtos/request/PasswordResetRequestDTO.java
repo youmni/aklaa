@@ -1,4 +1,4 @@
-package com.aklaa.api.dtos;
+package com.aklaa.api.dtos.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,10 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserDTO {
-    private Long id;
-    private String firstName;
-    private String lastName;
+public class PasswordResetRequestDTO {
     private String email;
-    private String userType;
 }

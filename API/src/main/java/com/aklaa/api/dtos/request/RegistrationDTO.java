@@ -1,4 +1,4 @@
-package com.aklaa.api.dtos;
+package com.aklaa.api.dtos.request;
 
 import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;

@@ -3,7 +3,11 @@ package com.aklaa.api.services.implementation;
 import com.aklaa.api.config.security.JwtService;
 import com.aklaa.api.dao.ResetPasswordRepository;
 import com.aklaa.api.dao.UserRepository;
-import com.aklaa.api.dtos.*;
+import com.aklaa.api.dtos.request.LoginDTO;
+import com.aklaa.api.dtos.request.PasswordResetRequestDTO;
+import com.aklaa.api.dtos.request.RegistrationDTO;
+import com.aklaa.api.dtos.response.AuthResponseDTO;
+import com.aklaa.api.dtos.response.UserDTO;
 import com.aklaa.api.mapper.UserMapper;
 import com.aklaa.api.model.PasswordResetToken;
 import com.aklaa.api.model.User;
@@ -11,18 +15,15 @@ import com.aklaa.api.services.contract.AuthService;
 import com.aklaa.api.services.contract.EmailService;
 import com.nimbusds.jose.JOSEException;
 import jakarta.mail.MessagingException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.security.SecureRandom;
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.Base64;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class AuthServiceImpl implements AuthService {
@@ -35,7 +36,6 @@ public class AuthServiceImpl implements AuthService {
     private final JwtService jwtService;
     private final ResetPasswordRepository resetPasswordRepository;
 
-    @Autowired
     public AuthServiceImpl(UserMapper userMapper, PasswordEncoder passwordEncoder, UserRepository userRepository, EmailService emailService, JwtService jwtService, ResetPasswordRepository resetPasswordRepository) {
         this.userMapper = userMapper;
         this.passwordEncoder = passwordEncoder;
