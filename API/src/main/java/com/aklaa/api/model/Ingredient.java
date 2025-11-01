@@ -42,6 +42,10 @@ public class Ingredient {
     @ValidEnum(enumClass = MeasurementUnit.class)
     private MeasurementUnit unit;
 
+    @ManyToOne
+    @JoinColumn(name="user_id", nullable=false)
+    private User user;
+
     @CreationTimestamp
     @Column(updatable = false)
     private LocalDateTime createdAt;
