@@ -4,6 +4,7 @@ import { Box, Button, Input, Stack, Spinner, Text, Grid, Badge, HStack, IconButt
 import { useSnackbar } from 'notistack';
 import { FiEdit2, FiTrash2, FiPlus, FiSearch, FiChevronLeft, FiChevronRight, FiChevronsLeft, FiChevronsRight } from 'react-icons/fi';
 import api from "../../../api/axiosConfig";
+import ConfirmDialog from "../../../components/ConfirmDialog";
 
 const GetIngredients = () => {
     const navigate = useNavigate();
@@ -15,6 +16,15 @@ const GetIngredients = () => {
     const [page, setPage] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
     const [totalElements, setTotalElements] = useState(0);
+    const [confirmOpen, setConfirmOpen] = useState(false);
+    const [confirmLoading, setConfirmLoading] = useState(false);
+    const [confirmPayload, setConfirmPayload] = useState({
+        title: "",
+        description: "",
+        confirmLabel: "Confirm",
+        confirmColorScheme: "red",
+        onConfirm: () => {}
+    });
     const pageSize = 12;
 
     const categories = [
@@ -60,7 +70,7 @@ const GetIngredients = () => {
             setTotalPages(response.data.totalPages || 0);
             setTotalElements(response.data.totalElements || 0);
         } catch (error) {
-            const errMsg = error?.response?.data?.message || 'Failed to fetch ingredients';
+            const errMsg = error?.response?.data?.message || 'Failed to get ingredients';
             enqueueSnackbar(errMsg, { variant: 'error' });
         } finally {
             setIsLoading(false);
@@ -83,11 +93,40 @@ const GetIngredients = () => {
     };
 
     const handleEdit = (ingredient) => {
-        navigate(`/ingredients/update/${ingredient.id}`);
+        setConfirmPayload({
+            title: "Confirm Edit",
+            description: `Are you sure you want to edit "${ingredient.name}"? This could have an effect on existing recipes using this ingredient.`,
+            confirmLabel: "Edit",
+            confirmColorScheme: "blue",
+            onConfirm: () => {
+                setConfirmOpen(false);
+                navigate(`/ingredients/update/${ingredient.id}`);
+            }
+        });
+        setConfirmOpen(true);
     };
 
     const handleDelete = (ingredient) => {
-        navigate(`/ingredients/delete/${ingredient.id}`);
+        setConfirmPayload({
+            title: "Confirm Delete",
+            description: `Are you sure you want to delete "${ingredient.name}"? This action cannot be undone.`,
+            confirmLabel: "Delete",
+            confirmColorScheme: "red",
+            onConfirm: async () => {
+                setConfirmLoading(true);
+                try {
+                    await api.delete(`/ingredients/${ingredient.id}`);
+                    enqueueSnackbar('Ingredient verwijderd', { variant: 'success' });
+                    setConfirmOpen(false);
+                    fetchIngredients();
+                } catch (err) {
+                    enqueueSnackbar(err?.response?.data?.message || 'Verwijderen mislukt', { variant: 'error' });
+                } finally {
+                    setConfirmLoading(false);
+                }
+            }
+        });
+        setConfirmOpen(true);
     };
 
     const handlePageChange = (newPage) => {
@@ -389,6 +428,20 @@ const GetIngredients = () => {
                     )}
                 </>
             )}
+
+            <ConfirmDialog
+                isOpen={confirmOpen}
+                onClose={() => {
+                    setConfirmOpen(false);
+                    setConfirmLoading(false);
+                }}
+                title={confirmPayload.title}
+                description={confirmPayload.description}
+                onConfirm={confirmPayload.onConfirm}
+                confirmLabel={confirmPayload.confirmLabel}
+                confirmColorScheme={confirmPayload.confirmColorScheme}
+                isLoading={confirmLoading}
+            />
         </Box>
     );
 };
