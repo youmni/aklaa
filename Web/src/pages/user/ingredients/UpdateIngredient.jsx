@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Box, Button, Input, Stack, Spinner } from "@chakra-ui/react";
 import { Field, Fieldset } from "@chakra-ui/react";
 import { useSnackbar } from 'notistack';
 import api from "../../../api/axiosConfig";
+import { FiArrowLeft } from 'react-icons/fi';
 
-const UpdateIngredient = ({ ingredient }) => {
+const UpdateIngredient = () => {
     const navigate = useNavigate();
+    const { id } = useParams();
     const { enqueueSnackbar } = useSnackbar();
     const [form, setForm] = useState({
         name: "",
@@ -16,6 +18,7 @@ const UpdateIngredient = ({ ingredient }) => {
     });
     const [errors, setErrors] = useState({});
     const [isLoading, setIsLoading] = useState(false);
+    const [isFetching, setIsFetching] = useState(true);
     const [successMessage, setSuccessMessage] = useState("");
 
     const units = ["G", "KG", "ML", "L", "PCS", "TBSP", "TSP", "CUP", "PINCH"];
@@ -34,15 +37,34 @@ const UpdateIngredient = ({ ingredient }) => {
     ];
 
     useEffect(() => {
-        if (ingredient) {
-            setForm({
-                name: ingredient.name || "",
-                description: ingredient.description || "",
-                category: ingredient.category || "",
-                unit: ingredient.unit || ""
-            });
-        }
-    }, [ingredient]);
+        const fetchIngredient = async () => {
+            if (!id) {
+                navigate('/ingredients');
+                return;
+            }
+
+            setIsFetching(true);
+            try {
+                const response = await api.get(`/ingredients/${id}`);
+                const ingredient = response.data;
+                
+                setForm({
+                    name: ingredient.name || "",
+                    description: ingredient.description || "",
+                    category: ingredient.category || "",
+                    unit: ingredient.unit || ""
+                });
+            } catch (error) {
+                const errMsg = error?.response?.data?.message || 'Failed to fetch ingredient';
+                enqueueSnackbar(errMsg, { variant: 'error' });
+                navigate('/ingredients');
+            } finally {
+                setIsFetching(false);
+            }
+        };
+
+        fetchIngredient();
+    }, [id, navigate, enqueueSnackbar]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -107,7 +129,7 @@ const UpdateIngredient = ({ ingredient }) => {
                 unit: form.unit
             };
 
-            const response = await api.put(`/ingredients/${ingredient.id}`, sanitizedData);
+            const response = await api.put(`/ingredients/${id}`, sanitizedData);
 
             const successMsg = response?.data?.message
                 ? response.data.message
@@ -115,7 +137,10 @@ const UpdateIngredient = ({ ingredient }) => {
 
             setSuccessMessage(successMsg);
             enqueueSnackbar(successMsg, { variant: 'success' });
-            navigate('/ingredients');
+            
+            setTimeout(() => {
+                navigate('/ingredients');
+            }, 1000);
         } catch (error) {
             const errMsg =
                 error?.response?.data?.message ||
@@ -130,7 +155,7 @@ const UpdateIngredient = ({ ingredient }) => {
         }
     };
 
-    if (!ingredient) {
+    if (isFetching) {
         return (
             <Box
                 p={8}
@@ -149,6 +174,17 @@ const UpdateIngredient = ({ ingredient }) => {
 
     return (
         <Box p={8} maxW="1200px" mx="auto" bg="white" minH="calc(100vh - 73px)">
+            <Box mb={4}>
+                <Button
+                    variant="ghost"
+                    color="#083951"
+                    onClick={() => navigate('/ingredients')}
+                    aria-label="Terug naar ingredients"
+                >
+                    <FiArrowLeft />
+                </Button>
+            </Box>
+
             {isLoading && (
                 <Box
                     position="fixed"
@@ -250,7 +286,7 @@ const UpdateIngredient = ({ ingredient }) => {
                                 <option value="">Select a category</option>
                                 {categories.map((cat) => (
                                     <option key={cat} value={cat}>
-                                        {cat.toLowerCase()}
+                                        {cat.charAt(0) + cat.slice(1).toLowerCase()}
                                     </option>
                                 ))}
                             </select>
@@ -293,7 +329,7 @@ const UpdateIngredient = ({ ingredient }) => {
                         mt={4}
                         isLoading={isLoading}
                         spinnerPlacement="center"
-                        isDisabled={isLoading}
+                        disabled={isLoading}
                         _hover={{
                             bg: "#0a4a63"
                         }}
