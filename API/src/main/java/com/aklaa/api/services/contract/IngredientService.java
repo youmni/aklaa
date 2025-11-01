@@ -8,4 +8,5 @@ import com.aklaa.api.model.User;
 public interface IngredientService {
     IngredientResponseDTO create(IngredientRequestDTO ingredientRequestDTO, User user);
     IngredientResponseDTO update(IngredientRequestDTO ingredientRequestDTO, Long id, User user);
+    IngredientResponseDTO delete(Long id, User user);
 }
