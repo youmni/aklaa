@@ -12,6 +12,7 @@ import Layout from "./components/layout/Layout";
 import Logout from "./pages/shared/Logout";
 import CreateIngredient from "./pages/user/ingredients/CreateIngredient";
 import UpdateIngredient from "./pages/user/ingredients/UpdateIngredient";
+import DeleteIngredient from "./pages/user/ingredients/DeleteIngredient";
 
 const App = () => {
   return (
@@ -33,7 +34,8 @@ const App = () => {
             <Route path="/" element={<Home />} />
             <Route path="/ingredients">
               <Route path="add" element={<CreateIngredient />} />
-              <Route path="update/:id" element={<UpdateIngredient />} />
+              <Route path="update" element={<UpdateIngredient />} />
+              <Route path="delete/:id" element={<DeleteIngredient />} />
             </Route>
           </Route>
         </Route>
