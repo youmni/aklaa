@@ -11,6 +11,7 @@ import NotFound from "./pages/shared/NotFound";
 import Layout from "./components/layout/Layout";
 import Logout from "./pages/shared/Logout";
 import CreateIngredient from "./pages/user/ingredients/CreateIngredient";
+import UpdateIngredient from "./pages/user/ingredients/UpdateIngredient";
 
 const App = () => {
   return (
@@ -31,7 +32,8 @@ const App = () => {
           <Route element={<Layout />}>
             <Route path="/" element={<Home />} />
             <Route path="/ingredients">
-              <Route path="create" element={<CreateIngredient />} />
+              <Route path="add" element={<CreateIngredient />} />
+              <Route path="update/:id" element={<UpdateIngredient />} />
             </Route>
           </Route>
         </Route>

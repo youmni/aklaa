@@ -2,6 +2,7 @@ package com.aklaa.api.controller;
 
 import com.aklaa.api.dao.UserRepository;
 import com.aklaa.api.dtos.request.IngredientRequestDTO;
+import com.aklaa.api.dtos.response.IngredientResponseDTO;
 import com.aklaa.api.model.Ingredient;
 import com.aklaa.api.model.User;
 import com.aklaa.api.services.implementation.IngredientServiceImpl;
@@ -11,10 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
@@ -33,7 +31,7 @@ public class IngredientController {
     }
 
     @PostMapping
-    public ResponseEntity<Ingredient> create(@RequestBody @Valid IngredientRequestDTO ingredientRequestDTO, @AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<IngredientResponseDTO> create(@RequestBody @Valid IngredientRequestDTO ingredientRequestDTO, @AuthenticationPrincipal UserDetails userDetails) {
         Optional<User> optionalUser = userRepository.findByEmail(userDetails.getUsername());
 
         if (optionalUser.isEmpty()) {
@@ -41,7 +39,7 @@ public class IngredientController {
                     .body(null);
         }
         User user = optionalUser.get();
-        Ingredient ingredient = ingredientService.create(ingredientRequestDTO, user);
+        IngredientResponseDTO ingredient = ingredientService.create(ingredientRequestDTO, user);
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentContextPath()
@@ -50,5 +48,18 @@ public class IngredientController {
                 .toUri();
 
         return ResponseEntity.created(location).body(ingredient);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<IngredientResponseDTO> update(@PathVariable Long id, @RequestBody @Valid IngredientRequestDTO ingredientRequestDTO, @AuthenticationPrincipal UserDetails userDetails) {
+        Optional<User> optionalUser = userRepository.findByEmail(userDetails.getUsername());
+
+        if (optionalUser.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(null);
+        }
+        User user = optionalUser.get();
+        IngredientResponseDTO ingredient = ingredientService.update(ingredientRequestDTO,id,user);
+        return ResponseEntity.ok(ingredient);
     }
 }
