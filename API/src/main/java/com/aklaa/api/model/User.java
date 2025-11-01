@@ -63,6 +63,9 @@ public class User implements UserDetails {
     @Column(unique = true)
     private String activationToken;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Ingredient> ingredients;
+
     @CreationTimestamp
     @Column(updatable = false)
     private LocalDateTime createdAt;

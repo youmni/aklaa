@@ -4,6 +4,7 @@ import com.aklaa.api.dao.IngredientRepository;
 import com.aklaa.api.dtos.request.IngredientRequestDTO;
 import com.aklaa.api.mapper.IngredientMapper;
 import com.aklaa.api.model.Ingredient;
+import com.aklaa.api.model.User;
 import com.aklaa.api.services.contract.IngredientService;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +20,9 @@ public class IngredientServiceImpl implements IngredientService {
     }
 
     @Override
-    public Ingredient create(IngredientRequestDTO ingredientRequestDTO) {
-        return ingredientRepository.save(ingredientMapper.toEntity(ingredientRequestDTO));
+    public Ingredient create(IngredientRequestDTO ingredientRequestDTO,  User user) {
+        Ingredient ingredient = ingredientMapper.toEntity(ingredientRequestDTO);
+        ingredient.setUser(user);
+        return ingredientRepository.save(ingredient);
     }
 }
