@@ -10,6 +10,7 @@ import PasswordResetConfirm from "./pages/shared/PasswordResetConfirm";
 import NotFound from "./pages/shared/NotFound";
 import Layout from "./components/layout/Layout";
 import Logout from "./pages/shared/Logout";
+import CreateIngredient from "./pages/user/ingredients/CreateIngredient";
 
 const App = () => {
   return (
@@ -29,6 +30,9 @@ const App = () => {
         <Route element={<PrivateRoute allowedRoles={['USER', 'ADMIN']} />}>
           <Route element={<Layout />}>
             <Route path="/" element={<Home />} />
+            <Route path="/ingredients">
+              <Route path="create" element={<CreateIngredient />} />
+            </Route>
           </Route>
         </Route>
 

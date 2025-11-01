@@ -23,9 +23,7 @@ public class IngredientRequestDTO {
     @Size(min = 1, max = 100, message = "Ingredient name must be between 1 and 100 characters")
     private String name;
 
-    @Column(nullable = false)
-    @NotBlank(message = "Ingredient description is required")
-    @Size(min = 1, max = 250, message = "Ingredient description must be between 1 and 250 characters")
+    @Size(max = 250, message = "Ingredient description must not be longer  than 250 characters")
     private String description;
 
     @Enumerated(EnumType.STRING)

@@ -10,6 +10,7 @@ import { FiMenu, FiX } from 'react-icons/fi';
 import { useAuth } from '../../hooks/useAuth';
 import { sidebarItems } from '../navigation/sidebarConfig';
 import SidebarItem from '../navigation/SidebarItem';
+import { Outlet } from 'react-router-dom';
 
 const Layout = ({ children }) => {
   const { user, loading } = useAuth();
@@ -140,7 +141,7 @@ const Layout = ({ children }) => {
         </Box>
 
         <Box flex="1" bg="gray.50" minH="calc(100vh - 73px)">
-          {children}
+          <Outlet />
         </Box>
       </Flex>
     </Box>
