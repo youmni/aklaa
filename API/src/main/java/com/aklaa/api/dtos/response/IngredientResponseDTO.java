@@ -23,5 +23,4 @@ public class IngredientResponseDTO {
     private String description;
     private IngredientCategory category;
     private MeasurementUnit unit;
-    private Long userId;
 }

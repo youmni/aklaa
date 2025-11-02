@@ -18,7 +18,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class IngredientRequestDTO {
-    @Column(nullable = false)
     @NotBlank(message = "Ingredient name is required")
     @Size(min = 1, max = 100, message = "Ingredient name must be between 1 and 100 characters")
     private String name;

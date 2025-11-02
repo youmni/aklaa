@@ -23,7 +23,6 @@ public class IngredientMapper {
                 .description(ingredient.getDescription())
                 .category(ingredient.getCategory())
                 .unit(ingredient.getUnit())
-                .userId(ingredient.getUser().getId())
                 .build();
     }
 
