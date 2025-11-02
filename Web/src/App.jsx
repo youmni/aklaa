@@ -18,6 +18,7 @@ import CreateDish from "./pages/user/dishes/CreateDish";
 import EditDish from "./pages/user/dishes/EditDish";
 import DetailsDish from "./pages/user/dishes/DetailsDish";
 import DeleteDish from "./pages/user/dishes/DeleteDish";
+import GetDishes from "./pages/user/dishes/GetDishes";
 
 const App = () => {
   return (
@@ -40,11 +41,12 @@ const App = () => {
             <Route path="/ingredients">
               <Route index element={<GetIngredients />} />
               <Route path="add" element={<CreateIngredient />} />
-              <Route path="update/:id" element={<UpdateIngredient />} />
+              <Route path="edit/:id" element={<UpdateIngredient />} />
               <Route path="delete/:id" element={<DeleteIngredient />} />
             </Route>
             <Route path="/dishes">
-              <Route path="create" element={<CreateDish />} />
+              <Route index element={<GetDishes />} />
+              <Route path="add" element={<CreateDish />} />
               <Route path="edit/:id" element={<EditDish />} />
               <Route path="details/:id" element={<DetailsDish />} />
               <Route path="delete/:id" element={<DeleteDish />} />

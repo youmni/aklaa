@@ -70,6 +70,7 @@ services:
       context: ./web
       args:
         VITE_BACKEND_URL: ${VITE_BACKEND_URL}
+        VITE_DEFAULT_IMAGE_URL: ${VITE_DEFAULT_IMAGE_URL}
     container_name: aklaa-frontend
     ports:
       - "3000:80"
