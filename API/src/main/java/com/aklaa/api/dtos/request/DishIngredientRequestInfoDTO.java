@@ -1,4 +1,4 @@
-package com.aklaa.api.dtos.shared;
+package com.aklaa.api.dtos.request;
 
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class DishIngredientInfoDTO {
+public class DishIngredientRequestInfoDTO {
 
     @NotNull(message = "Ingredient ID is required")
     private Long ingredientId;

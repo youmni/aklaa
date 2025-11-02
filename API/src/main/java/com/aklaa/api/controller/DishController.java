@@ -2,6 +2,7 @@ package com.aklaa.api.controller;
 
 import com.aklaa.api.dao.UserRepository;
 import com.aklaa.api.dtos.request.DishRequestDTO;
+import com.aklaa.api.dtos.request.IngredientRequestDTO;
 import com.aklaa.api.dtos.response.DishResponseDTO;
 import com.aklaa.api.dtos.response.IngredientResponseDTO;
 import com.aklaa.api.model.User;
@@ -47,5 +48,18 @@ public class DishController {
                 .toUri();
 
         return ResponseEntity.created(location).body(dish);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<DishResponseDTO> update(@PathVariable Long id, @RequestBody @Valid DishRequestDTO dishRequestDTO, @AuthenticationPrincipal UserDetails userDetails) {
+        Optional<User> optionalUser = userRepository.findByEmail(userDetails.getUsername());
+
+        if (optionalUser.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(null);
+        }
+        User user = optionalUser.get();
+        DishResponseDTO dish = dishService.update(dishRequestDTO,id,user);
+        return ResponseEntity.ok(dish);
     }
 }

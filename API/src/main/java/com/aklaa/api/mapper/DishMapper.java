@@ -1,9 +1,9 @@
 package com.aklaa.api.mapper;
 
 import com.aklaa.api.dtos.request.DishRequestDTO;
-import com.aklaa.api.dtos.shared.DishIngredientInfoDTO;
+import com.aklaa.api.dtos.request.DishIngredientRequestInfoDTO;
+import com.aklaa.api.dtos.response.DishIngredientResponseInfoDTO;
 import com.aklaa.api.dtos.response.DishResponseDTO;
-import com.aklaa.api.dtos.response.IngredientResponseDTO;
 import com.aklaa.api.model.Dish;
 import com.aklaa.api.model.DishIngredient;
 import com.aklaa.api.model.User;
@@ -13,6 +13,13 @@ import java.util.stream.Collectors;
 
 @Component
 public class DishMapper {
+
+    private final IngredientMapper ingredientMapper;
+
+    public DishMapper(IngredientMapper ingredientMapper) {
+        this.ingredientMapper = ingredientMapper;
+    }
+
     public Dish toEntity(DishRequestDTO dto, User user) {
         return Dish.builder()
                 .name(dto.getName())
@@ -38,15 +45,15 @@ public class DishMapper {
                 .people(dish.getPeople())
                 .ingredients(
                         dish.getDishIngredients().stream()
-                                .map(this::toDishIngredientInfoDTO)
+                                .map(this::toDishIngredientResponseInfoDTO)
                                 .collect(Collectors.toList())
                 )
                 .build();
     }
 
-    private DishIngredientInfoDTO toDishIngredientInfoDTO(DishIngredient dishIngredient) {
-        return DishIngredientInfoDTO.builder()
-                .ingredientId(dishIngredient.getIngredient().getId())
+    private DishIngredientResponseInfoDTO toDishIngredientResponseInfoDTO(DishIngredient dishIngredient) {
+        return DishIngredientResponseInfoDTO.builder()
+                .ingredient(ingredientMapper.toResponseDTO(dishIngredient.getIngredient()))
                 .quantity(dishIngredient.getQuantity())
                 .build();
     }
