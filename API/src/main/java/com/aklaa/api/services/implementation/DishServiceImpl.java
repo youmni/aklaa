@@ -13,9 +13,12 @@ import com.aklaa.api.model.DishIngredient;
 import com.aklaa.api.model.Ingredient;
 import com.aklaa.api.model.User;
 import com.aklaa.api.model.enums.CuisineType;
+import com.aklaa.api.model.enums.DishTag;
 import com.aklaa.api.services.contract.DishService;
+import jakarta.persistence.criteria.Expression;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
+import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -155,37 +158,36 @@ public class DishServiceImpl implements DishService {
                 .build();
     }
 
-    private Specification<Dish> hasCuisineSpec(List<CuisineType> cuisines) {
-        return (root, query, builder) -> {
-            if (cuisines == null || cuisines.isEmpty()) {
-                return builder.conjunction();
-            }
-            return root.get("type").in(cuisines);
-        };
-    }
-
     private Specification<Dish> searchSpec(String searchTerm) {
         return (root, query, builder) -> {
             if (searchTerm == null || searchTerm.isEmpty()) {
                 return builder.conjunction();
             }
 
-            String likeTerm = "%" + searchTerm.toLowerCase() + "%";
-
             assert query != null;
             query.distinct(true);
+            String likeTerm = "%" + searchTerm.toLowerCase() + "%";
 
             Join<Dish, DishIngredient> dishIngredientsJoin = root.join("dishIngredients", JoinType.LEFT);
             Join<DishIngredient, Ingredient> ingredientJoin = dishIngredientsJoin.join("ingredient", JoinType.LEFT);
 
-            Join<Dish, String> tagsJoin = root.join("tags", JoinType.LEFT);
+            Predicate namePredicate = builder.like(builder.lower(root.get("name")), likeTerm);
+            Predicate descriptionPredicate = builder.like(builder.lower(root.get("description")), likeTerm);
+            Predicate ingredientPredicate = builder.like(builder.lower(ingredientJoin.get("name")), likeTerm);
 
-            return builder.or(
-                    builder.like(builder.lower(root.get("name")), likeTerm),
-                    builder.like(builder.lower(root.get("description")), likeTerm),
-                    builder.like(builder.lower(tagsJoin), likeTerm),
-                    builder.like(builder.lower(ingredientJoin.get("name")), likeTerm)
-            );
+            Predicate tagsPredicate = builder.like(builder.lower(root.get("tags")), likeTerm);
+
+            return builder.or(namePredicate, descriptionPredicate, ingredientPredicate, tagsPredicate);
+        };
+    }
+
+
+    private Specification<Dish> hasCuisineSpec(List<CuisineType> cuisines) {
+        return (root, query, builder) -> {
+            if (cuisines == null || cuisines.isEmpty()) {
+                return builder.conjunction();
+            }
+            return root.get("type").in(cuisines);
         };
     }
 
