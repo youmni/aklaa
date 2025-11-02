@@ -17,6 +17,7 @@ import GetIngredients from "./pages/user/ingredients/GetIngredients";
 import CreateDish from "./pages/user/dishes/CreateDish";
 import EditDish from "./pages/user/dishes/EditDish";
 import DetailsDish from "./pages/user/dishes/DetailsDish";
+import DeleteDish from "./pages/user/dishes/DeleteDish";
 
 const App = () => {
   return (
@@ -46,6 +47,7 @@ const App = () => {
               <Route path="create" element={<CreateDish />} />
               <Route path="edit/:id" element={<EditDish />} />
               <Route path="details/:id" element={<DetailsDish />} />
+              <Route path="delete/:id" element={<DeleteDish />} />
             </Route>
           </Route>
         </Route>
