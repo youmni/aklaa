@@ -100,7 +100,7 @@ const GetIngredients = () => {
             confirmColorScheme: "blue",
             onConfirm: () => {
                 setConfirmOpen(false);
-                navigate(`/ingredients/update/${ingredient.id}`);
+                navigate(`/ingredients/edit/${ingredient.id}`);
             }
         });
         setConfirmOpen(true);

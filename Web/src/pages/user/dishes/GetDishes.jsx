@@ -1,0 +1,531 @@
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { Box, Button, Input, Stack, Spinner, Text, Grid, Badge, HStack, IconButton, VStack, Image } from "@chakra-ui/react";
+import { useSnackbar } from 'notistack';
+import { FiEdit2, FiTrash2, FiPlus, FiSearch, FiChevronLeft, FiChevronRight, FiChevronsLeft, FiChevronsRight, FiEye } from 'react-icons/fi';
+import api from "../../../api/axiosConfig";
+import ConfirmDialog from "../../../components/ConfirmDialog";
+
+const GetDishes = () => {
+    const navigate = useNavigate();
+    const { enqueueSnackbar } = useSnackbar();
+    const [dishes, setDishes] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [search, setSearch] = useState("");
+    const [selectedCountries, setSelectedCountries] = useState([]);
+    const [page, setPage] = useState(0);
+    const [totalPages, setTotalPages] = useState(0);
+    const [totalElements, setTotalElements] = useState(0);
+    const [confirmOpen, setConfirmOpen] = useState(false);
+    const [confirmLoading, setConfirmLoading] = useState(false);
+    const [confirmPayload, setConfirmPayload] = useState({
+        title: "",
+        description: "",
+        confirmLabel: "Confirm",
+        confirmColorScheme: "red",
+        onConfirm: () => {}
+    });
+    const pageSize = 12;
+    const defaultImageUrl = import.meta.env.VITE_DEFAULT_IMAGE_URL;
+
+    const cuisineTypes = [
+        "ITALIAN",
+        "FRENCH",
+        "CHINESE",
+        "JAPANESE",
+        "MEXICAN",
+        "INDIAN",
+        "AMERICAN",
+        "THAI",
+        "SPANISH",
+        "MEDITERRANEAN",
+        "MIDDLE_EASTERN",
+        "KOREAN",
+        "AFRICAN",
+        "GREEK",
+        "TURKISH",
+        "MOROCCAN"
+    ];
+
+    useEffect(() => {
+        fetchDishes();
+    }, [page, search, selectedCountries]);
+
+    const fetchDishes = async () => {
+        setIsLoading(true);
+        try {
+            const countryParams = selectedCountries.length > 0
+                ? selectedCountries.map(country => `${country}`).join(',')
+                : '';
+
+            const params = new URLSearchParams({
+                page: page,
+                size: pageSize
+            });
+
+            if (search.trim()) {
+                params.append('search', search.trim());
+            }
+
+            if (countryParams) {
+                params.append('countries', countryParams);
+            }
+
+            const response = await api.get(`/dishes/filter?${params.toString()}`);
+            setDishes(response.data.dishes || []);
+            setTotalPages(response.data.totalPages || 0);
+            setTotalElements(response.data.totalElements || 0);
+        } catch (error) {
+            const errMsg = error?.response?.data?.message || 'Failed to get dishes';
+            enqueueSnackbar(errMsg, { variant: 'error' });
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const handleSearchChange = (e) => {
+        setSearch(e.target.value);
+        setPage(0);
+    };
+
+    const handleCountryChange = (e) => {
+        const value = e.target.value;
+        if (value === "") {
+            setSelectedCountries([]);
+        } else {
+            setSelectedCountries([value]);
+        }
+        setPage(0);
+    };
+
+    const handleDetails = (dish) => {
+        navigate(`/dishes/details/${dish.id}`);
+    };
+
+    const handleEdit = (dish) => {
+        setConfirmPayload({
+            title: "Confirm Edit",
+            description: `Are you sure you want to edit "${dish.name}"?`,
+            confirmLabel: "Edit",
+            confirmColorScheme: "blue",
+            onConfirm: () => {
+                setConfirmOpen(false);
+                navigate(`/dishes/edit/${dish.id}`);
+            }
+        });
+        setConfirmOpen(true);
+    };
+
+    const handleDelete = (dish) => {
+        setConfirmPayload({
+            title: "Confirm Delete",
+            description: `Are you sure you want to delete "${dish.name}"? This action cannot be undone.`,
+            confirmLabel: "Delete",
+            confirmColorScheme: "red",
+            onConfirm: async () => {
+                setConfirmLoading(true);
+                try {
+                    navigate(`/dishes/delete/${dish.id}`);
+                    setConfirmOpen(false);
+                    fetchDishes();
+                } catch (err) {
+                    enqueueSnackbar(err?.response?.data?.message || 'Delete failed', { variant: 'error' });
+                } finally {
+                    setConfirmLoading(false);
+                }
+            }
+        });
+        setConfirmOpen(true);
+    };
+
+    const handlePageChange = (newPage) => {
+        if (newPage >= 0 && newPage < totalPages) {
+            setPage(newPage);
+        }
+    };
+
+    const getTagColor = (tag) => {
+        const colors = {
+            HEALTHY: { bg: '#E8F5E9', color: '#2E7D32', border: '#66BB6A' },
+            GLUTEN_FREE: { bg: '#FFF3E0', color: '#E65100', border: '#FF9800' },
+            VEGETARIAN: { bg: '#E3F2FD', color: '#1565C0', border: '#42A5F5' },
+            VEGAN: { bg: '#E8F5E9', color: '#388E3C', border: '#66BB6A' },
+            MAIN_COURSE: { bg: '#FFEBEE', color: '#C62828', border: '#EF5350' },
+            APPETIZER: { bg: '#FFF9C4', color: '#F57F17', border: '#FFEB3B' },
+            DESSERT: { bg: '#FCE4EC', color: '#C2185B', border: '#EC407A' },
+            DINNER: { bg: '#F3E5F5', color: '#6A1B9A', border: '#AB47BC' },
+            LUNCH: { bg: '#E0F7FA', color: '#00838F', border: '#26C6DA' },
+            BREAKFAST: { bg: '#FFF3E0', color: '#EF6C00', border: '#FB8C00' },
+            COMFORT_FOOD: { bg: '#FFEBEE', color: '#D32F2F', border: '#E57373' }
+        };
+        return colors[tag] || { bg: '#F5F5F5', color: '#616161', border: '#9E9E9E' };
+    };
+
+    const getCuisineColor = (cuisine) => {
+        const colors = {
+            ITALIAN: { bg: '#E8F5E9', color: '#2E7D32', border: '#66BB6A' },
+            FRENCH: { bg: '#E3F2FD', color: '#1565C0', border: '#42A5F5' },
+            CHINESE: { bg: '#FFEBEE', color: '#C62828', border: '#EF5350' },
+            JAPANESE: { bg: '#FCE4EC', color: '#C2185B', border: '#EC407A' },
+            MEXICAN: { bg: '#FFF3E0', color: '#E65100', border: '#FF9800' },
+            INDIAN: { bg: '#FFF9C4', color: '#F57F17', border: '#FFEB3B' },
+            AMERICAN: { bg: '#E3F2FD', color: '#1976D2', border: '#42A5F5' },
+            THAI: { bg: '#F3E5F5', color: '#6A1B9A', border: '#AB47BC' },
+            SPANISH: { bg: '#FFEBEE', color: '#D32F2F', border: '#E57373' },
+            MEDITERRANEAN: { bg: '#E0F7FA', color: '#00838F', border: '#26C6DA' },
+            MIDDLE_EASTERN: { bg: '#FFF9C4', color: '#EF6C00', border: '#FFB74D' },
+            KOREAN: { bg: '#FFEBEE', color: '#C62828', border: '#EF5350' },
+            AFRICAN: { bg: '#FFF3E0', color: '#E65100', border: '#FF9800' },
+            GREEK: { bg: '#E3F2FD', color: '#1565C0', border: '#42A5F5' },
+            TURKISH: { bg: '#FFEBEE', color: '#D32F2F', border: '#E57373' },
+            MOROCCAN: { bg: '#FFF9C4', color: '#F57F17', border: '#FFEB3B' }
+        };
+        return colors[cuisine] || { bg: '#F5F5F5', color: '#616161', border: '#9E9E9E' };
+    };
+
+    return (
+        <Box p={{ base: 4, md: 6, lg: 8 }} maxW="1400px" mx="auto" bg="white" minH="calc(100vh - 73px)">
+            <Stack mb={{ base: 4, md: 6, lg: 8 }} gap={{ base: 4, md: 6 }}>
+                <Stack direction={{ base: "column", sm: "row" }} justify="space-between" align={{ base: "stretch", sm: "center" }} gap={3}>
+                    <Text fontSize={{ base: "2xl", md: "3xl" }} fontWeight="bold" color="#083951">
+                        Dishes
+                    </Text>
+                    <Button
+                        bg="#083951"
+                        color="white"
+                        onClick={() => navigate('/dishes/add')}
+                        _hover={{ bg: "#0a4a63" }}
+                        size={{ base: "md", md: "lg" }}
+                        px={{ base: 4, md: 6 }}
+                        w={{ base: "full", sm: "auto" }}
+                    >
+                        <FiPlus style={{ marginRight: '8px' }} />
+                        Add Dish
+                    </Button>
+                </Stack>
+
+                <Stack direction={{ base: "column", md: "row" }} gap={4}>
+                    <Box position="relative" flex={2}>
+                        <Box
+                            position="absolute"
+                            left="3"
+                            top="50%"
+                            transform="translateY(-50%)"
+                            zIndex={1}
+                            pointerEvents="none"
+                        >
+                            <FiSearch color="#718096" size={18} />
+                        </Box>
+                        <Input
+                            placeholder="Search by name or description..."
+                            value={search}
+                            onChange={handleSearchChange}
+                            focusBorderColor="#083951"
+                            pl="2.5rem"
+                            size={{ base: "md", md: "lg" }}
+                        />
+                    </Box>
+                    <Box flex={1}>
+                        <select
+                            value={selectedCountries[0] || ""}
+                            onChange={handleCountryChange}
+                            style={{
+                                width: '100%',
+                                padding: window.innerWidth < 768 ? '0.5rem 0.75rem' : '0.75rem 1rem',
+                                borderRadius: '0.5rem',
+                                border: '1px solid #E2E8F0',
+                                fontSize: '1rem',
+                                backgroundColor: 'white',
+                                cursor: 'pointer',
+                                height: window.innerWidth < 768 ? '2.5rem' : '3rem'
+                            }}
+                        >
+                            <option value="">All cuisines</option>
+                            {cuisineTypes.map((cuisine) => (
+                                <option key={cuisine} value={cuisine}>
+                                    {cuisine.charAt(0) + cuisine.slice(1).toLowerCase().replace('_', ' ')}
+                                </option>
+                            ))}
+                        </select>
+                    </Box>
+                </Stack>
+
+                <Text fontSize="sm" color="gray.600" fontWeight="500">
+                    {totalElements} dish{totalElements !== 1 ? 'es' : ''} found
+                </Text>
+            </Stack>
+
+            {isLoading ? (
+                <Box display="flex" justifyContent="center" alignItems="center" minH="400px">
+                    <Spinner size="xl" thickness="4px" color="#083951" />
+                </Box>
+            ) : (
+                <>
+                    <Grid
+                        templateColumns={{
+                            base: "repeat(1, 1fr)",
+                            sm: "repeat(2, 1fr)",
+                            lg: "repeat(3, 1fr)",
+                            xl: "repeat(4, 1fr)"
+                        }}
+                        gap={{ base: 4, md: 6 }}
+                        mb={{ base: 6, md: 8 }}
+                    >
+                        {dishes.map((dish) => {
+                            const cuisineStyle = getCuisineColor(dish.type);
+                            return (
+                                <Box
+                                    key={dish.id}
+                                    borderWidth="2px"
+                                    borderRadius="xl"
+                                    borderColor="gray.200"
+                                    bg="white"
+                                    overflow="hidden"
+                                    _hover={{
+                                        shadow: "xl",
+                                        transform: "translateY(-4px)",
+                                        borderColor: "#083951"
+                                    }}
+                                    transition="all 0.3s"
+                                >
+                                    <Box position="relative" h={{ base: "180px", md: "200px" }} bg="gray.100">
+                                        <Image
+                                            src={dish.imageUrl || defaultImageUrl}
+                                            alt={dish.name}
+                                            w="100%"
+                                            h="100%"
+                                            objectFit="cover"
+                                            fallback={
+                                                <Box
+                                                    w="100%"
+                                                    h="100%"
+                                                    display="flex"
+                                                    alignItems="center"
+                                                    justifyContent="center"
+                                                    bg="gray.200"
+                                                >
+                                                    <Text color="gray.500" fontSize="sm">No image</Text>
+                                                </Box>
+                                            }
+                                        />
+                                        
+                                        <HStack
+                                            position="absolute"
+                                            top={2}
+                                            right={2}
+                                            gap={1}
+                                            bg="rgba(255, 255, 255, 0.95)"
+                                            borderRadius="md"
+                                            p={1}
+                                        >
+                                            <IconButton
+                                                size="sm"
+                                                colorPalette="green"
+                                                variant="ghost"
+                                                onClick={() => handleDetails(dish)}
+                                                aria-label="View details"
+                                                _hover={{ bg: "green.50" }}
+                                            >
+                                                <FiEye size={16} />
+                                            </IconButton>
+                                            <IconButton
+                                                size="sm"
+                                                colorPalette="blue"
+                                                variant="ghost"
+                                                onClick={() => handleEdit(dish)}
+                                                aria-label="Edit dish"
+                                                _hover={{ bg: "blue.50" }}
+                                            >
+                                                <FiEdit2 size={16} />
+                                            </IconButton>
+                                            <IconButton
+                                                size="sm"
+                                                colorPalette="red"
+                                                variant="ghost"
+                                                onClick={() => handleDelete(dish)}
+                                                aria-label="Delete dish"
+                                                _hover={{ bg: "red.50" }}
+                                            >
+                                                <FiTrash2 size={16} />
+                                            </IconButton>
+                                        </HStack>
+
+                                        <Box
+                                            position="absolute"
+                                            bottom={2}
+                                            left={2}
+                                            px={3}
+                                            py={1.5}
+                                            borderRadius="lg"
+                                            bg={cuisineStyle.bg}
+                                            color={cuisineStyle.color}
+                                            borderWidth="1px"
+                                            borderColor={cuisineStyle.border}
+                                            fontSize="sm"
+                                            fontWeight="700"
+                                            backdropFilter="blur(10px)"
+                                        >
+                                            {dish.type.charAt(0) + dish.type.slice(1).toLowerCase().replace('_', ' ')}
+                                        </Box>
+                                    </Box>
+
+                                    <Stack gap={3} p={{ base: 4, md: 5 }}>
+                                        <Text
+                                            fontSize={{ base: "lg", md: "xl" }}
+                                            fontWeight="bold"
+                                            color="#083951"
+                                            isTruncated
+                                            title={dish.name}
+                                        >
+                                            {dish.name}
+                                        </Text>
+
+                                        <VStack align="stretch" gap={2}>
+                                            <Text fontSize="xs" color="gray.500" fontWeight="600" textTransform="uppercase">
+                                                Tags
+                                            </Text>
+                                            <HStack flexWrap="wrap" gap={2}>
+                                                {dish.tags && dish.tags.length > 0 ? (
+                                                    dish.tags.slice(0, 3).map((tag, index) => {
+                                                        const tagStyle = getTagColor(tag);
+                                                        return (
+                                                            <Box
+                                                                key={index}
+                                                                px={{ base: 2, md: 2.5 }}
+                                                                py={{ base: 0.5, md: 1 }}
+                                                                borderRadius="md"
+                                                                bg={tagStyle.bg}
+                                                                color={tagStyle.color}
+                                                                borderWidth="1px"
+                                                                borderColor={tagStyle.border}
+                                                                fontSize="xs"
+                                                                fontWeight="600"
+                                                            >
+                                                                {tag.charAt(0) + tag.slice(1).toLowerCase().replace('_', ' ')}
+                                                            </Box>
+                                                        );
+                                                    })
+                                                ) : (
+                                                    <Text fontSize="xs" color="gray.400">No tags</Text>
+                                                )}
+                                                {dish.tags && dish.tags.length > 3 && (
+                                                    <Text fontSize="xs" color="gray.500" fontWeight="600">
+                                                        +{dish.tags.length - 3}
+                                                    </Text>
+                                                )}
+                                            </HStack>
+                                        </VStack>
+                                    </Stack>
+                                </Box>
+                            );
+                        })}
+                    </Grid>
+
+                    {totalPages > 1 && (
+                        <Stack direction={{ base: "column", sm: "row" }} justify="center" gap={2} mt={8} flexWrap="wrap">
+                            <HStack gap={2} justify="center" flexWrap="wrap">
+                                <IconButton
+                                    onClick={() => handlePageChange(0)}
+                                    disabled={page === 0}
+                                    size={{ base: "sm", md: "md" }}
+                                    variant="outline"
+                                    borderColor="#083951"
+                                    color="#083951"
+                                    _hover={{ bg: "gray.50" }}
+                                    display={{ base: "none", sm: "inline-flex" }}
+                                    aria-label="First page"
+                                >
+                                    <FiChevronsLeft />
+                                </IconButton>
+                                <IconButton
+                                    onClick={() => handlePageChange(page - 1)}
+                                    disabled={page === 0}
+                                    size={{ base: "sm", md: "md" }}
+                                    variant="outline"
+                                    borderColor="#083951"
+                                    color="#083951"
+                                    _hover={{ bg: "gray.50" }}
+                                    aria-label="Previous page"
+                                >
+                                    <FiChevronLeft />
+                                </IconButton>
+
+                                {[...Array(totalPages)].map((_, index) => {
+                                    if (
+                                        index === 0 ||
+                                        index === totalPages - 1 ||
+                                        (index >= page - 1 && index <= page + 1)
+                                    ) {
+                                        return (
+                                            <Button
+                                                key={index}
+                                                onClick={() => handlePageChange(index)}
+                                                size={{ base: "sm", md: "md" }}
+                                                bg={page === index ? "#083951" : "white"}
+                                                color={page === index ? "white" : "#083951"}
+                                                borderWidth="2px"
+                                                borderColor="#083951"
+                                                _hover={{
+                                                    bg: page === index ? "#0a4a63" : "gray.50"
+                                                }}
+                                                fontWeight="600"
+                                                minW={{ base: "36px", md: "40px" }}
+                                            >
+                                                {index + 1}
+                                            </Button>
+                                        );
+                                    } else if (index === page - 2 || index === page + 2) {
+                                        return <Text key={index} px={1} display={{ base: "none", sm: "block" }}>...</Text>;
+                                    }
+                                    return null;
+                                })}
+
+                                <IconButton
+                                    onClick={() => handlePageChange(page + 1)}
+                                    disabled={page === totalPages - 1}
+                                    size={{ base: "sm", md: "md" }}
+                                    variant="outline"
+                                    borderColor="#083951"
+                                    color="#083951"
+                                    _hover={{ bg: "gray.50" }}
+                                    aria-label="Next page"
+                                >
+                                    <FiChevronRight />
+                                </IconButton>
+                                <IconButton
+                                    onClick={() => handlePageChange(totalPages - 1)}
+                                    disabled={page === totalPages - 1}
+                                    size={{ base: "sm", md: "md" }}
+                                    variant="outline"
+                                    borderColor="#083951"
+                                    color="#083951"
+                                    _hover={{ bg: "gray.50" }}
+                                    display={{ base: "none", sm: "inline-flex" }}
+                                    aria-label="Last page"
+                                >
+                                    <FiChevronsRight />
+                                </IconButton>
+                            </HStack>
+                        </Stack>
+                    )}
+                </>
+            )}
+
+            <ConfirmDialog
+                isOpen={confirmOpen}
+                onClose={() => {
+                    setConfirmOpen(false);
+                    setConfirmLoading(false);
+                }}
+                title={confirmPayload.title}
+                description={confirmPayload.description}
+                onConfirm={confirmPayload.onConfirm}
+                confirmLabel={confirmPayload.confirmLabel}
+                confirmColorScheme={confirmPayload.confirmColorScheme}
+                isLoading={confirmLoading}
+            />
+        </Box>
+    );
+};
+
+export default GetDishes;
