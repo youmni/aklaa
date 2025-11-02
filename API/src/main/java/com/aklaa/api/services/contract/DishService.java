@@ -9,5 +9,6 @@ import com.aklaa.api.model.User;
 public interface DishService {
     DishResponseDTO create(DishRequestDTO dishRequestDTO, User user);
     DishResponseDTO update(DishRequestDTO dishRequestDTO, Long id, User user);
+    DishResponseDTO delete(Long id, User user);
     DishResponseDTO get(Long id, User user);
 }
