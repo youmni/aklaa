@@ -3,6 +3,7 @@ package com.aklaa.api.services.implementation;
 import com.aklaa.api.dao.DishRepository;
 import com.aklaa.api.dao.IngredientRepository;
 import com.aklaa.api.dtos.request.DishRequestDTO;
+import com.aklaa.api.dtos.response.DishListResponseDTO;
 import com.aklaa.api.dtos.response.DishResponseDTO;
 import com.aklaa.api.dtos.request.DishIngredientRequestInfoDTO;
 import com.aklaa.api.mapper.DishIngredientMapper;
@@ -11,7 +12,13 @@ import com.aklaa.api.model.Dish;
 import com.aklaa.api.model.DishIngredient;
 import com.aklaa.api.model.Ingredient;
 import com.aklaa.api.model.User;
+import com.aklaa.api.model.enums.CuisineType;
 import com.aklaa.api.services.contract.DishService;
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.JoinType;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -113,5 +120,76 @@ public class DishServiceImpl implements DishService {
             throw new SecurityException("You are not authorized to update this dish");
         }
         return dishMapper.toResponseDTO(existingDish);
+    }
+
+    @Override
+    public DishListResponseDTO filter(String search, List<String> countries, Pageable pageable, User user) {
+        List<CuisineType> cuisineEnums = null;
+        if (countries != null && !countries.isEmpty()) {
+            cuisineEnums = countries.stream()
+                    .map(c -> {
+                        try {
+                            return CuisineType.valueOf(c.toUpperCase());
+                        } catch (IllegalArgumentException e) {
+                            return null;
+                        }
+                    })
+                    .filter(Objects::nonNull)
+                    .toList();
+        }
+
+        Specification<Dish> spec = userSpec(user)
+                .and(hasCuisineSpec(cuisineEnums))
+                .and(searchSpec(search));
+
+        Page<Dish> dishesPage = dishRepository.findAll(spec, pageable);
+
+        List<DishResponseDTO> dishDTOs = dishesPage.getContent().stream()
+                .map(dishMapper::toResponseDTO)
+                .toList();
+
+        return DishListResponseDTO.builder()
+                .dishes(dishDTOs)
+                .totalElements(dishesPage.getTotalElements())
+                .totalPages(dishesPage.getTotalPages())
+                .build();
+    }
+
+    private Specification<Dish> hasCuisineSpec(List<CuisineType> cuisines) {
+        return (root, query, builder) -> {
+            if (cuisines == null || cuisines.isEmpty()) {
+                return builder.conjunction();
+            }
+            return root.get("type").in(cuisines);
+        };
+    }
+
+    private Specification<Dish> searchSpec(String searchTerm) {
+        return (root, query, builder) -> {
+            if (searchTerm == null || searchTerm.isEmpty()) {
+                return builder.conjunction();
+            }
+
+            String likeTerm = "%" + searchTerm.toLowerCase() + "%";
+
+            assert query != null;
+            query.distinct(true);
+
+            Join<Dish, DishIngredient> dishIngredientsJoin = root.join("dishIngredients", JoinType.LEFT);
+            Join<DishIngredient, Ingredient> ingredientJoin = dishIngredientsJoin.join("ingredient", JoinType.LEFT);
+
+            Join<Dish, String> tagsJoin = root.join("tags", JoinType.LEFT);
+
+            return builder.or(
+                    builder.like(builder.lower(root.get("name")), likeTerm),
+                    builder.like(builder.lower(root.get("description")), likeTerm),
+                    builder.like(builder.lower(tagsJoin), likeTerm),
+                    builder.like(builder.lower(ingredientJoin.get("name")), likeTerm)
+            );
+        };
+    }
+
+    private Specification<Dish> userSpec(User user) {
+        return (root, query, builder) -> builder.equal(root.get("user"), user);
     }
 }

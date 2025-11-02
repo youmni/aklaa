@@ -2,13 +2,13 @@ package com.aklaa.api.controller;
 
 import com.aklaa.api.dao.UserRepository;
 import com.aklaa.api.dtos.request.DishRequestDTO;
-import com.aklaa.api.dtos.request.IngredientRequestDTO;
+import com.aklaa.api.dtos.response.DishListResponseDTO;
 import com.aklaa.api.dtos.response.DishResponseDTO;
-import com.aklaa.api.dtos.response.IngredientResponseDTO;
-import com.aklaa.api.model.DishIngredient;
 import com.aklaa.api.model.User;
 import com.aklaa.api.services.contract.DishService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -88,5 +89,26 @@ public class DishController {
         User user = optionalUser.get();
         DishResponseDTO dishResponseDTO = dishService.get(id, user);
         return ResponseEntity.ok(dishResponseDTO);
+    }
+
+    @GetMapping("/filter")
+    public ResponseEntity<DishListResponseDTO> filterDishes(
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) List<String> countries,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @AuthenticationPrincipal UserDetails userDetails
+    ) {
+        Optional<User> optionalUser = userRepository.findByEmail(userDetails.getUsername());
+
+        if (optionalUser.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(null);
+        }
+        User user = optionalUser.get();
+
+        Pageable pageable = PageRequest.of(page, size);
+        DishListResponseDTO response = dishService.filter(search, countries, pageable, user);
+        return ResponseEntity.ok(response);
     }
 }
