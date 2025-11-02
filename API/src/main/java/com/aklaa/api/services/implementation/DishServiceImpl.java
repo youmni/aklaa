@@ -88,4 +88,15 @@ public class DishServiceImpl implements DishService {
 
         return dishMapper.toResponseDTO(savedDish);
     }
+
+    @Override
+    public DishResponseDTO get(Long id, User user) {
+        Dish existingDish = dishRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Dish not found with id: " + id));
+
+        if (!existingDish.getUser().getId().equals(user.getId())) {
+            throw new SecurityException("You are not authorized to update this dish");
+        }
+        return dishMapper.toResponseDTO(existingDish);
+    }
 }
