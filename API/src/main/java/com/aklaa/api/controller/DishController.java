@@ -64,6 +64,19 @@ public class DishController {
         return ResponseEntity.ok(dish);
     }
 
+    @DeleteMapping("{id}")
+    public ResponseEntity<DishResponseDTO> delete(@PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails) {
+        Optional<User> optionalUser = userRepository.findByEmail(userDetails.getUsername());
+
+        if (optionalUser.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(null);
+        }
+        User user = optionalUser.get();
+        DishResponseDTO dish = dishService.delete(id,user);
+        return ResponseEntity.ok(dish);
+    }
+
     @GetMapping("{id}")
     public ResponseEntity<DishResponseDTO> getIngredient(@PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails) {
         Optional<User> optionalUser = userRepository.findByEmail(userDetails.getUsername());

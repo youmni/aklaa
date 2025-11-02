@@ -12,6 +12,7 @@ import com.aklaa.api.model.DishIngredient;
 import com.aklaa.api.model.Ingredient;
 import com.aklaa.api.model.User;
 import com.aklaa.api.services.contract.DishService;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -87,6 +88,20 @@ public class DishServiceImpl implements DishService {
         Dish savedDish = dishRepository.save(existingDish);
 
         return dishMapper.toResponseDTO(savedDish);
+    }
+
+    @Override
+    public DishResponseDTO delete(Long id, User user) {
+        Dish dish = dishRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Dish not found"));
+
+        if(!dish.getUser().equals(user)){
+            throw new AccessDeniedException("Access denied");
+        }
+
+        DishResponseDTO dishResponseDTO = dishMapper.toResponseDTO(dish);
+        dishRepository.delete(dish);
+        return dishResponseDTO;
     }
 
     @Override
