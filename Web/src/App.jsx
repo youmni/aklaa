@@ -11,10 +11,12 @@ import NotFound from "./pages/shared/NotFound";
 import Layout from "./components/layout/Layout";
 import Logout from "./pages/shared/Logout";
 import CreateIngredient from "./pages/user/ingredients/CreateIngredient";
-import UpdateIngredient from "./pages/user/ingredients/UpdateIngredient";
+import UpdateIngredient from "./pages/user/ingredients/EditIngredient";
 import DeleteIngredient from "./pages/user/ingredients/DeleteIngredient";
 import GetIngredients from "./pages/user/ingredients/GetIngredients";
 import CreateDish from "./pages/user/dishes/CreateDish";
+import EditDish from "./pages/user/dishes/EditDish";
+import DetailsDish from "./pages/user/dishes/DetailsDish";
 
 const App = () => {
   return (
@@ -42,6 +44,8 @@ const App = () => {
             </Route>
             <Route path="/dishes">
               <Route path="create" element={<CreateDish />} />
+              <Route path="edit/:id" element={<EditDish />} />
+              <Route path="details/:id" element={<DetailsDish />} />
             </Route>
           </Route>
         </Route>

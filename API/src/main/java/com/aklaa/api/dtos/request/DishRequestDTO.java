@@ -1,6 +1,5 @@
 package com.aklaa.api.dtos.request;
 
-import com.aklaa.api.dtos.shared.DishIngredientInfoDTO;
 import com.aklaa.api.model.enums.CuisineType;
 import com.aklaa.api.model.enums.DishTag;
 import jakarta.persistence.Column;
@@ -14,8 +13,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
-import java.util.HashMap;
 import java.util.List;
 
 @Data
@@ -58,5 +55,5 @@ public class DishRequestDTO {
     @NotNull(message = "Ingredients cannot be null")
     @NotEmpty(message = "At least one ingredient is required")
     @Valid
-    private List<@Valid DishIngredientInfoDTO> ingredients;
+    private List<@Valid DishIngredientRequestInfoDTO> ingredients;
 }
