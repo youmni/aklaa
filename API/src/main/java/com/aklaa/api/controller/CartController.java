@@ -47,7 +47,6 @@ public class CartController {
         return ResponseEntity.ok(getCart(session));
     }
 
-
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     @PostMapping("/add")
     public ResponseEntity<String> addToCart(@Valid @RequestBody CartDishRequestDTO newItem, HttpSession session) {
