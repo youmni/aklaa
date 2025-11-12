@@ -4,8 +4,8 @@ import com.aklaa.api.dao.DishRepository;
 import com.aklaa.api.dao.GroceryListRepository;
 import com.aklaa.api.dao.UserRepository;
 import com.aklaa.api.dtos.request.CartDishRequestDTO;
-import com.aklaa.api.dtos.response.CartDishResponseDTO;
-import com.aklaa.api.dtos.response.DishResponseDTO;
+import com.aklaa.api.dtos.request.IngredientRequestDTO;
+import com.aklaa.api.dtos.response.*;
 import com.aklaa.api.mapper.DishMapper;
 import com.aklaa.api.mapper.GroceryListMapper;
 import com.aklaa.api.model.Dish;
@@ -13,15 +13,15 @@ import com.aklaa.api.model.GroceryList;
 import com.aklaa.api.model.User;
 import com.aklaa.api.services.implementation.GroceryListServiceImpl;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -79,5 +79,36 @@ public class GroceryListController {
         session.removeAttribute(CART_KEY);
 
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping()
+    public ResponseEntity<List<GroceryListResponseDTO>> getAll(@AuthenticationPrincipal UserDetails userDetails, Pageable pageable) {
+        Optional<User> optionalUser = userRepository.findByEmail(userDetails.getUsername());
+
+        if (optionalUser.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(null);
+        }
+        User user = optionalUser.get();
+        List<GroceryListResponseDTO> list = groceryListService.getGroceryLists(user, pageable);
+        return ResponseEntity.ok(list);
+    }
+
+    @GetMapping("/{id}/ingredients")
+    public ResponseEntity<GroceryListIngredientListResponseDTO> getIngredientsOfGroceryList(@PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails, @PageableDefault(size = 10) Pageable pageable) {
+        Optional<User> optionalUser = userRepository.findByEmail(userDetails.getUsername());
+        if (optionalUser.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        GroceryListIngredientListResponseDTO ingredients =
+                groceryListService.getIngredientOfGroceryList(id, optionalUser.get(), pageable);
+
+        if (ingredients == null ||
+                ingredients.getIngredients() == null ||
+                ingredients.getIngredients().isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.ok(ingredients);
     }
 }
