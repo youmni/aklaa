@@ -95,7 +95,7 @@ const ShoppingCart = () => {
         }
 
         try {
-            await api.post('/cart/save', null, {
+            await api.post('/grocerylists/save', null, {
                 params: {
                     startOfWeek: `${startOfWeek}T00:00:00`,
                     endOfWeek: `${endOfWeek}T23:59:59`
