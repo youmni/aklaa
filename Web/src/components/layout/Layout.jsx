@@ -5,8 +5,12 @@ import {
   Text,
   VStack,
   Spinner,
+  IconButton,
+  HStack,
+  Badge,
 } from '@chakra-ui/react';
-import { FiMenu, FiX } from 'react-icons/fi';
+import { FiMenu, FiX, FiShoppingCart } from 'react-icons/fi';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import { sidebarItems, sidebarFooterItems } from '../navigation/sidebarConfig';
 import SidebarItem from '../navigation/SidebarItem';
@@ -15,6 +19,7 @@ import { Outlet } from 'react-router-dom';
 const Layout = () => {
   const { user, loading } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
 
   if (loading) {
     return (
@@ -52,6 +57,8 @@ const Layout = () => {
   const filteredItems = filterItems(sidebarItems);
   const filteredFooterItems = filterItems(sidebarFooterItems);
 
+  const hasCartAccess = user && (user.userType === 'USER' || user.userType === 'ADMIN');
+
   return (
     <Box minH="100vh" position="relative">
       <Flex
@@ -71,16 +78,34 @@ const Layout = () => {
         <Text fontWeight="bold" fontSize="2xl" color="#083951">
           Aklaa
         </Text>
-        <Box
-          display={{ base: 'block', md: 'none' }}
-          cursor="pointer"
-          onClick={() => setIsOpen(!isOpen)}
-          p={2}
-          borderRadius="md"
-          _hover={{ bg: 'gray.100' }}
-        >
-          {isOpen ? <FiX size={24} /> : <FiMenu size={24} />}
-        </Box>
+        
+        <HStack gap={2}>
+          {hasCartAccess && (
+            <Box
+              as="button"
+              onClick={() => navigate('/cart')}
+              cursor="pointer"
+              p={2}
+              borderRadius="md"
+              transition="all 0.2s"
+              _hover={{ bg: 'gray.100' }}
+              color="#083951"
+            >
+              <FiShoppingCart size={24} />
+            </Box>
+          )}
+          
+          <Box
+            display={{ base: 'block', md: 'none' }}
+            cursor="pointer"
+            onClick={() => setIsOpen(!isOpen)}
+            p={2}
+            borderRadius="md"
+            _hover={{ bg: 'gray.100' }}
+          >
+            {isOpen ? <FiX size={24} /> : <FiMenu size={24} />}
+          </Box>
+        </HStack>
       </Flex>
 
       <Flex>

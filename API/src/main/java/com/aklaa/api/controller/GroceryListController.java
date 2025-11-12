@@ -20,8 +20,10 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -53,7 +55,7 @@ public class GroceryListController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     @PostMapping("/save")
-    public ResponseEntity<String> saveCart(HttpSession session, @AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<String> saveCart(@RequestParam LocalDateTime startOfWeek, @RequestParam LocalDateTime endOfWeek, HttpSession session, @AuthenticationPrincipal UserDetails userDetails) {
         List<CartDishRequestDTO> cartRequests = groceryListService.getCart(session);
         if (cartRequests.isEmpty()) {
             return ResponseEntity.badRequest().body(null);
@@ -70,6 +72,8 @@ public class GroceryListController {
         }
 
         GroceryList groceryList = groceryListMapper.fromCartDishes(cart, optionalUser.get());
+        groceryList.setStartOfWeek(startOfWeek);
+        groceryList.setEndOfWeek(endOfWeek);
         groceryListRepository.save(groceryList);
 
         session.removeAttribute(CART_KEY);

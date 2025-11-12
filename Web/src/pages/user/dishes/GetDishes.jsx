@@ -4,7 +4,7 @@ import { Box, Button, Input, Stack, Spinner, Text, Grid, Badge, HStack, IconButt
 import { useSnackbar } from 'notistack';
 import { FiEdit2, FiTrash2, FiPlus, FiSearch, FiChevronLeft, FiChevronRight, FiChevronsLeft, FiChevronsRight, FiEye, FiShoppingCart } from 'react-icons/fi';
 import api from "../../../api/axiosConfig";
-import ConfirmDialog from "../../../components/ConfirmDialog";
+import ConfirmDialog from "../../../components/shoppingcart/ConfirmDialog";
 import AddToCartModal from "../../../components/AddToCartModal";
 
 const GetDishes = () => {

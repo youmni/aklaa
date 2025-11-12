@@ -24,23 +24,6 @@ public class CartController {
         this.dishRepository = dishRepository;
     }
 
-    private List<CartDishRequestDTO> getCart(HttpSession session) {
-        Object sessionCart = session.getAttribute(CART_KEY);
-        if (sessionCart instanceof List<?> rawList) {
-            boolean valid = rawList.stream().allMatch(CartDishRequestDTO.class::isInstance);
-            if (valid) {
-                return (List<CartDishRequestDTO>) rawList;
-            }
-        }
-        List<CartDishRequestDTO> newCart = new ArrayList<>();
-        session.setAttribute(CART_KEY, newCart);
-        return newCart;
-    }
-
-    private void saveCart(HttpSession session, List<CartDishRequestDTO> cart) {
-        session.setAttribute(CART_KEY, cart);
-    }
-
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     @GetMapping
     public ResponseEntity<List<CartDishRequestDTO>> getCartItems(HttpSession session) {
@@ -114,5 +97,22 @@ public class CartController {
     public ResponseEntity<String> clearCart(HttpSession session) {
         session.removeAttribute(CART_KEY);
         return ResponseEntity.ok("Cart cleared successfully");
+    }
+
+    private List<CartDishRequestDTO> getCart(HttpSession session) {
+        Object sessionCart = session.getAttribute(CART_KEY);
+        if (sessionCart instanceof List<?> rawList) {
+            boolean valid = rawList.stream().allMatch(CartDishRequestDTO.class::isInstance);
+            if (valid) {
+                return (List<CartDishRequestDTO>) rawList;
+            }
+        }
+        List<CartDishRequestDTO> newCart = new ArrayList<>();
+        session.setAttribute(CART_KEY, newCart);
+        return newCart;
+    }
+
+    private void saveCart(HttpSession session, List<CartDishRequestDTO> cart) {
+        session.setAttribute(CART_KEY, cart);
     }
 }

@@ -19,6 +19,7 @@ import EditDish from "./pages/user/dishes/EditDish";
 import DetailsDish from "./pages/user/dishes/DetailsDish";
 import DeleteDish from "./pages/user/dishes/DeleteDish";
 import GetDishes from "./pages/user/dishes/GetDishes";
+import ShoppingCart from "./pages/user/ShoppingCart";
 
 const App = () => {
   return (
@@ -51,6 +52,7 @@ const App = () => {
               <Route path="details/:id" element={<DetailsDish />} />
               <Route path="delete/:id" element={<DeleteDish />} />
             </Route>
+            <Route path="/cart" element={<ShoppingCart />} />
           </Route>
         </Route>
 
