@@ -2,9 +2,10 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Button, Input, Stack, Spinner, Text, Grid, Badge, HStack, IconButton, VStack, Image } from "@chakra-ui/react";
 import { useSnackbar } from 'notistack';
-import { FiEdit2, FiTrash2, FiPlus, FiSearch, FiChevronLeft, FiChevronRight, FiChevronsLeft, FiChevronsRight, FiEye } from 'react-icons/fi';
+import { FiEdit2, FiTrash2, FiPlus, FiSearch, FiChevronLeft, FiChevronRight, FiChevronsLeft, FiChevronsRight, FiEye, FiShoppingCart } from 'react-icons/fi';
 import api from "../../../api/axiosConfig";
-import ConfirmDialog from "../../../components/ConfirmDialog";
+import ConfirmDialog from "../../../components/shoppingcart/ConfirmDialog";
+import AddToCartModal from "../../../components/AddToCartModal";
 
 const GetDishes = () => {
     const navigate = useNavigate();
@@ -25,6 +26,8 @@ const GetDishes = () => {
         confirmColorScheme: "red",
         onConfirm: () => {}
     });
+    const [cartModalOpen, setCartModalOpen] = useState(false);
+    const [selectedDish, setSelectedDish] = useState(null);
     const pageSize = 12;
     const defaultImageUrl = import.meta.env.VITE_DEFAULT_IMAGE_URL;
 
@@ -136,6 +139,11 @@ const GetDishes = () => {
             }
         });
         setConfirmOpen(true);
+    };
+
+    const handleAddToCart = (dish) => {
+        setSelectedDish(dish);
+        setCartModalOpen(true);
     };
 
     const handlePageChange = (newPage) => {
@@ -287,6 +295,8 @@ const GetDishes = () => {
                                         borderColor: "#083951"
                                     }}
                                     transition="all 0.3s"
+                                    display="flex"
+                                    flexDirection="column"
                                 >
                                     <Box position="relative" h={{ base: "180px", md: "200px" }} bg="gray.100">
                                         <Image
@@ -369,52 +379,66 @@ const GetDishes = () => {
                                         </Box>
                                     </Box>
 
-                                    <Stack gap={3} p={{ base: 4, md: 5 }}>
-                                        <Text
-                                            fontSize={{ base: "lg", md: "xl" }}
-                                            fontWeight="bold"
-                                            color="#083951"
-                                            isTruncated
-                                            title={dish.name}
-                                        >
-                                            {dish.name}
-                                        </Text>
-
-                                        <VStack align="stretch" gap={2}>
-                                            <Text fontSize="xs" color="gray.500" fontWeight="600" textTransform="uppercase">
-                                                Tags
+                                    <Stack gap={3} p={{ base: 4, md: 5 }} flex="1" justify="space-between">
+                                        <VStack align="stretch" gap={3}>
+                                            <Text
+                                                fontSize={{ base: "lg", md: "xl" }}
+                                                fontWeight="bold"
+                                                color="#083951"
+                                                isTruncated
+                                                title={dish.name}
+                                            >
+                                                {dish.name}
                                             </Text>
-                                            <HStack flexWrap="wrap" gap={2}>
-                                                {dish.tags && dish.tags.length > 0 ? (
-                                                    dish.tags.slice(0, 3).map((tag, index) => {
-                                                        const tagStyle = getTagColor(tag);
-                                                        return (
-                                                            <Box
-                                                                key={index}
-                                                                px={{ base: 2, md: 2.5 }}
-                                                                py={{ base: 0.5, md: 1 }}
-                                                                borderRadius="md"
-                                                                bg={tagStyle.bg}
-                                                                color={tagStyle.color}
-                                                                borderWidth="1px"
-                                                                borderColor={tagStyle.border}
-                                                                fontSize="xs"
-                                                                fontWeight="600"
-                                                            >
-                                                                {tag.charAt(0) + tag.slice(1).toLowerCase().replace('_', ' ')}
-                                                            </Box>
-                                                        );
-                                                    })
-                                                ) : (
-                                                    <Text fontSize="xs" color="gray.400">No tags</Text>
-                                                )}
-                                                {dish.tags && dish.tags.length > 3 && (
-                                                    <Text fontSize="xs" color="gray.500" fontWeight="600">
-                                                        +{dish.tags.length - 3}
-                                                    </Text>
-                                                )}
-                                            </HStack>
+
+                                            <VStack align="stretch" gap={2}>
+                                                <Text fontSize="xs" color="gray.500" fontWeight="600" textTransform="uppercase">
+                                                    Tags
+                                                </Text>
+                                                <HStack flexWrap="wrap" gap={2}>
+                                                    {dish.tags && dish.tags.length > 0 ? (
+                                                        dish.tags.slice(0, 3).map((tag, index) => {
+                                                            const tagStyle = getTagColor(tag);
+                                                            return (
+                                                                <Box
+                                                                    key={index}
+                                                                    px={{ base: 2, md: 2.5 }}
+                                                                    py={{ base: 0.5, md: 1 }}
+                                                                    borderRadius="md"
+                                                                    bg={tagStyle.bg}
+                                                                    color={tagStyle.color}
+                                                                    borderWidth="1px"
+                                                                    borderColor={tagStyle.border}
+                                                                    fontSize="xs"
+                                                                    fontWeight="600"
+                                                                >
+                                                                    {tag.charAt(0) + tag.slice(1).toLowerCase().replace('_', ' ')}
+                                                                </Box>
+                                                            );
+                                                        })
+                                                    ) : (
+                                                        <Text fontSize="xs" color="gray.400">No tags</Text>
+                                                    )}
+                                                    {dish.tags && dish.tags.length > 3 && (
+                                                        <Text fontSize="xs" color="gray.500" fontWeight="600">
+                                                            +{dish.tags.length - 3}
+                                                        </Text>
+                                                    )}
+                                                </HStack>
+                                            </VStack>
                                         </VStack>
+
+                                        <Button
+                                            bg="#083951"
+                                            color="white"
+                                            size="md"
+                                            w="full"
+                                            onClick={() => handleAddToCart(dish)}
+                                            _hover={{ bg: "#0a4a63" }}
+                                        >
+                                            <FiPlus style={{ marginRight: '8px' }} />
+                                            Add to Cart
+                                        </Button>
                                     </Stack>
                                 </Box>
                             );
@@ -523,6 +547,12 @@ const GetDishes = () => {
                 confirmLabel={confirmPayload.confirmLabel}
                 confirmColorScheme={confirmPayload.confirmColorScheme}
                 isLoading={confirmLoading}
+            />
+
+            <AddToCartModal
+                isOpen={cartModalOpen}
+                onClose={() => setCartModalOpen(false)}
+                dish={selectedDish}
             />
         </Box>
     );

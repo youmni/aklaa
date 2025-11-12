@@ -52,6 +52,10 @@ public class Ingredient {
     @Builder.Default
     private List<DishIngredient> dishIngredients = new ArrayList<>();
 
+    @OneToMany(mappedBy = "ingredient", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<GroceryListIngredient> groceryListIngredients = new ArrayList<>();
+
     @CreationTimestamp
     @Column(updatable = false)
     private LocalDateTime createdAt;

@@ -42,6 +42,12 @@ export const sidebarItems = [
       }
     ],
   },
+    {
+    id: 'cart',
+    label: 'Cart',
+    href: '/cart',
+    roles: ['USER', 'ADMIN'],
+  },
 ];
 
 export const sidebarFooterItems = [
