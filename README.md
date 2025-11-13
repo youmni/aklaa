@@ -30,10 +30,30 @@ MYSQL_PASSWORD=[db_password]
 SPRING_DATASOURCE_URL=[JDBC_url]
 SPRING_DATASOURCE_USERNAME=[user]
 SPRING_DATASOURCE_PASSWORD=[password]
+
 SPRING_PROFILES_ACTIVE=[dev or prod]
 
+SPRING_MAIL_HOST=[smtp]
+SPRING_MAIL_PORT=[port]
+SPRING_MAIL_USERNAME=[username]
+SPRING_MAIL_PASSWORD=[password]
+SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH=true
+SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE=true
+SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_REQUIRED=true
+
+FRONTEND_URL=[frontend_url]
+JWT_SECRET=[jwt_secret]
+
 # React
-VITE_API_URL=[frontend_url]
+VITE_BACKEND_URL=[backend_url]
+VITE_DEFAULT_IMAGE_URL=[default_image_url]
+
+# MinIO
+MINIO_ENDPOINT=[minio_endpoint_url]
+MINIO_ENDPOINT_EXTERN=[minio_extern_endpoint_url]
+MINIO_ACCESS_KEY=[access_key]
+MINIO_SECRET_KEY=[secret_key]
+MINIO_BUCKET_NAME=[bucket_name_for_dishes]
 ```
 
 3. **Start the project with Docker Compose**:
@@ -53,6 +73,7 @@ docker compose down
 2. **MySQL**: Used for managing the database.
 3. **Spring Boot**: Used for building the backend of the application.
 4. **React JS**: Used for managing the database.
+5. **Minio**: Used for image storage.
 
 ### Sources
 1. [@Relations: Many to Many](https://www.baeldung.com/jpa-many-to-many)
