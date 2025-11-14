@@ -4,9 +4,9 @@ import { Tabs } from '@chakra-ui/react';
 import { FaListUl } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
-import api from '../../api/axiosConfig';
-import GroceryListCard from '../../components/grocerylist/GroceryListCard';
-import EmptyGroceryLists from '../../components/grocerylist/EmptyGroceryLists';
+import api from '../../../api/axiosConfig';
+import GroceryListCard from '../../../components/grocerylist/GroceryListCard';
+import EmptyGroceryLists from '../../../components/grocerylist/EmptyGroceryLists';
 
 const GroceryLists = () => {
     const [groceryLists, setGroceryLists] = useState([]);
@@ -21,13 +21,7 @@ const GroceryLists = () => {
     const fetchGroceryLists = async () => {
         setLoading(true);
         try {
-            const response = await api.get('/grocerylists', {
-                params: {
-                    page: 0,
-                    size: 100,
-                    sort: 'startOfWeek,desc'
-                }
-            });
+            const response = await api.get('/grocerylists', {});
             setGroceryLists(response.data);
         } catch (error) {
             console.error('Error fetching grocery lists:', error);

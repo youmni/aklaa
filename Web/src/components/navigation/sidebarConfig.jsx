@@ -43,9 +43,9 @@ export const sidebarItems = [
     ],
   },
   {
-    id: 'groceries',
+    id: 'grocerylists',
     label: 'Lists',
-    href: '/groceries',
+    href: '/grocerylists',
     roles: ['USER', 'ADMIN'],
   },
 ];

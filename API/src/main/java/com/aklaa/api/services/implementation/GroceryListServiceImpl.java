@@ -13,10 +13,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -63,7 +60,15 @@ public class GroceryListServiceImpl implements GroceryListService {
     public GroceryListIngredientListResponseDTO getIngredientOfGroceryList(Long id, User user, Pageable pageable) {
         return groceryListRepository.findByIdAndUser(id, user)
                 .map(groceryList -> {
-                    List<GroceryListIngredient> allItems = groceryList.getGroceryListIngredients();
+                    List<GroceryListIngredient> allItems = groceryList.getGroceryListIngredients()
+                            .stream()
+                            .sorted(
+                                    Comparator.comparing((GroceryListIngredient item) ->
+                                                    item.getIngredient().getCategory())
+                                            .thenComparing(item ->
+                                                    item.getIngredient().getName())
+                            )
+                            .toList();
 
                     List<GroceryListIngredientResponseDTO> pagedIngredients = allItems.stream()
                             .skip(pageable.getOffset())
