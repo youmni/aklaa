@@ -112,13 +112,8 @@ const CreateDish = () => {
     const fetchIngredients = async () => {
         try {
             setIsLoadingIngredients(true);
-            const response = await api.get('/ingredients', {
-                params: {
-                    page: 0,
-                    size: 1000
-                }
-            });
-            setAvailableIngredients(response.data.ingredients || []);
+            const response = await api.get('/ingredients/all');
+            setAvailableIngredients(response.data || []);
         } catch (error) {
             enqueueSnackbar('Failed to fetch ingredients', { variant: 'error' });
         } finally {

@@ -42,10 +42,10 @@ export const sidebarItems = [
       }
     ],
   },
-    {
-    id: 'cart',
-    label: 'Cart',
-    href: '/cart',
+  {
+    id: 'grocerylists',
+    label: 'Lists',
+    href: '/grocerylists',
     roles: ['USER', 'ADMIN'],
   },
 ];

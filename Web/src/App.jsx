@@ -20,6 +20,9 @@ import DetailsDish from "./pages/user/dishes/DetailsDish";
 import DeleteDish from "./pages/user/dishes/DeleteDish";
 import GetDishes from "./pages/user/dishes/GetDishes";
 import ShoppingCart from "./pages/user/ShoppingCart";
+import GroceryLists from "./pages/user/groceryLists/GroceryLists";
+import DetailsGroceryList from "./pages/user/groceryLists/DetailsGroceryList";
+import EditGroceryLists from "./pages/user/groceryLists/EditGroceryLists";
 
 const App = () => {
   return (
@@ -53,6 +56,11 @@ const App = () => {
               <Route path="delete/:id" element={<DeleteDish />} />
             </Route>
             <Route path="/cart" element={<ShoppingCart />} />
+            <Route path="grocerylists">
+              <Route index element={<GroceryLists />} />
+              <Route path=":id/ingredients" element={<DetailsGroceryList />} />
+              <Route path=":id/edit" element={<EditGroceryLists />} />
+            </Route>
           </Route>
         </Route>
 
