@@ -12,7 +12,7 @@ import {
     Badge,
     Button,
 } from '@chakra-ui/react';
-import { FaListUl, FaShoppingBasket, FaCheckCircle } from 'react-icons/fa';
+import { FaListUl, FaShoppingBasket, FaCheckCircle, FaEdit } from 'react-icons/fa';
 import { FiArrowLeft } from 'react-icons/fi';
 import { useSnackbar } from 'notistack';
 import api from '../../../api/axiosConfig';
@@ -103,7 +103,7 @@ const DetailsGroceryList = () => {
             newChecked.add(ingredientId);
         }
         setCheckedItems(newChecked);
-        
+
         const storageKey = `groceryList_${id}_checked`;
         localStorage.setItem(storageKey, JSON.stringify([...newChecked]));
     };
@@ -145,10 +145,22 @@ const DetailsGroceryList = () => {
                         >
                             <FiArrowLeft />
                         </Button>
-                        <HStack gap={2}>
-                            <Text fontSize="lg" fontWeight="600" color="#083951">
-                                {totalChecked} / {totalItems} items checked
-                            </Text>
+                        <HStack gap={3}>
+                            <HStack gap={2}>
+                                <Text fontSize="lg" fontWeight="600" color="#083951">
+                                    {totalChecked} / {totalItems} items checked
+                                </Text>
+                            </HStack>
+                            <Button
+                                bg="#083951"
+                                color="white"
+                                onClick={() => navigate(`/grocerylists/${id}/edit`)}
+                                _hover={{ bg: '#0a4a63' }}
+                                leftIcon={<FaEdit />}
+                                px={6}
+                            >
+                                Edit
+                            </Button>
                         </HStack>
                     </Flex>
 

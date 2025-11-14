@@ -65,7 +65,7 @@ public class IngredientController {
         return ResponseEntity.ok(ingredient);
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<IngredientResponseDTO> delete(@PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails) {
         Optional<User> optionalUser = userRepository.findByEmail(userDetails.getUsername());
 
@@ -78,7 +78,7 @@ public class IngredientController {
         return ResponseEntity.ok(ingredient);
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<IngredientResponseDTO> getIngredient(@PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails) {
         Optional<User> optionalUser = userRepository.findByEmail(userDetails.getUsername());
 
@@ -88,6 +88,19 @@ public class IngredientController {
         }
         User user = optionalUser.get();
         IngredientResponseDTO ingredientResponseDTO = ingredientService.get(id, user);
+        return ResponseEntity.ok(ingredientResponseDTO);
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<IngredientResponseDTO>> getAll(@AuthenticationPrincipal UserDetails userDetails) {
+        Optional<User> optionalUser = userRepository.findByEmail(userDetails.getUsername());
+
+        if (optionalUser.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(null);
+        }
+        User user = optionalUser.get();
+        List<IngredientResponseDTO> ingredientResponseDTO = ingredientService.getAll(user);
         return ResponseEntity.ok(ingredientResponseDTO);
     }
 

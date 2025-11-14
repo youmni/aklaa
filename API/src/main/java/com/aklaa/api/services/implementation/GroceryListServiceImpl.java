@@ -2,17 +2,21 @@ package com.aklaa.api.services.implementation;
 
 import com.aklaa.api.dao.DishRepository;
 import com.aklaa.api.dao.GroceryListRepository;
+import com.aklaa.api.dao.IngredientRepository;
 import com.aklaa.api.dtos.request.CartDishRequestDTO;
+import com.aklaa.api.dtos.request.GroceryListIngredientListRequestDTO;
 import com.aklaa.api.dtos.response.*;
 import com.aklaa.api.mapper.DishMapper;
 import com.aklaa.api.model.Dish;
 import com.aklaa.api.model.GroceryListIngredient;
+import com.aklaa.api.model.GroceryListIngredientKey;
 import com.aklaa.api.model.User;
 import com.aklaa.api.services.contract.GroceryListService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -20,11 +24,13 @@ import java.util.stream.Collectors;
 public class GroceryListServiceImpl implements GroceryListService {
 
     private final DishRepository dishRepository;
+    private final IngredientRepository ingredientRepository;
     private final GroceryListRepository groceryListRepository;
     private final DishMapper dishMapper;
 
-    public GroceryListServiceImpl(DishRepository dishRepository, GroceryListRepository groceryListRepository, DishMapper dishMapper) {
+    public GroceryListServiceImpl(DishRepository dishRepository, IngredientRepository ingredientRepository, GroceryListRepository groceryListRepository, DishMapper dishMapper) {
         this.dishRepository = dishRepository;
+        this.ingredientRepository = ingredientRepository;
         this.groceryListRepository = groceryListRepository;
         this.dishMapper = dishMapper;
     }
@@ -100,6 +106,51 @@ public class GroceryListServiceImpl implements GroceryListService {
                         .totalElements(0)
                         .totalPages(0)
                         .build());
+    }
+
+    @Override
+    public void updateIngredientsOfGroceryList(Long listId, GroceryListIngredientListRequestDTO updatedList, User user) {
+        groceryListRepository.findByIdAndUser(listId, user).ifPresent(groceryList -> {
+
+            Map<Long, BigDecimal> updatedQuantities =
+                    new HashMap<>(updatedList.getIngredientsWithQuantity());
+
+            List<GroceryListIngredient> existingIngredients =
+                    groceryList.getGroceryListIngredients();
+
+            List<GroceryListIngredient> ingredientsToRemove = new ArrayList<>();
+
+            for (GroceryListIngredient existingItem : existingIngredients) {
+                Long ingredientId = existingItem.getIngredient().getId();
+
+                if (updatedQuantities.containsKey(ingredientId)) {
+                    existingItem.setQuantity(updatedQuantities.get(ingredientId));
+                    updatedQuantities.remove(ingredientId);
+                } else {
+                    ingredientsToRemove.add(existingItem);
+                }
+            }
+
+            existingIngredients.removeAll(ingredientsToRemove);
+
+            updatedQuantities.forEach((ingredientId, quantity) -> {
+                ingredientRepository.findById(ingredientId).ifPresent(ingredient -> {
+
+                    GroceryListIngredientKey key =
+                            new GroceryListIngredientKey(groceryList.getId(), ingredient.getId());
+
+                    GroceryListIngredient newItem = new GroceryListIngredient();
+                    newItem.setId(key);
+                    newItem.setGroceryList(groceryList);
+                    newItem.setIngredient(ingredient);
+                    newItem.setQuantity(quantity);
+
+                    existingIngredients.add(newItem);
+                });
+            });
+
+            groceryListRepository.save(groceryList);
+        });
     }
 
     public List<CartDishResponseDTO> convertToResponseDTOs(List<CartDishRequestDTO> cartRequests) {

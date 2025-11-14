@@ -4,6 +4,7 @@ import com.aklaa.api.dao.DishRepository;
 import com.aklaa.api.dao.GroceryListRepository;
 import com.aklaa.api.dao.UserRepository;
 import com.aklaa.api.dtos.request.CartDishRequestDTO;
+import com.aklaa.api.dtos.request.GroceryListIngredientListRequestDTO;
 import com.aklaa.api.dtos.request.IngredientRequestDTO;
 import com.aklaa.api.dtos.response.*;
 import com.aklaa.api.mapper.DishMapper;
@@ -78,6 +79,19 @@ public class GroceryListController {
 
         session.removeAttribute(CART_KEY);
 
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("{id}")
+    public ResponseEntity<?> update(@RequestBody @Valid GroceryListIngredientListRequestDTO request, @PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails){
+        Optional<User> optionalUser = userRepository.findByEmail(userDetails.getUsername());
+
+        if (optionalUser.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(null);
+        }
+        User user = optionalUser.get();
+        groceryListService.updateIngredientsOfGroceryList(id, request, user);
         return ResponseEntity.ok().build();
     }
 

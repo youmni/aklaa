@@ -15,6 +15,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
@@ -115,6 +116,26 @@ public class IngredientServiceImpl implements IngredientService {
             throw new AccessDeniedException("Access denied");
         }
         return ingredientMapper.toResponseDTO(ingredient);
+    }
+
+    @Override
+    public List<IngredientResponseDTO> getAll(User user) {
+
+        List<Ingredient> ingredients = ingredientRepository.findAllByUser(user);
+
+        return ingredients.stream()
+                .sorted(
+                        Comparator.comparing(Ingredient::getCategory)
+                                .thenComparing(Ingredient::getName)
+                )
+                .map(ingredient -> IngredientResponseDTO.builder()
+                        .id(ingredient.getId())
+                        .name(ingredient.getName())
+                        .description(ingredient.getDescription())
+                        .category(ingredient.getCategory())
+                        .unit(ingredient.getUnit())
+                        .build())
+                .toList();
     }
 
     private Specification<Ingredient> hasCategoriesSpec(List<IngredientCategory> categories) {
