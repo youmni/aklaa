@@ -24,6 +24,12 @@ export const sidebarItems = [
     ],
   },
   {
+    id: 'users',
+    label: 'Users',
+    href: '/admin/users',
+    roles: ['ADMIN'],
+  },
+  {
     id: 'groceries',
     label: 'Groceries',
     roles: [],
@@ -34,7 +40,7 @@ export const sidebarItems = [
         href: '/ingredients',
         roles: ['USER', 'ADMIN'],
       },
-            {
+      {
         id: 'dishes',
         label: 'Dishes',
         href: '/dishes',

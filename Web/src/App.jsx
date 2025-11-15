@@ -23,6 +23,7 @@ import ShoppingCart from "./pages/user/ShoppingCart";
 import GroceryLists from "./pages/user/groceryLists/GroceryLists";
 import DetailsGroceryList from "./pages/user/groceryLists/DetailsGroceryList";
 import EditGroceryLists from "./pages/user/groceryLists/EditGroceryLists";
+import GetUsers from "./pages/admin/users/GetUsers";
 
 const App = () => {
   return (
@@ -66,7 +67,11 @@ const App = () => {
 
         <Route element={<PrivateRoute allowedRoles={['ADMIN']} />}>
           <Route element={<Layout />}>
-            <Route path="/admin" element={<Home />} />
+            <Route path="/admin">
+              <Route path="users">
+                <Route index element={<GetUsers />} />
+              </Route>
+            </Route>
           </Route>
         </Route>
 
