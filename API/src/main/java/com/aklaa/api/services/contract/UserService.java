@@ -9,4 +9,5 @@ import java.util.List;
 
 public interface UserService {
     UserListResponseDTO getUsers(String search, String type, Pageable pageable);
+    UserDTO get(Long id);
 }

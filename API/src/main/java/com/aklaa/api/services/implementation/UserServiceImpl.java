@@ -5,6 +5,7 @@ import com.aklaa.api.dtos.response.IngredientListResponseDTO;
 import com.aklaa.api.dtos.response.IngredientResponseDTO;
 import com.aklaa.api.dtos.response.UserDTO;
 import com.aklaa.api.dtos.response.UserListResponseDTO;
+import com.aklaa.api.mapper.UserMapper;
 import com.aklaa.api.model.Ingredient;
 import com.aklaa.api.model.User;
 import com.aklaa.api.model.enums.IngredientCategory;
@@ -16,15 +17,19 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 
 @Component
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper) {
         this.userRepository = userRepository;
+        this.userMapper = userMapper;
     }
 
     @Override
@@ -58,6 +63,14 @@ public class UserServiceImpl implements UserService {
                 .totalElements(userPage.getTotalElements())
                 .totalPages(userPage.getTotalPages())
                 .build();
+    }
+
+    @Override
+    public UserDTO get(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("User not found"));
+
+        return userMapper.toDTO(user);
     }
 
     private Specification<User> hasUserTypeSpec(UserType type) {
