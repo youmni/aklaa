@@ -14,6 +14,11 @@ import com.aklaa.api.services.contract.UserService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -26,10 +31,12 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final UserDetailsService userDetailsService;
 
-    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper) {
+    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper, UserDetailsService userDetailsService) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
+        this.userDetailsService = userDetailsService;
     }
 
     @Override
@@ -71,6 +78,40 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new NoSuchElementException("User not found"));
 
         return userMapper.toDTO(user);
+    }
+
+    @Override
+    public UserDTO updateUserRole(Long id, UserType userType) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("User not found"));
+
+        user.setUserType(userType);
+        userRepository.save(user);
+
+        refreshAuthentication(user.getEmail());
+
+        return UserDTO.builder()
+                .id(user.getId())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .email(user.getEmail())
+                .userType(user.getUserType().name())
+                .build();
+    }
+
+    @Override
+    public void refreshAuthentication(String email) {
+        Authentication existingAuth = SecurityContextHolder.getContext().getAuthentication();
+
+        UserDetails updatedUserDetails = userDetailsService.loadUserByUsername(email);
+
+        Authentication newAuth = new UsernamePasswordAuthenticationToken(
+                updatedUserDetails,
+                existingAuth != null ? existingAuth.getCredentials() : null,
+                updatedUserDetails.getAuthorities()
+        );
+
+        SecurityContextHolder.getContext().setAuthentication(newAuth);
     }
 
     private Specification<User> hasUserTypeSpec(UserType type) {

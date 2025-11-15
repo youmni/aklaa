@@ -1,9 +1,11 @@
 package com.aklaa.api.controller;
 
+import com.aklaa.api.dao.UserRepository;
 import com.aklaa.api.dtos.response.IngredientListResponseDTO;
 import com.aklaa.api.dtos.response.UserDTO;
 import com.aklaa.api.dtos.response.UserListResponseDTO;
 import com.aklaa.api.model.User;
+import com.aklaa.api.model.enums.UserType;
 import com.aklaa.api.services.contract.UserService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -22,9 +24,11 @@ import java.util.Optional;
 public class UserController {
 
     private final UserService userService;
+    private final UserRepository userRepository;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, UserRepository userRepository) {
         this.userService = userService;
+        this.userRepository = userRepository;
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -46,4 +50,15 @@ public class UserController {
         UserDTO response = userService.get(id);
         return ResponseEntity.ok(response);
     }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("{id}")
+    public ResponseEntity<UserDTO> updateUserRole(
+            @PathVariable Long id,
+            @RequestParam UserType type) {
+
+        UserDTO updatedUser = userService.updateUserRole(id, type);
+        return ResponseEntity.ok(updatedUser);
+    }
+
 }

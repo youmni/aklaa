@@ -42,6 +42,7 @@ const GetUsers = () => {
     const [totalElements, setTotalElements] = useState(0);
     const [selectedUser, setSelectedUser] = useState(null);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const [isUpdatingRole, setIsUpdatingRole] = useState(false);
     const pageSize = 10;
 
     useEffect(() => {
@@ -93,6 +94,32 @@ const GetUsers = () => {
     const handleRowClick = (user) => {
         setSelectedUser(user);
         setIsDialogOpen(true);
+    };
+
+    const handleRoleChange = async (e) => {
+        const newRole = e.target.value;
+        if (!selectedUser || !newRole) return;
+
+        try {
+            setIsUpdatingRole(true);
+            await api.put(`/users/${selectedUser.id}`, null, {
+                params: { type: newRole }
+            });
+
+            // Update local state
+            setSelectedUser({ ...selectedUser, userType: newRole });
+            setUsers(users.map(user => 
+                user.id === selectedUser.id 
+                    ? { ...user, userType: newRole }
+                    : user
+            ));
+
+            enqueueSnackbar('User role updated successfully', { variant: 'success' });
+        } catch (error) {
+            enqueueSnackbar(error.response?.data?.message || 'Failed to update user role', { variant: 'error' });
+        } finally {
+            setIsUpdatingRole(false);
+        }
     };
 
     const getUserTypeBadge = (userType) => {
@@ -358,7 +385,27 @@ const GetUsers = () => {
                                             <Text fontSize="xs" color="gray.600" fontWeight="medium" mb={2} textTransform="uppercase" letterSpacing="wide">
                                                 Account Type
                                             </Text>
-                                            {getUserTypeBadge(selectedUser.userType)}
+                                            <NativeSelectRoot size="md" disabled={isUpdatingRole}>
+                                                <NativeSelectField
+                                                    value={selectedUser.userType}
+                                                    onChange={handleRoleChange}
+                                                    bg="white"
+                                                    borderColor="gray.300"
+                                                    borderWidth="1px"
+                                                    _hover={{ borderColor: NAVY }}
+                                                    borderRadius="md"
+                                                    cursor="pointer"
+                                                >
+                                                    <option value="USER"> User</option>
+                                                    <option value="ADMIN"> Admin</option>
+                                                </NativeSelectField>
+                                            </NativeSelectRoot>
+                                            {isUpdatingRole && (
+                                                <HStack mt={2}>
+                                                    <Spinner size="sm" color={NAVY} />
+                                                    <Text fontSize="xs" color="gray.600">Updating...</Text>
+                                                </HStack>
+                                            )}
                                         </Box>
                                     </VStack>
                                 )}
