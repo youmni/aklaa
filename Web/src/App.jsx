@@ -42,7 +42,7 @@ const App = () => {
 
         <Route element={<PrivateRoute allowedRoles={['USER', 'ADMIN']} />}>
           <Route element={<Layout />}>
-            <Route path="/" element={<Home />} />
+            <Route path="/" redirectTo="/dishes" />
             <Route path="/ingredients">
               <Route index element={<GetIngredients />} />
               <Route path="add" element={<CreateIngredient />} />
