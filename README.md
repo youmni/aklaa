@@ -18,7 +18,6 @@ cd aklaa
 ```
 
 2. **Copy `.env.example` to `.env` in the root of the project**:
-Rename the env.example file to .env. Then fill in all values with the correct information for your environment.
 
 3. **Start the project with Docker Compose**:
 ```bash
