@@ -31,6 +31,16 @@ docker compose down
 
 > **Note:** Make sure step 3 and 4 are performed in the root directory.
 
+## Documentation
+
+### Swagger
+- **Swagger UI:**  
+  - `http://localhost:8080/swagger-ui/index.html`
+- **OpenAPI JSON:**  
+  - `http://localhost:8080/v3/api-docs`
+- **OpenAPI YAML:**  
+  - `http://localhost:8080/v3/api-docs.yaml`
+
 ## Technologies
 1. **Docker**: Used for building the backend of the application.
 2. **MySQL**: Used for managing the database.
