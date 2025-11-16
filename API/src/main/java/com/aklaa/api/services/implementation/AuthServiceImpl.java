@@ -15,13 +15,17 @@ import com.aklaa.api.services.contract.AuthService;
 import com.aklaa.api.services.contract.EmailService;
 import com.nimbusds.jose.JOSEException;
 import jakarta.mail.MessagingException;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.security.SecureRandom;
+import java.text.ParseException;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.Optional;
 
@@ -124,6 +128,42 @@ public class AuthServiceImpl implements AuthService {
         } catch (IOException | MessagingException e) {
             throw new RuntimeException("Failed to send a password reset email");
         }
+    }
+
+    public AuthResponseDTO refreshAccessToken(String refreshToken) throws ParseException, JOSEException {
+        if (refreshToken == null) {
+            throw new IllegalArgumentException("Missing refresh token");
+        }
+
+        if (!jwtService.validateToken(refreshToken)) {
+            throw new IllegalArgumentException("Invalid or expired refresh token");
+        }
+
+        String type = jwtService.getClaim(refreshToken, "type");
+        if (!"refresh".equals(type)) {
+            throw new IllegalArgumentException("Wrong token type");
+        }
+
+        String userId = jwtService.getSubject(refreshToken);
+
+        User user = userRepository.findById(Long.parseLong(userId))
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+        return AuthResponseDTO.builder()
+                .success(true)
+                .message("Refresh successful")
+                .accessToken(jwtService.generateToken(user.getId(), user.getUserType()))
+                .refreshToken(refreshToken)
+                .build();
+    }
+
+    public String getCookieValue(HttpServletRequest request, String name) {
+        if (request.getCookies() == null) return null;
+
+        return Arrays.stream(request.getCookies())
+                .filter(c -> name.equals(c.getName()))
+                .map(Cookie::getValue)
+                .findFirst()
+                .orElse(null);
     }
 
     public static String generateSecureToken() {

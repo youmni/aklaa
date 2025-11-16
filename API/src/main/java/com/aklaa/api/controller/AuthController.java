@@ -11,7 +11,9 @@ import com.aklaa.api.dtos.response.UserDTO;
 import com.aklaa.api.model.PasswordResetToken;
 import com.aklaa.api.model.User;
 import com.aklaa.api.services.contract.AuthService;
+import com.nimbusds.jose.JOSEException;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.text.ParseException;
 import java.util.Optional;
 
 @RestController
@@ -171,5 +174,21 @@ public class AuthController {
         }
 
         return ResponseEntity.ok("Token is valid");
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<AuthResponseDTO> refreshAccessToken(HttpServletRequest request, HttpServletResponse response) throws ParseException, JOSEException {
+        String refreshToken = authService.getCookieValue(request, "refreshToken");
+
+        AuthResponseDTO newAuthentication = authService.refreshAccessToken(refreshToken);
+
+        Cookie accessTokenCookie = new Cookie("accessToken", newAuthentication.getAccessToken());
+        accessTokenCookie.setHttpOnly(true);
+        accessTokenCookie.setSecure(true);
+        accessTokenCookie.setPath("/");
+        accessTokenCookie.setMaxAge(10 * 60);
+        response.addCookie(accessTokenCookie);
+
+        return ResponseEntity.ok(newAuthentication);
     }
 }
