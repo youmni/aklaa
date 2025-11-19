@@ -1,6 +1,7 @@
 package com.aklaa.api.config.security;
 
 import com.aklaa.api.exceptions.JwtCreationException;
+import com.aklaa.api.exceptions.JwtParseException;
 import com.aklaa.api.model.enums.UserType;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
@@ -79,26 +80,48 @@ public class JwtService {
         }
     }
 
-    private boolean isTokenExpired(SignedJWT signedJWT) throws java.text.ParseException {
-        Date expirationTime = signedJWT.getJWTClaimsSet().getExpirationTime();
-        return expirationTime.before(new Date());
-    }
-
-    public String getSubject(String token) throws java.text.ParseException {
-        SignedJWT signedJWT = SignedJWT.parse(token);
-        return signedJWT.getJWTClaimsSet().getSubject();
-    }
-
-    public UserType getRoleFromToken(String token) throws java.text.ParseException {
-        SignedJWT signedJWT = SignedJWT.parse(token);
-        String role = (String) signedJWT.getJWTClaimsSet().getClaim("role");
-        if (role == null) {
-            throw new IllegalArgumentException("JWT token missing 'role' claim");
+    private boolean isTokenExpired(SignedJWT signedJWT) {
+        try {
+            Date expirationTime = signedJWT.getJWTClaimsSet().getExpirationTime();
+            return expirationTime.before(new Date());
+        } catch (ParseException e) {
+            throw new JwtParseException("Failed to read expiration time from JWT", e);
         }
-        return UserType.valueOf(role);
     }
-    public String getClaim(String token, String claim) throws ParseException {
-        SignedJWT signedJWT = SignedJWT.parse(token);
-        return signedJWT.getJWTClaimsSet().getStringClaim(claim);
+
+    public String getSubject(String token) {
+        try {
+            SignedJWT signedJWT = SignedJWT.parse(token);
+            return signedJWT.getJWTClaimsSet().getSubject();
+        } catch (ParseException e) {
+            throw new JwtParseException("Failed to parse JWT token", e);
+        }
+    }
+
+    public UserType getRoleFromToken(String token) {
+        try {
+            SignedJWT signedJWT = SignedJWT.parse(token);
+            String role = signedJWT.getJWTClaimsSet().getStringClaim("role");
+
+            if (role == null) {
+                throw new JwtParseException("JWT token missing 'role' claim", null);
+            }
+
+            return UserType.valueOf(role);
+
+        } catch (ParseException e) {
+            throw new JwtParseException("Failed to parse role from JWT", e);
+        } catch (IllegalArgumentException e) {
+            throw new JwtParseException("Invalid role value inside JWT", e);
+        }
+    }
+
+    public String getClaim(String token, String claim) {
+        try {
+            SignedJWT signedJWT = SignedJWT.parse(token);
+            return signedJWT.getJWTClaimsSet().getStringClaim(claim);
+        } catch (ParseException e) {
+            throw new JwtParseException("Failed to parse claim '" + claim + "' from JWT", e);
+        }
     }
 }
