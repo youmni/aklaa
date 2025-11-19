@@ -30,6 +30,12 @@ public class GlobalExceptionHandler {
                 .body("Invalid data: " + ex.getMostSpecificCause().getMessage());
     }
 
+    @ExceptionHandler(EmailSendingException.class)
+    public ResponseEntity<String> handleEmailSending(EmailSendingException ex) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Email could not be sent"+ ex.getMessage());
+    }
+
     @ExceptionHandler(JOSEException.class)
     public ResponseEntity<AuthResponseDTO> handleJoseException(JOSEException ex) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
