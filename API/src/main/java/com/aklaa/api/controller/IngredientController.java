@@ -11,6 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +33,7 @@ public class IngredientController {
         this.userRepository = userRepository;
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     @PostMapping
     public ResponseEntity<IngredientResponseDTO> create(@RequestBody @Valid IngredientRequestDTO ingredientRequestDTO, @AuthenticationPrincipal UserDetails userDetails) {
         Optional<User> optionalUser = userRepository.findByEmail(userDetails.getUsername());
@@ -52,6 +54,7 @@ public class IngredientController {
         return ResponseEntity.created(location).body(ingredient);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     @PutMapping("/{id}")
     public ResponseEntity<IngredientResponseDTO> update(@PathVariable Long id, @RequestBody @Valid IngredientRequestDTO ingredientRequestDTO, @AuthenticationPrincipal UserDetails userDetails) {
         Optional<User> optionalUser = userRepository.findByEmail(userDetails.getUsername());
@@ -65,6 +68,7 @@ public class IngredientController {
         return ResponseEntity.ok(ingredient);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     @DeleteMapping("/{id}")
     public ResponseEntity<IngredientResponseDTO> delete(@PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails) {
         Optional<User> optionalUser = userRepository.findByEmail(userDetails.getUsername());
@@ -78,6 +82,7 @@ public class IngredientController {
         return ResponseEntity.ok(ingredient);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     @GetMapping("/{id}")
     public ResponseEntity<IngredientResponseDTO> getIngredient(@PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails) {
         Optional<User> optionalUser = userRepository.findByEmail(userDetails.getUsername());
@@ -91,6 +96,7 @@ public class IngredientController {
         return ResponseEntity.ok(ingredientResponseDTO);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     @GetMapping("/all")
     public ResponseEntity<List<IngredientResponseDTO>> getAll(@AuthenticationPrincipal UserDetails userDetails) {
         Optional<User> optionalUser = userRepository.findByEmail(userDetails.getUsername());
@@ -104,6 +110,7 @@ public class IngredientController {
         return ResponseEntity.ok(ingredientResponseDTO);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     @GetMapping
     public ResponseEntity<IngredientListResponseDTO> filterIngredients(
             @RequestParam(required = false) String search,

@@ -11,6 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +33,7 @@ public class DishController {
         this.dishService = dishService;
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     @PostMapping
     public ResponseEntity<DishResponseDTO> create(@RequestBody @Valid DishRequestDTO dishRequestDTO, @AuthenticationPrincipal UserDetails userDetails){
         Optional<User> optionalUser = userRepository.findByEmail(userDetails.getUsername());
@@ -52,6 +54,7 @@ public class DishController {
         return ResponseEntity.created(location).body(dish);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     @PutMapping("/{id}")
     public ResponseEntity<DishResponseDTO> update(@PathVariable Long id, @RequestBody @Valid DishRequestDTO dishRequestDTO, @AuthenticationPrincipal UserDetails userDetails) {
         Optional<User> optionalUser = userRepository.findByEmail(userDetails.getUsername());
@@ -65,6 +68,7 @@ public class DishController {
         return ResponseEntity.ok(dish);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     @DeleteMapping("{id}")
     public ResponseEntity<DishResponseDTO> delete(@PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails) {
         Optional<User> optionalUser = userRepository.findByEmail(userDetails.getUsername());
@@ -78,6 +82,7 @@ public class DishController {
         return ResponseEntity.ok(dish);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     @GetMapping("{id}")
     public ResponseEntity<DishResponseDTO> getIngredient(@PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails) {
         Optional<User> optionalUser = userRepository.findByEmail(userDetails.getUsername());
@@ -91,6 +96,7 @@ public class DishController {
         return ResponseEntity.ok(dishResponseDTO);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     @GetMapping("/filter")
     public ResponseEntity<DishListResponseDTO> filterDishes(
             @RequestParam(required = false) String search,

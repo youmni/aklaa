@@ -1,7 +1,6 @@
 package com.aklaa.api.mapper;
 
 import com.aklaa.api.dtos.request.DishRequestDTO;
-import com.aklaa.api.dtos.request.DishIngredientRequestInfoDTO;
 import com.aklaa.api.dtos.response.DishIngredientResponseInfoDTO;
 import com.aklaa.api.dtos.response.DishResponseDTO;
 import com.aklaa.api.model.Dish;
