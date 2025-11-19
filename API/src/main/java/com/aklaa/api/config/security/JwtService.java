@@ -1,5 +1,6 @@
 package com.aklaa.api.config.security;
 
+import com.aklaa.api.exceptions.JwtCreationException;
 import com.aklaa.api.model.enums.UserType;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
@@ -20,44 +21,52 @@ public class JwtService {
     @Value("${jwt.secret}")
     private String secret;
 
-    public String generateToken(long id, UserType role) throws JOSEException {
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.MINUTE, 2);
+    public String generateToken(long id, UserType role) {
+        try {
+            Calendar cal = Calendar.getInstance();
+            cal.add(Calendar.MINUTE, 2);
 
-        JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
-                .subject(String.valueOf(id))
-                .claim("role", role)
-                .claim("type", "access")
-                .expirationTime(cal.getTime())
-                .build();
+            JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
+                    .subject(String.valueOf(id))
+                    .claim("role", role)
+                    .claim("type", "access")
+                    .expirationTime(cal.getTime())
+                    .build();
 
-        JWSHeader header = new JWSHeader(JWSAlgorithm.HS256);
-        SignedJWT signedJWT = new SignedJWT(header, claimsSet);
-        JWSSigner signer = new MACSigner(secret);
+            JWSHeader header = new JWSHeader(JWSAlgorithm.HS256);
+            SignedJWT signedJWT = new SignedJWT(header, claimsSet);
+            JWSSigner signer = new MACSigner(secret);
 
-        signedJWT.sign(signer);
+            signedJWT.sign(signer);
+            return signedJWT.serialize();
 
-        return signedJWT.serialize();
+        } catch (JOSEException e) {
+            throw new JwtCreationException("Failed to generate JWT access token", e);
+        }
     }
 
-    public String generateRefreshToken(long id, UserType role) throws JOSEException {
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DAY_OF_MONTH, 7);
+    public String generateRefreshToken(long id, UserType role) {
+        try {
+            Calendar cal = Calendar.getInstance();
+            cal.add(Calendar.DAY_OF_MONTH, 7);
 
-        JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
-                .subject(String.valueOf(id))
-                .claim("role", role)
-                .claim("type", "refresh")
-                .expirationTime(cal.getTime())
-                .build();
+            JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
+                    .subject(String.valueOf(id))
+                    .claim("role", role)
+                    .claim("type", "refresh")
+                    .expirationTime(cal.getTime())
+                    .build();
 
-        JWSHeader header = new JWSHeader(JWSAlgorithm.HS256);
-        SignedJWT signedJWT = new SignedJWT(header, claimsSet);
-        JWSSigner signer = new MACSigner(secret);
+            JWSHeader header = new JWSHeader(JWSAlgorithm.HS256);
+            SignedJWT signedJWT = new SignedJWT(header, claimsSet);
+            JWSSigner signer = new MACSigner(secret);
 
-        signedJWT.sign(signer);
+            signedJWT.sign(signer);
+            return signedJWT.serialize();
 
-        return signedJWT.serialize();
+        } catch (JOSEException e) {
+            throw new JwtCreationException("Failed to generate JWT refresh token", e);
+        }
     }
 
     public boolean validateToken(String token) {
