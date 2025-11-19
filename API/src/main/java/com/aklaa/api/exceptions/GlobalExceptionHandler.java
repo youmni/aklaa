@@ -1,5 +1,7 @@
 package com.aklaa.api.exceptions;
 
+import com.aklaa.api.dtos.response.AuthResponseDTO;
+import com.nimbusds.jose.JOSEException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +28,24 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body("Invalid data: " + ex.getMostSpecificCause().getMessage());
+    }
+
+    @ExceptionHandler(JOSEException.class)
+    public ResponseEntity<AuthResponseDTO> handleJoseException(JOSEException ex) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new AuthResponseDTO(false, "Could not generate token: " + ex.getMessage(), null, null));
+    }
+
+    @ExceptionHandler(AccountNotActivatedException.class)
+    public ResponseEntity<AuthResponseDTO> handleNotActivated(AccountNotActivatedException ex) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(new AuthResponseDTO(false, ex.getMessage(), null, null));
+    }
+
+    @ExceptionHandler(InvalidCredentialsException.class)
+    public ResponseEntity<AuthResponseDTO> handleInvalidCredentials(InvalidCredentialsException ex) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(new AuthResponseDTO(false, ex.getMessage(), null, null));
     }
 
     @ExceptionHandler(Exception.class)

@@ -8,6 +8,8 @@ import com.aklaa.api.dtos.request.PasswordResetRequestDTO;
 import com.aklaa.api.dtos.request.RegistrationDTO;
 import com.aklaa.api.dtos.response.AuthResponseDTO;
 import com.aklaa.api.dtos.response.UserDTO;
+import com.aklaa.api.exceptions.AccountNotActivatedException;
+import com.aklaa.api.exceptions.InvalidCredentialsException;
 import com.aklaa.api.mapper.UserMapper;
 import com.aklaa.api.model.PasswordResetToken;
 import com.aklaa.api.model.User;
@@ -71,22 +73,15 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public AuthResponseDTO login(LoginDTO loginDTO) {
-        try {
+    public AuthResponseDTO login(LoginDTO loginDTO) throws JOSEException {
             Optional<User> userOpt = userRepository.findByEmail(loginDTO.getEmail()).stream().findFirst();
 
             if (userOpt.isEmpty() || !passwordEncoder.matches(loginDTO.getPassword(), userOpt.get().getPassword())) {
-                return AuthResponseDTO.builder()
-                        .success(false)
-                        .message("Invalid email or password")
-                        .build();
+                throw new InvalidCredentialsException("Invalid email or password.");
             }
 
             if (!userOpt.get().isEnabled() || userOpt.get().getActivationToken() != null) {
-                return AuthResponseDTO.builder()
-                        .success(false)
-                        .message("Account not activated yet")
-                        .build();
+                throw new AccountNotActivatedException("Account not activated.");
             }
 
             User user = userOpt.get();
@@ -100,13 +95,6 @@ public class AuthServiceImpl implements AuthService {
                     .accessToken(token)
                     .refreshToken(refreshToken)
                     .build();
-
-        } catch (JOSEException e) {
-            return AuthResponseDTO.builder()
-                    .success(false)
-                    .message("Could not generate token: " + e.getMessage())
-                    .build();
-        }
     }
 
     @Override

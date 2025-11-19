@@ -50,7 +50,7 @@ public interface AuthService {
      * @return AuthResponseDTO containing success status, message, and JWT access token
      * @throws RuntimeException if credentials are invalid or account is not activated
      */
-    AuthResponseDTO login(LoginDTO loginDTO);
+    AuthResponseDTO login(LoginDTO loginDTO) throws JOSEException;
     
     /**
      * Processes a password reset request by generating a reset token and sending a reset email.
