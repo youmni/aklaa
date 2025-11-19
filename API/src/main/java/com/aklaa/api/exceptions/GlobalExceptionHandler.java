@@ -42,6 +42,20 @@ public class GlobalExceptionHandler {
                 .body(new AuthResponseDTO(false, "Could not generate token: " + ex.getMessage(), null, null));
     }
 
+    @ExceptionHandler(JwtParseException.class)
+    public ResponseEntity<String> handleJwtParseException(JwtParseException ex) {
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body("Invalid JWT token: " + ex.getMessage());
+    }
+
+    @ExceptionHandler(JwtCreationException.class)
+    public ResponseEntity<String> handleJwtParseCreationException(JwtCreationException ex) {
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Error creating JWT token: " + ex.getMessage());
+    }
+
     @ExceptionHandler(AccountNotActivatedException.class)
     public ResponseEntity<AuthResponseDTO> handleNotActivated(AccountNotActivatedException ex) {
         return ResponseEntity.status(HttpStatus.FORBIDDEN)
