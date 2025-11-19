@@ -27,9 +27,12 @@ api.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
-    // ❗ voorkom infinite loop
+    const currentPath = window.location.pathname;
+    if (currentPath.startsWith("/auth")) {
+      return Promise.reject(error);
+    }
+
     if (originalRequest.url.includes("/auth/refresh")) {
-      window.location.href = "/auth/login";
       return Promise.reject(error);
     }
 
@@ -38,7 +41,6 @@ api.interceptors.response.use(
     }
 
     if (originalRequest._retry) {
-      window.location.href = "/auth/login";
       return Promise.reject(error);
     }
 
@@ -55,11 +57,12 @@ api.interceptors.response.use(
 
     try {
       await api.post("/auth/refresh");
+
       processQueue(null);
+
       return api(originalRequest);
     } catch (err) {
       processQueue(err);
-      window.location.href = "/auth/login";
       return Promise.reject(err);
     } finally {
       isRefreshing = false;

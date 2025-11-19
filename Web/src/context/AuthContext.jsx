@@ -3,9 +3,9 @@ import api from "../api/axiosConfig";
 
 export const AuthContext = createContext({
   user: null,
-  setUser: () => {},
+  setUser: () => { },
   loading: true,
-  setLoading: () => {},
+  setLoading: () => { },
 });
 
 export const AuthProvider = ({ children }) => {
@@ -14,6 +14,11 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     let mounted = true;
+
+    if (window.location.pathname.startsWith("/auth")) {
+      setLoading(false);
+      return;
+    }
 
     const initAuth = async () => {
       try {
