@@ -82,6 +82,7 @@ public class GroceryListController {
         return ResponseEntity.ok().build();
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     @PutMapping("{id}")
     public ResponseEntity<?> update(@RequestBody @Valid GroceryListIngredientListRequestDTO request, @PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails){
         Optional<User> optionalUser = userRepository.findByEmail(userDetails.getUsername());
@@ -95,6 +96,7 @@ public class GroceryListController {
         return ResponseEntity.ok().build();
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     @GetMapping()
     public ResponseEntity<List<GroceryListResponseDTO>> getAll(@AuthenticationPrincipal UserDetails userDetails, Pageable pageable) {
         Optional<User> optionalUser = userRepository.findByEmail(userDetails.getUsername());
@@ -108,6 +110,7 @@ public class GroceryListController {
         return ResponseEntity.ok(list);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     @GetMapping("/{id}/ingredients")
     public ResponseEntity<GroceryListIngredientListResponseDTO> getIngredientsOfGroceryList(@PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails, @PageableDefault(size = 10) Pageable pageable) {
         Optional<User> optionalUser = userRepository.findByEmail(userDetails.getUsername());

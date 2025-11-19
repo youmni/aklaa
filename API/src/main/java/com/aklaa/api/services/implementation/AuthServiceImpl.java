@@ -8,19 +8,19 @@ import com.aklaa.api.dtos.request.PasswordResetRequestDTO;
 import com.aklaa.api.dtos.request.RegistrationDTO;
 import com.aklaa.api.dtos.response.AuthResponseDTO;
 import com.aklaa.api.dtos.response.UserDTO;
+import com.aklaa.api.exceptions.AccountNotActivatedException;
+import com.aklaa.api.exceptions.InvalidCredentialsException;
 import com.aklaa.api.mapper.UserMapper;
 import com.aklaa.api.model.PasswordResetToken;
 import com.aklaa.api.model.User;
 import com.aklaa.api.services.contract.AuthService;
 import com.aklaa.api.services.contract.EmailService;
 import com.nimbusds.jose.JOSEException;
-import jakarta.mail.MessagingException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.security.SecureRandom;
 import java.text.ParseException;
 import java.time.OffsetDateTime;
@@ -55,38 +55,26 @@ public class AuthServiceImpl implements AuthService {
             throw new IllegalArgumentException("Passwords do not match");
         }
 
-        try {
-            User user = userMapper.toEntity(registrationDTO);
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-            user.setActivationToken(generateSecureToken());
-            userRepository.save(user);
+        User user = userMapper.toEntity(registrationDTO);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setActivationToken(generateSecureToken());
+        userRepository.save(user);
 
-            emailService.sendActivationEmail(user, user.getActivationToken());
+        emailService.sendActivationEmail(user, user.getActivationToken());
 
-            return userMapper.toDTO(user);
-
-        } catch (IOException | MessagingException e) {
-            throw new RuntimeException("Failed to send activation email");
-        }
+        return userMapper.toDTO(user);
     }
 
     @Override
-    public AuthResponseDTO login(LoginDTO loginDTO) {
-        try {
+    public AuthResponseDTO login(LoginDTO loginDTO) throws JOSEException {
             Optional<User> userOpt = userRepository.findByEmail(loginDTO.getEmail()).stream().findFirst();
 
             if (userOpt.isEmpty() || !passwordEncoder.matches(loginDTO.getPassword(), userOpt.get().getPassword())) {
-                return AuthResponseDTO.builder()
-                        .success(false)
-                        .message("Invalid email or password")
-                        .build();
+                throw new InvalidCredentialsException("Invalid email or password.");
             }
 
             if (!userOpt.get().isEnabled() || userOpt.get().getActivationToken() != null) {
-                return AuthResponseDTO.builder()
-                        .success(false)
-                        .message("Account not activated yet")
-                        .build();
+                throw new AccountNotActivatedException("Account not activated.");
             }
 
             User user = userOpt.get();
@@ -100,18 +88,10 @@ public class AuthServiceImpl implements AuthService {
                     .accessToken(token)
                     .refreshToken(refreshToken)
                     .build();
-
-        } catch (JOSEException e) {
-            return AuthResponseDTO.builder()
-                    .success(false)
-                    .message("Could not generate token: " + e.getMessage())
-                    .build();
-        }
     }
 
     @Override
     public void processPasswordResetRequest(PasswordResetRequestDTO passwordResetRequestDTO) {
-        try{
             Optional<User> userOpt = userRepository.findByEmail(passwordResetRequestDTO.getEmail());
             if (userOpt.isEmpty()) return;
 
@@ -125,9 +105,6 @@ public class AuthServiceImpl implements AuthService {
 
             resetPasswordRepository.save(resetToken);
             emailService.sendPasswordResetEmail(user, token);
-        } catch (IOException | MessagingException e) {
-            throw new RuntimeException("Failed to send a password reset email");
-        }
     }
 
     public AuthResponseDTO refreshAccessToken(String refreshToken) throws ParseException, JOSEException {

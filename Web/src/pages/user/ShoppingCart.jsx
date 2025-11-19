@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 import api from '../../api/axiosConfig';
 import CartHeader from '../../components/shoppingcart/CartHeader';
-import WeekPlanningCard from '../../components/WeekPlanningCard';
+import WeekPlanningCard from '../../components/shoppingcart/WeekPlanningCard';
 import CartItemsList from '../../components/shoppingcart/CartItemsList';
 import CartSummary from '../../components/shoppingcart/CartSummary';
 import EmptyCart from '../../components/shoppingcart/EmptyCart';

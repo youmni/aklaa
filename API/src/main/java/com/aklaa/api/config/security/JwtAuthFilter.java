@@ -51,7 +51,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         }
 
         if (jwt != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            try {
                 userId = jwtService.getSubject(jwt);
 
                 if (jwtService.validateToken(jwt)) {
@@ -78,16 +77,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                     authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authToken);
                 }
-
-            } catch (ParseException e) {
-                logger.warn("Failed to parse JWT token");
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                response.setContentType("application/json");
-                response.getWriter().write("{\"error\": \"Invalid or malformed JWT token\"}");
-                return;
-            }
         }
-
         filterChain.doFilter(request, response);
     }
 }

@@ -6,6 +6,6 @@ import jakarta.mail.MessagingException;
 import java.io.IOException;
 
 public interface EmailService {
-    void sendActivationEmail(User user, String token) throws IOException, MessagingException;
-    void sendPasswordResetEmail(User user, String token) throws IOException, MessagingException;
+    void sendActivationEmail(User user, String token);
+    void sendPasswordResetEmail(User user, String token);
 }

@@ -1,5 +1,7 @@
 package com.aklaa.api.config.security;
 
+import com.aklaa.api.exceptions.JwtCreationException;
+import com.aklaa.api.exceptions.JwtParseException;
 import com.aklaa.api.model.enums.UserType;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
@@ -20,44 +22,52 @@ public class JwtService {
     @Value("${jwt.secret}")
     private String secret;
 
-    public String generateToken(long id, UserType role) throws JOSEException {
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.MINUTE, 2);
+    public String generateToken(long id, UserType role) {
+        try {
+            Calendar cal = Calendar.getInstance();
+            cal.add(Calendar.MINUTE, 2);
 
-        JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
-                .subject(String.valueOf(id))
-                .claim("role", role)
-                .claim("type", "access")
-                .expirationTime(cal.getTime())
-                .build();
+            JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
+                    .subject(String.valueOf(id))
+                    .claim("role", role)
+                    .claim("type", "access")
+                    .expirationTime(cal.getTime())
+                    .build();
 
-        JWSHeader header = new JWSHeader(JWSAlgorithm.HS256);
-        SignedJWT signedJWT = new SignedJWT(header, claimsSet);
-        JWSSigner signer = new MACSigner(secret);
+            JWSHeader header = new JWSHeader(JWSAlgorithm.HS256);
+            SignedJWT signedJWT = new SignedJWT(header, claimsSet);
+            JWSSigner signer = new MACSigner(secret);
 
-        signedJWT.sign(signer);
+            signedJWT.sign(signer);
+            return signedJWT.serialize();
 
-        return signedJWT.serialize();
+        } catch (JOSEException e) {
+            throw new JwtCreationException("Failed to generate JWT access token", e);
+        }
     }
 
-    public String generateRefreshToken(long id, UserType role) throws JOSEException {
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DAY_OF_MONTH, 7);
+    public String generateRefreshToken(long id, UserType role) {
+        try {
+            Calendar cal = Calendar.getInstance();
+            cal.add(Calendar.DAY_OF_MONTH, 7);
 
-        JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
-                .subject(String.valueOf(id))
-                .claim("role", role)
-                .claim("type", "refresh")
-                .expirationTime(cal.getTime())
-                .build();
+            JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
+                    .subject(String.valueOf(id))
+                    .claim("role", role)
+                    .claim("type", "refresh")
+                    .expirationTime(cal.getTime())
+                    .build();
 
-        JWSHeader header = new JWSHeader(JWSAlgorithm.HS256);
-        SignedJWT signedJWT = new SignedJWT(header, claimsSet);
-        JWSSigner signer = new MACSigner(secret);
+            JWSHeader header = new JWSHeader(JWSAlgorithm.HS256);
+            SignedJWT signedJWT = new SignedJWT(header, claimsSet);
+            JWSSigner signer = new MACSigner(secret);
 
-        signedJWT.sign(signer);
+            signedJWT.sign(signer);
+            return signedJWT.serialize();
 
-        return signedJWT.serialize();
+        } catch (JOSEException e) {
+            throw new JwtCreationException("Failed to generate JWT refresh token", e);
+        }
     }
 
     public boolean validateToken(String token) {
@@ -70,26 +80,48 @@ public class JwtService {
         }
     }
 
-    private boolean isTokenExpired(SignedJWT signedJWT) throws java.text.ParseException {
-        Date expirationTime = signedJWT.getJWTClaimsSet().getExpirationTime();
-        return expirationTime.before(new Date());
-    }
-
-    public String getSubject(String token) throws java.text.ParseException {
-        SignedJWT signedJWT = SignedJWT.parse(token);
-        return signedJWT.getJWTClaimsSet().getSubject();
-    }
-
-    public UserType getRoleFromToken(String token) throws java.text.ParseException {
-        SignedJWT signedJWT = SignedJWT.parse(token);
-        String role = (String) signedJWT.getJWTClaimsSet().getClaim("role");
-        if (role == null) {
-            throw new IllegalArgumentException("JWT token missing 'role' claim");
+    private boolean isTokenExpired(SignedJWT signedJWT) {
+        try {
+            Date expirationTime = signedJWT.getJWTClaimsSet().getExpirationTime();
+            return expirationTime.before(new Date());
+        } catch (ParseException e) {
+            throw new JwtParseException("Failed to read expiration time from JWT", e);
         }
-        return UserType.valueOf(role);
     }
-    public String getClaim(String token, String claim) throws ParseException {
-        SignedJWT signedJWT = SignedJWT.parse(token);
-        return signedJWT.getJWTClaimsSet().getStringClaim(claim);
+
+    public String getSubject(String token) {
+        try {
+            SignedJWT signedJWT = SignedJWT.parse(token);
+            return signedJWT.getJWTClaimsSet().getSubject();
+        } catch (ParseException e) {
+            throw new JwtParseException("Failed to parse JWT token", e);
+        }
+    }
+
+    public UserType getRoleFromToken(String token) {
+        try {
+            SignedJWT signedJWT = SignedJWT.parse(token);
+            String role = signedJWT.getJWTClaimsSet().getStringClaim("role");
+
+            if (role == null) {
+                throw new JwtParseException("JWT token missing 'role' claim", null);
+            }
+
+            return UserType.valueOf(role);
+
+        } catch (ParseException e) {
+            throw new JwtParseException("Failed to parse role from JWT", e);
+        } catch (IllegalArgumentException e) {
+            throw new JwtParseException("Invalid role value inside JWT", e);
+        }
+    }
+
+    public String getClaim(String token, String claim) {
+        try {
+            SignedJWT signedJWT = SignedJWT.parse(token);
+            return signedJWT.getJWTClaimsSet().getStringClaim(claim);
+        } catch (ParseException e) {
+            throw new JwtParseException("Failed to parse claim '" + claim + "' from JWT", e);
+        }
     }
 }

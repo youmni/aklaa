@@ -7,10 +7,9 @@ const EmptyGroceryLists = ({ onGoToCart }) => {
             <Container maxW="100%" px={8}>
                 <VStack align="stretch" gap={8}>
                     <Flex align="center" gap={3}>
-                        <FaListUl size={32} color="#083951" />
-                        <Heading size="xl" color="#083951" fontWeight="600">
+                        <Text fontSize={{ base: "2xl", md: "3xl" }} fontWeight="bold" color="#083951">
                             Grocery Lists
-                        </Heading>
+                        </Text>
                     </Flex>
 
                     <Flex justify="center" align="center" minH="50vh">
@@ -40,9 +39,9 @@ const EmptyGroceryLists = ({ onGoToCart }) => {
                             <Text fontSize="md" color="gray.600" mb={8}>
                                 Create your first grocery list by adding dishes to your cart and saving it!
                             </Text>
-                            <Button 
-                                bg="#083951" 
-                                color="white" 
+                            <Button
+                                bg="#083951"
+                                color="white"
                                 size="lg"
                                 onClick={onGoToCart}
                                 _hover={{ bg: "#0a4a63" }}

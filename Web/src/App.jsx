@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Navigate ,Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Navigate, Routes, Route } from "react-router-dom";
 import Register from "./pages/shared/Register";
 import Login from "./pages/shared/Login";
 import PrivateRoute from "./components/PrivateRoute";
@@ -41,7 +41,7 @@ const App = () => {
 
         <Route element={<PrivateRoute allowedRoles={['USER', 'ADMIN']} />}>
           <Route element={<Layout />}>
-            <Route path="/" element={<Navigate to="/dishes" replace />}  />
+            <Route path="/" element={<Navigate to="/dishes" replace />} />
             <Route path="/ingredients">
               <Route index element={<GetIngredients />} />
               <Route path="add" element={<CreateIngredient />} />
@@ -66,13 +66,15 @@ const App = () => {
 
         <Route element={<PrivateRoute allowedRoles={['ADMIN']} />}>
           <Route element={<Layout />}>
-            <Route path="/admin" element={<Navigate to="/admin/users" replace />}>
+            <Route path="/admin">
+              <Route index element={<Navigate to="users" replace />} />
               <Route path="users">
                 <Route index element={<GetUsers />} />
               </Route>
             </Route>
           </Route>
         </Route>
+
 
         <Route path="/not-found" element={<Layout><NotFound /></Layout>} />
         <Route path="*" element={<Layout><NotFound /></Layout>} />
