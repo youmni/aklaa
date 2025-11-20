@@ -54,9 +54,11 @@ docker compose down
 3. [@Validation](https://www.baeldung.com/spring-boot-bean-validation)
 4. [@JWT-token](https://connect2id.com/products/nimbus-jose-jwt)
 6. [@Dependency injection](https://medium.com/@reetesh043/spring-boot-dependency-injection-137f85f84590)
-7. [@Access-token refresh](https://chatgpt.com/share/691a3235-011c-8007-9fa3-ed87f5d72c5d)
+7. [@Axios-interceptor](https://chatgpt.com/share/691a3235-011c-8007-9fa3-ed87f5d72c5d)
 8. [@JpaSpecificationExecutor](https://docs.spring.io/spring-data/jpa/docs/current/api/org/springframework/data/jpa/repository/JpaSpecificationExecutor.html)
 9. [@Lombok](https://www.baeldung.com/intro-to-project-lombok)
+10. [@Javadoc](https://www.baeldung.com/javadoc)
+11. [@Minio](https://chatgpt.com/share/691e1722-a328-8010-96ba-904168f98fe5)
 
 ### Authors
 - [@Youmni Malha](https://github.com/Youmni)
