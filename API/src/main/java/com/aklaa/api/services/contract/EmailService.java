@@ -1,5 +1,6 @@
 package com.aklaa.api.services.contract;
 
+import com.aklaa.api.exceptions.EmailSendingException;
 import com.aklaa.api.model.User;
 
 /**

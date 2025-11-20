@@ -5,6 +5,8 @@ import com.aklaa.api.dtos.response.UserListResponseDTO;
 import com.aklaa.api.model.enums.UserType;
 import org.springframework.data.domain.Pageable;
 
+import java.util.NoSuchElementException;
+
 /**
  * Service interface for user management operations.
  * <p>

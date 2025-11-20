@@ -5,8 +5,10 @@ import com.aklaa.api.dtos.response.IngredientListResponseDTO;
 import com.aklaa.api.dtos.response.IngredientResponseDTO;
 import com.aklaa.api.model.User;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.AccessDeniedException;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 /**
  * Service interface for ingredient management operations.

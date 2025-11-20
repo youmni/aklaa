@@ -5,8 +5,10 @@ import com.aklaa.api.dtos.response.DishListResponseDTO;
 import com.aklaa.api.dtos.response.DishResponseDTO;
 import com.aklaa.api.model.User;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.AccessDeniedException;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 /**
  * Service interface for dish management operations.

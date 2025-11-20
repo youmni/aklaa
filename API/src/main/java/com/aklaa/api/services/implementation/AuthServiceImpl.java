@@ -66,7 +66,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public AuthResponseDTO login(LoginDTO loginDTO) throws JOSEException {
+    public AuthResponseDTO login(LoginDTO loginDTO){
             Optional<User> userOpt = userRepository.findByEmail(loginDTO.getEmail()).stream().findFirst();
 
             if (userOpt.isEmpty() || !passwordEncoder.matches(loginDTO.getPassword(), userOpt.get().getPassword())) {
