@@ -66,7 +66,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public AuthResponseDTO login(LoginDTO loginDTO) throws JOSEException {
+    public AuthResponseDTO login(LoginDTO loginDTO){
             Optional<User> userOpt = userRepository.findByEmail(loginDTO.getEmail()).stream().findFirst();
 
             if (userOpt.isEmpty() || !passwordEncoder.matches(loginDTO.getPassword(), userOpt.get().getPassword())) {
@@ -107,7 +107,7 @@ public class AuthServiceImpl implements AuthService {
             emailService.sendPasswordResetEmail(user, token);
     }
 
-    public AuthResponseDTO refreshAccessToken(String refreshToken) throws ParseException, JOSEException {
+    public AuthResponseDTO refreshAccessToken(String refreshToken) {
         if (refreshToken == null) {
             throw new IllegalArgumentException("Missing refresh token");
         }
