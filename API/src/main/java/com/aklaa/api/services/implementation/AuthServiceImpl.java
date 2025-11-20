@@ -107,7 +107,7 @@ public class AuthServiceImpl implements AuthService {
             emailService.sendPasswordResetEmail(user, token);
     }
 
-    public AuthResponseDTO refreshAccessToken(String refreshToken) throws ParseException, JOSEException {
+    public AuthResponseDTO refreshAccessToken(String refreshToken) {
         if (refreshToken == null) {
             throw new IllegalArgumentException("Missing refresh token");
         }
