@@ -19,12 +19,29 @@ cd aklaa
 
 2. **Copy `.env.example` to `.env` in the root of the project**:
 
-3. **Start the project with Docker Compose**:
+
+3. WEB folder: Create a `.env` file
+```bash
+VITE_BACKEND_URL: [url]
+```
+
+4. API folder: Add `application.properties`
+
+Go to the **API** folder and place an `application.properties` file inside the **resources** directory.  
+This file ensures that the database is properly created and updated. You may configure it as you prefer; the example below is a common setup:
+
+```properties
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL8Dialect
+```
+
+5. **Start the project with Docker Compose**:
 ```bash
 docker compose up -d --build
 ```
 
-4. **Stop the project with Docker Compose**:
+6. **Stop the project with Docker Compose**:
 ```bash
 docker compose down
 ```
