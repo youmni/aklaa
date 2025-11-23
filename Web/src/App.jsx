@@ -23,6 +23,7 @@ import GroceryLists from "./pages/user/groceryLists/GroceryLists";
 import DetailsGroceryList from "./pages/user/groceryLists/DetailsGroceryList";
 import EditGroceryLists from "./pages/user/groceryLists/EditGroceryLists";
 import GetUsers from "./pages/admin/users/GetUsers";
+import SecurityEvents from "@/pages/admin/security/Events.tsx";
 
 const App = () => {
   return (
@@ -70,6 +71,9 @@ const App = () => {
               <Route index element={<Navigate to="users" replace />} />
               <Route path="users">
                 <Route index element={<GetUsers />} />
+              </Route>
+              <Route path="security">
+                <Route index element={<SecurityEvents />} />
               </Route>
             </Route>
           </Route>
