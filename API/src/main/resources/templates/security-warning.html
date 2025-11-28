@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Important! Security alert {{eventType}} </title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 5px;
+            max-width: 600px;
+            margin: 40px auto;
+        }
+        h1 {
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+        p {
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: #ffffff !important;
+            text-decoration: none;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+        .footer {
+            font-size: 12px;
+            line-height: 1.4;
+            margin-top: 20px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Security alert {{eventType}}</h1>
+    <p>
+        The security event has reached the threshold for user {{userName}}. Please review the event log and take
+        appropriate actions.
+    </p>
+    <a href="{{securityEventsLink}}" class="button">View security events</a>
+    <p class="footer">
+        No automatic actions are taken as part of this email, you can (unsafely) ignore it if wanted.
+    </p>
+</div>
+</body>
+</html>

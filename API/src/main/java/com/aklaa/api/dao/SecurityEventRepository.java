@@ -12,8 +12,8 @@ import java.util.List;
 
 public interface SecurityEventRepository extends JpaRepository<SecurityEvent, Long>, JpaSpecificationExecutor<SecurityEvent> {
 
-    long countByUserAndCreatedAtAfter(User user, LocalDateTime createdAtAfter);
-
     @EntityGraph(attributePaths = {"user", "actingUser"})
     List<SecurityEvent> getAllByCreatedAtAfterOrderByCreatedAtDesc(LocalDateTime createdAtAfter, Pageable pageable);
+
+    long countByUserAndCreatedAtAfterAndVerifiedIs(User user, LocalDateTime createdAtAfter, boolean verified);
 }

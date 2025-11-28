@@ -9,17 +9,11 @@ import {
     HStack,
     VStack,
     Table,
-    IconButton,
-    ButtonGroup,
     NativeSelectRoot,
     NativeSelectField,
     Spinner,
-    Badge,
-    Dialog,
-    CloseButton,
-    Portal
+    Badge
 } from '@chakra-ui/react';
-import { LuChevronLeft, LuChevronRight } from 'react-icons/lu';
 import PaginationComponent from "../../../components/ui/Pagination";
 
 const NAVY = '#083951';

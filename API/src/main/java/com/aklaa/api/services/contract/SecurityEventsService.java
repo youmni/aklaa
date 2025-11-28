@@ -5,6 +5,7 @@ import com.aklaa.api.model.SecurityEvent;
 import com.aklaa.api.model.User;
 import com.aklaa.api.model.enums.SecurityEventType;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.time.LocalDateTime;
@@ -36,13 +37,13 @@ public interface SecurityEventsService {
      * delegate to this method.
      * </p>
      *
-     * @param user the user who is the subject of the security event
+     * @param user       the user who is the subject of the security event
      * @param actingUser the user who initiated the action (may be null for self-initiated actions)
-     * @param type the type of security event being recorded
-     * @param message a descriptive message providing context about the event
-     * @return the created SecurityEvent entity
+     * @param type       the type of security event being recorded
+     * @param message    a descriptive message providing context about the event
      */
-    SecurityEvent registerEvent(User user, User actingUser, SecurityEventType type, String message);
+    @Async
+    void registerEvent(User user, User actingUser, SecurityEventType type, String message);
 
     /**
      * Marks a security event as verified or acknowledged.
@@ -65,20 +66,20 @@ public interface SecurityEventsService {
      * @param user the user who is the subject of the security event
      * @param type the type of security event being recorded
      * @param message a descriptive message providing context about the event
-     * @return the created SecurityEvent entity
      */
-    default SecurityEvent registerEvent(User user, SecurityEventType type, String message) {
-        return registerEvent(user, null, type, message);
+    @Async
+    default void registerEvent(User user, SecurityEventType type, String message) {
+        registerEvent(user, null, type, message);
     }
 
     /**
      * Registers a successful login event for the specified user.
      *
      * @param user the user who successfully logged in
-     * @return the created SecurityEvent entity with message "Successful login"
      */
-    default SecurityEvent registerLogin(User user) {
-        return registerEvent(user, SecurityEventType.LOGIN, "Successful login");
+    @Async
+    default void registerLogin(User user) {
+        registerEvent(user, SecurityEventType.LOGIN, "Successful login");
     }
 
     /**
@@ -86,13 +87,12 @@ public interface SecurityEventsService {
      * <p>
      * The current user is automatically retrieved from the {@link SecurityContextHolder}.
      * </p>
-     *
-     * @return the created SecurityEvent entity with message "Successful logout"
      */
-    default SecurityEvent registerLogout() {
+    @Async
+    default void registerLogout() {
         var user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        return registerEvent(user, SecurityEventType.LOGOUT, "Successful logout");
+        registerEvent(user, SecurityEventType.LOGOUT, "Successful logout");
     }
 
     /**
@@ -100,10 +100,10 @@ public interface SecurityEventsService {
      *
      * @param user the user who attempted to log in
      * @param reason a description of why the login failed (e.g., "invalid password", "account locked")
-     * @return the created SecurityEvent entity with message "Failed to login: {reason}"
      */
-    default SecurityEvent registerFailedLogin(User user, String reason) {
-        return registerEvent(user, SecurityEventType.FAILED_LOGIN, String.format("Failed to login: %s", reason));
+    @Async
+    default void registerFailedLogin(User user, String reason) {
+        registerEvent(user, SecurityEventType.FAILED_LOGIN, String.format("Failed to login: %s", reason));
     }
 
     /**
@@ -111,10 +111,10 @@ public interface SecurityEventsService {
      *
      * @param user the user whose password reset was requested
      * @param actingUser the user who initiated the request (may be different for admin-initiated resets)
-     * @return the created SecurityEvent entity with message "Password reset flow requested"
      */
-    default SecurityEvent registerPasswordForgot(User user, User actingUser) {
-        return registerEvent(user, actingUser, SecurityEventType.PASSWORD_FORGOT, "Password reset flow requested");
+    @Async
+    default void registerPasswordForgot(User user, User actingUser) {
+        registerEvent(user, actingUser, SecurityEventType.PASSWORD_FORGOT, "Password reset flow requested");
     }
 
     /**
@@ -123,12 +123,12 @@ public interface SecurityEventsService {
      * The current user is automatically retrieved from the {@link SecurityContextHolder}.
      * </p>
      *
-     * @return the created SecurityEvent entity with message "Password reset flow requested"
      */
-    default SecurityEvent registerPasswordForgot() {
+    @Async
+    default void registerPasswordForgot() {
         var user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        return registerPasswordForgot(user, null);
+        registerPasswordForgot(user, null);
     }
 
     /**
@@ -136,10 +136,10 @@ public interface SecurityEventsService {
      *
      * @param user the user whose password was reset
      * @param actingUser the user who performed the reset (may be an administrator)
-     * @return the created SecurityEvent entity with message "Password has been reset"
      */
-    default SecurityEvent registerPasswordReset(User user, User actingUser) {
-        return registerEvent(user, SecurityEventType.PASSWORD_RESET, "Password has been reset");
+    @Async
+    default void registerPasswordReset(User user, User actingUser) {
+        registerEvent(user, SecurityEventType.PASSWORD_RESET, "Password has been reset");
     }
 
     /**
@@ -148,13 +148,12 @@ public interface SecurityEventsService {
      * The current user is automatically retrieved from the {@link SecurityContextHolder}.
      * This is typically used for self-service password resets.
      * </p>
-     *
-     * @return the created SecurityEvent entity with message "Password has been reset"
      */
-    default SecurityEvent registerPasswordReset() {
+    @Async
+    default void registerPasswordReset() {
         var user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        return registerPasswordReset(user, null);
+        registerPasswordReset(user, null);
     }
 
     /**
@@ -162,10 +161,10 @@ public interface SecurityEventsService {
      *
      * @param user the user who attempted unauthorized access
      * @param resource the resource or endpoint that was accessed without permission
-     * @return the created SecurityEvent entity with message "Attempted to access {resource} without permission"
      */
-    default SecurityEvent registerUnauthorizedAccess(User user, String resource) {
-        return registerEvent(user, null, String.format("Attempted to access %s without permission", resource));
+    @Async
+    default void registerUnauthorizedAccess(User user, String resource) {
+        registerEvent(user, null, String.format("Attempted to access %s without permission", resource));
     }
 
 }

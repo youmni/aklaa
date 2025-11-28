@@ -6,32 +6,30 @@ import java.time.Duration;
 
 @Getter
 public enum SecurityEventType {
-    LOGIN(true),
-    LOGOUT(true),
-    FAILED_LOGIN(true, 5, Duration.ofDays(7)),
+    LOGIN,
+    LOGOUT,
+    FAILED_LOGIN(5, Duration.ofHours(1)),
     /**
      * Password reset flow has been completed
      */
-    PASSWORD_RESET(true),
+    PASSWORD_RESET,
     /**
      * Password reset flow has been started for the user
      */
-    PASSWORD_FORGOT(true, 5, Duration.ofDays(7)),
+    PASSWORD_FORGOT(5, Duration.ofHours(1)),
     /**
      * The user tried to access a resource they do not have permissions for
      */
-    UNAUTHORIZED_ACCESS(false);
+    UNAUTHORIZED_ACCESS(5, Duration.ofHours(1));
 
-    private final boolean defaultVerify;
     private final Integer requiredVerificationAfter;
     private final Duration requiredVerificationDuration;
 
-    SecurityEventType(boolean defaultVerify) {
-        this(defaultVerify, null, null);
+    SecurityEventType() {
+        this(null, null);
     }
 
-    SecurityEventType(boolean defaultVerify, Integer requiredVerificationAfter, Duration requiredVerificationDuration) {
-        this.defaultVerify = defaultVerify;
+    SecurityEventType(Integer requiredVerificationAfter, Duration requiredVerificationDuration) {
         this.requiredVerificationAfter = requiredVerificationAfter;
         this.requiredVerificationDuration = requiredVerificationDuration;
     }
