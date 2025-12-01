@@ -22,7 +22,7 @@ cd aklaa
 
 3. WEB folder: Create a `.env` file
 ```bash
-VITE_BACKEND_URL: [url]
+VITE_BACKEND_URL= [url]
 ```
 
 4. API folder: Add `application.properties`

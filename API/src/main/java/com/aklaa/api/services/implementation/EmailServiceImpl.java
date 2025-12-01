@@ -1,10 +1,12 @@
 package com.aklaa.api.services.implementation;
 
 import com.aklaa.api.exceptions.EmailSendingException;
+import com.aklaa.api.model.SecurityEvent;
 import com.aklaa.api.model.User;
 import com.aklaa.api.services.contract.EmailService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -15,6 +17,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
+@Slf4j
 @Service
 public class EmailServiceImpl implements EmailService {
 
@@ -74,6 +77,34 @@ public class EmailServiceImpl implements EmailService {
 
         } catch (IOException | MessagingException e) {
             throw new EmailSendingException("Failed to send password reset email", e);
+        }
+    }
+
+    @Override
+    public void sendSecurityWarning(User receiver, User triggered, SecurityEvent event) {
+        try {
+            ClassPathResource resource = new ClassPathResource("templates/security-warning.html");
+
+            String html;
+            try (InputStream inputStream = resource.getInputStream()) {
+                html = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
+            }
+
+            String securityEventsLink = frontendUrl + "/auth/admin/security";
+            html = html
+                    .replace("{{securityEventsLink}}", securityEventsLink)
+                    .replace("{{eventType}}", event.getType().toString())
+                    .replace("{{userName}}", triggered.getFirstName() + " " + triggered.getLastName());
+
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+            helper.setTo(receiver.getEmail());
+            helper.setSubject(String.format("Important! Security alert %s", event.getType().toString()));
+            helper.setText(html, true);
+            mailSender.send(message);
+
+        } catch (IOException | MessagingException e) {
+            log.error("Failed to send security warning email", e);
         }
     }
 }

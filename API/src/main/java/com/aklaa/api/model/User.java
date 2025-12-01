@@ -72,6 +72,15 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<GroceryList> groceryLists;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SecurityEvent> securityEvents;
+
+    /**
+     * Events triggered on behalf of this user, with regard to another user
+     */
+    @OneToMany(mappedBy = "actingUser", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SecurityEvent> actedSecurityEvents;
+
     @CreationTimestamp
     @Column(updatable = false)
     private LocalDateTime createdAt;

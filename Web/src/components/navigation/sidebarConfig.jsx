@@ -24,12 +24,6 @@ export const sidebarItems = [
     ],
   },
   {
-    id: 'users',
-    label: 'Users',
-    href: '/admin/users',
-    roles: ['ADMIN'],
-  },
-  {
     id: 'groceries',
     label: 'Groceries',
     roles: [],
@@ -54,6 +48,18 @@ export const sidebarItems = [
     href: '/grocerylists',
     roles: ['USER', 'ADMIN'],
   },
+    {
+        id: 'users',
+        label: 'Users',
+        href: '/admin/users',
+        roles: ['ADMIN'],
+    },
+    {
+        id: 'security',
+        label: 'Security',
+        href: '/admin/security',
+        roles: ['ADMIN']
+    }
 ];
 
 export const sidebarFooterItems = [
