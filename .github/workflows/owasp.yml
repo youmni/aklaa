@@ -1,0 +1,161 @@
+name: DAST with OWASP ZAP
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 2 * * 1'  # Weekly on Monday at 2 AM
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  zap_scan:
+    name: OWASP ZAP Scan
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      security-events: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Create application.properties
+        run: |
+          cat > API/src/main/resources/application.properties << EFO
+          spring.jpa.hibernate.ddl-auto=update
+          spring.jpa.show-sql=true
+          spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQLDialect
+          EOF
+
+      # Create .env file with test credentials and GitHub secrets
+      - name: Create environment file
+        run: |
+          cat > .env << EOF
+          # MySQL
+          MYSQL_ROOT_PASSWORD=test_root_password_123
+          MYSQL_DATABASE=aklaa
+          MYSQL_USER=aklaa
+          MYSQL_PASSWORD=test_password_123
+          
+          # Spring Boot
+          SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/aklaa?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+          SPRING_DATASOURCE_USERNAME=aklaa
+          SPRING_DATASOURCE_PASSWORD=test_password_123
+          
+          # Email (from GitHub Secrets)
+          SPRING_MAIL_HOST=smtp.gmail.com
+          SPRING_MAIL_PORT=587
+          SPRING_MAIL_USERNAME=${{ secrets.MAIL_USERNAME }}
+          SPRING_MAIL_PASSWORD=${{ secrets.MAIL_PASSWORD }}
+          SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH=true
+          SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE=true
+          SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_REQUIRED=true
+          
+          FRONTEND_URL=http://localhost:3000
+          JWT_SECRET=test_jwt_secret_for_ci_cd_only_not_for_production_use
+          
+          # React
+          VITE_BACKEND_URL=http://localhost:8080
+          VITE_DEFAULT_IMAGE_URL=https://via.placeholder.com/270
+          
+          # MinIO
+          MINIO_ENDPOINT=http://minio:9000
+          MINIO_ENDPOINT_EXTERN=http://localhost:9000
+          MINIO_ACCESS_KEY=minioadmin
+          MINIO_SECRET_KEY=minioadmin123
+          MINIO_BUCKET_NAME=aklaa
+          EOF
+
+      # Start all services with Docker Compose
+      - name: Start services with Docker Compose
+        run: |
+          docker compose up -d
+          echo "Waiting for services to be healthy..."
+
+      # Wait for services to be ready
+      - name: Wait for MySQL to be ready
+        run: |
+          timeout 15 bash -c 'until docker compose exec -T db mysqladmin ping -h localhost --silent; do sleep 2; done'
+          echo "MySQL is ready"
+
+      - name: Wait for API to be ready
+        run: |
+          timeout 25 bash -c 'until curl -f http://localhost:8080/actuator/health; do sleep 3; done'
+          echo "API is ready"
+
+      - name: Wait for Frontend to be ready
+        run: |
+          timeout 15 bash -c 'until curl -f http://localhost:3000; do sleep 2; done'
+          echo "Frontend is ready"
+
+      - name: Wait for MinIO to be ready
+        run: |
+          timeout 15 bash -c 'until curl -f http://localhost:9000/minio/health/live; do sleep 2; done'
+          echo "MinIO is ready"
+
+      - name: ZAP API Scan - Backend
+        uses: zaproxy/action-api-scan@v0.10.0
+        with:
+          target: 'http://localhost:8080'
+          format: openapi
+          cmd_options: '-a'
+          allow_issue_writing: false
+          artifact_name: 'zap_scan_api'
+
+      - name: Rename API scan results
+        if: always()
+        run: |
+          mv report_html.html api_report_html.html || true
+          mv report_json.json api_report_json.json || true
+          mv report_md.md api_report_md.md || true
+
+      - name: ZAP Full Scan - Frontend
+        uses: zaproxy/action-full-scan@v0.13.0
+        with:
+          target: 'http://localhost:3000'
+          rules_file_name: '.zap/rules.tsv'
+          cmd_options: '-a -j'  # Ajax spider for React apps
+          allow_issue_writing: false
+          artifact_name: 'zap_scan_ui'
+
+      - name: Rename UI scan results
+        if: always()
+        run: |
+          mv report_html.html ui_report_html.html || true
+          mv report_json.json ui_report_json.json || true
+          mv report_md.md ui_report_md.md || true
+
+      # Upload scan results
+      - name: Upload ZAP reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: zap-reports
+          path: |
+            api_report_html.html
+            api_report_json.json
+            api_report_md.md
+            ui_report_html.html
+            ui_report_json.json
+            ui_report_md.md
+
+      # Show Docker logs on failure for debugging
+      - name: Show Docker logs on failure
+        if: failure()
+        run: |
+          echo "=== API Logs ==="
+          docker compose logs api
+          echo "=== DB Logs ==="
+          docker compose logs db
+          echo "=== Frontend Logs ==="
+          docker compose logs frontend
+          echo "=== MinIO Logs ==="
+          docker compose logs minio
+
+      # Cleanup
+      - name: Stop services
+        if: always()
+        run: |
+          docker compose down -v

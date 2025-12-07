@@ -37,7 +37,7 @@ services:
 
   api:
     build:
-      context: ./api
+      context: ./API
     container_name: aklaa-api
     ports:
       - "8080:8080"
@@ -61,13 +61,14 @@ services:
       MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}
       MINIO_BUCKET_NAME: ${MINIO_BUCKET_NAME}
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     networks:
       - aklaa-network
 
   frontend:
     build:
-      context: ./web
+      context: ./Web
     environment:
         VITE_BACKEND_URL: ${VITE_BACKEND_URL}
         VITE_DEFAULT_IMAGE_URL: ${VITE_DEFAULT_IMAGE_URL}
