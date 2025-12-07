@@ -26,7 +26,7 @@ jobs:
           cat > API/src/main/resources/application.properties << EFO
           spring.jpa.hibernate.ddl-auto=update
           spring.jpa.show-sql=true
-          spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL8Dialect
+          spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQLDialect
           EOF
 
       # Create .env file with test credentials and GitHub secrets
@@ -40,10 +40,9 @@ jobs:
           MYSQL_PASSWORD=test_password_123
           
           # Spring Boot
-          SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/aklaa
+          SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/aklaa?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
           SPRING_DATASOURCE_USERNAME=aklaa
           SPRING_DATASOURCE_PASSWORD=test_password_123
-          SPRING_PROFILES_ACTIVE=test
           
           # Email (from GitHub Secrets)
           SPRING_MAIL_HOST=smtp.gmail.com
