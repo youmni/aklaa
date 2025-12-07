@@ -104,7 +104,7 @@ jobs:
 
       # Run ZAP API Scan on Backend
       - name: ZAP API Scan - Backend
-        uses: zaproxy/action-api-scan@v0.6.0
+        uses: zaproxy/action-api-scan@v0.10.0
         with:
           target: 'http://localhost:8080'
           format: openapi
@@ -121,7 +121,7 @@ jobs:
 
       # Run ZAP Full Scan on Frontend
       - name: ZAP Full Scan - Frontend
-        uses: zaproxy/action-full-scan@v0.8.0
+        uses: zaproxy/action-full-scan@v0.13.0
         with:
           target: 'http://localhost:3000'
           rules_file_name: '.zap/rules.tsv'
