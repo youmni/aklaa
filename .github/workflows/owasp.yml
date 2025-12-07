@@ -64,7 +64,7 @@ jobs:
       # Start all services with Docker Compose
       - name: Start services with Docker Compose
         run: |
-          docker-compose up -d
+          docker compose up -d
           echo "Waiting for services to be healthy..."
 
       # Wait for services to be ready
