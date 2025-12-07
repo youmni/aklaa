@@ -37,7 +37,7 @@ services:
 
   api:
     build:
-      context: ./api
+      context: ./API
     container_name: aklaa-api
     ports:
       - "8080:8080"
@@ -67,7 +67,7 @@ services:
 
   frontend:
     build:
-      context: ./web
+      context: ./Web
     environment:
         VITE_BACKEND_URL: ${VITE_BACKEND_URL}
         VITE_DEFAULT_IMAGE_URL: ${VITE_DEFAULT_IMAGE_URL}
