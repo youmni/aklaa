@@ -95,22 +95,14 @@ jobs:
           timeout 15 bash -c 'until curl -f http://localhost:9000/minio/health/live; do sleep 2; done'
           echo "MinIO is ready"
 
-      # Download OpenAPI spec from running API
-      - name: Download OpenAPI spec
-        run: |
-          curl -f http://localhost:8080/v3/api-docs -o openapi.json
-          echo "OpenAPI spec downloaded"
-          cat openapi.json | head -n 20
-
-      # Run ZAP API Scan on Backend
       - name: ZAP API Scan - Backend
         uses: zaproxy/action-api-scan@v0.10.0
         with:
           target: 'http://localhost:8080'
           format: openapi
-          api_spec: 'openapi.json'
           cmd_options: '-a'
           allow_issue_writing: false
+          artifact_name: 'zap_scan_api'
 
       - name: Rename API scan results
         if: always()
@@ -119,7 +111,6 @@ jobs:
           mv report_json.json api_report_json.json || true
           mv report_md.md api_report_md.md || true
 
-      # Run ZAP Full Scan on Frontend
       - name: ZAP Full Scan - Frontend
         uses: zaproxy/action-full-scan@v0.13.0
         with:
@@ -127,6 +118,7 @@ jobs:
           rules_file_name: '.zap/rules.tsv'
           cmd_options: '-a -j'  # Ajax spider for React apps
           allow_issue_writing: false
+          artifact_name: 'zap_scan_ui'
 
       - name: Rename UI scan results
         if: always()
