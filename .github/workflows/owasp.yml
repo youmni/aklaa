@@ -70,22 +70,22 @@ jobs:
       # Wait for services to be ready
       - name: Wait for MySQL to be ready
         run: |
-          timeout 60 bash -c 'until docker compose exec -T db mysqladmin ping -h localhost --silent; do sleep 2; done'
+          timeout 15 bash -c 'until docker compose exec -T db mysqladmin ping -h localhost --silent; do sleep 2; done'
           echo "MySQL is ready"
 
       - name: Wait for API to be ready
         run: |
-          timeout 90 bash -c 'until curl -f http://localhost:8080/actuator/health; do sleep 3; done'
+          timeout 25 bash -c 'until curl -f http://localhost:8080/actuator/health; do sleep 3; done'
           echo "API is ready"
 
       - name: Wait for Frontend to be ready
         run: |
-          timeout 60 bash -c 'until curl -f http://localhost:3000; do sleep 2; done'
+          timeout 15 bash -c 'until curl -f http://localhost:3000; do sleep 2; done'
           echo "Frontend is ready"
 
       - name: Wait for MinIO to be ready
         run: |
-          timeout 60 bash -c 'until curl -f http://localhost:9000/minio/health/live; do sleep 2; done'
+          timeout 15 bash -c 'until curl -f http://localhost:9000/minio/health/live; do sleep 2; done'
           echo "MinIO is ready"
 
       # Download OpenAPI spec from running API
