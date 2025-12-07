@@ -21,6 +21,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Create application.properties
+        run: |
+          cat > API/src/main/resources/application.properties << EFO
+          spring.jpa.hibernate.ddl-auto=update
+          spring.jpa.show-sql=true
+          spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL8Dialect
+          EOF
+
       # Create .env file with test credentials and GitHub secrets
       - name: Create environment file
         run: |
