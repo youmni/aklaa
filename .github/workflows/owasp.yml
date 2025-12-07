@@ -1,0 +1,103 @@
+name: DAST with OWASP ZAP
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 2 * * 1'
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  zap_scan:
+    name: OWASP ZAP Scan
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      security-events: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v3
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Build backend
+        run: |
+          cd API
+          mvn clean package -DskipTests
+
+      - name: Start backend service
+        run: |
+          cd API
+          java -jar target/*.jar &
+          echo $! > backend.pid
+          # Wait for service to be ready
+          sleep 30
+          curl -f http://localhost:8080/actuator/health || exit 1
+        env:
+          SPRING_PROFILES_ACTIVE: test
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '21'
+
+      - name: Build and start frontend
+        run: |
+          cd Web
+          npm ci
+          npm run build
+          npx serve -s build -l 3000 &
+          echo $! > frontend.pid
+          sleep 10
+
+      # Step 2: Run ZAP API Scan (Backend/REST API)
+      - name: ZAP API Scan - Backend
+        uses: zaproxy/action-api-scan@v0.6.0
+        with:
+          target: 'http://localhost:8080'
+          format: openapi
+          api_spec: 'v3/api-docs'
+          cmd_options: '-a'
+          allow_issue_writing: false
+
+      - name: Rename API scan results
+        run: |
+          mv report_html.html api_report_html.html
+          mv report_json.json api_report_json.json
+          mv report_md.md api_report_md.md
+
+      - name: ZAP Full Scan - Frontend
+        uses: zaproxy/action-full-scan@v0.8.0
+        with:
+          target: 'http://localhost:3000'
+          rules_file_name: '.zap/rules.tsv'
+          cmd_options: '-a -j'
+          allow_issue_writing: false
+
+      - name: Rename UI scan results
+        run: |
+          mv report_html.html ui_report_html.html
+          mv report_json.json ui_report_json.json
+          mv report_md.md ui_report_md.md
+
+      - name: Upload ZAP reports
+        uses: actions/upload-artifact@v3
+        with:
+          name: zap-reports
+          path: |
+            api_report_html.html
+            api_report_json.json
+            ui_report_html.html
+            ui_report_json.json
+
+      - name: Stop services
+        run: |
+          if [ -f backend.pid ]; then kill $(cat backend.pid) || true; fi
+          if [ -f frontend.pid ]; then kill $(cat frontend.pid) || true; fi
