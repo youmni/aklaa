@@ -61,7 +61,8 @@ services:
       MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}
       MINIO_BUCKET_NAME: ${MINIO_BUCKET_NAME}
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     networks:
       - aklaa-network
 
@@ -75,8 +76,7 @@ services:
     ports:
       - "3000:80"
     depends_on:
-      api:
-        condition: service_healthy
+      - api
     networks:
       - aklaa-network
 
