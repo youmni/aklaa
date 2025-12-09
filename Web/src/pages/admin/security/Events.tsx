@@ -79,7 +79,12 @@ const SecurityEvents = () => {
             since: since + "T00:00:00",
         }
 
-        api.get('/security', { params })
+        let url = '/security';
+        if (selectedEventType != '') {
+            url += '?eventType=' + selectedEventType
+        }
+
+        api.get(url, { params })
             .catch(err => enqueueSnackbar(err.response?.data?.message || 'Failed to fetch users', { variant: 'error' }))
             .then(res => {
                 if (typeof res === "object") {

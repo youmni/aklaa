@@ -2,11 +2,13 @@ package com.aklaa.api.controller;
 
 import com.aklaa.api.annotations.AdminRoute;
 import com.aklaa.api.dtos.response.SecurityEventDto;
+import com.aklaa.api.model.enums.SecurityEventType;
 import com.aklaa.api.services.contract.SecurityEventsService;
 import jakarta.annotation.Resource;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,7 +25,11 @@ public class SecurityEventController {
 
     @AdminRoute
     @GetMapping
-    public ResponseEntity<List<SecurityEventDto>> getAllEventsSince(LocalDateTime since, Pageable pageable) {
+    public ResponseEntity<List<SecurityEventDto>> getAllEventsSince(LocalDateTime since, Pageable pageable, @RequestParam(required = false) SecurityEventType eventType) {
+        if (eventType != null) {
+            return ResponseEntity.ok(this.securityEventsService.getEventsSince(since, eventType, pageable));
+        }
+
         return ResponseEntity.ok(this.securityEventsService.getEventsSince(since, pageable));
     }
 
