@@ -88,6 +88,6 @@ public class SecurityEventsServiceImpl implements SecurityEventsService {
         var since = LocalDateTime.now().minusHours(type.getRequiredVerificationDuration().toHours());
         var events = this.securityEventRepository.countByUserAndCreatedAtAfterAndVerifiedIs(user, since, false);
 
-        return events > type.getRequiredVerificationAfter();
+        return events < type.getRequiredVerificationAfter();
     }
 }
