@@ -5,6 +5,7 @@ import com.aklaa.api.dtos.request.PasswordResetRequestDTO;
 import com.aklaa.api.dtos.request.RegistrationDTO;
 import com.aklaa.api.dtos.response.AuthResponseDTO;
 import com.aklaa.api.dtos.response.UserDTO;
+import com.aklaa.api.exceptions.AccountBlacklistedException;
 import com.aklaa.api.exceptions.AccountNotActivatedException;
 import com.aklaa.api.exceptions.InvalidCredentialsException;
 import com.nimbusds.jose.JOSEException;
@@ -44,6 +45,7 @@ public interface AuthService {
      * @return an {@link AuthResponseDTO} with success status, message, access token, and refresh token
      * @throws InvalidCredentialsException if the email or password is incorrect
      * @throws AccountNotActivatedException if the account has not been activated yet
+     * @throws AccountBlacklistedException if the account is blacklisted
      */
     AuthResponseDTO login(LoginDTO loginDTO);
     
