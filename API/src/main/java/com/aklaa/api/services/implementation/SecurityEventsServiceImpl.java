@@ -37,14 +37,6 @@ public class SecurityEventsServiceImpl implements SecurityEventsService {
                 .toList();
     }
 
-    @Override
-    public List<SecurityEventDto> getEventsSince(LocalDateTime since, SecurityEventType eventType, Pageable pageable) {
-        return this.securityEventRepository.getAllByCreatedAtAfterAndTypeEqualsOrderByCreatedAtDesc(since, eventType, pageable)
-                .stream()
-                .map(SecurityEventDto::build)
-                .toList();
-    }
-
     @Async
     @Override
     public void registerEvent(User user, User actingUser, SecurityEventType type, String message) {

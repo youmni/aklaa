@@ -30,8 +30,6 @@ public interface SecurityEventsService {
      */
     List<SecurityEventDto> getEventsSince(LocalDateTime since, Pageable pageable);
 
-    List<SecurityEventDto> getEventsSince(LocalDateTime since, SecurityEventType eventType, Pageable pageable);
-
     /**
      * Registers a new security event in the system.
      * <p>
