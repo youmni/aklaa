@@ -52,7 +52,7 @@ public class UserController {
     }
 
     @AllowAdmin
-    @PutMapping("{id}")
+    @PutMapping("/enable/{id}")
     public ResponseEntity<UserDTO> enableAccount(@PathVariable Long id) {
         UserDTO updatedUser = userService.enableUser(id);
         return ResponseEntity.ok(updatedUser);

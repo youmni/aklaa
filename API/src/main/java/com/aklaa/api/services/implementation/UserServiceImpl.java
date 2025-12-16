@@ -56,6 +56,7 @@ public class UserServiceImpl implements UserService {
                         .lastName(user.getLastName())
                         .email(user.getEmail())
                         .userType(user.getUserType().name())
+                        .enabled(user.isEnabled())
                         .build())
                 .toList();
 
@@ -90,6 +91,7 @@ public class UserServiceImpl implements UserService {
                 .lastName(user.getLastName())
                 .email(user.getEmail())
                 .userType(user.getUserType().name())
+                .enabled(user.isEnabled())
                 .build();
     }
 
