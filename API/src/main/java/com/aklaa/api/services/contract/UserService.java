@@ -2,6 +2,7 @@ package com.aklaa.api.services.contract;
 
 import com.aklaa.api.dtos.response.UserDTO;
 import com.aklaa.api.dtos.response.UserListResponseDTO;
+import com.aklaa.api.model.User;
 import com.aklaa.api.model.enums.UserType;
 import org.springframework.data.domain.Pageable;
 
@@ -66,7 +67,20 @@ public interface UserService {
      * @return a {@link UserDTO} containing the updated user's data
      * @throws NoSuchElementException if the user is not found
      */
-    UserDTO enableUser(Long id);
+    UserDTO enable(Long id);
+
+    /**
+     * Delete a user's account.
+     * <p>
+     * Deletes the user's account.
+     * </p>
+     *
+     * @param id the ID of the user who needs to be deleted
+     * @param actionTaker the User that wants to perform the action
+     * @return a {@link UserDTO} containing the removed user's data
+     * @throws NoSuchElementException if the user is not found
+     */
+    public UserDTO delete(Long id, User actionTaker);
     
     /**
      * Refreshes the authentication context for a user.

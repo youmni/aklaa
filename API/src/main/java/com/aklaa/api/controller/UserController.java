@@ -1,14 +1,17 @@
 package com.aklaa.api.controller;
 
 import com.aklaa.api.annotations.AllowAdmin;
+import com.aklaa.api.annotations.AllowAuthenticated;
 import com.aklaa.api.dtos.response.UserDTO;
 import com.aklaa.api.dtos.response.UserListResponseDTO;
+import com.aklaa.api.model.User;
 import com.aklaa.api.model.enums.UserType;
 import com.aklaa.api.services.contract.UserService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -51,10 +54,26 @@ public class UserController {
         return ResponseEntity.ok(updatedUser);
     }
 
+    @AllowAuthenticated
+    @DeleteMapping("{id}")
+    public ResponseEntity<UserDTO> deleteUser(@PathVariable Long id, @AuthenticationPrincipal User actionTaker) {
+        UserDTO deletedUser = userService.delete(id, actionTaker);
+        return ResponseEntity.ok(deletedUser);
+    }
+
+    @AllowAuthenticated
+    @DeleteMapping()
+    public ResponseEntity<UserDTO> deleteOwnUser(@AuthenticationPrincipal User actionTaker) {
+        UserDTO deletedUser = userService.delete(actionTaker.getId(), actionTaker);
+        return ResponseEntity.ok(deletedUser);
+    }
+
+
+
     @AllowAdmin
     @PutMapping("/enable/{id}")
     public ResponseEntity<UserDTO> enableAccount(@PathVariable Long id) {
-        UserDTO updatedUser = userService.enableUser(id);
+        UserDTO updatedUser = userService.enable(id);
         return ResponseEntity.ok(updatedUser);
     }
 }

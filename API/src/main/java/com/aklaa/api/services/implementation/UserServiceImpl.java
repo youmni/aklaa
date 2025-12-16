@@ -10,6 +10,7 @@ import com.aklaa.api.services.contract.UserService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -96,7 +97,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO enableUser(Long id) {
+    public UserDTO enable(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("User not found"));
 
@@ -107,6 +108,20 @@ public class UserServiceImpl implements UserService {
 
             refreshAuthentication(user.getEmail());
         }
+
+        return userMapper.toDTO(user);
+    }
+
+    @Override
+    public UserDTO delete(Long id, User actionTaker) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("User not found"));
+
+        if (!canDelete(user, actionTaker)) {
+            throw new AccessDeniedException("User not allowed to delete");
+        }
+
+        userRepository.delete(user);
 
         return userMapper.toDTO(user);
     }
@@ -149,5 +164,9 @@ public class UserServiceImpl implements UserService {
                     builder.like(builder.lower(root.get("email")), likeTerm)
             );
         };
+    }
+
+    private boolean canDelete(User user, User actionTaker) {
+        return actionTaker.getUserType() == UserType.ADMIN || actionTaker.getId().equals(user.getId());
     }
 }
