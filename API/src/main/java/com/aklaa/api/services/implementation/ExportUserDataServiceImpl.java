@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,11 +26,21 @@ public class ExportUserDataServiceImpl implements ExportUserDataService {
 
     @Override
     public byte[] getUserData(User user) throws JsonProcessingException {
-        Map<String, Object> map = new HashMap<>();
+        Map<String, Object> map = new LinkedHashMap<>();
         map.put("user", userService.get(user.getId()));
         map.put("ingredients", ingredientService.getAll(user));
         map.put("dishes", dishService.getAll(user));
-        map.put("grocerylists", groceryListService.getAll(user));
+        map.put("groceryLists",
+                groceryListService.getAll(user).stream()
+                        .map(groceryList -> Map.of(
+                                "groceryList", groceryList,
+                                "ingredients", groceryListService.getIngredientOfGroceryList(
+                                        groceryList.getId(),
+                                        user
+                                )
+                        ))
+                        .toList()
+        );
 
         return objectMapper.writeValueAsBytes(map);
     }

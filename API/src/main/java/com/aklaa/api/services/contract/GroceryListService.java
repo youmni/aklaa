@@ -2,8 +2,7 @@ package com.aklaa.api.services.contract;
 
 import com.aklaa.api.dtos.request.CartDishRequestDTO;
 import com.aklaa.api.dtos.request.GroceryListIngredientListRequestDTO;
-import com.aklaa.api.dtos.response.GroceryListIngredientListResponseDTO;
-import com.aklaa.api.dtos.response.GroceryListResponseDTO;
+import com.aklaa.api.dtos.response.*;
 import com.aklaa.api.model.User;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.data.domain.Pageable;
@@ -70,7 +69,20 @@ public interface GroceryListService {
      *         total elements, and total pages
      */
     GroceryListIngredientListResponseDTO getIngredientOfGroceryList(Long id, User user, Pageable pageable);
-    
+
+    /**
+     * Retrieves the ingredients of a specific grocery list.
+     * <p>
+     * This method fetches all ingredients in a grocery list. If the grocery list is not found or doesn't
+     * belong to the user, an empty response is returned.
+     * </p>
+     *
+     * @param id the ID of the grocery list
+     * @param user the user who owns the grocery list
+     * @return a {@link List<IngredientResponseDTO>} the ingredients
+     */
+    List<IngredientResponseDTO> getIngredientOfGroceryList(Long id, User user);
+
     /**
      * Updates the ingredients in a specific grocery list.
      * <p>
