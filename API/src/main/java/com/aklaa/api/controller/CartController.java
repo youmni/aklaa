@@ -1,5 +1,6 @@
 package com.aklaa.api.controller;
 
+import com.aklaa.api.annotations.AllowAuthenticated;
 import com.aklaa.api.dao.DishRepository;
 import com.aklaa.api.dtos.request.CartDishRequestDTO;
 import com.aklaa.api.model.Dish;
@@ -24,13 +25,13 @@ public class CartController {
         this.dishRepository = dishRepository;
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+    @AllowAuthenticated
     @GetMapping
     public ResponseEntity<List<CartDishRequestDTO>> getCartItems(HttpSession session) {
         return ResponseEntity.ok(getCart(session));
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+    @AllowAuthenticated
     @PostMapping("/add")
     public ResponseEntity<String> addToCart(@Valid @RequestBody CartDishRequestDTO newItem, HttpSession session) {
         Optional<Dish> dish = dishRepository.findById(newItem.getDishId());
@@ -52,7 +53,7 @@ public class CartController {
         return ResponseEntity.ok("Item added successfully");
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+    @AllowAuthenticated
     @PutMapping("/edit/{id}")
     public ResponseEntity<String> editCartItem(@PathVariable int id, @Valid @RequestBody CartDishRequestDTO updatedItem, HttpSession session) {
         Optional<Dish> dish = dishRepository.findById(updatedItem.getDishId());
@@ -78,7 +79,7 @@ public class CartController {
         }
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+    @AllowAuthenticated
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteCartItem(@PathVariable int id, HttpSession session) {
         List<CartDishRequestDTO> cart = getCart(session);
@@ -92,7 +93,7 @@ public class CartController {
         }
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+    @AllowAuthenticated
     @DeleteMapping("/clear")
     public ResponseEntity<String> clearCart(HttpSession session) {
         session.removeAttribute(CART_KEY);

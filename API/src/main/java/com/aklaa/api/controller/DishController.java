@@ -1,5 +1,6 @@
 package com.aklaa.api.controller;
 
+import com.aklaa.api.annotations.AllowAuthenticated;
 import com.aklaa.api.dao.UserRepository;
 import com.aklaa.api.dtos.request.DishRequestDTO;
 import com.aklaa.api.dtos.response.DishListResponseDTO;
@@ -33,7 +34,7 @@ public class DishController {
         this.dishService = dishService;
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+    @AllowAuthenticated
     @PostMapping
     public ResponseEntity<DishResponseDTO> create(@RequestBody @Valid DishRequestDTO dishRequestDTO, @AuthenticationPrincipal UserDetails userDetails){
         Optional<User> optionalUser = userRepository.findByEmail(userDetails.getUsername());
@@ -54,7 +55,7 @@ public class DishController {
         return ResponseEntity.created(location).body(dish);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+    @AllowAuthenticated
     @PutMapping("/{id}")
     public ResponseEntity<DishResponseDTO> update(@PathVariable Long id, @RequestBody @Valid DishRequestDTO dishRequestDTO, @AuthenticationPrincipal UserDetails userDetails) {
         Optional<User> optionalUser = userRepository.findByEmail(userDetails.getUsername());
@@ -68,7 +69,7 @@ public class DishController {
         return ResponseEntity.ok(dish);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+    @AllowAuthenticated
     @DeleteMapping("{id}")
     public ResponseEntity<DishResponseDTO> delete(@PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails) {
         Optional<User> optionalUser = userRepository.findByEmail(userDetails.getUsername());
@@ -82,7 +83,7 @@ public class DishController {
         return ResponseEntity.ok(dish);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+    @AllowAuthenticated
     @GetMapping("{id}")
     public ResponseEntity<DishResponseDTO> getIngredient(@PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails) {
         Optional<User> optionalUser = userRepository.findByEmail(userDetails.getUsername());
@@ -96,7 +97,7 @@ public class DishController {
         return ResponseEntity.ok(dishResponseDTO);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+    @AllowAuthenticated
     @GetMapping("/filter")
     public ResponseEntity<DishListResponseDTO> filterDishes(
             @RequestParam(required = false) String search,

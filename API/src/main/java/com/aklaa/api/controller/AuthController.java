@@ -1,5 +1,6 @@
 package com.aklaa.api.controller;
 
+import com.aklaa.api.annotations.AllowAnonymous;
 import com.aklaa.api.dao.ResetPasswordRepository;
 import com.aklaa.api.dao.UserRepository;
 import com.aklaa.api.dtos.request.LoginDTO;
@@ -43,6 +44,7 @@ public class AuthController {
         this.passwordEncoder = passwordEncoder;
     }
 
+    @AllowAnonymous
     @PostMapping("/register")
     public ResponseEntity<UserDTO> register(@RequestBody RegistrationDTO registrationDTO) {
         UserDTO user = authService.register(registrationDTO);
@@ -56,6 +58,7 @@ public class AuthController {
         return ResponseEntity.created(location).body(user);
     }
 
+    @AllowAnonymous
     @PostMapping("/login")
     public ResponseEntity<AuthResponseDTO> login(@RequestBody LoginDTO loginDTO, HttpServletResponse response) throws JOSEException {
         AuthResponseDTO auth = authService.login(loginDTO);
@@ -84,6 +87,7 @@ public class AuthController {
                 .ok(auth);
     }
 
+    @AllowAnonymous
     @PostMapping("/logout")
     public ResponseEntity<AuthResponseDTO> logout(HttpServletResponse response) {
         Cookie accessTokenCookie = new Cookie("accessToken", null);
@@ -104,6 +108,7 @@ public class AuthController {
                 .ok().build();
     }
 
+    @AllowAnonymous
     @GetMapping("/me")
     public ResponseEntity<UserDTO> getCurrentUser(@AuthenticationPrincipal UserDetails userDetails) {
         Optional<User> optionalUser = userRepository.findByEmail(userDetails.getUsername());
@@ -126,12 +131,14 @@ public class AuthController {
         return ResponseEntity.ok(dto);
     }
 
+    @AllowAnonymous
     @PostMapping("/reset-password")
     public ResponseEntity<String> requestReset(@RequestBody PasswordResetRequestDTO passwordResetRequestDTO) {
         authService.processPasswordResetRequest(passwordResetRequestDTO);
         return ResponseEntity.ok("If the email is registered, you'll get a reset link");
     }
 
+    @AllowAnonymous
     @PostMapping("/reset-password/confirm")
     public ResponseEntity<String> resetPassword(@RequestBody PasswordResetConfirmDTO passwordResetConfirmDTO) {
         Optional<PasswordResetToken> tokenOpt = resetPasswordRepository.findByToken(passwordResetConfirmDTO.getToken());
@@ -150,6 +157,7 @@ public class AuthController {
         return ResponseEntity.ok("Password updated");
     }
 
+    @AllowAnonymous
     @GetMapping("/activate")
     public ResponseEntity<String> activateAccount(@RequestParam String token) {
         Optional<User> userOpt = userRepository.findByActivationToken(token);
@@ -165,6 +173,7 @@ public class AuthController {
         return ResponseEntity.ok("Account activated!");
     }
 
+    @AllowAnonymous
     @GetMapping("/reset-password")
     public ResponseEntity<String> passwordReset(@RequestParam String token) {
         Optional<PasswordResetToken> tokenOpt = resetPasswordRepository.findByToken(token);
@@ -176,6 +185,7 @@ public class AuthController {
         return ResponseEntity.ok("Token is valid");
     }
 
+    @AllowAnonymous
     @PostMapping("/refresh")
     public ResponseEntity<AuthResponseDTO> refreshAccessToken(HttpServletRequest request, HttpServletResponse response) throws ParseException, JOSEException {
         String refreshToken = authService.getCookieValue(request, "refreshToken");
