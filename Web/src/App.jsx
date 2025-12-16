@@ -23,6 +23,7 @@ import GroceryLists from "./pages/user/groceryLists/GroceryLists";
 import DetailsGroceryList from "./pages/user/groceryLists/DetailsGroceryList";
 import EditGroceryLists from "./pages/user/groceryLists/EditGroceryLists";
 import GetUsers from "./pages/admin/users/GetUsers";
+import ExportedUserData from "./pages/shared/ExportedUserData";
 
 const App = () => {
   return (
@@ -60,6 +61,9 @@ const App = () => {
               <Route index element={<GroceryLists />} />
               <Route path=":id/ingredients" element={<DetailsGroceryList />} />
               <Route path=":id/edit" element={<EditGroceryLists />} />
+            </Route>
+            <Route path="settings/">
+              <Route path="export" element={<ExportedUserData />} />
             </Route>
           </Route>
         </Route>
