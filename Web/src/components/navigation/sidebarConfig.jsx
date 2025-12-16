@@ -54,6 +54,19 @@ export const sidebarItems = [
     href: '/grocerylists',
     roles: ['USER', 'ADMIN'],
   },
+  {
+    id: 'settings',
+    label: 'Settings',
+    roles: [],
+    children: [
+      {
+        id: 'export',
+        label: 'Export User Data',
+        href: '/settings/export',
+        roles: ['USER', 'ADMIN'],
+      }
+    ],
+  },
 ];
 
 export const sidebarFooterItems = [

@@ -63,6 +63,19 @@ public class GroceryListServiceImpl implements GroceryListService {
     }
 
     @Override
+    public List<GroceryListResponseDTO> getAll(User user) {
+        return groceryListRepository.findByUser(user)
+                .stream()
+                .map(groceryList -> GroceryListResponseDTO.builder()
+                        .id(groceryList.getId())
+                        .startOfWeek(groceryList.getStartOfWeek())
+                        .endOfWeek(groceryList.getEndOfWeek())
+                        .build()
+                )
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public GroceryListIngredientListResponseDTO getIngredientOfGroceryList(Long id, User user, Pageable pageable) {
         return groceryListRepository.findByIdAndUser(id, user)
                 .map(groceryList -> {
@@ -107,6 +120,33 @@ public class GroceryListServiceImpl implements GroceryListService {
                         .totalPages(0)
                         .build());
     }
+    @Override
+    public List<IngredientResponseDTO> getIngredientOfGroceryList(Long id, User user) {
+        return groceryListRepository.findByIdAndUser(id, user)
+                .map(groceryList ->
+                        groceryList.getGroceryListIngredients()
+                                .stream()
+                                .sorted(
+                                        Comparator.comparing(
+                                                (GroceryListIngredient item) ->
+                                                        item.getIngredient().getCategory()
+                                        ).thenComparing(
+                                                item -> item.getIngredient().getName()
+                                        )
+                                )
+                                .map(item -> IngredientResponseDTO.builder()
+                                        .id(item.getIngredient().getId())
+                                        .name(item.getIngredient().getName())
+                                        .description(item.getIngredient().getDescription())
+                                        .category(item.getIngredient().getCategory())
+                                        .unit(item.getIngredient().getUnit())
+                                        .build()
+                                )
+                                .toList()
+                )
+                .orElse(List.of());
+    }
+
 
     @Override
     public void updateIngredientsOfGroceryList(Long listId, GroceryListIngredientListRequestDTO updatedList, User user) {

@@ -156,6 +156,15 @@ public class DishServiceImpl implements DishService {
                 .build();
     }
 
+    @Override
+    public List<DishResponseDTO> getAll(User user) {
+        List<Dish> dishes = dishRepository.findByUser(user);
+
+        return dishes.stream()
+                .map(dishMapper::toResponseDTO)
+                .toList();
+    }
+
     private Specification<Dish> searchSpec(String searchTerm) {
         return (root, query, builder) -> {
             if (searchTerm == null || searchTerm.isEmpty()) {
