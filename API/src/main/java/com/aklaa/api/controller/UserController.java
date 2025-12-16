@@ -61,6 +61,15 @@ public class UserController {
         return ResponseEntity.ok(deletedUser);
     }
 
+    @AllowAuthenticated
+    @DeleteMapping()
+    public ResponseEntity<UserDTO> deleteOwnUser(@AuthenticationPrincipal User actionTaker) {
+        UserDTO deletedUser = userService.delete(actionTaker.getId(), actionTaker);
+        return ResponseEntity.ok(deletedUser);
+    }
+
+
+
     @AllowAdmin
     @PutMapping("/enable/{id}")
     public ResponseEntity<UserDTO> enableAccount(@PathVariable Long id) {

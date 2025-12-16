@@ -64,6 +64,12 @@ export const sidebarItems = [
         label: 'Export User Data',
         href: '/settings/export',
         roles: ['USER', 'ADMIN'],
+      },
+            {
+        id: 'profile',
+        label: 'Profile',
+        href: '/settings/profile',
+        roles: ['USER', 'ADMIN'],
       }
     ],
   },

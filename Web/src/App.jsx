@@ -24,6 +24,7 @@ import DetailsGroceryList from "./pages/user/groceryLists/DetailsGroceryList";
 import EditGroceryLists from "./pages/user/groceryLists/EditGroceryLists";
 import GetUsers from "./pages/admin/users/GetUsers";
 import ExportedUserData from "./pages/shared/ExportedUserData";
+import Profile from "./pages/shared/Profile";
 
 const App = () => {
   return (
@@ -64,6 +65,7 @@ const App = () => {
             </Route>
             <Route path="settings/">
               <Route path="export" element={<ExportedUserData />} />
+              <Route path="profile" element={<Profile />} />
             </Route>
           </Route>
         </Route>
