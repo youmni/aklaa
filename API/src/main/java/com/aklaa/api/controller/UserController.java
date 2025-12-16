@@ -1,5 +1,6 @@
 package com.aklaa.api.controller;
 
+import com.aklaa.api.annotations.AllowAdmin;
 import com.aklaa.api.dtos.response.UserDTO;
 import com.aklaa.api.dtos.response.UserListResponseDTO;
 import com.aklaa.api.model.enums.UserType;
@@ -20,7 +21,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @AllowAdmin
     @GetMapping()
     public ResponseEntity<UserListResponseDTO> getAllUsers(
             @RequestParam(required = false) String search,
@@ -33,14 +34,14 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @AllowAdmin
     @GetMapping("{id}")
     public ResponseEntity<UserDTO> getUser(@PathVariable Long id) {
         UserDTO response = userService.get(id);
         return ResponseEntity.ok(response);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @AllowAdmin
     @PutMapping("{id}")
     public ResponseEntity<UserDTO> updateUserRole(
             @PathVariable Long id,

@@ -1,5 +1,6 @@
 package com.aklaa.api.controller;
 
+import com.aklaa.api.annotations.AllowAuthenticated;
 import com.aklaa.api.dao.DishRepository;
 import com.aklaa.api.dao.GroceryListRepository;
 import com.aklaa.api.dao.UserRepository;
@@ -54,7 +55,7 @@ public class GroceryListController {
         this.userRepository = userRepository;
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+    @AllowAuthenticated
     @PostMapping("/save")
     public ResponseEntity<String> saveCart(@RequestParam LocalDateTime startOfWeek, @RequestParam LocalDateTime endOfWeek, HttpSession session, @AuthenticationPrincipal UserDetails userDetails) {
         List<CartDishRequestDTO> cartRequests = groceryListService.getCart(session);
@@ -82,7 +83,7 @@ public class GroceryListController {
         return ResponseEntity.ok().build();
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+    @AllowAuthenticated
     @PutMapping("{id}")
     public ResponseEntity<?> update(@RequestBody @Valid GroceryListIngredientListRequestDTO request, @PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails){
         Optional<User> optionalUser = userRepository.findByEmail(userDetails.getUsername());
@@ -96,7 +97,7 @@ public class GroceryListController {
         return ResponseEntity.ok().build();
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+    @AllowAuthenticated
     @GetMapping()
     public ResponseEntity<List<GroceryListResponseDTO>> getAll(@AuthenticationPrincipal UserDetails userDetails, Pageable pageable) {
         Optional<User> optionalUser = userRepository.findByEmail(userDetails.getUsername());
@@ -110,7 +111,7 @@ public class GroceryListController {
         return ResponseEntity.ok(list);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+    @AllowAuthenticated
     @GetMapping("/{id}/ingredients")
     public ResponseEntity<GroceryListIngredientListResponseDTO> getIngredientsOfGroceryList(@PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails, @PageableDefault(size = 10) Pageable pageable) {
         Optional<User> optionalUser = userRepository.findByEmail(userDetails.getUsername());
