@@ -56,6 +56,7 @@ public class UserServiceImpl implements UserService {
                         .lastName(user.getLastName())
                         .email(user.getEmail())
                         .userType(user.getUserType().name())
+                        .enabled(user.isEnabled())
                         .build())
                 .toList();
 
@@ -90,7 +91,24 @@ public class UserServiceImpl implements UserService {
                 .lastName(user.getLastName())
                 .email(user.getEmail())
                 .userType(user.getUserType().name())
+                .enabled(user.isEnabled())
                 .build();
+    }
+
+    @Override
+    public UserDTO enableUser(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("User not found"));
+
+        if(!user.isEnabled()) {
+            user.setEnabled(true);
+            user.setActivationToken(null);
+            userRepository.save(user);
+
+            refreshAuthentication(user.getEmail());
+        }
+
+        return userMapper.toDTO(user);
     }
 
     @Override

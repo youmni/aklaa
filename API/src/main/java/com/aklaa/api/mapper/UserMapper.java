@@ -16,6 +16,7 @@ public class UserMapper {
                 .lastName(user.getLastName())
                 .email(user.getEmail())
                 .userType(String.valueOf(user.getUserType()))
+                .enabled(user.isEnabled())
                 .build();
     }
 
