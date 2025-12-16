@@ -5,7 +5,7 @@ import {
 import { LuChevronLeft, LuChevronRight } from 'react-icons/lu';
 import { useSnackbar } from 'notistack';
 import api from '../../../api/axiosConfig';
-import UserDetailsModal from './UserDetailsModal';
+import UserDetailsModal from '../../../components/UserDetailsModal';
 
 const NAVY = '#083951';
 
@@ -21,7 +21,6 @@ const GetUsers = () => {
     const [selectedUser, setSelectedUser] = useState(null);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [isUpdatingRole, setIsUpdatingRole] = useState(false);
-    const [enablingId, setEnablingId] = useState(null);
 
     const pageSize = 10;
 
@@ -73,7 +72,6 @@ const GetUsers = () => {
 
     const handleEnable = async (id) => {
         try {
-            setEnablingId(id);
             await api.put(`/users/enable/${id}`);
 
             setUsers(users.map(user => user.id === id ? { ...user, enabled: true } : user));
@@ -82,8 +80,20 @@ const GetUsers = () => {
             enqueueSnackbar('User enabled successfully', { variant: 'success' });
         } catch (error) {
             enqueueSnackbar(error.response?.data?.message || 'Failed to enable user', { variant: 'error' });
-        } finally {
-            setEnablingId(null);
+        }
+    };
+
+    const handleDelete = async (id) => {
+        try {
+            await api.delete(`/users/${id}`);
+
+            setUsers((prev) => prev.filter((user) => user.id !== id));
+
+            if (selectedUser?.id === id) setSelectedUser(null);
+
+            enqueueSnackbar('Deleted successfully', { variant: 'success' });
+        } catch (error) {
+            enqueueSnackbar(error.response?.data?.message || 'Failed to delete user', { variant: 'error' });
         }
     };
 
@@ -121,9 +131,9 @@ const GetUsers = () => {
                         <Table.Root size="lg" variant="plain">
                             <Table.Header>
                                 <Table.Row>
-                                    <Table.ColumnHeader  style={{ color: NAVY, textAlign: 'left', padding: '12px' }}>First Name</Table.ColumnHeader >
-                                    <Table.ColumnHeader  style={{ color: NAVY, textAlign: 'left', padding: '12px' }}>Last Name</Table.ColumnHeader >
-                                    <Table.ColumnHeader  style={{ color: NAVY, textAlign: 'left', padding: '12px' }}>Status</Table.ColumnHeader >
+                                    <Table.ColumnHeader style={{ color: NAVY, textAlign: 'left', padding: '12px' }}>First Name</Table.ColumnHeader >
+                                    <Table.ColumnHeader style={{ color: NAVY, textAlign: 'left', padding: '12px' }}>Last Name</Table.ColumnHeader >
+                                    <Table.ColumnHeader style={{ color: NAVY, textAlign: 'left', padding: '12px' }}>Status</Table.ColumnHeader >
                                 </Table.Row>
                             </Table.Header>
                             <Table.Body>
@@ -189,9 +199,9 @@ const GetUsers = () => {
                     onOpenChange={setIsDialogOpen}
                     selectedUser={selectedUser}
                     handleRoleChange={handleRoleChange}
+                    handleDelete={handleDelete}
                     isUpdatingRole={isUpdatingRole}
                     handleEnable={handleEnable}
-                    enablingId={enablingId}
                     NAVY={NAVY}
                 />
             </VStack>
