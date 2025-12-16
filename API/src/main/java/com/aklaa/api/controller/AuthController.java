@@ -11,12 +11,10 @@ import com.aklaa.api.dtos.response.UserDTO;
 import com.aklaa.api.model.PasswordResetToken;
 import com.aklaa.api.model.User;
 import com.aklaa.api.services.contract.AuthService;
-import com.aklaa.api.services.contract.SecurityEventsService;
 import com.nimbusds.jose.JOSEException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -31,14 +29,19 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/auth")
-@RequiredArgsConstructor
 public class AuthController {
 
     private final AuthService authService;
     private final UserRepository userRepository;
     private final ResetPasswordRepository resetPasswordRepository;
     private final PasswordEncoder passwordEncoder;
-    private final SecurityEventsService securityEventsService;
+
+    public AuthController(AuthService authService, UserRepository userRepository, ResetPasswordRepository resetPasswordRepository, PasswordEncoder passwordEncoder) {
+        this.authService = authService;
+        this.userRepository = userRepository;
+        this.resetPasswordRepository = resetPasswordRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @PostMapping("/register")
     public ResponseEntity<UserDTO> register(@RequestBody RegistrationDTO registrationDTO) {
@@ -97,8 +100,6 @@ public class AuthController {
         refreshTokenCookie.setMaxAge(0);
         response.addCookie(refreshTokenCookie);
 
-        securityEventsService.registerLogout();
-
         return ResponseEntity
                 .ok().build();
     }
@@ -127,10 +128,7 @@ public class AuthController {
 
     @PostMapping("/reset-password")
     public ResponseEntity<String> requestReset(@RequestBody PasswordResetRequestDTO passwordResetRequestDTO) {
-        securityEventsService.registerPasswordForgot();
-
         authService.processPasswordResetRequest(passwordResetRequestDTO);
-
         return ResponseEntity.ok("If the email is registered, you'll get a reset link");
     }
 
@@ -148,8 +146,6 @@ public class AuthController {
         user.setPassword(passwordEncoder.encode(passwordResetConfirmDTO.getNewPassword()));
         userRepository.save(user);
         resetPasswordRepository.delete(token);
-
-        securityEventsService.registerPasswordReset();
 
         return ResponseEntity.ok("Password updated");
     }

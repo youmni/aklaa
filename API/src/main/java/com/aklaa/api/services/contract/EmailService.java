@@ -1,7 +1,6 @@
 package com.aklaa.api.services.contract;
 
 import com.aklaa.api.exceptions.EmailSendingException;
-import com.aklaa.api.model.SecurityEvent;
 import com.aklaa.api.model.User;
 
 /**
@@ -40,12 +39,4 @@ public interface EmailService {
      * @throws EmailSendingException if an error occurs while reading the template or sending the email
      */
     void sendPasswordResetEmail(User user, String token);
-
-    /**
-     * Email admins to alert of a repeated security event warning
-     * @param receiver user receiving the email
-     * @param triggered user triggering the event
-     * @param event the event being triggered
-     */
-    void sendSecurityWarning(User receiver, User triggered, SecurityEvent event);
 }
