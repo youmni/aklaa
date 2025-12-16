@@ -76,6 +76,7 @@ docker compose down
 9. [@Lombok](https://www.baeldung.com/intro-to-project-lombok)
 10. [@Javadoc](https://www.baeldung.com/javadoc)
 11. [@Minio](https://chatgpt.com/share/691e1722-a328-8010-96ba-904168f98fe5)
+12. [@return-file-exported-data](https://www.baeldung.com/spring-controller-return-image-file)
 
 ### Authors
 - [@Youmni Malha](https://github.com/Youmni)

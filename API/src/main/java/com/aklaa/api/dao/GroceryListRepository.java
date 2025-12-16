@@ -13,5 +13,6 @@ import java.util.Optional;
 
 public interface GroceryListRepository extends JpaRepository<GroceryList, Long> {
     Page<GroceryList> findByUser(User user, Pageable pageable);
+    List<GroceryList> findByUser(User user);
     Optional<GroceryList> findByIdAndUser(Long id, User user);
 }

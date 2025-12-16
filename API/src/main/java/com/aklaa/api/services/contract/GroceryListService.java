@@ -43,7 +43,18 @@ public interface GroceryListService {
      * @return a list of {@link GroceryListResponseDTO} containing the user's grocery lists
      */
     List<GroceryListResponseDTO> getGroceryLists(User user, Pageable pageable);
-    
+
+    /**
+     * Retrieves all grocery lists for a specific user.
+     * <p>
+     * This method fetches grocery lists belonging to the user.
+     * </p>
+     *
+     * @param user the user whose grocery lists should be retrieved
+     * @return a list of {@link GroceryListResponseDTO} containing the user's grocery lists
+     */
+    List<GroceryListResponseDTO> getAll(User user);
+
     /**
      * Retrieves the ingredients of a specific grocery list with pagination.
      * <p>

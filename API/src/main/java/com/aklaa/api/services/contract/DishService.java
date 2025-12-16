@@ -78,6 +78,16 @@ public interface DishService {
      * @return a {@link DishListResponseDTO} containing the filtered dishes, total elements, and total pages
      */
     DishListResponseDTO filter(String search, List<String> countries, Pageable pageable, User user);
+    /**
+     * Get and retrieves dishes.
+     * <p>
+     * This method gets all dishes for the user that is passed.
+     * </p>
+     *
+     * @param user the user whose dishes should be retrieved
+     * @return a {@link DishListResponseDTO} containing the filtered dishes, total elements, and total pages
+     */
+    List<DishResponseDTO> getAll(User user);
     
     /**
      * Retrieves a specific dish by its ID.

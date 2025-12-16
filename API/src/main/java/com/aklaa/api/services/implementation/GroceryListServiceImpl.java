@@ -63,6 +63,19 @@ public class GroceryListServiceImpl implements GroceryListService {
     }
 
     @Override
+    public List<GroceryListResponseDTO> getAll(User user) {
+        return groceryListRepository.findByUser(user)
+                .stream()
+                .map(groceryList -> GroceryListResponseDTO.builder()
+                        .id(groceryList.getId())
+                        .startOfWeek(groceryList.getStartOfWeek())
+                        .endOfWeek(groceryList.getEndOfWeek())
+                        .build()
+                )
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public GroceryListIngredientListResponseDTO getIngredientOfGroceryList(Long id, User user, Pageable pageable) {
         return groceryListRepository.findByIdAndUser(id, user)
                 .map(groceryList -> {
