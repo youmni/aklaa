@@ -1,7 +1,5 @@
 package com.aklaa.api.config.security;
 
-import com.aklaa.api.model.User;
-import com.aklaa.api.services.contract.SecurityEventsService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -52,7 +50,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, SecurityEventsService securityEventsService) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
@@ -68,8 +66,6 @@ public class SecurityConfig {
                             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                         })
                         .accessDeniedHandler((request, response, accessDeniedException) -> {
-                            securityEventsService.registerUnauthorizedAccess((User) request.getUserPrincipal(), request.getContextPath());
-
                             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
                         })
                 )

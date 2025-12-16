@@ -15,11 +15,9 @@ import com.aklaa.api.model.PasswordResetToken;
 import com.aklaa.api.model.User;
 import com.aklaa.api.services.contract.AuthService;
 import com.aklaa.api.services.contract.EmailService;
-import com.aklaa.api.services.contract.SecurityEventsService;
 import com.nimbusds.jose.JOSEException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -32,7 +30,6 @@ import java.util.Base64;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
     private final UserMapper userMapper;
@@ -42,7 +39,15 @@ public class AuthServiceImpl implements AuthService {
     private final EmailService emailService;
     private final JwtService jwtService;
     private final ResetPasswordRepository resetPasswordRepository;
-    private final SecurityEventsService securityEventsService;
+
+    public AuthServiceImpl(UserMapper userMapper, PasswordEncoder passwordEncoder, UserRepository userRepository, EmailService emailService, JwtService jwtService, ResetPasswordRepository resetPasswordRepository) {
+        this.userMapper = userMapper;
+        this.passwordEncoder = passwordEncoder;
+        this.userRepository = userRepository;
+        this.emailService = emailService;
+        this.jwtService = jwtService;
+        this.resetPasswordRepository = resetPasswordRepository;
+    }
 
     @Override
     public UserDTO register(RegistrationDTO registrationDTO) {
@@ -65,14 +70,10 @@ public class AuthServiceImpl implements AuthService {
             Optional<User> userOpt = userRepository.findByEmail(loginDTO.getEmail()).stream().findFirst();
 
             if (userOpt.isEmpty() || !passwordEncoder.matches(loginDTO.getPassword(), userOpt.get().getPassword())) {
-                userOpt.ifPresent(user -> securityEventsService.registerFailedLogin(user, "Wrong password"));
-
                 throw new InvalidCredentialsException("Invalid email or password.");
             }
 
             if (!userOpt.get().isEnabled() || userOpt.get().getActivationToken() != null) {
-                userOpt.ifPresent(user -> securityEventsService.registerFailedLogin(user, "Account not active"));
-
                 throw new AccountNotActivatedException("Account not activated.");
             }
 
@@ -80,8 +81,6 @@ public class AuthServiceImpl implements AuthService {
 
             String refreshToken = jwtService.generateRefreshToken(user.getId(), user.getUserType());
             String token = jwtService.generateToken(user.getId(), user.getUserType());
-
-            securityEventsService.registerLogin(user);
 
             return AuthResponseDTO.builder()
                     .success(true)
