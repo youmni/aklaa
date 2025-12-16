@@ -50,4 +50,11 @@ public class UserController {
         UserDTO updatedUser = userService.updateUserRole(id, type);
         return ResponseEntity.ok(updatedUser);
     }
+
+    @AllowAdmin
+    @PutMapping("{id}")
+    public ResponseEntity<UserDTO> enableAccount(@PathVariable Long id) {
+        UserDTO updatedUser = userService.enableUser(id);
+        return ResponseEntity.ok(updatedUser);
+    }
 }

@@ -94,6 +94,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserDTO enableUser(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("User not found"));
+
+        if(!user.isEnabled()) {
+            user.setEnabled(true);
+            user.setActivationToken(null);
+            userRepository.save(user);
+
+            refreshAuthentication(user.getEmail());
+        }
+
+        return userMapper.toDTO(user);
+    }
+
+    @Override
     public void refreshAuthentication(String email) {
         Authentication existingAuth = SecurityContextHolder.getContext().getAuthentication();
 

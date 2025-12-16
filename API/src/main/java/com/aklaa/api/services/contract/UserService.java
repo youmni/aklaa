@@ -55,6 +55,18 @@ public interface UserService {
      * @throws NoSuchElementException if the user is not found
      */
     UserDTO updateUserRole(Long id, UserType userType);
+
+    /**
+     * Enable a user's account.
+     * <p>
+     * Updates the user's 'enabled' status and 'activationToken' in the database.
+     * </p>
+     *
+     * @param id the ID of the user whose role should be updated
+     * @return a {@link UserDTO} containing the updated user's data
+     * @throws NoSuchElementException if the user is not found
+     */
+    UserDTO enableUser(Long id);
     
     /**
      * Refreshes the authentication context for a user.
