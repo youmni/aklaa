@@ -86,6 +86,12 @@ public class GlobalExceptionHandler {
                 .body(new AuthResponseDTO(false, ex.getMessage(), null, null));
     }
 
+    @ExceptionHandler(AccountBlacklistedException.class)
+    public ResponseEntity<AuthResponseDTO> handleAccountBlacklistedException(AccountBlacklistedException ex) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(new AuthResponseDTO(false, ex.getMessage(), null, null));
+    }
+
     @ExceptionHandler(InvalidCredentialsException.class)
     public ResponseEntity<AuthResponseDTO> handleInvalidCredentials(InvalidCredentialsException ex) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)

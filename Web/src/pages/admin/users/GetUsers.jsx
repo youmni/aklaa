@@ -25,12 +25,6 @@ import api from '../../../api/axiosConfig';
 
 const NAVY = '#083951';
 
-const USER_TYPES = [
-    { value: '', label: 'All Types' },
-    { value: 'USER', label: 'User' },
-    { value: 'ADMIN', label: 'Admin' }
-];
-
 const GetUsers = () => {
     const { enqueueSnackbar } = useSnackbar();
     const [users, setUsers] = useState([]);
@@ -122,15 +116,6 @@ const GetUsers = () => {
         }
     };
 
-    const getUserTypeBadge = (userType) => {
-        const colorPalette = userType === 'ADMIN' ? 'purple' : 'blue';
-        return (
-            <Badge colorPalette={colorPalette} size="sm">
-                {userType}
-            </Badge>
-        );
-    };
-
     return (
         <Box p={8} bg="gray.50" minH="calc(100vh - 73px)">
             <VStack align="stretch" gap={6} maxW="1400px" mx="auto">
@@ -172,6 +157,7 @@ const GetUsers = () => {
                                 <option value=""> All Types</option>
                                 <option value="USER"> User</option>
                                 <option value="ADMIN"> Admin</option>
+                                <option value="BLACKLISTED"> Blacklisted</option>
                             </NativeSelectField>
                         </NativeSelectRoot>
                     </Box>
@@ -398,6 +384,7 @@ const GetUsers = () => {
                                                 >
                                                     <option value="USER"> User</option>
                                                     <option value="ADMIN"> Admin</option>
+                                                    <option value="BLACKLISTED"> Blacklisted</option>
                                                 </NativeSelectField>
                                             </NativeSelectRoot>
                                             {isUpdatingRole && (

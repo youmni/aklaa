@@ -8,11 +8,13 @@ import com.aklaa.api.dtos.request.PasswordResetRequestDTO;
 import com.aklaa.api.dtos.request.RegistrationDTO;
 import com.aklaa.api.dtos.response.AuthResponseDTO;
 import com.aklaa.api.dtos.response.UserDTO;
+import com.aklaa.api.exceptions.AccountBlacklistedException;
 import com.aklaa.api.exceptions.AccountNotActivatedException;
 import com.aklaa.api.exceptions.InvalidCredentialsException;
 import com.aklaa.api.mapper.UserMapper;
 import com.aklaa.api.model.PasswordResetToken;
 import com.aklaa.api.model.User;
+import com.aklaa.api.model.enums.UserType;
 import com.aklaa.api.services.contract.AuthService;
 import com.aklaa.api.services.contract.EmailService;
 import com.nimbusds.jose.JOSEException;
@@ -75,6 +77,14 @@ public class AuthServiceImpl implements AuthService {
 
             if (!userOpt.get().isEnabled() || userOpt.get().getActivationToken() != null) {
                 throw new AccountNotActivatedException("Account not activated.");
+            }
+
+            if (userOpt.get().getUserType().equals(UserType.BLACKLISTED)) {
+                throw new AccountBlacklistedException(
+                        "Your account has been deactivated and cannot be used to access this application. " +
+                                "This may be due to security or policy reasons. " +
+                                "If you believe this is an error or need assistance, please contact the system administrator."
+                );
             }
 
             User user = userOpt.get();
