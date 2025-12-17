@@ -3,6 +3,7 @@ package com.aklaa.api.services.implementation;
 import com.aklaa.api.config.security.JwtService;
 import com.aklaa.api.dao.ResetPasswordRepository;
 import com.aklaa.api.dao.UserRepository;
+import com.aklaa.api.dtos.request.ForgotPasswordRequestDTO;
 import com.aklaa.api.dtos.request.LoginDTO;
 import com.aklaa.api.dtos.request.PasswordResetRequestDTO;
 import com.aklaa.api.dtos.request.RegistrationDTO;
@@ -20,6 +21,7 @@ import com.aklaa.api.services.contract.EmailService;
 import com.nimbusds.jose.JOSEException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +31,7 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.Arrays;
 import java.util.Base64;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -65,6 +68,23 @@ public class AuthServiceImpl implements AuthService {
         emailService.sendActivationEmail(user, user.getActivationToken());
 
         return userMapper.toDTO(user);
+    }
+
+    @Override
+    public void forgotPassword(Long id, ForgotPasswordRequestDTO forgotPasswordRequestDTO) {
+        Optional<User> userOpt = userRepository.findById(id);
+
+        if (userOpt.isEmpty() || !passwordEncoder.matches(forgotPasswordRequestDTO.getOldPassword(), userOpt.get().getPassword())) {
+            throw new InvalidCredentialsException("Invalid password.");
+        }
+
+        if(!forgotPasswordRequestDTO.getNewPassword().equals(forgotPasswordRequestDTO.getConfirmNewPassword())) {
+            throw new InvalidCredentialsException("New Passwords do not match.");
+        }
+
+        User user = userOpt.get();
+        user.setPassword(passwordEncoder.encode(forgotPasswordRequestDTO.getNewPassword()));
+        userRepository.save(user);
     }
 
     @Override
