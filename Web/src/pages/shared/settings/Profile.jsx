@@ -11,12 +11,6 @@ const Profile = () => {
 
   return (
     <Box maxW="1200px" mx="auto" px={4}>
-      <Box mb={4}>
-        <Button variant="ghost" color="#083951" onClick={() => navigate('/settings')}>
-          <FiArrowLeft />
-        </Button>
-      </Box>
-
       <SimpleGrid columns={1} spacing={6}>
         <EditProfile />
         <DeleteProfile />
