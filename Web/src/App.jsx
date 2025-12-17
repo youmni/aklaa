@@ -1,14 +1,14 @@
 import React from "react";
 import { BrowserRouter as Router, Navigate, Routes, Route } from "react-router-dom";
-import Register from "./pages/shared/Register";
-import Login from "./pages/shared/Login";
+import Register from "./pages/shared/auth/Register";
+import Login from "./pages/shared/auth/Login";
 import PrivateRoute from "./components/PrivateRoute";
-import AccountActivation from "./pages/shared/AccountActivation";
-import PasswordReset from "./pages/shared/PasswordReset";
-import PasswordResetConfirm from "./pages/shared/PasswordResetConfirm";
+import AccountActivation from "./pages/shared/auth/AccountActivation";
+import PasswordReset from "./pages/shared/auth/PasswordReset";
+import PasswordResetConfirm from "./pages/shared/auth/PasswordResetConfirm";
 import NotFound from "./pages/shared/NotFound";
 import Layout from "./components/layout/Layout";
-import Logout from "./pages/shared/Logout";
+import Logout from "./pages/shared/auth/Logout";
 import CreateIngredient from "./pages/user/ingredients/CreateIngredient";
 import UpdateIngredient from "./pages/user/ingredients/EditIngredient";
 import DeleteIngredient from "./pages/user/ingredients/DeleteIngredient";
@@ -23,9 +23,9 @@ import GroceryLists from "./pages/user/groceryLists/GroceryLists";
 import DetailsGroceryList from "./pages/user/groceryLists/DetailsGroceryList";
 import EditGroceryLists from "./pages/user/groceryLists/EditGroceryLists";
 import GetUsers from "./pages/admin/users/GetUsers";
-import ExportedUserData from "./pages/shared/ExportedUserData";
-import Profile from "./pages/shared/Profile";
-import EmailActivation from "./pages/shared/EmailActivation";
+import ExportedUserData from "./pages/shared/settings/ExportedUserData";
+import Profile from "./pages/shared/settings/Profile";
+import EmailActivation from "./pages/shared/auth/EmailActivation";
 
 const App = () => {
   return (

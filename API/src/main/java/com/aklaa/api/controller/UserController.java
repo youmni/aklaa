@@ -68,10 +68,10 @@ public class UserController {
     }
 
     @AllowAuthenticated
-    @PutMapping("{id}/email")
-    public ResponseEntity<UserDTO> updateUserEmail(@PathVariable Long id, @RequestBody UpdatedUserDTO updatedUserDTO) {
+    @PutMapping("/email")
+    public ResponseEntity<UserDTO> updateUserEmail(@RequestBody UpdatedUserDTO updatedUserDTO, @AuthenticationPrincipal User actionTaker) {
 
-        UserDTO updatedUser = userService.update(id, updatedUserDTO);
+        UserDTO updatedUser = userService.update(actionTaker.getId(), updatedUserDTO);
         return ResponseEntity.ok(updatedUser);
     }
 

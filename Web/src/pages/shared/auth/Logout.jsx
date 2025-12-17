@@ -1,6 +1,6 @@
 import { useEffect } from "react";
-import api from "../../api/axiosConfig";
-import { useAuth } from "../../hooks/useAuth";
+import api from "../../../api/axiosConfig";
+import { useAuth } from "../../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 
 const Logout = () => {

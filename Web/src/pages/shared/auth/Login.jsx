@@ -1,5 +1,8 @@
 import React, { useState } from "react";
-import api from "../../api/axiosConfig";
+import axios from "axios";
+import api from "../../../api/axiosConfig";
+import RedirectToPath from "../../../components/Redirect";
+import { useAuth } from "../../../hooks/useAuth";
 import { useNavigate, Link as RouterLink } from "react-router-dom";
 import {
     Button,
@@ -9,28 +12,48 @@ import {
     Stack,
     Box,
     Spinner,
-    Text,
-} from "@chakra-ui/react";
+} from "@chakra-ui/react"
 
-const PasswordReset = () => {
+const Login = () => {
     const navigate = useNavigate();
-    const [email, setEmail] = useState("");
+    const [form, setForm] = useState({
+        email: "",
+        password: ""
+    });
+
     const [errors, setErrors] = useState({});
     const [isLoading, setIsLoading] = useState(false);
     const [successMessage, setSuccessMessage] = useState("");
+    const { user, setUser } = useAuth();
 
     const handleChange = (e) => {
-        setEmail(e.target.value);
-        if (errors.email) setErrors({ ...errors, email: "" });
-        if (successMessage) setSuccessMessage("");
+        const { name, value } = e.target;
+        setForm({
+            ...form,
+            [name]: value
+        });
+
+        if (errors[name]) {
+            setErrors({
+                ...errors,
+                [name]: ""
+            });
+        }
+
+        if (successMessage) {
+            setSuccessMessage("");
+        }
     };
 
     const validateForm = () => {
         const newErrors = {};
-        if (!email.trim()) {
-            newErrors.email = "Email is required.";
-        } else if (!/\S+@\S+\.\S+/.test(email.trim())) {
-            newErrors.email = "Invalid email address.";
+        if (!form.email || form.email.trim() === "") {
+            newErrors.email = "Email is verplicht";
+        } else if (!/\S+@\S+\.\S+/.test(form.email.trim())) {
+            newErrors.email = "Ongeldig e-mailadres";
+        }
+        if (!form.password || form.password === "") {
+            newErrors.password = "Wachtwoord is verplicht";
         }
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
@@ -38,33 +61,53 @@ const PasswordReset = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!validateForm()) return;
+
+        if (!validateForm()) {
+            return;
+        }
 
         setIsLoading(true);
-        setErrors({});
         setSuccessMessage("");
+        setErrors({});
 
         try {
-            const response = await api.post("/auth/reset-password", { email: email.trim().toLowerCase() });
+            const sanitizedData = {
+                email: form.email.trim().toLowerCase(),
+                password: form.password,
+            };
+
+            const response = await api.post('/auth/login', sanitizedData);
+
+            const me = await api.get("/auth/me");
+            setUser(me.data || null);
 
             const successMsg = response?.data?.message
                 ? response.data.message
-                : "If an account with that email exists, a password reset link has been sent.";
+                : `Login successful for ${form.email}.`;
 
             setSuccessMessage(successMsg);
-            setEmail("");
-            // optional: navigate("/auth/login"); // uncomment if you want to redirect immediately
+            setForm({
+                email: "",
+                password: ""
+            });
+
         } catch (error) {
+            const errMsg =
+                error?.response?.data?.message ||
+                error?.message ||
+                'Login failed. Please check your email and password and try again.';
+
             setErrors({
-                submit:
-                    error?.response?.data?.message ||
-                    error?.message ||
-                    "Password reset failed. Please check your email and try again.",
+                submit: errMsg
             });
         } finally {
             setIsLoading(false);
         }
     };
+
+    if (user) {
+        return <RedirectToPath />;
+    }
 
     return (
         <Box minH="100vh" bg="gray.50" display="flex" alignItems="center" justifyContent="center">
@@ -77,12 +120,6 @@ const PasswordReset = () => {
                 maxW="md"
                 position="relative"
             >
-                <Box position="absolute" top={4} right={4} fontSize="sm">
-                    <RouterLink to="/auth/login" style={{ textDecoration: 'underline', color: '#000000ff', fontWeight: 600 }}>
-                        Back to login
-                    </RouterLink>
-                </Box>
-
                 {isLoading && (
                     <Box
                         position="absolute"
@@ -100,13 +137,17 @@ const PasswordReset = () => {
                         <Spinner size="xl" thickness="4px" color="teal.500" />
                     </Box>
                 )}
-
                 <form onSubmit={handleSubmit}>
+                    <Box position="absolute" top={4} right={4} fontSize="sm">
+                        <RouterLink to="/auth/password-reset" style={{ textDecoration: 'underline', color: '#000000ff', fontWeight: 600 }}>
+                            Forgot password?
+                        </RouterLink>
+                    </Box>
                     <Fieldset.Root size="lg">
                         <Stack>
-                            <Fieldset.Legend>Reset Password</Fieldset.Legend>
+                            <Fieldset.Legend>Login</Fieldset.Legend>
                             <Fieldset.HelperText>
-                                Enter your email address to receive a password reset link.
+                                Please fill in the Login form below to access your account.
                             </Fieldset.HelperText>
                         </Stack>
 
@@ -117,9 +158,8 @@ const PasswordReset = () => {
                                     bg="green.50"
                                     color="green.800"
                                     borderRadius="md"
-                                    fontSize="sm"
-                                    textAlign="center"
                                     mb={4}
+                                    fontSize="sm"
                                 >
                                     {successMessage}
                                 </Box>
@@ -131,28 +171,38 @@ const PasswordReset = () => {
                                     bg="red.50"
                                     color="red.800"
                                     borderRadius="md"
-                                    fontSize="sm"
-                                    textAlign="center"
                                     mb={4}
+                                    fontSize="sm"
                                 >
                                     {errors.submit}
                                 </Box>
                             )}
 
                             <Field.Root invalid={!!errors.email}>
-                                <Field.Label>Email</Field.Label>
+                                <Field.Label>Email address</Field.Label>
                                 <Input
                                     name="email"
                                     type="email"
-                                    value={email}
+                                    value={form.email}
                                     onChange={handleChange}
-                                    placeholder="example@mail.com"
                                 />
                                 {errors.email && (
                                     <Field.ErrorText>{errors.email}</Field.ErrorText>
                                 )}
                             </Field.Root>
 
+                            <Field.Root invalid={!!errors.password}>
+                                <Field.Label>Password</Field.Label>
+                                <Input
+                                    name="password"
+                                    type="password"
+                                    value={form.password}
+                                    onChange={handleChange}
+                                />
+                                {errors.password && (
+                                    <Field.ErrorText>{errors.password}</Field.ErrorText>
+                                )}
+                            </Field.Root>
                         </Fieldset.Content>
                         <Button
                             type="submit"
@@ -163,11 +213,11 @@ const PasswordReset = () => {
                             spinnerPlacement="center"
                             isDisabled={isLoading}
                         >
-                            Send Reset Link
+                            Login
                         </Button>
                         <Box mt={4} textAlign="center" fontSize="sm">
-                            Don't have an account?{' '}
-                            <RouterLink to="/auth/register" style={{ color: '#319795', fontWeight: 600 }}>
+                            Not registered yet?{' '}
+                            <RouterLink to="/auth/register" style={{ textDecoration: 'underline', color: '#319795', fontWeight: 600 }}>
                                 Register
                             </RouterLink>
                         </Box>
@@ -175,7 +225,7 @@ const PasswordReset = () => {
                 </form>
             </Box>
         </Box>
-    );
+    )
 };
 
-export default PasswordReset;
+export default Login;

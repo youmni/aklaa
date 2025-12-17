@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import api from '../../api/axiosConfig';
+import api from '../../../api/axiosConfig';
 import { Box, Heading, Spinner, Text } from '@chakra-ui/react';
-import StatusCard from '../../components/StatusMessageCard';
+import StatusCard from '../../../components/StatusMessageCard';
 
 function EmailActivation() {
   const [searchParams] = useSearchParams();
