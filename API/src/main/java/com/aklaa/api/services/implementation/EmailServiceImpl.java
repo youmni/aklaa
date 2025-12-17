@@ -87,7 +87,7 @@ public class EmailServiceImpl implements EmailService {
                 html = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
             }
 
-            String emailConfirmLink = frontendUrl + "/users/email-confirm?token=" + token;
+            String emailConfirmLink = frontendUrl + "/auth/email-confirm?token=" + token;
             html = html.replace("{{emailConfirmLink}}", emailConfirmLink);
 
             MimeMessage message = mailSender.createMimeMessage();

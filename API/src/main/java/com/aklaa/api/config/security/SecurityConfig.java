@@ -56,7 +56,7 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/actuator/health").anonymous()
-                        .requestMatchers("/api/auth/register", "/api/auth/login", "api/auth/refresh", "/api/auth/activate", "/api/auth/reset-password/**", "/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll()
+                        .requestMatchers("api/users/email-confirm", "/api/auth/register", "/api/auth/login", "api/auth/refresh", "/api/auth/activate", "/api/auth/reset-password/**", "/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/user/**").hasAnyRole("ADMIN", "USER")
                         .anyRequest().authenticated()

@@ -46,7 +46,6 @@ public class User implements UserDetails {
     @Email(message = "Email should be valid")
     private String email;
 
-    @Column(unique = true)
     @Email(message = "Email should be valid")
     private String pendingEmail;
 

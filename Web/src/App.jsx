@@ -25,6 +25,7 @@ import EditGroceryLists from "./pages/user/groceryLists/EditGroceryLists";
 import GetUsers from "./pages/admin/users/GetUsers";
 import ExportedUserData from "./pages/shared/ExportedUserData";
 import Profile from "./pages/shared/Profile";
+import EmailActivation from "./pages/shared/EmailActivation";
 
 const App = () => {
   return (
@@ -36,6 +37,7 @@ const App = () => {
           <Route path="activate" element={<AccountActivation />} />
           <Route path="password-reset" element={<PasswordReset />} />
           <Route path="password-reset/confirm" element={<PasswordResetConfirm />} />
+          <Route path="email-confirm" element={<EmailActivation />} />
           <Route element={<PrivateRoute allowedRoles={['USER', 'ADMIN']} />}>
             <Route path="/auth/logout" element={<Logout />} />
           </Route>
