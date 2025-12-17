@@ -70,7 +70,13 @@ export const sidebarItems = [
         label: 'Profile',
         href: '/settings/profile',
         roles: ['USER', 'ADMIN'],
-      }
+      },
+      {
+        id: 'password-reset',
+        label: 'Reset Password',
+        href: '/settings/password-reset',
+        roles: ['USER', 'ADMIN'],
+      },
     ],
   },
 ];

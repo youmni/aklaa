@@ -106,7 +106,7 @@ const EditProfile = () => {
     };
 
     return (
-        <Box w="100%" maxW="full" mx="auto" bg="white" p={6} boxShadow="sm">
+        <Box w="100%" maxW="full" mx="auto" bg="white" p={6}>
 
             {isLoading && (
                 <Box
@@ -127,7 +127,7 @@ const EditProfile = () => {
             <form onSubmit={handleSubmit} style={{ width: '100%' }}>
                 <Fieldset.Root size="lg" w="100%">
                     <Stack w="100%">
-                        <Fieldset.Legend fontSize="2xl" color={'#083951'}>
+                        <Fieldset.Legend fontSize="3xl" fontWeight="bold" color={'#083951'}>
                             Edit Profile
                         </Fieldset.Legend>
                         <Fieldset.HelperText>

@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ForgotPasswordRequestDTO {
+public class PasswordResetDTO {
     @NotBlank(message = "Old Password is required")
     private String oldPassword;
 

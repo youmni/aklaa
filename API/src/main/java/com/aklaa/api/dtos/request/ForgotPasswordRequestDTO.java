@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class PasswordResetRequestDTO {
+public class ForgotPasswordRequestDTO {
     private String email;
 }
