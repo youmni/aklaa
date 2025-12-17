@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useSearchParams, Link as RouterLink } from "react-router-dom";
-import api from "../../api/axiosConfig";
+import api from "../../../api/axiosConfig";
 import {
     Button,
     Fieldset,
@@ -9,7 +9,7 @@ import {
     Box,
     Spinner,
 } from "@chakra-ui/react"
-import StatusCard from "../../components/StatusMessageCard";
+import StatusCard from "../../../components/StatusMessageCard";
 
 const PasswordResetConfirm = () => {
     const navigate = useNavigate();

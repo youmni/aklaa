@@ -46,6 +46,9 @@ public class User implements UserDetails {
     @Email(message = "Email should be valid")
     private String email;
 
+    @Email(message = "Email should be valid")
+    private String pendingEmail;
+
     @Column(nullable = false)
     @Pattern(
             regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!])(?=\\S+$).{8,}$",

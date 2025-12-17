@@ -76,4 +76,29 @@ public class EmailServiceImpl implements EmailService {
             throw new EmailSendingException("Failed to send password reset email", e);
         }
     }
+
+    @Override
+    public void sendActivationUpdatedEmail(String email, String token) {
+        try {
+            ClassPathResource resource = new ClassPathResource("templates/email-activation.html");
+
+            String html;
+            try (InputStream inputStream = resource.getInputStream()) {
+                html = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
+            }
+
+            String emailConfirmLink = frontendUrl + "/auth/email-confirm?token=" + token;
+            html = html.replace("{{emailConfirmLink}}", emailConfirmLink);
+
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+            helper.setTo(email);
+            helper.setSubject("Confirm your new email");
+            helper.setText(html, true);
+            mailSender.send(message);
+
+        } catch (IOException | MessagingException e) {
+            throw new EmailSendingException("Failed to send activation email for updated email address", e);
+        }
+    }
 }

@@ -1,5 +1,7 @@
 package com.aklaa.api.services.contract;
 
+import com.aklaa.api.dtos.request.PasswordResetRequestDTO;
+import com.aklaa.api.dtos.request.UpdatedUserDTO;
 import com.aklaa.api.dtos.response.UserDTO;
 import com.aklaa.api.dtos.response.UserListResponseDTO;
 import com.aklaa.api.model.User;
@@ -70,6 +72,16 @@ public interface UserService {
     UserDTO enable(Long id);
 
     /**
+     * Updated a user's account.
+     *
+     * @param id the ID of the user who needs to be deleted
+     * @param updatedUserDTO the request DTO containing firstname, lastname and email
+     * @return a {@link UserDTO} containing the updated user's data
+     * @throws NoSuchElementException if the user is not found
+     */
+    UserDTO update(Long id, UpdatedUserDTO updatedUserDTO);
+
+    /**
      * Delete a user's account.
      * <p>
      * Deletes the user's account.
@@ -80,7 +92,7 @@ public interface UserService {
      * @return a {@link UserDTO} containing the removed user's data
      * @throws NoSuchElementException if the user is not found
      */
-    public UserDTO delete(Long id, User actionTaker);
+    UserDTO delete(Long id, User actionTaker);
     
     /**
      * Refreshes the authentication context for a user.

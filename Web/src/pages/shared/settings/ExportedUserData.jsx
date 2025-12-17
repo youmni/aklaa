@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import api from '../../api/axiosConfig.jsx';
+import api from '../../../api/axiosConfig.jsx';
 import {
   Box,
   Text,
