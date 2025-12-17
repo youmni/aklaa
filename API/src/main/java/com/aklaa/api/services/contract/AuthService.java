@@ -1,15 +1,14 @@
 package com.aklaa.api.services.contract;
 
-import com.aklaa.api.dtos.request.ForgotPasswordRequestDTO;
+import com.aklaa.api.dtos.request.PasswordResetDTO;
 import com.aklaa.api.dtos.request.LoginDTO;
-import com.aklaa.api.dtos.request.PasswordResetRequestDTO;
+import com.aklaa.api.dtos.request.ForgotPasswordRequestDTO;
 import com.aklaa.api.dtos.request.RegistrationDTO;
 import com.aklaa.api.dtos.response.AuthResponseDTO;
 import com.aklaa.api.dtos.response.UserDTO;
 import com.aklaa.api.exceptions.AccountBlacklistedException;
 import com.aklaa.api.exceptions.AccountNotActivatedException;
 import com.aklaa.api.exceptions.InvalidCredentialsException;
-import com.nimbusds.jose.JOSEException;
 import jakarta.servlet.http.HttpServletRequest;
 
 /**
@@ -38,15 +37,13 @@ public interface AuthService {
     /**
      * Registers a new user in the system.
      * <p>
-     * This method validates that passwords match, creates a new user
-     * with an encoded password, generates an activation token, and sends an
-     * activation email to the user.
+     * This method validates that passwords match, and then changes the users password
      * </p>
      *
      * @param id the user ID
-     * @param forgotPasswordRequestDTO containing the old password, new password and confirmed new password
+     * @param passwordResetDTO containing the old password, new password and confirmed new password
      */
-    void forgotPassword(Long id, ForgotPasswordRequestDTO forgotPasswordRequestDTO);
+    void resetPassword(Long id, PasswordResetDTO passwordResetDTO);
 
     /**
      * Authenticates a user and generates JWT tokens.
@@ -71,9 +68,9 @@ public interface AuthService {
      * If the user does not exist, the request is silently ignored for security purposes.
      * </p>
      *
-     * @param passwordResetRequestDTO the request containing the user's email address
+     * @param forgotPasswordRequestDTO the request containing the user's email address
      */
-    void processPasswordResetRequest(PasswordResetRequestDTO passwordResetRequestDTO);
+    void processPasswordResetRequest(ForgotPasswordRequestDTO forgotPasswordRequestDTO);
     
     /**
      * Refreshes an expired access token using a valid refresh token.

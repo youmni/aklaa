@@ -131,15 +131,15 @@ public class AuthController {
 
     @AllowAnonymous
     @PostMapping("/reset-password")
-    public ResponseEntity<String> requestReset(@RequestBody PasswordResetRequestDTO passwordResetRequestDTO) {
-        authService.processPasswordResetRequest(passwordResetRequestDTO);
+    public ResponseEntity<String> requestReset(@RequestBody ForgotPasswordRequestDTO forgotPasswordRequestDTO) {
+        authService.processPasswordResetRequest(forgotPasswordRequestDTO);
         return ResponseEntity.ok("If the email is registered, you'll get a reset link");
     }
 
     @AllowAnonymous
     @PostMapping("/reset-password/confirm")
-    public ResponseEntity<String> resetPassword(@RequestBody PasswordResetConfirmDTO passwordResetConfirmDTO) {
-        Optional<PasswordResetToken> tokenOpt = resetPasswordRepository.findByToken(passwordResetConfirmDTO.getToken());
+    public ResponseEntity<String> resetPassword(@RequestBody ForgotPasswordConfirmDTO forgotPasswordConfirmDTO) {
+        Optional<PasswordResetToken> tokenOpt = resetPasswordRepository.findByToken(forgotPasswordConfirmDTO.getToken());
 
         if (tokenOpt.isEmpty() || tokenOpt.get().isExpired()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Token is invalid or expired");
@@ -148,7 +148,7 @@ public class AuthController {
         PasswordResetToken token = tokenOpt.get();
         User user = token.getUser();
 
-        user.setPassword(passwordEncoder.encode(passwordResetConfirmDTO.getNewPassword()));
+        user.setPassword(passwordEncoder.encode(forgotPasswordConfirmDTO.getNewPassword()));
         userRepository.save(user);
         resetPasswordRepository.delete(token);
 
@@ -184,9 +184,9 @@ public class AuthController {
     }
 
     @AllowAuthenticated
-    @PutMapping("/forgot-password/{id}")
-    public ResponseEntity<String> forgotPassword(@PathVariable Long id, @RequestBody ForgotPasswordRequestDTO forgotPasswordRequestDTO) {
-        authService.forgotPassword(id, forgotPasswordRequestDTO);
+    @PutMapping("/reset-password")
+    public ResponseEntity<String> resetPassword(@RequestBody PasswordResetDTO passwordResetDTO, @AuthenticationPrincipal User user) {
+        authService.resetPassword(user.getId(), passwordResetDTO);
         return ResponseEntity.ok("The password was reset successful");
     }
 

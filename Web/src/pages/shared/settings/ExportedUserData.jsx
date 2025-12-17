@@ -53,17 +53,13 @@ const ExportedUserData = () => {
 
   return (
     <Box
-      maxW="720px"
+      maxW="1200px"
       mx="auto"
-      bg="white"
-      border="1px solid"
-      borderColor="gray.200"
-      borderRadius="lg"
       p={6}
     >
-      <Stack spacing={4} maxW="600px" mx="auto">
+      <Stack spacing={4} maxW="1200px" mx="auto">
         <Stack spacing={2}>
-          <Text fontSize="lg" fontWeight="semibold">
+          <Text fontSize="3xl" fontWeight="bold">
             Export your personal data
           </Text>
           <Text fontSize="sm" color="#000000ff">

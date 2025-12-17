@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class PasswordResetConfirmDTO {
+public class ForgotPasswordConfirmDTO {
     private String token;
 
     @Pattern(

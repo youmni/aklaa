@@ -3,9 +3,9 @@ package com.aklaa.api.services.implementation;
 import com.aklaa.api.config.security.JwtService;
 import com.aklaa.api.dao.ResetPasswordRepository;
 import com.aklaa.api.dao.UserRepository;
-import com.aklaa.api.dtos.request.ForgotPasswordRequestDTO;
+import com.aklaa.api.dtos.request.PasswordResetDTO;
 import com.aklaa.api.dtos.request.LoginDTO;
-import com.aklaa.api.dtos.request.PasswordResetRequestDTO;
+import com.aklaa.api.dtos.request.ForgotPasswordRequestDTO;
 import com.aklaa.api.dtos.request.RegistrationDTO;
 import com.aklaa.api.dtos.response.AuthResponseDTO;
 import com.aklaa.api.dtos.response.UserDTO;
@@ -18,7 +18,6 @@ import com.aklaa.api.model.User;
 import com.aklaa.api.model.enums.UserType;
 import com.aklaa.api.services.contract.AuthService;
 import com.aklaa.api.services.contract.EmailService;
-import com.nimbusds.jose.JOSEException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.data.crossstore.ChangeSetPersister;
@@ -26,7 +25,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
-import java.text.ParseException;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.Arrays;
@@ -71,19 +69,19 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public void forgotPassword(Long id, ForgotPasswordRequestDTO forgotPasswordRequestDTO) {
+    public void resetPassword(Long id, PasswordResetDTO passwordResetDTO) {
         Optional<User> userOpt = userRepository.findById(id);
 
-        if (userOpt.isEmpty() || !passwordEncoder.matches(forgotPasswordRequestDTO.getOldPassword(), userOpt.get().getPassword())) {
+        if (userOpt.isEmpty() || !passwordEncoder.matches(passwordResetDTO.getOldPassword(), userOpt.get().getPassword())) {
             throw new InvalidCredentialsException("Invalid password.");
         }
 
-        if(!forgotPasswordRequestDTO.getNewPassword().equals(forgotPasswordRequestDTO.getConfirmNewPassword())) {
+        if(!passwordResetDTO.getNewPassword().equals(passwordResetDTO.getConfirmNewPassword())) {
             throw new InvalidCredentialsException("New Passwords do not match.");
         }
 
         User user = userOpt.get();
-        user.setPassword(passwordEncoder.encode(forgotPasswordRequestDTO.getNewPassword()));
+        user.setPassword(passwordEncoder.encode(passwordResetDTO.getNewPassword()));
         userRepository.save(user);
     }
 
@@ -121,8 +119,8 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public void processPasswordResetRequest(PasswordResetRequestDTO passwordResetRequestDTO) {
-            Optional<User> userOpt = userRepository.findByEmail(passwordResetRequestDTO.getEmail());
+    public void processPasswordResetRequest(ForgotPasswordRequestDTO forgotPasswordRequestDTO) {
+            Optional<User> userOpt = userRepository.findByEmail(forgotPasswordRequestDTO.getEmail());
             if (userOpt.isEmpty()) return;
 
             User user = userOpt.get();

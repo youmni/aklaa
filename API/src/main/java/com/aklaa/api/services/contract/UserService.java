@@ -1,6 +1,5 @@
 package com.aklaa.api.services.contract;
 
-import com.aklaa.api.dtos.request.PasswordResetRequestDTO;
 import com.aklaa.api.dtos.request.UpdatedUserDTO;
 import com.aklaa.api.dtos.response.UserDTO;
 import com.aklaa.api.dtos.response.UserListResponseDTO;

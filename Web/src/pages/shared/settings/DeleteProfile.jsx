@@ -43,8 +43,8 @@ const DeleteProfile = () => {
   };
 
   return (
-    <Box maxW="full" mx="auto" bg="white" p={6} boxShadow="sm">
-      <Heading as="h2" size="2xl" mb={3} color="red.500">Delete Profile</Heading>
+    <Box maxW="full" mx="auto" bg="white" p={6}>
+      <Heading as="h2" size="3xl" mb={3} color="red.500" fontWeight="bold">Delete Profile</Heading>
       <Text fontSize="sm" color="gray.600" mb={4}>
         Deleting a user account will permanently remove all associated data, including personal information, settings, and uploaded content; access to services and subscriptions will be lost, recovery may not be possible, and some data may be retained for legal or regulatory purposes.
       </Text>

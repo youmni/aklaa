@@ -4,8 +4,8 @@ import Register from "./pages/shared/auth/Register";
 import Login from "./pages/shared/auth/Login";
 import PrivateRoute from "./components/PrivateRoute";
 import AccountActivation from "./pages/shared/auth/AccountActivation";
-import PasswordReset from "./pages/shared/auth/PasswordReset";
-import PasswordResetConfirm from "./pages/shared/auth/PasswordResetConfirm";
+import ForgotPassword from "./pages/shared/auth/ForgotPassword";
+import ForgotPasswordConfirm from "./pages/shared/auth/ForgotPasswordConfirm";
 import NotFound from "./pages/shared/NotFound";
 import Layout from "./components/layout/Layout";
 import Logout from "./pages/shared/auth/Logout";
@@ -26,7 +26,7 @@ import GetUsers from "./pages/admin/users/GetUsers";
 import ExportedUserData from "./pages/shared/settings/ExportedUserData";
 import Profile from "./pages/shared/settings/Profile";
 import EmailActivation from "./pages/shared/auth/EmailActivation";
-
+import PasswordReset from "./pages/shared/settings/PasswordReset";
 const App = () => {
   return (
     <Router>
@@ -35,8 +35,8 @@ const App = () => {
           <Route path="register" element={<Register />} />
           <Route path="login" element={<Login />} />
           <Route path="activate" element={<AccountActivation />} />
-          <Route path="password-reset" element={<PasswordReset />} />
-          <Route path="password-reset/confirm" element={<PasswordResetConfirm />} />
+          <Route path="password-reset" element={<ForgotPassword />} />
+          <Route path="password-reset/confirm" element={<ForgotPasswordConfirm />} />
           <Route path="email-confirm" element={<EmailActivation />} />
           <Route element={<PrivateRoute allowedRoles={['USER', 'ADMIN']} />}>
             <Route path="/auth/logout" element={<Logout />} />
@@ -68,6 +68,7 @@ const App = () => {
             <Route path="settings/">
               <Route path="export" element={<ExportedUserData />} />
               <Route path="profile" element={<Profile />} />
+              <Route path="password-reset" element={<PasswordReset />} />
             </Route>
           </Route>
         </Route>
