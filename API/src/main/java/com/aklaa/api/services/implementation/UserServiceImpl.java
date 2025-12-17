@@ -1,12 +1,17 @@
 package com.aklaa.api.services.implementation;
 
+import com.aklaa.api.dao.ResetEmailRepository;
 import com.aklaa.api.dao.UserRepository;
+import com.aklaa.api.dtos.request.UpdatedUserDTO;
 import com.aklaa.api.dtos.response.UserDTO;
 import com.aklaa.api.dtos.response.UserListResponseDTO;
 import com.aklaa.api.mapper.UserMapper;
+import com.aklaa.api.model.EmailResetToken;
 import com.aklaa.api.model.User;
 import com.aklaa.api.model.enums.UserType;
+import com.aklaa.api.services.contract.EmailService;
 import com.aklaa.api.services.contract.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -18,21 +23,22 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import static com.aklaa.api.services.implementation.AuthServiceImpl.generateSecureToken;
+
 @Component
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final ResetEmailRepository resetEmailRepository;
     private final UserMapper userMapper;
     private final UserDetailsService userDetailsService;
-
-    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper, UserDetailsService userDetailsService) {
-        this.userRepository = userRepository;
-        this.userMapper = userMapper;
-        this.userDetailsService = userDetailsService;
-    }
+    private final EmailService emailService;
 
     @Override
     public UserListResponseDTO getUsers(String search, String type, Pageable pageable) {
@@ -113,6 +119,24 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserDTO update(Long id, UpdatedUserDTO request) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("User not found"));
+
+        user.setFirstName(request.getFirstName());
+        user.setLastName(request.getLastName());
+
+        if (emailHasChanged(request.getEmail(), user)) {
+            requestEmailChange(user, request.getEmail());
+        }
+
+        userRepository.save(user);
+        refreshAuthentication(user.getEmail());
+
+        return userMapper.toDTO(user);
+    }
+
+    @Override
     public UserDTO delete(Long id, User actionTaker) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("User not found"));
@@ -168,5 +192,23 @@ public class UserServiceImpl implements UserService {
 
     private boolean canDelete(User user, User actionTaker) {
         return actionTaker.getUserType() == UserType.ADMIN || actionTaker.getId().equals(user.getId());
+    }
+
+    private boolean emailHasChanged(String newEmail, User user) {
+        return newEmail != null && !newEmail.equalsIgnoreCase(user.getEmail());
+    }
+
+    private void requestEmailChange(User user, String newEmail) {
+        String token = generateSecureToken();
+
+        EmailResetToken tokenEntity = new EmailResetToken();
+        tokenEntity.setToken(token);
+        tokenEntity.setExpiresAt(OffsetDateTime.now(ZoneOffset.UTC).plusHours(2));
+        tokenEntity.setUser(user);
+
+        resetEmailRepository.save(tokenEntity);
+
+        user.setPendingEmail(newEmail);
+        emailService.sendActivationUpdatedEmail(newEmail, token);
     }
 }

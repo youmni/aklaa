@@ -39,4 +39,24 @@ public interface EmailService {
      * @throws EmailSendingException if an error occurs while reading the template or sending the email
      */
     void sendPasswordResetEmail(User user, String token);
+
+    /**
+     * Sends a confirmation email to verify and activate a user's updated email address.
+     *
+     * <p>
+     * This method loads an HTML email template, replaces the email confirmation link placeholder
+     * with the actual confirmation URL (frontend URL + token), and sends the email to the user's
+     * pending email address.
+     * </p>
+     *
+     * <p>
+     * Once the user clicks the confirmation link, the pending email address can be activated
+     * and replace the current email address.
+     * </p>
+     *
+     * @param email the user new email address that needs to be confirmed
+     * @param token the unique email confirmation token to be included in the confirmation link
+     * @throws EmailSendingException if an error occurs while reading the template or sending the email
+     */
+    void sendActivationUpdatedEmail(String email, String token);
 }

@@ -1,27 +1,40 @@
 package com.aklaa.api.controller;
 
 import com.aklaa.api.annotations.AllowAdmin;
+import com.aklaa.api.annotations.AllowAnonymous;
 import com.aklaa.api.annotations.AllowAuthenticated;
+import com.aklaa.api.dao.ResetEmailRepository;
+import com.aklaa.api.dao.UserRepository;
+import com.aklaa.api.dtos.request.UpdatedUserDTO;
 import com.aklaa.api.dtos.response.UserDTO;
 import com.aklaa.api.dtos.response.UserListResponseDTO;
+import com.aklaa.api.model.EmailResetToken;
+import com.aklaa.api.model.PasswordResetToken;
 import com.aklaa.api.model.User;
 import com.aklaa.api.model.enums.UserType;
 import com.aklaa.api.services.contract.UserService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
 
     private final UserService userService;
+    private final ResetEmailRepository resetEmailRepository;
+    private final UserRepository userRepository;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, ResetEmailRepository resetEmailRepository, UserRepository userRepository) {
         this.userService = userService;
+        this.resetEmailRepository = resetEmailRepository;
+        this.userRepository = userRepository;
     }
 
     @AllowAdmin
@@ -55,6 +68,14 @@ public class UserController {
     }
 
     @AllowAuthenticated
+    @PutMapping("{id}/email")
+    public ResponseEntity<UserDTO> updateUserEmail(@PathVariable Long id, @RequestBody UpdatedUserDTO updatedUserDTO) {
+
+        UserDTO updatedUser = userService.update(id, updatedUserDTO);
+        return ResponseEntity.ok(updatedUser);
+    }
+
+    @AllowAuthenticated
     @DeleteMapping("{id}")
     public ResponseEntity<UserDTO> deleteUser(@PathVariable Long id, @AuthenticationPrincipal User actionTaker) {
         UserDTO deletedUser = userService.delete(id, actionTaker);
@@ -68,7 +89,22 @@ public class UserController {
         return ResponseEntity.ok(deletedUser);
     }
 
+    @AllowAnonymous
+    @GetMapping("/email-confirm")
+    public ResponseEntity<String> emailReset(@RequestParam String token) {
+        Optional<EmailResetToken> tokenOpt = resetEmailRepository.findByToken(token);
 
+        if (tokenOpt.isEmpty() || tokenOpt.get().isExpired()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid or expired token");
+        }
+        User user = tokenOpt.get().getUser();
+        user.setEmail(user.getPendingEmail().toLowerCase());
+        user.setPendingEmail(null);
+        userRepository.save(user);
+        resetEmailRepository.delete(tokenOpt.get());
+
+        return ResponseEntity.ok("Token is valid");
+    }
 
     @AllowAdmin
     @PutMapping("/enable/{id}")
