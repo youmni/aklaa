@@ -3,8 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import EditProfile from './EditProfile';
 import DeleteProfile from './DeleteProfile';
 import { SimpleGrid, Box, Button } from '@chakra-ui/react';
-import { FiArrowLeft } from 'react-icons/fi';
-
 
 const Profile = () => {
   const navigate = useNavigate();
