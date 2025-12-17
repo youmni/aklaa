@@ -1,5 +1,6 @@
 package com.aklaa.api.services.contract;
 
+import com.aklaa.api.dtos.request.ForgotPasswordRequestDTO;
 import com.aklaa.api.dtos.request.LoginDTO;
 import com.aklaa.api.dtos.request.PasswordResetRequestDTO;
 import com.aklaa.api.dtos.request.RegistrationDTO;
@@ -33,7 +34,20 @@ public interface AuthService {
      * @throws IllegalArgumentException if the passwords do not match
      */
     UserDTO register(RegistrationDTO registrationDTO);
-    
+
+    /**
+     * Registers a new user in the system.
+     * <p>
+     * This method validates that passwords match, creates a new user
+     * with an encoded password, generates an activation token, and sends an
+     * activation email to the user.
+     * </p>
+     *
+     * @param id the user ID
+     * @param forgotPasswordRequestDTO containing the old password, new password and confirmed new password
+     */
+    void forgotPassword(Long id, ForgotPasswordRequestDTO forgotPasswordRequestDTO);
+
     /**
      * Authenticates a user and generates JWT tokens.
      * <p>

@@ -1,12 +1,10 @@
 package com.aklaa.api.controller;
 
 import com.aklaa.api.annotations.AllowAnonymous;
+import com.aklaa.api.annotations.AllowAuthenticated;
 import com.aklaa.api.dao.ResetPasswordRepository;
 import com.aklaa.api.dao.UserRepository;
-import com.aklaa.api.dtos.request.LoginDTO;
-import com.aklaa.api.dtos.request.PasswordResetConfirmDTO;
-import com.aklaa.api.dtos.request.PasswordResetRequestDTO;
-import com.aklaa.api.dtos.request.RegistrationDTO;
+import com.aklaa.api.dtos.request.*;
 import com.aklaa.api.dtos.response.AuthResponseDTO;
 import com.aklaa.api.dtos.response.UserDTO;
 import com.aklaa.api.model.PasswordResetToken;
@@ -183,6 +181,13 @@ public class AuthController {
         }
 
         return ResponseEntity.ok("Token is valid");
+    }
+
+    @AllowAuthenticated
+    @PutMapping("/forgot-password/{id}")
+    public ResponseEntity<String> forgotPassword(@PathVariable Long id, @RequestBody ForgotPasswordRequestDTO forgotPasswordRequestDTO) {
+        authService.forgotPassword(id, forgotPasswordRequestDTO);
+        return ResponseEntity.ok("The password was reset successful");
     }
 
     @AllowAnonymous
