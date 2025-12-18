@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import {
-    Box, Heading, Input, Text, HStack, VStack, Table, IconButton, Button, ButtonGroup, NativeSelectRoot, NativeSelectField, Spinner, Badge, Pagination, Dialog, DataList, CloseButton, Portal
+    Box, Heading, Input, Text, HStack, VStack, Table, IconButton, Button, ButtonGroup, NativeSelectRoot, NativeSelectField, Spinner, Badge, Dialog, DataList, CloseButton, Portal
 } from '@chakra-ui/react';
-import { LuChevronLeft, LuChevronRight } from 'react-icons/lu';
 import { useSnackbar } from 'notistack';
 import api from '../../../api/axiosConfig';
 import UserDetailsModal from '../../../components/UserDetailsModal';
+import Pagination from '../../../components/Pagination';
 
 const GetUsers = () => {
     const { enqueueSnackbar } = useSnackbar();
@@ -13,7 +13,7 @@ const GetUsers = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedType, setSelectedType] = useState('');
-    const [page, setPage] = useState(1);
+    const [page, setPage] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
     const [totalElements, setTotalElements] = useState(0);
     const [selectedUser, setSelectedUser] = useState(null);
@@ -29,7 +29,7 @@ const GetUsers = () => {
     const fetchUsers = async () => {
         try {
             setIsLoading(true);
-            const params = { page: page - 1, size: pageSize };
+            const params = { page: page, size: pageSize };
             if (searchTerm) params.search = searchTerm;
             if (selectedType) params.type = selectedType;
 
@@ -122,7 +122,7 @@ const GetUsers = () => {
                     <Box bg="white" borderRadius="xl" overflow="hidden" border="1px solid" borderColor="gray.200" boxShadow="md">
                         <Box p={6} borderBottom="1px solid" borderColor="gray.200" bg="gray.50">
                             <Text fontSize="sm" color="gray.600" fontWeight="medium">
-                                Showing {((page - 1) * pageSize) + 1} - {Math.min(page * pageSize, totalElements)} of {totalElements} users
+                                Showing {(page * pageSize) + 1} - {Math.min((page + 1) * pageSize, totalElements)} of {totalElements} users
                             </Text>
                         </Box>
 
@@ -158,37 +158,7 @@ const GetUsers = () => {
                             </Table.Body>
                         </Table.Root>
 
-                        {totalPages > 1 && (
-                            <Box display="flex" justifyContent="center" mt={6}>
-                                <Pagination.Root count={totalElements} pageSize={pageSize} page={page} onPageChange={(details) => setPage(details.page)}>
-                                    <ButtonGroup variant="ghost" size="sm" wrap="wrap">
-                                        <Pagination.PrevTrigger asChild>
-                                            <IconButton _hover={{ bg: 'gray.100' }}>
-                                                <LuChevronLeft />
-                                            </IconButton>
-                                        </Pagination.PrevTrigger>
-
-                                        <Pagination.Items
-                                            render={(pageItem) => (
-                                                <IconButton
-                                                    variant={{ base: 'ghost', _selected: 'solid' }}
-                                                    colorScheme={pageItem.value === page ? 'blue' : 'gray'}
-                                                    _hover={{ bg: pageItem.value === page ? "#083951" : 'gray.100' }}
-                                                >
-                                                    {pageItem.value}
-                                                </IconButton>
-                                            )}
-                                        />
-
-                                        <Pagination.NextTrigger asChild>
-                                            <IconButton _hover={{ bg: 'gray.100' }}>
-                                                <LuChevronRight />
-                                            </IconButton>
-                                        </Pagination.NextTrigger>
-                                    </ButtonGroup>
-                                </Pagination.Root>
-                            </Box>
-                        )}
+                        <Pagination page={page} totalPages={totalPages} onPageChange={(p) => setPage(p)} />
                     </Box>
                 )}
 
