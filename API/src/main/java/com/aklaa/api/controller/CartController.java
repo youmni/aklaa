@@ -6,6 +6,7 @@ import com.aklaa.api.dtos.request.CartDishRequestDTO;
 import com.aklaa.api.model.Dish;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -16,14 +17,11 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/cart")
+@RequiredArgsConstructor
 public class CartController {
 
     private static final String CART_KEY = "cart";
     private final DishRepository dishRepository;
-
-    public CartController(DishRepository dishRepository) {
-        this.dishRepository = dishRepository;
-    }
 
     @AllowAuthenticated
     @GetMapping

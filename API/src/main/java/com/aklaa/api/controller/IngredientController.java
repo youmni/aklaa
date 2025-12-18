@@ -8,6 +8,7 @@ import com.aklaa.api.dtos.response.IngredientResponseDTO;
 import com.aklaa.api.model.User;
 import com.aklaa.api.services.implementation.IngredientServiceImpl;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -24,15 +25,11 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/ingredients")
+@RequiredArgsConstructor
 public class IngredientController {
 
     private final IngredientServiceImpl ingredientService;
     private final UserRepository userRepository;
-
-    public IngredientController(IngredientServiceImpl ingredientService, UserRepository userRepository) {
-        this.ingredientService = ingredientService;
-        this.userRepository = userRepository;
-    }
 
     @AllowAuthenticated
     @PostMapping

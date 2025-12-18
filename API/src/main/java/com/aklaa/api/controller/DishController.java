@@ -8,6 +8,7 @@ import com.aklaa.api.dtos.response.DishResponseDTO;
 import com.aklaa.api.model.User;
 import com.aklaa.api.services.contract.DishService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -24,15 +25,11 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/dishes")
+@RequiredArgsConstructor
 public class DishController {
 
     private final UserRepository userRepository;
     private final DishService dishService;
-
-    public DishController(UserRepository userRepository, DishService dishService) {
-        this.userRepository = userRepository;
-        this.dishService = dishService;
-    }
 
     @AllowAuthenticated
     @PostMapping

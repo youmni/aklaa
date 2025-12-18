@@ -20,6 +20,7 @@ import com.aklaa.api.services.contract.AuthService;
 import com.aklaa.api.services.contract.EmailService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -33,6 +34,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
     private final UserMapper userMapper;
@@ -42,15 +44,6 @@ public class AuthServiceImpl implements AuthService {
     private final EmailService emailService;
     private final JwtService jwtService;
     private final ResetPasswordRepository resetPasswordRepository;
-
-    public AuthServiceImpl(UserMapper userMapper, PasswordEncoder passwordEncoder, UserRepository userRepository, EmailService emailService, JwtService jwtService, ResetPasswordRepository resetPasswordRepository) {
-        this.userMapper = userMapper;
-        this.passwordEncoder = passwordEncoder;
-        this.userRepository = userRepository;
-        this.emailService = emailService;
-        this.jwtService = jwtService;
-        this.resetPasswordRepository = resetPasswordRepository;
-    }
 
     @Override
     public UserDTO register(RegistrationDTO registrationDTO) {
