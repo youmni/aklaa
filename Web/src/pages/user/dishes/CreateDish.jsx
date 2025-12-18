@@ -453,11 +453,15 @@ const CreateDish = () => {
                                 </Select.Root>
                             </Field>
                         </VStack>
-
-                        <Box>
-                            <Heading size="md" mb={4}>Dish Image (Required)</Heading>
+                        <Field
+                            label="Dish Image"
+                            required
+                            invalid={!!errors.imageUrl}
+                            errorText={errors.imageUrl}
+                            mb={4}
+                        >
                             {!imagePreview ? (
-                                <Field invalid={!!errors.imageUrl} errorText={errors.imageUrl}>
+                                <>
                                     <Button
                                         as="label"
                                         htmlFor="image-upload"
@@ -486,7 +490,7 @@ const CreateDish = () => {
                                         onChange={handleImageUpload}
                                         display="none"
                                     />
-                                </Field>
+                                </>
                             ) : (
                                 <Box position="relative">
                                     <Image
@@ -511,11 +515,16 @@ const CreateDish = () => {
                                     </IconButton>
                                 </Box>
                             )}
-                        </Box>
+                        </Field>
 
-                        <Box>
-                            <Flex justify="space-between" align="center" mb={4}>
-                                <Heading size="md">Ingredients</Heading>
+                        <Field
+                            label="Ingredients"
+                            required
+                            mb={4}
+                            invalid={!!errors.ingredients}
+                            errorText={errors.ingredients}
+                        >
+                            <Flex justify="flex-end" align="center" mb={4}>
                                 <Button
                                     size="md"
                                     onClick={handleAddIngredient}
@@ -528,12 +537,6 @@ const CreateDish = () => {
                                     <FaPlus style={{ marginRight: '8px' }} /> Add Ingredient
                                 </Button>
                             </Flex>
-
-                            {errors.ingredients && (
-                                <Text color="red.500" fontSize="sm" mb={4} p={3} bg="red.50" borderRadius="md">
-                                    {errors.ingredients}
-                                </Text>
-                            )}
 
                             <Box 
                                 maxH="420px" 
@@ -628,10 +631,10 @@ const CreateDish = () => {
                                     )}
                                 </VStack>
                             </Box>
-                        </Box>
+                        </Field>
 
                         <Box>
-                            <Heading size="md" mb={4}>Cooking Instructions (Optional)</Heading>
+                            <Heading size="md" mb={4}>Cooking Instructions</Heading>
                             <Box 
                                 border="1px solid" 
                                 borderColor="gray.200" 
