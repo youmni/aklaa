@@ -1,63 +1,141 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import {
+    Box,
     Button,
-    Dialog,
-    Portal,
     Text,
-    VStack,
+    Icon,
+    Portal,
     HStack,
+    Flex,
+    Dialog,
 } from "@chakra-ui/react";
+import { FiAlertCircle } from "react-icons/fi";
 
 const ConfirmDialog = ({
-    open,
-    onOpenChange,
-    title,
-    description,
-    confirmText = "Confirm",
-    cancelText = "Cancel",
+    isOpen,
+    onClose,
     onConfirm,
-    isDanger = false,
+    title = "Confirm",
+    description = "",
+    confirmLabel = "Confirm",
+    cancelLabel = "Cancel",
+    confirmColorScheme = "red",
+    isLoading = false,
+    IconComponent = FiAlertCircle,
 }) => {
+    const confirmRef = useRef();
+
+    useEffect(() => {
+        if (!isOpen) return;
+
+        const onKey = (e) => {
+            if (e.key === "Escape") onClose();
+            if (e.key === "Enter" && !isLoading) onConfirm();
+        };
+
+        window.addEventListener("keydown", onKey);
+        setTimeout(() => confirmRef.current?.focus(), 0);
+
+        return () => {
+            window.removeEventListener("keydown", onKey);
+        };
+    }, [isOpen, onClose, onConfirm, isLoading]);
+
     return (
         <Dialog.Root
-            open={open}
-            onOpenChange={(e) => onOpenChange(e.open)}
-            role="alertdialog"
+            open={isOpen}
+            onOpenChange={(e) => {
+                if (!e.open) onClose();
+            }}
         >
             <Portal>
                 <Dialog.Backdrop />
+
                 <Dialog.Positioner>
                     <Dialog.Content
-                        maxW="400px"
-                        borderRadius="xl"
-                        p={6}
-                        boxShadow="xl"
+                        bg="white"
+                        borderRadius="12px"
+                        boxShadow="0 10px 30px rgba(2,6,23,0.2)"
+                        maxW="560px"
+                        w="100%"
+                        overflow="hidden"
                     >
-                        <VStack align="stretch" spacing={4}>
-                            <Text fontSize="xl" fontWeight="bold" color={isDanger ? "red.600" : "gray.800"}>
-                                {title}
-                            </Text>
-                            <Text fontSize="md" color="gray.700">
-                                {description}
-                            </Text>
+                        {/* Header */}
+                        <Flex
+                            px={{ base: 5, md: 6 }}
+                            py={5}
+                            gap={4}
+                            align="flex-start"
+                            borderBottom="1px"
+                            borderColor="gray.100"
+                        >
+                            <Box
+                                minW="44px"
+                                minH="44px"
+                                borderRadius="full"
+                                display="grid"
+                                placeItems="center"
+                                bg={confirmColorScheme === "red" ? "red.50" : "gray.50"}
+                                border="1px solid"
+                                borderColor={confirmColorScheme === "red" ? "red.100" : "gray.100"}
+                            >
+                                <Icon
+                                    as={IconComponent}
+                                    boxSize={5}
+                                    color={confirmColorScheme === "red" ? "red.600" : "gray.600"}
+                                    aria-hidden
+                                />
+                            </Box>
 
-                            <HStack justify="flex-end" spacing={3} pt={4}>
-                                <Dialog.CloseTrigger asChild>
-                                    <Button size="md" variant="surface">
-                                        {cancelText}
-                                    </Button>
-                                </Dialog.CloseTrigger>
-                                <Button
-                                    colorPalette={isDanger ? "red" : "blue"}
-                                    size="md"
-                                    width="full"
-
-                                    onClick={onConfirm}
+                            <Box flex="1">
+                                <Text
+                                    fontWeight="700"
+                                    fontSize={{ base: "md", md: "lg" }}
+                                    color="gray.800"
+                                    mb={1}
                                 >
-                                    {confirmText}
-                                </Button>
-                            </HStack>
-                        </VStack>
+                                    {title}
+                                </Text>
+                                {description && (
+                                    <Text color="gray.600" fontSize="sm" lineHeight="1.4">
+                                        {description}
+                                    </Text>
+                                )}
+                            </Box>
+                        </Flex>
+
+                        {/* Footer */}
+                        <Flex
+                            px={{ base: 4, md: 6 }}
+                            py={4}
+                            gap={3}
+                            justify="flex-end"
+                            align="center"
+                            borderTop="1px"
+                            borderColor="gray.50"
+                        >
+                            <Button
+                                variant="ghost"
+                                onClick={onClose}
+                                isDisabled={isLoading}
+                                borderRadius="8px"
+                                _hover={{ bg: "gray.100" }}
+                            >
+                                {cancelLabel}
+                            </Button>
+
+                            <Button
+                                ref={confirmRef}
+                                colorScheme={confirmColorScheme}
+                                onClick={onConfirm}
+                                isLoading={isLoading}
+                                borderRadius="8px"
+                                px={5}
+                                boxShadow="sm"
+                            >
+                                {confirmLabel}
+                            </Button>
+                        </Flex>
                     </Dialog.Content>
                 </Dialog.Positioner>
             </Portal>

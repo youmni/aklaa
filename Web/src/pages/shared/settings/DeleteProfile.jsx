@@ -18,12 +18,12 @@ import ConfirmDialog from '../../../components/ConfirmDialog';
 const DeleteProfile = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
 
   const handleDelete = async () => {
-    setIsDeleteOpen(true);
+    setConfirmOpen(true);
   };
 
   const confirmDelete = async () => {
@@ -31,7 +31,7 @@ const DeleteProfile = () => {
     try {
       await api.delete('/users');
       enqueueSnackbar('Account deleted. Redirecting to login...', { variant: 'success' });
-      setIsDeleteOpen(false);
+      setConfirmOpen(false);
       navigate('/auth/login');
     } catch (err) {
       const message = err?.response?.data?.message || err?.response?.data || err.message || 'Delete failed';
@@ -72,14 +72,15 @@ const DeleteProfile = () => {
         </Button>
       </HStack>
       <ConfirmDialog
-        open={isDeleteOpen}
-        onOpenChange={setIsDeleteOpen}
+        isOpen={confirmOpen}
+        onClose={() => setConfirmOpen(false)}
         title="Delete User Account"
         description="Are you sure you want to delete your account? This action cannot be undone."
-        confirmText="Delete"
-        cancelText="X"
-        isDanger
         onConfirm={confirmDelete}
+        confirmLabel="Delete"
+        cancelLabel="Cancel"
+        confirmColorScheme="red"
+        isLoading={loading}
       />
     </Box>
   );
