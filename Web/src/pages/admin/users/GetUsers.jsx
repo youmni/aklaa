@@ -7,8 +7,6 @@ import { useSnackbar } from 'notistack';
 import api from '../../../api/axiosConfig';
 import UserDetailsModal from '../../../components/UserDetailsModal';
 
-const NAVY = '#083951';
-
 const GetUsers = () => {
     const { enqueueSnackbar } = useSnackbar();
     const [users, setUsers] = useState([]);
@@ -101,7 +99,7 @@ const GetUsers = () => {
         <Box p={8} bg="gray.50" minH="calc(100vh - 73px)">
             <VStack align="stretch" gap={6} maxW="1400px" mx="auto">
                 <Box>
-                    <Heading fontSize="3xl" fontWeight="bold" color={NAVY} mb={2}>
+                    <Heading fontSize="3xl" fontWeight="bold" color="#083951" mb={2}>
                         Users Management
                     </Heading>
                     <Text color="gray.600" fontSize="md">
@@ -111,7 +109,7 @@ const GetUsers = () => {
 
                 {isLoading ? (
                     <Box display="flex" justifyContent="center" py={20}>
-                        <Spinner size="xl" thickness="4px" color={NAVY} />
+                        <Spinner size="xl" thickness="4px" color="#083951" />
                     </Box>
                 ) : users.length === 0 ? (
                     <Box textAlign="center" py={20} bg="white" borderRadius="xl" border="1px solid" borderColor="gray.200" boxShadow="sm">
@@ -131,9 +129,9 @@ const GetUsers = () => {
                         <Table.Root size="lg" variant="plain">
                             <Table.Header>
                                 <Table.Row>
-                                    <Table.ColumnHeader style={{ color: NAVY, textAlign: 'left', padding: '12px' }}>First Name</Table.ColumnHeader >
-                                    <Table.ColumnHeader style={{ color: NAVY, textAlign: 'left', padding: '12px' }}>Last Name</Table.ColumnHeader >
-                                    <Table.ColumnHeader style={{ color: NAVY, textAlign: 'left', padding: '12px' }}>Status</Table.ColumnHeader >
+                                    <Table.ColumnHeader style={{ color: "#083951", textAlign: 'left', padding: '12px' }}>First Name</Table.ColumnHeader >
+                                    <Table.ColumnHeader style={{ color: "#083951", textAlign: 'left', padding: '12px' }}>Last Name</Table.ColumnHeader >
+                                    <Table.ColumnHeader style={{ color: "#083951", textAlign: 'left', padding: '12px' }}>Status</Table.ColumnHeader >
                                 </Table.Row>
                             </Table.Header>
                             <Table.Body>
@@ -175,7 +173,7 @@ const GetUsers = () => {
                                                 <IconButton
                                                     variant={{ base: 'ghost', _selected: 'solid' }}
                                                     colorScheme={pageItem.value === page ? 'blue' : 'gray'}
-                                                    _hover={{ bg: pageItem.value === page ? NAVY : 'gray.100' }}
+                                                    _hover={{ bg: pageItem.value === page ? "#083951" : 'gray.100' }}
                                                 >
                                                     {pageItem.value}
                                                 </IconButton>
@@ -202,7 +200,6 @@ const GetUsers = () => {
                     handleDelete={handleDelete}
                     isUpdatingRole={isUpdatingRole}
                     handleEnable={handleEnable}
-                    NAVY={NAVY}
                 />
             </VStack>
         </Box>

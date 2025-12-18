@@ -27,8 +27,6 @@ import { FaPlus, FaTrash } from 'react-icons/fa';
 import { FiArrowLeft } from 'react-icons/fi';
 import { useSnackbar } from 'notistack';
 
-const NAVY = '#083951';
-
 const CUISINE_TYPES = [
     { value: 'ITALIAN', label: 'Italian' },
     { value: 'FRENCH', label: 'French' },
@@ -313,7 +311,7 @@ const EditDish = () => {
                 justifyContent="center"
                 minH="calc(100vh - 73px)"
             >
-                <Spinner size="xl" thickness="4px" color={NAVY} />
+                <Spinner size="xl" thickness="4px" color="#083951" />
             </Box>
         );
     }
@@ -323,7 +321,7 @@ const EditDish = () => {
             <Box mb={4}>
                 <Button
                     variant="ghost"
-                    color={NAVY}
+                    color="#083951"
                     onClick={() => navigate('/dishes')}
                     aria-label="Back to dishes"
                 >
@@ -344,13 +342,13 @@ const EditDish = () => {
                     justifyContent="center"
                     zIndex={10}
                 >
-                    <Spinner size="xl" thickness="4px" color={NAVY} />
+                    <Spinner size="xl" thickness="4px" color="#083951" />
                 </Box>
             )}
 
             <VStack align="stretch" gap={8}>
                 <Box>
-                    <Heading fontSize="3xl" fontWeight="bold" color={NAVY} mb={2}>Edit Dish</Heading>
+                    <Heading fontSize="3xl" fontWeight="bold" color="#083951" mb={2}>Edit Dish</Heading>
                     <Text color="gray.600">Update your dish information</Text>
                 </Box>
 
@@ -489,7 +487,7 @@ const EditDish = () => {
                                     size="md"
                                     onClick={handleAddIngredient}
                                     type="button"
-                                    bg={NAVY}
+                                    bg="#083951"
                                     color="white"
                                     _hover={{ bg: '#0a4960' }}
                                     px={6}
@@ -517,7 +515,7 @@ const EditDish = () => {
                                 <VStack align="stretch" gap={3}>
                                     {formData.ingredients.length === 0 ? (
                                         <Box textAlign="center" py={12}>
-                                            <Text color={NAVY} fontSize="lg" fontWeight="medium">No ingredients added yet</Text>
+                                            <Text color="#083951" fontSize="lg" fontWeight="medium">No ingredients added yet</Text>
                                             <Text color="gray.500" fontSize="sm" mt={2}>Click "Add Ingredient" to get started</Text>
                                         </Box>
                                     ) : (
@@ -643,7 +641,7 @@ const EditDish = () => {
                         <Box pt={4}>
                             <Button
                                 type="submit"
-                                bg={NAVY}
+                                bg="#083951"
                                 color="white"
                                 width="full"
                                 isLoading={isSubmitting}

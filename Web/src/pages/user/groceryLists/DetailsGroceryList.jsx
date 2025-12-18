@@ -51,7 +51,6 @@ const DetailsGroceryList = () => {
     const [groceryData, setGroceryData] = useState(null);
     const [checkedItems, setCheckedItems] = useState(new Set());
 
-    // Load checked items from localStorage on mount
     useEffect(() => {
         const storageKey = `groceryList_${id}_checked`;
         const savedChecked = localStorage.getItem(storageKey);

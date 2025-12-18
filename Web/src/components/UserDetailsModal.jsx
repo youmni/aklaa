@@ -23,8 +23,7 @@ const UserDetailsModal = ({
     isUpdatingRole,
     handleEnable,
     handleDelete,
-    enablingId,
-    NAVY,
+    enablingId
 }) => {
 
     const [isDeleteOpen, setIsDeleteOpen] = useState(false);
@@ -57,7 +56,7 @@ const UserDetailsModal = ({
                             </Dialog.CloseTrigger>
 
                             <Dialog.Header pb={2} pt={6} px={6}>
-                                <Dialog.Title fontSize="2xl" fontWeight="bold" color={NAVY}>
+                                <Dialog.Title fontSize="2xl" fontWeight="bold" color="#083951">
                                     User Details
                                 </Dialog.Title>
                             </Dialog.Header>
@@ -69,7 +68,7 @@ const UserDetailsModal = ({
                                         bg="gray.50"
                                         borderRadius="lg"
                                         borderLeft="4px solid"
-                                        borderColor={NAVY}
+                                        borderColor="#083951"
                                     >
                                         <Text
                                             fontSize="xs"
@@ -81,7 +80,7 @@ const UserDetailsModal = ({
                                         >
                                             User ID
                                         </Text>
-                                        <Text fontSize="lg" fontWeight="bold" color={NAVY}>
+                                        <Text fontSize="lg" fontWeight="bold" color="#083951">
                                             #{selectedUser.id}
                                         </Text>
                                     </Box>
@@ -154,7 +153,7 @@ const UserDetailsModal = ({
                                                 bg="white"
                                                 borderColor="gray.300"
                                                 borderWidth="1px"
-                                                _hover={{ borderColor: NAVY }}
+                                                _hover={{ borderColor: "#083951" }}
                                                 borderRadius="md"
                                                 cursor="pointer"
                                             >
@@ -165,7 +164,7 @@ const UserDetailsModal = ({
                                         </NativeSelectRoot>
                                         {isUpdatingRole && (
                                             <HStack mt={2}>
-                                                <Spinner size="sm" color={NAVY} />
+                                                <Spinner size="sm" color="#083951" />
                                                 <Text fontSize="xs" color="gray.600">
                                                     Updating...
                                                 </Text>
