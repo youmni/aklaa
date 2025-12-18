@@ -20,8 +20,6 @@ import { FaUsers } from 'react-icons/fa';
 import { useSnackbar } from 'notistack';
 import MarkdownRenderer from '../../../components/MarkdownRenderer';
 
-const NAVY = '#083951';
-
 const DetailsDish = () => {
     const { id } = useParams();
     const navigate = useNavigate();
@@ -68,7 +66,7 @@ const DetailsDish = () => {
                 justifyContent="center"
                 minH="calc(100vh - 73px)"
             >
-                <Spinner size="xl" thickness="4px" color={NAVY} />
+                <Spinner size="xl" thickness="4px" color="#083951" />
             </Box>
         );
     }
@@ -82,7 +80,7 @@ const DetailsDish = () => {
             <Flex mb={6} justify="space-between" align="center">
                 <Button
                     variant="ghost"
-                    color={NAVY}
+                    color="#083951"
                     onClick={() => navigate('/dishes')}
                     aria-label="Back to dishes"
                 >
@@ -92,12 +90,12 @@ const DetailsDish = () => {
 
             <VStack align="stretch" gap={8}>
                 <Box>
-                    <Heading fontSize="3xl" fontWeight="bold" color={NAVY} mb={2}>
+                    <Heading fontSize="3xl" fontWeight="bold" color="#083951" mb={2}>
                         {dish.name}
                     </Heading>
                     <Flex align="center" gap={4} mt={4}>
                         <HStack>
-                            <FaUsers color={NAVY} />
+                            <FaUsers color="#083951" />
                             <Text color="gray.600" fontWeight="medium">
                                 {dish.people} {dish.people === 1 ? 'Serving' : 'Servings'}
                             </Text>
@@ -124,7 +122,7 @@ const DetailsDish = () => {
 
                 {dish.tags && dish.tags.length > 0 && (
                     <Box>
-                        <Heading size="md" mb={3} color={NAVY}>Tags</Heading>
+                        <Heading size="md" mb={3} color="#083951">Tags</Heading>
                         <Flex flexWrap="wrap" gap={2}>
                             {dish.tags.map((tag, index) => (
                                 <Badge
@@ -143,14 +141,14 @@ const DetailsDish = () => {
                 )}
 
                 <Box>
-                    <Heading size="md" mb={3} color={NAVY}>Description</Heading>
+                    <Heading size="md" mb={3} color="#083951">Description</Heading>
                     <Text color="gray.700" lineHeight="1.8" fontSize="lg">
                         {dish.description}
                     </Text>
                 </Box>
 
                 <Box>
-                    <Heading size="md" mb={4} color={NAVY}>Ingredients</Heading>
+                    <Heading size="md" mb={4} color="#083951">Ingredients</Heading>
                     <Card.Root bg="gray.50" borderRadius="lg" p={6}>
                         <SimpleGrid columns={{ base: 1, md: 2 }} gap={4}>
                             {dish.ingredients && dish.ingredients.length > 0 ? (
@@ -164,7 +162,7 @@ const DetailsDish = () => {
                                         justify="space-between"
                                         align="center"
                                     >
-                                        <Text fontWeight="medium" color={NAVY}>
+                                        <Text fontWeight="medium" color="#083951">
                                             {item.ingredient.name}
                                         </Text>
                                         <Text color="gray.600" fontWeight="semibold">
@@ -181,7 +179,7 @@ const DetailsDish = () => {
 
                 {dish.cookingSteps && (
                     <Box>
-                        <Heading size="md" mb={4} color={NAVY}>
+                        <Heading size="md" mb={4} color="#083951">
                             Cooking Instructions
                         </Heading>
                         <Box boxShadow="sm" p={6} bg="gray.50" borderRadius="lg">

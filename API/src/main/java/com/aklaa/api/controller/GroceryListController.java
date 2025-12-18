@@ -16,6 +16,7 @@ import com.aklaa.api.model.User;
 import com.aklaa.api.services.implementation.GroceryListServiceImpl;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
@@ -34,6 +35,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/grocerylists")
+@RequiredArgsConstructor
 public class GroceryListController {
 
     private static final String CART_KEY = "cart";
@@ -41,19 +43,6 @@ public class GroceryListController {
     private final GroceryListServiceImpl  groceryListService;
     private final UserRepository userRepository;
     private final GroceryListMapper groceryListMapper;
-
-    public GroceryListController(
-            DishRepository dishRepository,
-            GroceryListRepository groceryListRepository, GroceryListServiceImpl groceryListService,
-            GroceryListMapper groceryListMapper,
-            UserRepository userRepository,
-            DishMapper dishMapper
-    ) {
-        this.groceryListRepository = groceryListRepository;
-        this.groceryListService = groceryListService;
-        this.groceryListMapper = groceryListMapper;
-        this.userRepository = userRepository;
-    }
 
     @AllowAuthenticated
     @PostMapping("/save")

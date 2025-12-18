@@ -10,6 +10,7 @@ import {
     Spinner,
 } from "@chakra-ui/react"
 import StatusCard from "../../../components/StatusMessageCard";
+import { Field } from "../../../components/ui/field";
 
 const PasswordResetConfirm = () => {
     const navigate = useNavigate();
@@ -181,31 +182,23 @@ const PasswordResetConfirm = () => {
                             )}
 
                             <Stack spacing={4}>
-                                <Box>
-                                    <Box fontWeight="600" mb={2}>New password</Box>
+                                <Field label="New password" required invalid={!!errors.newPassword} errorText={errors.newPassword}>
                                     <Input
                                         name="newPassword"
                                         type="password"
                                         value={form.newPassword}
                                         onChange={handleChange}
                                     />
-                                    {errors.newPassword && (
-                                        <Box color="red.600" fontSize="sm" mt={1}>{errors.newPassword}</Box>
-                                    )}
-                                </Box>
+                                </Field>
 
-                                <Box>
-                                    <Box fontWeight="600" mb={2}>Confirm password</Box>
+                                <Field label="Confirm password" required invalid={!!errors.confirmPassword} errorText={errors.confirmPassword}>
                                     <Input
                                         name="confirmPassword"
                                         type="password"
                                         value={form.confirmPassword}
                                         onChange={handleChange}
                                     />
-                                    {errors.confirmPassword && (
-                                        <Box color="red.600" fontSize="sm" mt={1}>{errors.confirmPassword}</Box>
-                                    )}
-                                </Box>
+                                </Field>
                             </Stack>
                         </Fieldset.Content>
                         <Button

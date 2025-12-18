@@ -14,6 +14,7 @@ import com.nimbusds.jose.JOSEException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -28,19 +29,13 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/auth")
+@RequiredArgsConstructor
 public class AuthController {
 
     private final AuthService authService;
     private final UserRepository userRepository;
     private final ResetPasswordRepository resetPasswordRepository;
     private final PasswordEncoder passwordEncoder;
-
-    public AuthController(AuthService authService, UserRepository userRepository, ResetPasswordRepository resetPasswordRepository, PasswordEncoder passwordEncoder) {
-        this.authService = authService;
-        this.userRepository = userRepository;
-        this.resetPasswordRepository = resetPasswordRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
 
     @AllowAnonymous
     @PostMapping("/register")

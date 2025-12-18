@@ -13,6 +13,7 @@ import com.aklaa.api.model.PasswordResetToken;
 import com.aklaa.api.model.User;
 import com.aklaa.api.model.enums.UserType;
 import com.aklaa.api.services.contract.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -25,17 +26,12 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/users")
+@RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
     private final ResetEmailRepository resetEmailRepository;
     private final UserRepository userRepository;
-
-    public UserController(UserService userService, ResetEmailRepository resetEmailRepository, UserRepository userRepository) {
-        this.userService = userService;
-        this.resetEmailRepository = resetEmailRepository;
-        this.userRepository = userRepository;
-    }
 
     @AllowAdmin
     @GetMapping()

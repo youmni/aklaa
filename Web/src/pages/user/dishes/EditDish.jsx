@@ -27,8 +27,6 @@ import { FaPlus, FaTrash } from 'react-icons/fa';
 import { FiArrowLeft } from 'react-icons/fi';
 import { useSnackbar } from 'notistack';
 
-const NAVY = '#083951';
-
 const CUISINE_TYPES = [
     { value: 'ITALIAN', label: 'Italian' },
     { value: 'FRENCH', label: 'French' },
@@ -313,7 +311,7 @@ const EditDish = () => {
                 justifyContent="center"
                 minH="calc(100vh - 73px)"
             >
-                <Spinner size="xl" thickness="4px" color={NAVY} />
+                <Spinner size="xl" thickness="4px" color="#083951" />
             </Box>
         );
     }
@@ -323,7 +321,7 @@ const EditDish = () => {
             <Box mb={4}>
                 <Button
                     variant="ghost"
-                    color={NAVY}
+                    color="#083951"
                     onClick={() => navigate('/dishes')}
                     aria-label="Back to dishes"
                 >
@@ -344,13 +342,13 @@ const EditDish = () => {
                     justifyContent="center"
                     zIndex={10}
                 >
-                    <Spinner size="xl" thickness="4px" color={NAVY} />
+                    <Spinner size="xl" thickness="4px" color="#083951" />
                 </Box>
             )}
 
             <VStack align="stretch" gap={8}>
                 <Box>
-                    <Heading fontSize="3xl" fontWeight="bold" color={NAVY} mb={2}>Edit Dish</Heading>
+                    <Heading fontSize="3xl" fontWeight="bold" color="#083951" mb={2}>Edit Dish</Heading>
                     <Text color="gray.600">Update your dish information</Text>
                 </Box>
 
@@ -461,35 +459,42 @@ const EditDish = () => {
                             </Field>
                         </VStack>
 
-                        <Box>
-                            <Heading size="md" mb={4}>Dish Image</Heading>
-                            <Field invalid={!!errors.imageUrl} errorText={errors.imageUrl}>
-                                {formData.imageUrl && (
-                                    <Box mb={4}>
-                                        <Image
-                                            src={formData.imageUrl}
-                                            alt="Dish preview"
-                                            maxH="400px"
-                                            w="full"
-                                            objectFit="cover"
-                                            borderRadius="lg"
-                                        />
-                                        <Text fontSize="sm" color="gray.500" mt={2}>
-                                            Image editing is not available yet
-                                        </Text>
-                                    </Box>
-                                )}
-                            </Field>
-                        </Box>
+                        <Field
+                            label="Dish Image"
+                            required
+                            invalid={!!errors.imageUrl}
+                            errorText={errors.imageUrl}
+                        >
+                            {formData.imageUrl && (
+                                <Box mb={4}>
+                                    <Image
+                                        src={formData.imageUrl}
+                                        alt="Dish preview"
+                                        maxH="400px"
+                                        w="full"
+                                        objectFit="cover"
+                                        borderRadius="lg"
+                                    />
+                                    <Text fontSize="sm" color="gray.500" mt={2}>
+                                        Image editing is not available yet
+                                    </Text>
+                                </Box>
+                            )}
+                        </Field>
 
-                        <Box>
-                            <Flex justify="space-between" align="center" mb={4}>
-                                <Heading size="md">Ingredients</Heading>
+                        <Field
+                            label="Ingredients"
+                            required
+                            mb={4}
+                            invalid={!!errors.ingredients}
+                            errorText={errors.ingredients}
+                        >
+                            <Flex justify="flex-end" align="center" mb={4}>
                                 <Button
                                     size="md"
                                     onClick={handleAddIngredient}
                                     type="button"
-                                    bg={NAVY}
+                                    bg="#083951"
                                     color="white"
                                     _hover={{ bg: '#0a4960' }}
                                     px={6}
@@ -497,12 +502,6 @@ const EditDish = () => {
                                     <FaPlus style={{ marginRight: '8px' }} /> Add Ingredient
                                 </Button>
                             </Flex>
-
-                            {errors.ingredients && (
-                                <Text color="red.500" fontSize="sm" mb={4} p={3} bg="red.50" borderRadius="md">
-                                    {errors.ingredients}
-                                </Text>
-                            )}
 
                             <Box 
                                 maxH="420px" 
@@ -517,7 +516,7 @@ const EditDish = () => {
                                 <VStack align="stretch" gap={3}>
                                     {formData.ingredients.length === 0 ? (
                                         <Box textAlign="center" py={12}>
-                                            <Text color={NAVY} fontSize="lg" fontWeight="medium">No ingredients added yet</Text>
+                                            <Text color="#083951" fontSize="lg" fontWeight="medium">No ingredients added yet</Text>
                                             <Text color="gray.500" fontSize="sm" mt={2}>Click "Add Ingredient" to get started</Text>
                                         </Box>
                                     ) : (
@@ -597,10 +596,10 @@ const EditDish = () => {
                                     )}
                                 </VStack>
                             </Box>
-                        </Box>
+                        </Field>
 
                         <Box>
-                            <Heading size="md" mb={4}>Cooking Instructions (Optional)</Heading>
+                            <Heading size="md" mb={4}>Cooking Instructions</Heading>
                             <Box 
                                 border="1px solid" 
                                 borderColor="gray.200" 
@@ -643,7 +642,7 @@ const EditDish = () => {
                         <Box pt={4}>
                             <Button
                                 type="submit"
-                                bg={NAVY}
+                                bg="#083951"
                                 color="white"
                                 width="full"
                                 isLoading={isSubmitting}

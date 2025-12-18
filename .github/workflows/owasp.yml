@@ -43,6 +43,10 @@ jobs:
           SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/aklaa?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
           SPRING_DATASOURCE_USERNAME=aklaa
           SPRING_DATASOURCE_PASSWORD=test_password_123
+
+          SPRING_JPA_HIBERNATE_DDL_AUTO=update
+          SPRING_JPA_SHOW_SQL=true
+          SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT=org.hibernate.dialect.MySQL8Dialect
           
           # Email (from GitHub Secrets)
           SPRING_MAIL_HOST=smtp.gmail.com
@@ -82,7 +86,7 @@ jobs:
 
       - name: Wait for API to be ready
         run: |
-          timeout 25 bash -c 'until curl -f http://localhost:8080/actuator/health; do sleep 3; done'
+          timeout 60 bash -c 'until curl -f http://localhost:8080/actuator/health; do sleep 3; done'
           echo "API is ready"
 
       - name: Wait for Frontend to be ready

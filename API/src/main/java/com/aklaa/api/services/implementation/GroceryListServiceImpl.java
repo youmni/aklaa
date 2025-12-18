@@ -13,6 +13,7 @@ import com.aklaa.api.model.GroceryListIngredientKey;
 import com.aklaa.api.model.User;
 import com.aklaa.api.services.contract.GroceryListService;
 import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -21,19 +22,13 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class GroceryListServiceImpl implements GroceryListService {
 
     private final DishRepository dishRepository;
     private final IngredientRepository ingredientRepository;
     private final GroceryListRepository groceryListRepository;
     private final DishMapper dishMapper;
-
-    public GroceryListServiceImpl(DishRepository dishRepository, IngredientRepository ingredientRepository, GroceryListRepository groceryListRepository, DishMapper dishMapper) {
-        this.dishRepository = dishRepository;
-        this.ingredientRepository = ingredientRepository;
-        this.groceryListRepository = groceryListRepository;
-        this.dishMapper = dishMapper;
-    }
 
     public List<CartDishRequestDTO> getCart(HttpSession session) {
         String CART_KEY = "cart";

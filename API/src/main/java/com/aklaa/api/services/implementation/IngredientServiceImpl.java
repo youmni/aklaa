@@ -9,6 +9,7 @@ import com.aklaa.api.model.Ingredient;
 import com.aklaa.api.model.User;
 import com.aklaa.api.model.enums.IngredientCategory;
 import com.aklaa.api.services.contract.IngredientService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -21,15 +22,11 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 
 @Service
+@RequiredArgsConstructor
 public class IngredientServiceImpl implements IngredientService {
 
     private final IngredientRepository ingredientRepository;
     private final IngredientMapper ingredientMapper;
-
-    public IngredientServiceImpl(IngredientRepository ingredientRepository, IngredientMapper ingredientMapper) {
-        this.ingredientRepository = ingredientRepository;
-        this.ingredientMapper = ingredientMapper;
-    }
 
     @Override
     public IngredientResponseDTO create(IngredientRequestDTO ingredientRequestDTO,  User user) {

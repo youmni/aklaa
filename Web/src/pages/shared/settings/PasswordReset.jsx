@@ -1,7 +1,8 @@
-import { use, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Button, Input, Stack, Spinner } from "@chakra-ui/react";
-import { Field, Fieldset } from "@chakra-ui/react";
+import { Fieldset } from "@chakra-ui/react";
+import { Field } from '../../../components/ui/field';
 import { useSnackbar } from 'notistack';
 import api from "../../../api/axiosConfig";
 const PasswordReset = () => {
@@ -124,8 +125,7 @@ const PasswordReset = () => {
                             </Box>
                         )}
 
-                        <Field.Root invalid={!!errors.oldPassword}>
-                            <Field.Label>Old Password</Field.Label>
+                        <Field label="Old Password" required invalid={!!errors.oldPassword} errorText={errors.oldPassword}>
                             <Input
                                 name="oldPassword"
                                 type="password"
@@ -133,11 +133,9 @@ const PasswordReset = () => {
                                 onChange={handleChange}
                                 focusBorderColor="#083951"
                             />
-                            {errors.oldPassword && <Field.ErrorText>{errors.oldPassword}</Field.ErrorText>}
-                        </Field.Root>
+                        </Field>
 
-                        <Field.Root invalid={!!errors.newPassword}>
-                            <Field.Label>New Password</Field.Label>
+                        <Field label="New Password" required invalid={!!errors.newPassword} errorText={errors.newPassword}>
                             <Input
                                 name="newPassword"
                                 type="password"
@@ -145,11 +143,9 @@ const PasswordReset = () => {
                                 onChange={handleChange}
                                 focusBorderColor="#083951"
                             />
-                            {errors.newPassword && <Field.ErrorText>{errors.newPassword}</Field.ErrorText>}
-                        </Field.Root>
+                        </Field>
 
-                        <Field.Root invalid={!!errors.confirmNewPassword}>
-                            <Field.Label>Confirm New Password</Field.Label>
+                        <Field label="Confirm New Password" required invalid={!!errors.confirmNewPassword} errorText={errors.confirmNewPassword}>
                             <Input
                                 name="confirmNewPassword"
                                 type="password"
@@ -157,8 +153,7 @@ const PasswordReset = () => {
                                 onChange={handleChange}
                                 focusBorderColor="#083951"
                             />
-                            {errors.confirmNewPassword && <Field.ErrorText>{errors.confirmNewPassword}</Field.ErrorText>}
-                        </Field.Root>
+                        </Field>
                     </Fieldset.Content>
 
                     <Button

@@ -2,10 +2,11 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Button, Input, Stack, Spinner, Text, Grid, Badge, HStack, IconButton, VStack, Image } from "@chakra-ui/react";
 import { useSnackbar } from 'notistack';
-import { FiEdit2, FiTrash2, FiPlus, FiSearch, FiChevronLeft, FiChevronRight, FiChevronsLeft, FiChevronsRight, FiEye, FiShoppingCart } from 'react-icons/fi';
+import { FiEdit2, FiTrash2, FiPlus, FiSearch, FiEye } from 'react-icons/fi';
 import api from "../../../api/axiosConfig";
-import ConfirmDialog from "../../../components/shoppingcart/ConfirmDialog";
+import ConfirmDialog from "../../../components/ConfirmDialog";
 import AddToCartModal from "../../../components/AddToCartModal";
+import Pagination from "../../../components/Pagination";
 
 const GetDishes = () => {
     const navigate = useNavigate();
@@ -392,9 +393,6 @@ const GetDishes = () => {
                                             </Text>
 
                                             <VStack align="stretch" gap={2}>
-                                                <Text fontSize="xs" color="gray.500" fontWeight="600" textTransform="uppercase">
-                                                    Tags
-                                                </Text>
                                                 <HStack flexWrap="wrap" gap={2}>
                                                     {dish.tags && dish.tags.length > 0 ? (
                                                         dish.tags.slice(0, 3).map((tag, index) => {
@@ -445,93 +443,7 @@ const GetDishes = () => {
                         })}
                     </Grid>
 
-                    {totalPages > 1 && (
-                        <Stack direction={{ base: "column", sm: "row" }} justify="center" gap={2} mt={8} flexWrap="wrap">
-                            <HStack gap={2} justify="center" flexWrap="wrap">
-                                <IconButton
-                                    onClick={() => handlePageChange(0)}
-                                    disabled={page === 0}
-                                    size={{ base: "sm", md: "md" }}
-                                    variant="outline"
-                                    borderColor="#083951"
-                                    color="#083951"
-                                    _hover={{ bg: "gray.50" }}
-                                    display={{ base: "none", sm: "inline-flex" }}
-                                    aria-label="First page"
-                                >
-                                    <FiChevronsLeft />
-                                </IconButton>
-                                <IconButton
-                                    onClick={() => handlePageChange(page - 1)}
-                                    disabled={page === 0}
-                                    size={{ base: "sm", md: "md" }}
-                                    variant="outline"
-                                    borderColor="#083951"
-                                    color="#083951"
-                                    _hover={{ bg: "gray.50" }}
-                                    aria-label="Previous page"
-                                >
-                                    <FiChevronLeft />
-                                </IconButton>
-
-                                {[...Array(totalPages)].map((_, index) => {
-                                    if (
-                                        index === 0 ||
-                                        index === totalPages - 1 ||
-                                        (index >= page - 1 && index <= page + 1)
-                                    ) {
-                                        return (
-                                            <Button
-                                                key={index}
-                                                onClick={() => handlePageChange(index)}
-                                                size={{ base: "sm", md: "md" }}
-                                                bg={page === index ? "#083951" : "white"}
-                                                color={page === index ? "white" : "#083951"}
-                                                borderWidth="2px"
-                                                borderColor="#083951"
-                                                _hover={{
-                                                    bg: page === index ? "#0a4a63" : "gray.50"
-                                                }}
-                                                fontWeight="600"
-                                                minW={{ base: "36px", md: "40px" }}
-                                            >
-                                                {index + 1}
-                                            </Button>
-                                        );
-                                    } else if (index === page - 2 || index === page + 2) {
-                                        return <Text key={index} px={1} display={{ base: "none", sm: "block" }}>...</Text>;
-                                    }
-                                    return null;
-                                })}
-
-                                <IconButton
-                                    onClick={() => handlePageChange(page + 1)}
-                                    disabled={page === totalPages - 1}
-                                    size={{ base: "sm", md: "md" }}
-                                    variant="outline"
-                                    borderColor="#083951"
-                                    color="#083951"
-                                    _hover={{ bg: "gray.50" }}
-                                    aria-label="Next page"
-                                >
-                                    <FiChevronRight />
-                                </IconButton>
-                                <IconButton
-                                    onClick={() => handlePageChange(totalPages - 1)}
-                                    disabled={page === totalPages - 1}
-                                    size={{ base: "sm", md: "md" }}
-                                    variant="outline"
-                                    borderColor="#083951"
-                                    color="#083951"
-                                    _hover={{ bg: "gray.50" }}
-                                    display={{ base: "none", sm: "inline-flex" }}
-                                    aria-label="Last page"
-                                >
-                                    <FiChevronsRight />
-                                </IconButton>
-                            </HStack>
-                        </Stack>
-                    )}
+                    <Pagination page={page} totalPages={totalPages} onPageChange={handlePageChange} />
                 </>
             )}
 

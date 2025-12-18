@@ -17,6 +17,7 @@ import com.aklaa.api.services.contract.DishService;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -27,19 +28,13 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 
 @Service
+@RequiredArgsConstructor
 public class DishServiceImpl implements DishService {
 
     private final DishRepository dishRepository;
     private final DishMapper dishMapper;
     private final DishIngredientMapper dishIngredientMapper;
     private final IngredientRepository ingredientRepository;
-
-    public DishServiceImpl(DishRepository dishRepository, DishMapper dishMapper, DishIngredientMapper dishIngredientMapper, IngredientRepository ingredientRepository) {
-        this.dishRepository = dishRepository;
-        this.dishMapper = dishMapper;
-        this.dishIngredientMapper = dishIngredientMapper;
-        this.ingredientRepository = ingredientRepository;
-    }
 
     @Override
     public DishResponseDTO create(DishRequestDTO dishRequestDTO, User user) {
