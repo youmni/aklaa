@@ -393,9 +393,6 @@ const GetDishes = () => {
                                             </Text>
 
                                             <VStack align="stretch" gap={2}>
-                                                <Text fontSize="xs" color="gray.500" fontWeight="600" textTransform="uppercase">
-                                                    Tags
-                                                </Text>
                                                 <HStack flexWrap="wrap" gap={2}>
                                                     {dish.tags && dish.tags.length > 0 ? (
                                                         dish.tags.slice(0, 3).map((tag, index) => {

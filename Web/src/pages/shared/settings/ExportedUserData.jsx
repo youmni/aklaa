@@ -59,7 +59,7 @@ const ExportedUserData = () => {
     >
       <Stack spacing={4} maxW="1200px" mx="auto">
         <Stack spacing={2}>
-          <Text fontSize="3xl" fontWeight="bold">
+          <Text fontSize="3xl" color="#083951" fontWeight="bold">
             Export your personal data
           </Text>
           <Text fontSize="sm" color="#000000ff">
@@ -80,7 +80,7 @@ const ExportedUserData = () => {
           onClick={handleDownload}
           isLoading={loading}
           leftIcon={<FiDownload />}
-          colorScheme="#000000ff"
+          colorPalette="blue"
           size="md"
           loadingText="Preparing"
           w="100%"

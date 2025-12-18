@@ -3,13 +3,13 @@ import { useNavigate, Link as RouterLink } from "react-router-dom";
 import axios from "axios";
 import {
   Button,
-  Field,
   Fieldset,
   Input,
   Stack,
   Box,
   Spinner,
 } from "@chakra-ui/react"
+import { Field } from '../../../components/ui/field';
 
 const Register = () => {
   const [form, setForm] = useState({
@@ -192,68 +192,48 @@ const Register = () => {
                 </Box>
               )}
 
-              <Field.Root invalid={!!errors.firstName}>
-                <Field.Label>First Name</Field.Label>
+              <Field label="First Name" required invalid={!!errors.firstName} errorText={errors.firstName}>
                 <Input
                   name="firstName"
                   value={form.firstName}
                   onChange={handleChange}
                 />
-                {errors.firstName && (
-                  <Field.ErrorText>{errors.firstName}</Field.ErrorText>
-                )}
-              </Field.Root>
+              </Field>
 
-              <Field.Root invalid={!!errors.lastName}>
-                <Field.Label>Last Name</Field.Label>
+              <Field label="Last Name" required invalid={!!errors.lastName} errorText={errors.lastName}>
                 <Input
                   name="lastName"
                   value={form.lastName}
                   onChange={handleChange}
                 />
-                {errors.lastName && (
-                  <Field.ErrorText>{errors.lastName}</Field.ErrorText>
-                )}
-              </Field.Root>
+              </Field>
 
-              <Field.Root invalid={!!errors.email}>
-                <Field.Label>Email address</Field.Label>
+              <Field label="Email address" required invalid={!!errors.email} errorText={errors.email}>
                 <Input
                   name="email"
                   type="email"
                   value={form.email}
                   onChange={handleChange}
                 />
-                {errors.email && (
-                  <Field.ErrorText>{errors.email}</Field.ErrorText>
-                )}
-              </Field.Root>
+              </Field>
 
-              <Field.Root invalid={!!errors.password}>
-                <Field.Label>Password</Field.Label>
+              <Field label="Password" required invalid={!!errors.password} errorText={errors.password}>
                 <Input
                   name="password"
                   type="password"
                   value={form.password}
                   onChange={handleChange}
                 />
-                {errors.password && (
-                  <Field.ErrorText>{errors.password}</Field.ErrorText>
-                )}
-              </Field.Root>
+              </Field>
 
-              <Field.Root invalid={!!errors.confirmPassword}>
-                <Field.Label>Confirm Password</Field.Label>
+              <Field label="Confirm Password" required invalid={!!errors.confirmPassword} errorText={errors.confirmPassword}>
                 <Input
                   name="confirmPassword"
                   type="password"
                   value={form.confirmPassword}
                   onChange={handleChange}
                 />
-                {errors.confirmPassword && (
-                  <Field.ErrorText>{errors.confirmPassword}</Field.ErrorText>
-                )}
-              </Field.Root>
+              </Field>
             </Fieldset.Content>
             <Button
               type="submit"

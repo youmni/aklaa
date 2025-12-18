@@ -6,13 +6,13 @@ import { useAuth } from "../../../hooks/useAuth";
 import { useNavigate, Link as RouterLink } from "react-router-dom";
 import {
     Button,
-    Field,
     Fieldset,
     Input,
     Stack,
     Box,
     Spinner,
 } from "@chakra-ui/react"
+import { Field } from '../../../components/ui/field';
 
 const Login = () => {
     const navigate = useNavigate();
@@ -178,31 +178,23 @@ const Login = () => {
                                 </Box>
                             )}
 
-                            <Field.Root invalid={!!errors.email}>
-                                <Field.Label>Email address</Field.Label>
+                            <Field label="Email address" required invalid={!!errors.email} errorText={errors.email}>
                                 <Input
                                     name="email"
                                     type="email"
                                     value={form.email}
                                     onChange={handleChange}
                                 />
-                                {errors.email && (
-                                    <Field.ErrorText>{errors.email}</Field.ErrorText>
-                                )}
-                            </Field.Root>
+                            </Field>
 
-                            <Field.Root invalid={!!errors.password}>
-                                <Field.Label>Password</Field.Label>
+                            <Field label="Password" required invalid={!!errors.password} errorText={errors.password}>
                                 <Input
                                     name="password"
                                     type="password"
                                     value={form.password}
                                     onChange={handleChange}
                                 />
-                                {errors.password && (
-                                    <Field.ErrorText>{errors.password}</Field.ErrorText>
-                                )}
-                            </Field.Root>
+                            </Field>
                         </Fieldset.Content>
                         <Button
                             type="submit"

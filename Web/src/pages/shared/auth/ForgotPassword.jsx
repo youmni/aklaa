@@ -3,7 +3,6 @@ import api from "../../../api/axiosConfig";
 import { useNavigate, Link as RouterLink } from "react-router-dom";
 import {
     Button,
-    Field,
     Fieldset,
     Input,
     Stack,
@@ -11,6 +10,7 @@ import {
     Spinner,
     Text,
 } from "@chakra-ui/react";
+import { Field } from '../../../components/ui/field';
 
 const PasswordReset = () => {
     const navigate = useNavigate();
@@ -53,7 +53,6 @@ const PasswordReset = () => {
 
             setSuccessMessage(successMsg);
             setEmail("");
-            // optional: navigate("/auth/login"); // uncomment if you want to redirect immediately
         } catch (error) {
             setErrors({
                 submit:
@@ -139,8 +138,7 @@ const PasswordReset = () => {
                                 </Box>
                             )}
 
-                            <Field.Root invalid={!!errors.email}>
-                                <Field.Label>Email</Field.Label>
+                            <Field label="Email" required invalid={!!errors.email} errorText={errors.email}>
                                 <Input
                                     name="email"
                                     type="email"
@@ -148,10 +146,7 @@ const PasswordReset = () => {
                                     onChange={handleChange}
                                     placeholder="example@mail.com"
                                 />
-                                {errors.email && (
-                                    <Field.ErrorText>{errors.email}</Field.ErrorText>
-                                )}
-                            </Field.Root>
+                            </Field>
 
                         </Fieldset.Content>
                         <Button

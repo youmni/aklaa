@@ -459,30 +459,37 @@ const EditDish = () => {
                             </Field>
                         </VStack>
 
-                        <Box>
-                            <Heading size="md" mb={4}>Dish Image</Heading>
-                            <Field invalid={!!errors.imageUrl} errorText={errors.imageUrl}>
-                                {formData.imageUrl && (
-                                    <Box mb={4}>
-                                        <Image
-                                            src={formData.imageUrl}
-                                            alt="Dish preview"
-                                            maxH="400px"
-                                            w="full"
-                                            objectFit="cover"
-                                            borderRadius="lg"
-                                        />
-                                        <Text fontSize="sm" color="gray.500" mt={2}>
-                                            Image editing is not available yet
-                                        </Text>
-                                    </Box>
-                                )}
-                            </Field>
-                        </Box>
+                        <Field
+                            label="Dish Image"
+                            required
+                            invalid={!!errors.imageUrl}
+                            errorText={errors.imageUrl}
+                        >
+                            {formData.imageUrl && (
+                                <Box mb={4}>
+                                    <Image
+                                        src={formData.imageUrl}
+                                        alt="Dish preview"
+                                        maxH="400px"
+                                        w="full"
+                                        objectFit="cover"
+                                        borderRadius="lg"
+                                    />
+                                    <Text fontSize="sm" color="gray.500" mt={2}>
+                                        Image editing is not available yet
+                                    </Text>
+                                </Box>
+                            )}
+                        </Field>
 
-                        <Box>
-                            <Flex justify="space-between" align="center" mb={4}>
-                                <Heading size="md">Ingredients</Heading>
+                        <Field
+                            label="Ingredients"
+                            required
+                            mb={4}
+                            invalid={!!errors.ingredients}
+                            errorText={errors.ingredients}
+                        >
+                            <Flex justify="flex-end" align="center" mb={4}>
                                 <Button
                                     size="md"
                                     onClick={handleAddIngredient}
@@ -495,12 +502,6 @@ const EditDish = () => {
                                     <FaPlus style={{ marginRight: '8px' }} /> Add Ingredient
                                 </Button>
                             </Flex>
-
-                            {errors.ingredients && (
-                                <Text color="red.500" fontSize="sm" mb={4} p={3} bg="red.50" borderRadius="md">
-                                    {errors.ingredients}
-                                </Text>
-                            )}
 
                             <Box 
                                 maxH="420px" 
@@ -595,10 +596,10 @@ const EditDish = () => {
                                     )}
                                 </VStack>
                             </Box>
-                        </Box>
+                        </Field>
 
                         <Box>
-                            <Heading size="md" mb={4}>Cooking Instructions (Optional)</Heading>
+                            <Heading size="md" mb={4}>Cooking Instructions</Heading>
                             <Box 
                                 border="1px solid" 
                                 borderColor="gray.200" 

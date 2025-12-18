@@ -1,7 +1,8 @@
-import { use, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Button, Input, Stack, Spinner } from "@chakra-ui/react";
-import { Field, Fieldset } from "@chakra-ui/react";
+import { Fieldset } from "@chakra-ui/react";
+import { Field } from '../../../components/ui/field';
 import { useSnackbar } from 'notistack';
 import api from "../../../api/axiosConfig";
 import { FiArrowLeft } from 'react-icons/fi';
@@ -193,8 +194,7 @@ const CreateIngredient = () => {
                             </Box>
                         )}
 
-                        <Field.Root invalid={!!errors.name}>
-                            <Field.Label>Name</Field.Label>
+                        <Field label="Name" required invalid={!!errors.name} errorText={errors.name}>
                             <Input
                                 name="name"
                                 type="text"
@@ -203,13 +203,9 @@ const CreateIngredient = () => {
                                 maxLength={100}
                                 focusBorderColor="#083951"
                             />
-                            {errors.name && (
-                                <Field.ErrorText>{errors.name}</Field.ErrorText>
-                            )}
-                        </Field.Root>
+                        </Field>
 
-                        <Field.Root invalid={!!errors.description}>
-                            <Field.Label>Description (optional)</Field.Label>
+                        <Field label="Description" invalid={!!errors.description} errorText={errors.description}>
                             <Input
                                 name="description"
                                 type="text"
@@ -218,13 +214,9 @@ const CreateIngredient = () => {
                                 maxLength={250}
                                 focusBorderColor="#083951"
                             />
-                            {errors.description && (
-                                <Field.ErrorText>{errors.description}</Field.ErrorText>
-                            )}
-                        </Field.Root>
+                        </Field>
 
-                        <Field.Root invalid={!!errors.category}>
-                            <Field.Label>Category</Field.Label>
+                        <Field label="Category" required invalid={!!errors.category} errorText={errors.category}>
                             <select
                                 name="category"
                                 value={form.category}
@@ -244,13 +236,9 @@ const CreateIngredient = () => {
                                     </option>
                                 ))}
                             </select>
-                            {errors.category && (
-                                <Field.ErrorText>{errors.category}</Field.ErrorText>
-                            )}
-                        </Field.Root>
+                        </Field>
 
-                        <Field.Root invalid={!!errors.unit}>
-                            <Field.Label>Unit</Field.Label>
+                        <Field label="Unit" required invalid={!!errors.unit} errorText={errors.unit}>
                             <select
                                 name="unit"
                                 value={form.unit}
@@ -270,10 +258,7 @@ const CreateIngredient = () => {
                                     </option>
                                 ))}
                             </select>
-                            {errors.unit && (
-                                <Field.ErrorText>{errors.unit}</Field.ErrorText>
-                            )}
-                        </Field.Root>
+                        </Field>
                     </Fieldset.Content>
                     <Button
                         type="submit"
