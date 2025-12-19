@@ -18,7 +18,7 @@ import {
 import { FiArrowLeft, FiEdit } from 'react-icons/fi';
 import { FaUsers } from 'react-icons/fa';
 import { useSnackbar } from 'notistack';
-import MarkdownRenderer from '../../../components/MarkdownRenderer';
+import MarkdownRenderer from '../../../components/ui/MarkdownRenderer';
 
 const DetailsDish = () => {
     const { id } = useParams();

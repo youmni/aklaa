@@ -7,19 +7,20 @@ import com.aklaa.api.dtos.request.CartDishRequestDTO;
 import com.aklaa.api.dtos.request.GroceryListIngredientListRequestDTO;
 import com.aklaa.api.dtos.response.*;
 import com.aklaa.api.mapper.DishMapper;
-import com.aklaa.api.model.Dish;
-import com.aklaa.api.model.GroceryListIngredient;
-import com.aklaa.api.model.GroceryListIngredientKey;
-import com.aklaa.api.model.User;
+import com.aklaa.api.mapper.GroceryListMapper;
+import com.aklaa.api.model.*;
 import com.aklaa.api.services.contract.GroceryListService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static com.aklaa.api.services.implementation.UserServiceImpl.canDelete;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +30,7 @@ public class GroceryListServiceImpl implements GroceryListService {
     private final IngredientRepository ingredientRepository;
     private final GroceryListRepository groceryListRepository;
     private final DishMapper dishMapper;
+    private final GroceryListMapper groceryListMapper;
 
     public List<CartDishRequestDTO> getCart(HttpSession session) {
         String CART_KEY = "cart";
@@ -142,6 +144,19 @@ public class GroceryListServiceImpl implements GroceryListService {
                 .orElse(List.of());
     }
 
+    @Override
+    public GroceryListResponseDTO delete(Long id, User actionTaker) {
+        GroceryList list = groceryListRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Grocery list not found"));
+
+        if (!canDelete(list.getUser(), actionTaker)) {
+            throw new AccessDeniedException("User not allowed to delete");
+        }
+
+        groceryListRepository.delete(list);
+
+        return groceryListMapper.toResponseDTO(list);
+    }
 
     @Override
     public void updateIngredientsOfGroceryList(Long listId, GroceryListIngredientListRequestDTO updatedList, User user) {
@@ -186,23 +201,5 @@ public class GroceryListServiceImpl implements GroceryListService {
 
             groceryListRepository.save(groceryList);
         });
-    }
-
-    public List<CartDishResponseDTO> convertToResponseDTOs(List<CartDishRequestDTO> cartRequests) {
-        return cartRequests.stream()
-                .map(req -> {
-                    Optional<Dish> dishOpt = dishRepository.findById(req.getDishId());
-                    if (dishOpt.isEmpty()) return null;
-
-                    DishResponseDTO dishDTO = dishMapper.toResponseDTO(dishOpt.get());
-                    return CartDishResponseDTO.builder()
-                            .id(req.getId())
-                            .dish(dishDTO)
-                            .dayOfWeek(req.getDayOfWeek())
-                            .people(req.getPeople())
-                            .build();
-                })
-                .filter(Objects::nonNull)
-                .collect(Collectors.toList());
     }
 }

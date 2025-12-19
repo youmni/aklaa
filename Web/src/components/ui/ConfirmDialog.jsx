@@ -126,7 +126,7 @@ const ConfirmDialog = ({
 
                             <Button
                                 ref={confirmRef}
-                                colorScheme={confirmColorScheme}
+                                colorPalette={confirmColorScheme}
                                 onClick={onConfirm}
                                 isLoading={isLoading}
                                 borderRadius="8px"

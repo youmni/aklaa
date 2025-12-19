@@ -56,7 +56,7 @@ const EditGroceryLists = () => {
     const [ingredients, setIngredients] = useState({});
     const [allIngredients, setAllIngredients] = useState([]);
     const [showAddIngredient, setShowAddIngredient] = useState(false);
-    const [selectedIngredient, setSelectedIngredient] = useState('');
+    const [selectedIngredient, setSelectedIngredient] = useState(null);
     const [newQuantity, setNewQuantity] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -147,12 +147,19 @@ const EditGroceryLists = () => {
             return;
         }
 
+        const ingredientObj = allIngredients.find(ing => ing.id === selectedIngredient);
+
         setIngredients(prev => ({
             ...prev,
             [selectedIngredient]: numQuantity
         }));
 
-        setSelectedIngredient('');
+        setGroceryData(prev => ({
+            ...prev,
+            ingredients: prev && prev.ingredients ? [...prev.ingredients, { ingredient: ingredientObj, quantity: numQuantity }] : [{ ingredient: ingredientObj, quantity: numQuantity }]
+        }));
+
+        setSelectedIngredient(null);
         setNewQuantity('');
         setShowAddIngredient(false);
         enqueueSnackbar('Ingredient added', { variant: 'success' });
@@ -219,7 +226,7 @@ const EditGroceryLists = () => {
 
     const getSelectedIngredientName = () => {
         if (!selectedIngredient) return '';
-        const ingredient = allIngredients.find(ing => ing.id.toString() === selectedIngredient);
+        const ingredient = allIngredients.find(ing => ing.id === selectedIngredient);
         return ingredient ? `${ingredient.name} (${unitLabels[ingredient.unit] || ingredient.unit})` : '';
     };
 
@@ -371,12 +378,12 @@ const EditGroceryLists = () => {
                                                                 key={ing.id}
                                                                 p={3}
                                                                 cursor="pointer"
-                                                                bg={selectedIngredient === ing.id.toString() ? 'blue.50' : 'white'}
+                                                                bg={selectedIngredient === ing.id ? 'blue.50' : 'white'}
                                                                 borderBottom="1px solid"
                                                                 borderColor="gray.100"
                                                                 _hover={{ bg: 'gray.50' }}
                                                                 onClick={() => {
-                                                                    setSelectedIngredient(ing.id.toString());
+                                                                    setSelectedIngredient(ing.id);
                                                                     setSearchTerm('');
                                                                     setIsDropdownOpen(false);
                                                                 }}

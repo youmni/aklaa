@@ -1,16 +1,25 @@
 import { Box, Flex, Heading, Text, Badge, HStack, VStack, Button } from '@chakra-ui/react';
+import { IconButton } from '@chakra-ui/react';
 import { FaCalendarAlt, FaShoppingBasket, FaChevronRight } from 'react-icons/fa';
+import { FiTrash2} from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { useSnackbar } from 'notistack';
+import api from '../../api/axiosConfig';
+import ConfirmDialog from '../ui/ConfirmDialog';
 
 const GroceryListCard = ({ list, status, onRefresh }) => {
     const navigate = useNavigate();
+    const { enqueueSnackbar } = useSnackbar();
+    const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
 
     const formatDate = (dateString) => {
         const date = new Date(dateString);
-        return date.toLocaleDateString('en-US', { 
-            month: 'short', 
-            day: 'numeric', 
-            year: 'numeric' 
+        return date.toLocaleDateString('en-US', {
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric'
         });
     };
 
@@ -42,6 +51,25 @@ const GroceryListCard = ({ list, status, onRefresh }) => {
 
     const handleViewIngredients = () => {
         navigate(`/grocerylists/${list.id}/ingredients`);
+    };
+
+    const handleDeleteClick = () => {
+        setIsConfirmOpen(true);
+    };
+
+    const handleConfirmDelete = async () => {
+        setIsDeleting(true);
+        try {
+            await api.delete(`/grocerylists/${list.id}`);
+            enqueueSnackbar('Grocery list deleted', { variant: 'success' });
+            setIsConfirmOpen(false);
+            if (onRefresh) onRefresh();
+        } catch (err) {
+            console.error('Error deleting grocery list:', err);
+            enqueueSnackbar('Failed to delete grocery list', { variant: 'error' });
+        } finally {
+            setIsDeleting(false);
+        }
     };
 
     return (
@@ -98,7 +126,7 @@ const GroceryListCard = ({ list, status, onRefresh }) => {
                     )}
                 </VStack>
 
-                <Flex align="center">
+                <Flex align="center" gap={3}>
                     <Button
                         bg="#083951"
                         color="white"
@@ -111,6 +139,27 @@ const GroceryListCard = ({ list, status, onRefresh }) => {
                     >
                         View Details
                     </Button>
+                    <IconButton
+                        size="sm"
+                        colorPalette="red"
+                        variant="ghost"
+                        onClick={handleDeleteClick}
+                        aria-label="Delete grocery list"
+                        _hover={{ bg: "red.50" }}
+                    >
+                        <FiTrash2 size={16} />
+                    </IconButton>
+                    <ConfirmDialog
+                        isOpen={isConfirmOpen}
+                        onClose={() => setIsConfirmOpen(false)}
+                        onConfirm={handleConfirmDelete}
+                        title="Delete grocery list"
+                        description="Are you sure you want to delete this grocery list? This action cannot be undone."
+                        confirmLabel="Delete"
+                        cancelLabel="Cancel"
+                        confirmColorScheme="red"
+                        isLoading={isDeleting}
+                    />
                 </Flex>
             </Flex>
         </Box>

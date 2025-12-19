@@ -12,7 +12,7 @@ import {
   Heading,
   Divider,
 } from '@chakra-ui/react';
-import ConfirmDialog from '../../../components/ConfirmDialog';
+import ConfirmDialog from '../../../components/ui/ConfirmDialog.jsx';
 
 
 const DeleteProfile = () => {

@@ -9,7 +9,7 @@ import {
     Box,
     Spinner,
 } from "@chakra-ui/react"
-import StatusCard from "../../../components/StatusMessageCard";
+import StatusCard from "../../../components/ui/StatusMessageCard";
 import { Field } from "../../../components/ui/field";
 
 const PasswordResetConfirm = () => {

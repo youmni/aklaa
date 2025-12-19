@@ -4,8 +4,8 @@ import {
 } from '@chakra-ui/react';
 import { useSnackbar } from 'notistack';
 import api from '../../../api/axiosConfig';
-import UserDetailsModal from '../../../components/UserDetailsModal';
-import Pagination from '../../../components/Pagination';
+import UserDetailsModal from '../../../components/users/UserDetailsModal';
+import Pagination from '../../../components/ui/Pagination';
 
 const GetUsers = () => {
     const { enqueueSnackbar } = useSnackbar();
@@ -131,7 +131,7 @@ const GetUsers = () => {
                                 <Table.Row>
                                     <Table.ColumnHeader style={{ color: "#083951", textAlign: 'left', padding: '12px' }}>First Name</Table.ColumnHeader >
                                     <Table.ColumnHeader style={{ color: "#083951", textAlign: 'left', padding: '12px' }}>Last Name</Table.ColumnHeader >
-                                    <Table.ColumnHeader style={{ color: "#083951", textAlign: 'left', padding: '12px' }}>Status</Table.ColumnHeader >
+                                    <Table.ColumnHeader style={{ color: "#083951", textAlign: 'left', padding: '12px' }}>Role</Table.ColumnHeader >
                                 </Table.Row>
                             </Table.Header>
                             <Table.Body>
@@ -141,7 +141,7 @@ const GetUsers = () => {
                                         <Table.Cell style={{ padding: '12px' }}>{user.lastName}</Table.Cell>
                                         <Table.Cell style={{ padding: '12px' }}>
                                             <Badge
-                                                colorPalette={user.enabled ? 'green' : 'red'}
+                                                colorPalette={user.userType === 'ADMIN' ? 'green' : (user.userType === 'BLACKLISTED' ? 'purple' : 'blue')}
                                                 fontSize="sm"
                                                 px={3}
                                                 py={1}
@@ -150,7 +150,11 @@ const GetUsers = () => {
                                                 display="inline-flex"
                                                 alignItems="center"
                                             >
-                                                {user.enabled ? 'Enabled' : 'Disabled'}
+                                                {user.userType === 'ADMIN'
+                                                    ? 'Admin'
+                                                    : user.userType === 'BLACKLISTED'
+                                                        ? 'Blacklisted'
+                                                        : 'User'}                                            
                                             </Badge>
                                         </Table.Cell>
                                     </Table.Row>

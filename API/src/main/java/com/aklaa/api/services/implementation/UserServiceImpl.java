@@ -190,7 +190,7 @@ public class UserServiceImpl implements UserService {
         };
     }
 
-    private boolean canDelete(User user, User actionTaker) {
+    public static boolean canDelete(User user, User actionTaker) {
         return actionTaker.getUserType() == UserType.ADMIN || actionTaker.getId().equals(user.getId());
     }
 

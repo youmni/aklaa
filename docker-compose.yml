@@ -72,7 +72,7 @@ services:
   frontend:
     build:
       context: ./Web
-    environment:
+      args:
         VITE_BACKEND_URL: ${VITE_BACKEND_URL}
         VITE_DEFAULT_IMAGE_URL: ${VITE_DEFAULT_IMAGE_URL}
     container_name: aklaa-frontend

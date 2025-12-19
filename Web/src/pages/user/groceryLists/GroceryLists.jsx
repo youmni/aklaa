@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Box, Container, Heading, Text, VStack, Spinner, Flex, Grid } from '@chakra-ui/react';
+import { Box, Container, Heading, Text, VStack, Spinner, Flex, Grid, useTabs } from '@chakra-ui/react';
 import { Tabs } from '@chakra-ui/react';
 import { FaListUl } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
@@ -13,6 +13,7 @@ const GroceryLists = () => {
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
     const { enqueueSnackbar } = useSnackbar();
+    const tabs = useTabs({ defaultValue: 'present' });
 
     useEffect(() => {
         fetchGroceryLists();
@@ -74,14 +75,15 @@ const GroceryLists = () => {
         <Box bg="gray.50" minH="100vh">
             <Container maxW="100%" px={0}>
                 <VStack align="stretch" gap={0}>
-                    <Box px={8} py={8} bg="white" borderBottom="1px solid" borderColor="gray.200">
+                    <Box px={8} py={8} bg="white" borderBottom="none">
                         <Flex align="center" gap={3} mb={6}>
                             <Text fontSize={{ base: "2xl", md: "3xl" }} fontWeight="bold" color="#083951">
                                 Grocery Lists
                             </Text>
                         </Flex>
 
-                        <Tabs.Root defaultValue="present" variant="plain" w="100%">
+                        <Tabs.RootProvider value={tabs} variant="plain">
+                        <Box w="100%">
                             <Tabs.List
                                 bg="gray.100"
                                 borderRadius="lg"
@@ -242,7 +244,8 @@ const GroceryLists = () => {
                                     )}
                                 </Tabs.Content>
                             </Box>
-                        </Tabs.Root>
+                        </Box>
+                        </Tabs.RootProvider>
                     </Box>
                 </VStack>
             </Container>
