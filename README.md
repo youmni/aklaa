@@ -19,13 +19,7 @@ cd aklaa
 
 2. **Copy `.env.example` to `.env` in the root of the project**:
 
-
-3. WEB folder: Create a `.env` file
-```bash
-VITE_BACKEND_URL: [url]
-```
-
-4. API folder: Add `application.properties`
+3. **API folder: Add `application.properties`**
 
 Go to the **API** folder and place an `application.properties` file inside the **resources** directory.  
 This file ensures that the database is properly created and updated. You may configure it as you prefer; the example below is a common setup:
@@ -45,8 +39,6 @@ docker compose up -d --build
 ```bash
 docker compose down
 ```
-
-> **Note:** Make sure step 3 and 4 are performed in the root directory.
 
 ## Documentation
 
