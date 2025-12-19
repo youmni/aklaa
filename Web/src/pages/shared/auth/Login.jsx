@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import api from "../../../api/axiosConfig";
-import RedirectToPath from "../../../components/Redirect";
+import RedirectToPath from "../../../components/navigation/Redirect";
 import { useAuth } from "../../../hooks/useAuth";
 import { useNavigate, Link as RouterLink } from "react-router-dom";
 import {
