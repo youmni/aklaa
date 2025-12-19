@@ -13,10 +13,10 @@ import {
     Input,
     Icon,
 } from '@chakra-ui/react';
-import { Field } from "./ui/field";
+import { Field } from "../ui/field";
 import { useSnackbar } from 'notistack';
 import { FiCalendar, FiUsers, FiShoppingCart } from 'react-icons/fi';
-import api from '../api/axiosConfig';
+import api from '../../api/axiosConfig';
 
 const AddToCartModal = ({ isOpen, onClose, dish }) => {
     const { enqueueSnackbar } = useSnackbar();

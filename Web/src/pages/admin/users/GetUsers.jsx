@@ -4,8 +4,8 @@ import {
 } from '@chakra-ui/react';
 import { useSnackbar } from 'notistack';
 import api from '../../../api/axiosConfig';
-import UserDetailsModal from '../../../components/UserDetailsModal';
-import Pagination from '../../../components/Pagination';
+import UserDetailsModal from '../../../components/users/UserDetailsModal';
+import Pagination from '../../../components/ui/Pagination';
 
 const GetUsers = () => {
     const { enqueueSnackbar } = useSnackbar();

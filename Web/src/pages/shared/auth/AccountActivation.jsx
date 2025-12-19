@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Box, Heading, Spinner, Text } from '@chakra-ui/react';
-import StatusCard from '../../../components/StatusMessageCard';
+import StatusCard from '../../../components/ui/StatusMessageCard';
 
 function AccountActivation() {
   const [searchParams] = useSearchParams();

@@ -13,7 +13,7 @@ import {
     Portal,
     Dialog,
 } from "@chakra-ui/react";
-import ConfirmDialog from './ConfirmDialog.jsx';
+import ConfirmDialog from '../ui/ConfirmDialog.jsx';
 
 const UserDetailsModal = ({
     isOpen,

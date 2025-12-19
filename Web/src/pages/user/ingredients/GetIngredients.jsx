@@ -4,8 +4,8 @@ import { Box, Button, Input, Stack, Spinner, Text, Grid, Badge, HStack, IconButt
 import { useSnackbar } from 'notistack';
 import { FiEdit2, FiTrash2, FiPlus, FiSearch } from 'react-icons/fi';
 import api from "../../../api/axiosConfig";
-import ConfirmDialog from "../../../components/ConfirmDialog";
-import Pagination from "../../../components/Pagination";
+import ConfirmDialog from "../../../components/ui/ConfirmDialog";
+import Pagination from "../../../components/ui/Pagination";
 
 const GetIngredients = () => {
     const navigate = useNavigate();

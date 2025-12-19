@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Navigate, Routes, Route } from "react-router-dom";
 import Register from "./pages/shared/auth/Register";
 import Login from "./pages/shared/auth/Login";
-import PrivateRoute from "./components/PrivateRoute";
+import PrivateRoute from "./components/navigation/PrivateRoute";
 import AccountActivation from "./pages/shared/auth/AccountActivation";
 import ForgotPassword from "./pages/shared/auth/ForgotPassword";
 import ForgotPasswordConfirm from "./pages/shared/auth/ForgotPasswordConfirm";
