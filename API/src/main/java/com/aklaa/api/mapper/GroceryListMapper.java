@@ -1,23 +1,35 @@
 package com.aklaa.api.mapper;
 
+import com.aklaa.api.dao.DishRepository;
+import com.aklaa.api.dtos.request.CartDishRequestDTO;
+import com.aklaa.api.dtos.request.IngredientRequestDTO;
 import com.aklaa.api.dtos.response.CartDishResponseDTO;
+import com.aklaa.api.dtos.response.DishResponseDTO;
+import com.aklaa.api.dtos.response.GroceryListResponseDTO;
+import com.aklaa.api.model.Dish;
 import com.aklaa.api.model.GroceryList;
 import com.aklaa.api.model.GroceryListIngredient;
 import com.aklaa.api.model.User;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
+@RequiredArgsConstructor
 public class GroceryListMapper {
     private final IngredientMapper ingredientMapper;
+    private final DishMapper dishMapper;
+    private final DishRepository dishRepository;
 
-    public GroceryListMapper(IngredientMapper ingredientMapper) {
-        this.ingredientMapper = ingredientMapper;
+    public GroceryListResponseDTO toResponseDTO(GroceryList groceryList) {
+        return GroceryListResponseDTO.builder()
+                .id(groceryList.getId())
+                .startOfWeek(groceryList.getStartOfWeek())
+                .endOfWeek(groceryList.getEndOfWeek())
+                .build();
     }
 
     public GroceryList fromCartDishes(List<CartDishResponseDTO> cartDishes, User user) {
@@ -52,4 +64,21 @@ public class GroceryListMapper {
         return groceryList;
     }
 
+    public List<CartDishResponseDTO> convertToCartDishResponseDTOs(List<CartDishRequestDTO> cartRequests) {
+        return cartRequests.stream()
+                .map(req -> {
+                    Optional<Dish> dishOpt = dishRepository.findById(req.getDishId());
+                    if (dishOpt.isEmpty()) return null;
+
+                    DishResponseDTO dishDTO = dishMapper.toResponseDTO(dishOpt.get());
+                    return CartDishResponseDTO.builder()
+                            .id(req.getId())
+                            .dish(dishDTO)
+                            .dayOfWeek(req.getDayOfWeek())
+                            .people(req.getPeople())
+                            .build();
+                })
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+    }
 }

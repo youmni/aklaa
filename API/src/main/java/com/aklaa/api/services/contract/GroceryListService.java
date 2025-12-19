@@ -84,6 +84,18 @@ public interface GroceryListService {
     List<IngredientResponseDTO> getIngredientOfGroceryList(Long id, User user);
 
     /**
+     * Deletes a specific grocery list.
+     * <p>
+     * This method deletes a grocery list.
+     * </p>
+     *
+     * @param id the ID of the grocery list
+     * @param actionTaker the user who wants to delete the grocery list
+     * @return a {@link List<IngredientResponseDTO>} the ingredients
+     */
+    GroceryListResponseDTO delete(Long id, User actionTaker);
+
+    /**
      * Updates the ingredients in a specific grocery list.
      * <p>
      * This method updates ingredient quantities, removes ingredients not in the update list,
