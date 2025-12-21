@@ -119,7 +119,7 @@ const GetUsers = () => {
                     </Text>
                 </Box>
 
-                <Stack direction={{ base: "column", md: "row" }} gap={4} align="center">
+                <Stack direction={{ base: "column", md: "row" }} gap={4}>
                     <Box position="relative" flex={2}>
                         <Box
                             position="absolute"
@@ -140,7 +140,6 @@ const GetUsers = () => {
                             size={{ base: "md", md: "lg" }}
                         />
                     </Box>
-
                     <Box flex={1}>
                         <select
                             value={selectedType}

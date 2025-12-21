@@ -127,13 +127,13 @@ const GroceryListCard = ({ list, status, onRefresh }) => {
                 </VStack>
 
                 <Flex
-                    align={{ base: 'stretch', md: 'center' }}
+                    align="center"
                     gap={3}
                     mt={{ base: 4, md: 0 }}
                     ml={{ base: 0, md: 2 }}
                     flexShrink={0}
-                    direction={{ base: 'row', md: 'column' }}
-                    justify={{ base: 'space-between', md: 'flex-start' }}
+                    direction="row"
+                    justify={{ base: 'space-between', md: 'flex-end' }}
                     w={{ base: '100%', md: 'auto' }}
                 >
                     <Button
@@ -145,18 +145,18 @@ const GroceryListCard = ({ list, status, onRefresh }) => {
                         borderRadius="lg"
                         onClick={handleViewIngredients}
                         px={{ base: 4, md: 6 }}
-                        w={{ base: '48%', md: 'auto' }}
+                        w={{ base: '70%', md: 'auto' }}
                     >
                         View Details
                     </Button>
                     <IconButton
                         size={{ base: 'sm', md: 'sm' }}
-                        colorScheme="red"
+                        colorPalette="red"
                         variant="ghost"
                         onClick={handleDeleteClick}
                         aria-label="Delete grocery list"
                         _hover={{ bg: "red.50" }}
-                        w={{ base: 'auto', md: '48%' }}
+                        w={{ base: '28%', md: 'auto' }}
                     >
                         <FiTrash2 size={16} />
                     </IconButton>
