@@ -1,7 +1,7 @@
 # Aklaa
 
 ## Overview
-**Aklaa** is an application that automatically generates shopping lists based on the meals or individual products entered by the user. It allows users to manage recipes, plan their weekly meals, and customize the generated shopping list by adding or removing ingredients. All recipes and shopping lists can be exported as PDFs for easy reference.
+**Aklaa** is an application that automatically generates shopping lists based on the meals or individual products entered by the user. It allows users to manage recipes, plan their weekly meals, and customize the generated shopping list by adding or removing ingredients.
 
 ## Installation
 
@@ -67,9 +67,14 @@ docker compose down
 8. [@JpaSpecificationExecutor](https://docs.spring.io/spring-data/jpa/docs/current/api/org/springframework/data/jpa/repository/JpaSpecificationExecutor.html)
 9. [@Lombok](https://www.baeldung.com/intro-to-project-lombok)
 10. [@Javadoc](https://www.baeldung.com/javadoc)
-11. [@Minio](https://chatgpt.com/share/691e1722-a328-8010-96ba-904168f98fe5)
-12. [@Return-file-exported-data](https://www.baeldung.com/spring-controller-return-image-file)
-13. [@Security-headers-api](https://chatgpt.com/share/694479ba-eb74-8007-89d5-2114415b74f2)
+11. [@Minio-setup](https://chatgpt.com/share/691e1722-a328-8010-96ba-904168f98fe5)
+12. [@Minio-bucket-policy](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketPolicy.html)
+13. [@Return-file-exported-data](https://www.baeldung.com/spring-controller-return-image-file)
+14. [@Security-headers-api](https://chatgpt.com/share/694479ba-eb74-8007-89d5-2114415b74f2)
+15. [@Chakra-UI](https://chakra-ui.com/)
+16. [@Used-repo-Flipflow](https://github.com/youmni/flipflow)
+17. [@Used-repo-SafeCircle](https://github.com/youmni/safecircle_backend)
+18. [@Vite](https://vite.dev/)
 
-### Authors
+### Author
 - [@Youmni Malha](https://github.com/Youmni)
