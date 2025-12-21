@@ -13,10 +13,13 @@ import com.aklaa.api.services.contract.GroceryListService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -201,5 +204,13 @@ public class GroceryListServiceImpl implements GroceryListService {
 
             groceryListRepository.save(groceryList);
         });
+    }
+
+    @Scheduled(cron = "0 0 3 * * *")
+    @Transactional
+    public void deleteGroceryListsAfter1Month() {
+        groceryListRepository.deleteByCreatedAtBefore(
+                LocalDateTime.now().minusMonths(1)
+        );
     }
 }
