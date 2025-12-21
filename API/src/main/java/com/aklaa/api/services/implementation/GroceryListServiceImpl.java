@@ -206,7 +206,7 @@ public class GroceryListServiceImpl implements GroceryListService {
         });
     }
 
-    @Scheduled(cron = "0 0 3 * * *")
+    @Scheduled(cron = "0 0 3 * * *", zone = "Europe/Brussels")
     @Transactional
     public void deleteGroceryListsAfter1Month() {
         groceryListRepository.deleteByCreatedAtBefore(

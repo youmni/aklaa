@@ -19,6 +19,8 @@ public interface GroceryListRepository extends JpaRepository<GroceryList, Long> 
     Page<GroceryList> findByUser(User user, Pageable pageable);
     List<GroceryList> findByUser(User user);
     Optional<GroceryList> findByIdAndUser(Long id, User user);
+
     @Modifying
     @Query("DELETE FROM GroceryList g WHERE g.createdAt < :date")
-    void deleteByCreatedAtBefore(@Param("date") LocalDateTime date);}
+    void deleteByCreatedAtBefore(@Param("date") LocalDateTime date);
+}
