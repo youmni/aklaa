@@ -1,7 +1,7 @@
 # Aklaa
 
 ## Overview
-**Aklaa** is an application that automatically generates shopping lists based on the meals or individual products entered by the user. It allows users to manage recipes, plan their weekly meals, and customize the generated shopping list by adding or removing ingredients. All recipes and shopping lists can be exported as PDFs for easy reference.
+**Aklaa** is an application that automatically generates shopping lists based on the meals or individual products entered by the user. It allows users to manage recipes, plan their weekly meals, and customize the generated shopping list by adding or removing ingredients.
 
 ## Installation
 
@@ -58,18 +58,24 @@ docker compose down
 5. **Minio**: Used for image storage.
 
 ### Sources
-1. [@Relations: Many to Many](https://www.baeldung.com/jpa-many-to-many)
-2. [@Relations: One to Many](https://www.baeldung.com/hibernate-one-to-many)
-3. [@Validation](https://www.baeldung.com/spring-boot-bean-validation)
+1. [@Spring-documentation](https://spring.io/)
+2. [@Relations: Many to Many](https://www.baeldung.com/jpa-many-to-many)
+3. [@Relations: One to Many](https://www.baeldung.com/hibernate-one-to-many)
 4. [@JWT-token](https://connect2id.com/products/nimbus-jose-jwt)
-6. [@Dependency injection](https://medium.com/@reetesh043/spring-boot-dependency-injection-137f85f84590)
-7. [@Axios-interceptor](https://chatgpt.com/share/691a3235-011c-8007-9fa3-ed87f5d72c5d)
-8. [@JpaSpecificationExecutor](https://docs.spring.io/spring-data/jpa/docs/current/api/org/springframework/data/jpa/repository/JpaSpecificationExecutor.html)
-9. [@Lombok](https://www.baeldung.com/intro-to-project-lombok)
-10. [@Javadoc](https://www.baeldung.com/javadoc)
-11. [@Minio](https://chatgpt.com/share/691e1722-a328-8010-96ba-904168f98fe5)
+5. [@Dependency injection](https://medium.com/@reetesh043/spring-boot-dependency-injection-137f85f84590)
+6. [@Axios-interceptor](https://chatgpt.com/share/691a3235-011c-8007-9fa3-ed87f5d72c5d)
+7. [@JpaSpecificationExecutor](https://docs.spring.io/spring-data/jpa/docs/current/api/org/springframework/data/jpa/repository/JpaSpecificationExecutor.html)
+8. [@Lombok](https://www.baeldung.com/intro-to-project-lombok)
+9.  [@Javadoc](https://www.baeldung.com/javadoc)
+10. [@Minio-setup](https://chatgpt.com/share/691e1722-a328-8010-96ba-904168f98fe5)
+11. [@Minio-bucket-policy](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketPolicy.html)
 12. [@Return-file-exported-data](https://www.baeldung.com/spring-controller-return-image-file)
 13. [@Security-headers-api](https://chatgpt.com/share/694479ba-eb74-8007-89d5-2114415b74f2)
+14. [@Chakra-UI](https://chakra-ui.com/)
+15. [@Used-repo-Flipflow](https://github.com/youmni/flipflow)
+16. [@Used-repo-SafeCircle](https://github.com/youmni/safecircle_backend)
+17. [@Vite](https://vite.dev/)
+18. [@Validation](https://www.baeldung.com/spring-boot-bean-validation)
 
-### Authors
+### Author
 - [@Youmni Malha](https://github.com/Youmni)

@@ -75,18 +75,18 @@ const GroceryListCard = ({ list, status, onRefresh }) => {
     return (
         <Box
             bg="white"
-            borderRadius="xl"
-            p={6}
+            borderRadius={{ base: 'lg', md: 'xl' }}
+            p={{ base: 4, md: 6 }}
             boxShadow="sm"
             border="1px solid"
             borderColor="gray.200"
             transition="all 0.2s"
             _hover={{ boxShadow: 'md', transform: 'translateY(-2px)' }}
         >
-            <Flex justify="space-between" align="start" gap={4}>
+            <Flex direction={{ base: 'column', md: 'row' }} justify="space-between" align="start" gap={4}>
                 <VStack align="stretch" flex={1} gap={3}>
                     <Flex align="center" gap={3} flexWrap="wrap">
-                        <Heading size="md" color="#083951" fontWeight="600">
+                        <Heading as="h3" fontSize={{ base: 'md', md: 'lg' }} color="#083951" fontWeight="600">
                             Week {formatDate(list.startOfWeek)} - {formatDate(list.endOfWeek)}
                         </Heading>
                         <Badge
@@ -126,26 +126,37 @@ const GroceryListCard = ({ list, status, onRefresh }) => {
                     )}
                 </VStack>
 
-                <Flex align="center" gap={3}>
+                <Flex
+                    align="center"
+                    gap={3}
+                    mt={{ base: 4, md: 0 }}
+                    ml={{ base: 0, md: 2 }}
+                    flexShrink={0}
+                    direction="row"
+                    justify={{ base: 'space-between', md: 'flex-end' }}
+                    w={{ base: '100%', md: 'auto' }}
+                >
                     <Button
                         bg="#083951"
                         color="white"
-                        size="md"
+                        size={{ base: 'sm', md: 'md' }}
                         rightIcon={<FaChevronRight />}
                         _hover={{ bg: "#0a4a63" }}
                         borderRadius="lg"
                         onClick={handleViewIngredients}
-                        px={6}
+                        px={{ base: 4, md: 6 }}
+                        w={{ base: '70%', md: 'auto' }}
                     >
                         View Details
                     </Button>
                     <IconButton
-                        size="sm"
+                        size={{ base: 'sm', md: 'sm' }}
                         colorPalette="red"
                         variant="ghost"
                         onClick={handleDeleteClick}
                         aria-label="Delete grocery list"
                         _hover={{ bg: "red.50" }}
+                        w={{ base: '28%', md: 'auto' }}
                     >
                         <FiTrash2 size={16} />
                     </IconButton>

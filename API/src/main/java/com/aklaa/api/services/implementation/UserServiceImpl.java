@@ -11,6 +11,8 @@ import com.aklaa.api.model.User;
 import com.aklaa.api.model.enums.UserType;
 import com.aklaa.api.services.contract.EmailService;
 import com.aklaa.api.services.contract.UserService;
+import jakarta.persistence.criteria.Expression;
+import jakarta.persistence.criteria.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -182,13 +184,26 @@ public class UserServiceImpl implements UserService {
 
             String likeTerm = "%" + searchTerm.toLowerCase() + "%";
 
-            return builder.or(
-                    builder.like(builder.lower(root.get("firstName")), likeTerm),
-                    builder.like(builder.lower(root.get("lastName")), likeTerm),
-                    builder.like(builder.lower(root.get("email")), likeTerm)
+            Predicate firstNameLike = builder.like(
+                    builder.lower(root.get("firstName")), likeTerm
             );
+            Predicate lastNameLike = builder.like(
+                    builder.lower(root.get("lastName")), likeTerm
+            );
+            Predicate emailLike = builder.like(
+                    builder.lower(root.get("email")), likeTerm
+            );
+
+            Expression<String> fullName = builder.concat(
+                    builder.concat(builder.lower(root.get("firstName")), " "),
+                    builder.lower(root.get("lastName"))
+            );
+            Predicate fullNameLike = builder.like(fullName, likeTerm);
+
+            return builder.or(firstNameLike, lastNameLike, emailLike, fullNameLike);
         };
     }
+
 
     public static boolean canDelete(User user, User actionTaker) {
         return actionTaker.getUserType() == UserType.ADMIN || actionTaker.getId().equals(user.getId());

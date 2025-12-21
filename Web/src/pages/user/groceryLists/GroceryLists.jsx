@@ -72,10 +72,10 @@ const GroceryLists = () => {
     }
 
     return (
-        <Box bg="gray.50" minH="100vh">
-            <Container maxW="100%" px={0}>
+        <Box bg="white" minH="100vh">
+            <Container maxW="100%" px={{ base: 4, md: 0 }}>
                 <VStack align="stretch" gap={0}>
-                    <Box px={8} py={8} bg="white" borderBottom="none">
+                    <Box px={{ base: 4, md: 8 }} py={8} bg="white" borderBottom="none">
                         <Flex align="center" gap={3} mb={6}>
                             <Text fontSize={{ base: "2xl", md: "3xl" }} fontWeight="bold" color="#083951">
                                 Grocery Lists
@@ -89,16 +89,17 @@ const GroceryLists = () => {
                                 borderRadius="lg"
                                 p={1}
                                 display="grid"
-                                gridTemplateColumns="1fr 1fr 1fr"
+                                gridTemplateColumns={{ base: "1fr", md: "1fr 1fr 1fr" }}
+                                gap={2}
                                 w="100%"
                             >
                                 <Tabs.Trigger
                                     value="past"
-                                    px={6}
-                                    py={2.5}
+                                    px={{ base: 3, md: 6 }}
+                                    py={{ base: 2, md: 2.5 }}
                                     borderRadius="md"
                                     fontWeight="500"
-                                    fontSize="sm"
+                                    fontSize={{ base: "xs", md: "sm" }}
                                     color="gray.700"
                                     _selected={{
                                         bg: "white",
@@ -113,11 +114,11 @@ const GroceryLists = () => {
 
                                 <Tabs.Trigger
                                     value="present"
-                                    px={6}
-                                    py={2.5}
+                                    px={{ base: 3, md: 6 }}
+                                    py={{ base: 2, md: 2.5 }}
                                     borderRadius="md"
                                     fontWeight="500"
-                                    fontSize="sm"
+                                    fontSize={{ base: "xs", md: "sm" }}
                                     color="gray.700"
                                     _selected={{
                                         bg: "white",
@@ -132,11 +133,11 @@ const GroceryLists = () => {
 
                                 <Tabs.Trigger
                                     value="future"
-                                    px={6}
-                                    py={2.5}
+                                    px={{ base: 3, md: 6 }}
+                                    py={{ base: 2, md: 2.5 }}
                                     borderRadius="md"
                                     fontWeight="500"
-                                    fontSize="sm"
+                                    fontSize={{ base: "xs", md: "sm" }}
                                     color="gray.700"
                                     _selected={{
                                         bg: "white",
@@ -152,6 +153,11 @@ const GroceryLists = () => {
 
                             <Box px={0} py={6}>
                                 <Tabs.Content value="past">
+                                    <Box bg="gray.50" borderRadius="md" p={3} mx={{ base: 4, md: 8 }} mb={4}>
+                                        <Text fontSize="sm" color="gray.600">
+                                            Warning: expired lists are automatically deleted after 1 month.
+                                        </Text>
+                                    </Box>
                                     {past.length === 0 ? (
                                         <Box
                                             bg="white"
@@ -161,14 +167,14 @@ const GroceryLists = () => {
                                             boxShadow="sm"
                                             border="1px solid"
                                             borderColor="gray.200"
-                                            mx={8}
+                                            mx={{ base: 4, md: 8 }}
                                         >
                                             <Text color="gray.500" fontSize="lg">
                                                 No past grocery lists
                                             </Text>
                                         </Box>
                                     ) : (
-                                        <VStack align="stretch" gap={4} px={8}>
+                                        <VStack align="stretch" gap={4} px={{ base: 4, md: 8 }}>
                                             {past.map(list => (
                                                 <GroceryListCard
                                                     key={list.id}
@@ -191,7 +197,7 @@ const GroceryLists = () => {
                                             boxShadow="sm"
                                             border="1px solid"
                                             borderColor="gray.200"
-                                            mx={8}
+                                            mx={{ base: 4, md: 8 }}
                                         >
                                             <Text color="gray.500" fontSize="lg">
                                                 No current grocery lists
@@ -201,7 +207,7 @@ const GroceryLists = () => {
                                             </Text>
                                         </Box>
                                     ) : (
-                                        <VStack align="stretch" gap={4} px={8}>
+                                        <VStack align="stretch" gap={4} px={{ base: 4, md: 8 }}>
                                             {present.map(list => (
                                                 <GroceryListCard
                                                     key={list.id}
@@ -224,14 +230,14 @@ const GroceryLists = () => {
                                             boxShadow="sm"
                                             border="1px solid"
                                             borderColor="gray.200"
-                                            mx={8}
+                                            mx={{ base: 4, md: 8 }}
                                         >
                                             <Text color="gray.500" fontSize="lg">
                                                 No upcoming grocery lists
                                             </Text>
                                         </Box>
                                     ) : (
-                                        <VStack align="stretch" gap={4} px={8}>
+                                        <VStack align="stretch" gap={4} px={{ base: 4, md: 8 }}>
                                             {future.map(list => (
                                                 <GroceryListCard
                                                     key={list.id}

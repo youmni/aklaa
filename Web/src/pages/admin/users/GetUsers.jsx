@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import {
-    Box, Heading, Input, Text, HStack, VStack, Table, IconButton, Button, ButtonGroup, NativeSelectRoot, NativeSelectField, Spinner, Badge, Dialog, DataList, CloseButton, Portal
+    Box, Heading, Input, Stack, Text, HStack, VStack, Table, IconButton, Button, ButtonGroup, NativeSelectRoot, NativeSelectField, Spinner, Badge, Dialog, DataList, CloseButton, Portal
 } from '@chakra-ui/react';
+import { FiSearch } from 'react-icons/fi';
 import { useSnackbar } from 'notistack';
 import api from '../../../api/axiosConfig';
 import UserDetailsModal from '../../../components/users/UserDetailsModal';
@@ -21,6 +22,17 @@ const GetUsers = () => {
     const [isUpdatingRole, setIsUpdatingRole] = useState(false);
 
     const pageSize = 10;
+
+    const handleSearchChange = (e) => {
+        setSearchTerm(e.target.value);
+        setPage(0);
+    };
+
+    const handleTypeChange = (e) => {
+        const value = e.target.value;
+        setSelectedType(value === '' ? '' : value);
+        setPage(0);
+    };
 
     useEffect(() => {
         fetchUsers();
@@ -96,7 +108,7 @@ const GetUsers = () => {
     };
 
     return (
-        <Box p={8} bg="gray.50" minH="calc(100vh - 73px)">
+        <Box p={8} bg="white" minH="calc(100vh - 73px)">
             <VStack align="stretch" gap={6} maxW="1400px" mx="auto">
                 <Box>
                     <Heading fontSize="3xl" fontWeight="bold" color="#083951" mb={2}>
@@ -106,6 +118,50 @@ const GetUsers = () => {
                         Manage and view all registered users
                     </Text>
                 </Box>
+
+                <Stack direction={{ base: "column", md: "row" }} gap={4}>
+                    <Box position="relative" flex={2}>
+                        <Box
+                            position="absolute"
+                            left="3"
+                            top="50%"
+                            transform="translateY(-50%)"
+                            zIndex={1}
+                            pointerEvents="none"
+                        >
+                            <FiSearch color="#718096" size={18} />
+                        </Box>
+                        <Input
+                            placeholder="Search by first name, last name or email..."
+                            value={searchTerm}
+                            onChange={handleSearchChange}
+                            focusBorderColor="#083951"
+                            pl="2.5rem"
+                            size={{ base: "md", md: "lg" }}
+                        />
+                    </Box>
+                    <Box flex={1}>
+                        <select
+                            value={selectedType}
+                            onChange={handleTypeChange}
+                            style={{
+                                width: '100%',
+                                padding: window.innerWidth < 768 ? '0.5rem 0.75rem' : '0.75rem 1rem',
+                                borderRadius: '0.5rem',
+                                border: '1px solid #E2E8F0',
+                                fontSize: '1rem',
+                                backgroundColor: 'white',
+                                cursor: 'pointer',
+                                height: window.innerWidth < 768 ? '2.5rem' : '3rem'
+                            }}
+                        >
+                            <option value="">All types</option>
+                            <option value="ADMIN">Admin</option>
+                            <option value="BLACKLISTED">Blacklisted</option>
+                            <option value="USER">User</option>
+                        </select>
+                    </Box>
+                </Stack>
 
                 {isLoading ? (
                     <Box display="flex" justifyContent="center" py={20}>

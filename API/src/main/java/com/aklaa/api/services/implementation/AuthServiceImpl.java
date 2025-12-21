@@ -1,6 +1,7 @@
 package com.aklaa.api.services.implementation;
 
 import com.aklaa.api.config.security.JwtService;
+import com.aklaa.api.dao.ResetEmailRepository;
 import com.aklaa.api.dao.ResetPasswordRepository;
 import com.aklaa.api.dao.UserRepository;
 import com.aklaa.api.dtos.request.PasswordResetDTO;
@@ -22,10 +23,13 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.crossstore.ChangeSetPersister;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.security.SecureRandom;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.Arrays;
@@ -44,6 +48,7 @@ public class AuthServiceImpl implements AuthService {
     private final EmailService emailService;
     private final JwtService jwtService;
     private final ResetPasswordRepository resetPasswordRepository;
+    private final ResetEmailRepository resetEmailRepository;
 
     @Override
     public UserDTO register(RegistrationDTO registrationDTO) {
@@ -168,5 +173,21 @@ public class AuthServiceImpl implements AuthService {
         byte[] randomBytes = new byte[32];
         secureRandom.nextBytes(randomBytes);
         return Base64.getUrlEncoder().withoutPadding().encodeToString(randomBytes);
+    }
+
+    @Scheduled(cron = "0 33 15 * * *", zone = "Europe/Brussels")
+    @Transactional
+    public void deletePasswordResetTokenAutomatically() {
+        resetPasswordRepository.deletePasswordResetTokenAutomatically(
+                LocalDateTime.now().minusMinutes(15)
+        );
+    }
+
+    @Scheduled(cron = "0 0 5 * * *", zone = "Europe/Brussels")
+    @Transactional
+    public void deleteEmailResetTokenAutomatically() {
+        resetEmailRepository.deleteEmailResetTokenAutomatically(
+                LocalDateTime.now().minusHours(2)
+        );
     }
 }
