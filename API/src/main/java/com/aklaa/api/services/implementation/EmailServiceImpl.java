@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -27,6 +28,7 @@ public class EmailServiceImpl implements EmailService {
     private String frontendUrl;
 
     @Override
+    @Async
     public void sendActivationEmail(User user, String token) {
         try {
             ClassPathResource resource = new ClassPathResource("templates/register.html");
@@ -52,6 +54,7 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
+    @Async
     public void sendPasswordResetEmail(User user, String token) {
         try {
             ClassPathResource resource = new ClassPathResource("templates/password-reset.html");
@@ -77,6 +80,7 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
+    @Async
     public void sendActivationUpdatedEmail(String email, String token) {
         try {
             ClassPathResource resource = new ClassPathResource("templates/email-activation.html");
