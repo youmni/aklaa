@@ -133,6 +133,7 @@ public class AuthServiceImpl implements AuthService {
             emailService.sendPasswordResetEmail(user, token);
     }
 
+    @Override
     public AuthResponseDTO refreshAccessToken(String refreshToken) {
         if (refreshToken == null) {
             throw new IllegalArgumentException("Missing refresh token");
