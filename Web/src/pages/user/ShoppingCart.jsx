@@ -2,7 +2,9 @@ import { useEffect, useState } from 'react';
 import { Container, Flex, Text, VStack, Spinner, Box } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
-import api from '../../api/axiosConfig';
+import cartService from '../../services/cartService';
+import dishService from '../../services/dishService';
+import groceryListService from '../../services/groceryListService';
 import CartHeader from '../../components/shoppingcart/CartHeader';
 import WeekPlanningCard from '../../components/shoppingcart/WeekPlanningCard';
 import CartItemsList from '../../components/shoppingcart/CartItemsList';
@@ -37,14 +39,14 @@ const ShoppingCart = () => {
     const fetchCartItems = async () => {
         setLoading(true);
         try {
-            const response = await api.get('/cart');
+            const response = await cartService.getCart();
             setCartItems(response.data);
             
             if (response.data.length > 0) {
                 const dishIds = [...new Set(response.data.map(item => item.dishId))];
                 
                 const dishPromises = dishIds.map(id => 
-                    api.get(`/dishes/${id}`)
+                    dishService.getDishById(id)
                         .catch(error => {
                             console.error(`Failed to fetch dish with id ${id}:`, error);
                             return null;
@@ -74,7 +76,7 @@ const ShoppingCart = () => {
         if (!window.confirm('Are you sure you want to clear your cart?')) return;
         
         try {
-            await api.delete('/cart/clear');
+            await cartService.clearCart();
             enqueueSnackbar('Cart cleared successfully', { variant: 'success' });
             setCartItems([]);
             setDishes({});
@@ -95,11 +97,9 @@ const ShoppingCart = () => {
         }
 
         try {
-            await api.post('/grocerylists/save', null, {
-                params: {
-                    startOfWeek: `${startOfWeek}T00:00:00`,
-                    endOfWeek: `${endOfWeek}T23:59:59`
-                }
+            await groceryListService.saveCartToGroceryList({
+                startOfWeek: `${startOfWeek}T00:00:00`,
+                endOfWeek: `${endOfWeek}T23:59:59`
             });
             
             enqueueSnackbar('Grocery list saved successfully', { variant: 'success' });

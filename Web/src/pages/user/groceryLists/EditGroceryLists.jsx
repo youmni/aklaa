@@ -18,7 +18,8 @@ import {
 import { FaListUl, FaPlus, FaTrash, FaSave, FaTimes } from 'react-icons/fa';
 import { FiArrowLeft } from 'react-icons/fi';
 import { useSnackbar } from 'notistack';
-import api from '../../../api/axiosConfig';
+import groceryListService from '../../../services/groceryListService';
+import ingredientService from '../../../services/ingredientService';
 
 const categoryLabels = {
     VEGETABLES: { name: 'Vegetables', color: 'green' },
@@ -69,11 +70,9 @@ const EditGroceryLists = () => {
     const fetchGroceryListDetails = async () => {
         setLoading(true);
         try {
-            const response = await api.get(`/grocerylists/${id}/ingredients`, {
-                params: {
-                    page: 0,
-                    size: 1000
-                }
+            const response = await groceryListService.getGroceryListIngredients(id, {
+                page: 0,
+                size: 1000
             });
             setGroceryData(response.data);
 
@@ -93,7 +92,7 @@ const EditGroceryLists = () => {
 
     const fetchAllIngredients = async () => {
         try {
-            const response = await api.get('/ingredients/all');
+            const response = await ingredientService.getAllIngredients();
             setAllIngredients(response.data);
         } catch (error) {
             console.error('Error fetching ingredients:', error);
@@ -183,7 +182,7 @@ const EditGroceryLists = () => {
                 cleanedIngredients[id] = parseFloat(qty);
             });
 
-            await api.put(`/grocerylists/${id}`, {
+            await groceryListService.updateGroceryList(id, {
                 ingredientsWithQuantity: cleanedIngredients
             });
             enqueueSnackbar('Grocery list updated successfully', { variant: 'success' });

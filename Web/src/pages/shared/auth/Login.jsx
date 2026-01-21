@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
-import api from "../../../api/axiosConfig";
+import authService from "../../../services/authService";
 import RedirectToPath from "../../../components/navigation/Redirect";
 import { useAuth } from "../../../hooks/useAuth";
 import { useNavigate, Link as RouterLink } from "react-router-dom";
@@ -76,9 +75,9 @@ const Login = () => {
                 password: form.password,
             };
 
-            const response = await api.post('/auth/login', sanitizedData);
+            const response = await authService.login(sanitizedData);
 
-            const me = await api.get("/auth/me");
+            const me = await authService.getMe();
             setUser(me.data || null);
 
             const successMsg = response?.data?.message

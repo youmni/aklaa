@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import api from '../../../api/axiosConfig.jsx';
+import userService from '../../../services/userService';
 import { useNavigate } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 import { FiDownload } from 'react-icons/fi';
@@ -29,7 +29,7 @@ const DeleteProfile = () => {
   const confirmDelete = async () => {
     setLoading(true);
     try {
-      await api.delete('/users');
+      await userService.deleteUser();
       enqueueSnackbar('Account deleted. Redirecting to login...', { variant: 'success' });
       setConfirmOpen(false);
       navigate('/auth/login');

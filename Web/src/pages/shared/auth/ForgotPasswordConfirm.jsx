@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useSearchParams, Link as RouterLink } from "react-router-dom";
-import api from "../../../api/axiosConfig";
+import authService from "../../../services/authService";
 import {
     Button,
     Fieldset,
@@ -37,7 +37,7 @@ const PasswordResetConfirm = () => {
 
         const checkToken = async () => {
             try {
-                await api.get(`/auth/reset-password?token=${token}`);
+                await authService.validateResetToken(token);
                 setTokenValid(true);
             } catch (err) {
                 const apiMessage = err.response?.data?.message || err.response?.data;
@@ -82,7 +82,7 @@ const PasswordResetConfirm = () => {
         setSuccessMessage("");
 
         try {
-            const response = await api.post("/auth/reset-password/confirm", {
+            const response = await authService.confirmPasswordReset({
                 token,
                 newPassword: form.newPassword
             });

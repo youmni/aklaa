@@ -4,7 +4,7 @@ import { Box, Button, Input, Stack, Spinner } from "@chakra-ui/react";
 import { Fieldset } from "@chakra-ui/react";
 import { Field } from '../../../components/ui/field';
 import { useSnackbar } from 'notistack';
-import api from "../../../api/axiosConfig";
+import authService from "../../../services/authService";
 const PasswordReset = () => {
     const { enqueueSnackbar } = useSnackbar();
     const [form, setForm] = useState({
@@ -68,7 +68,7 @@ const PasswordReset = () => {
         setErrors({});
 
         try {
-            const res = await api.put('/auth/reset-password', form);
+            const res = await authService.resetPassword(form);
 
             const successMsg = 'Password was updated successfully.';
             setSuccessMessage(successMsg);

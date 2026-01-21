@@ -4,7 +4,7 @@ import { Box, Button, Input, Stack, Spinner } from "@chakra-ui/react";
 import { Fieldset } from "@chakra-ui/react";
 import { Field } from '../../../components/ui/field';
 import { useSnackbar } from 'notistack';
-import api from "../../../api/axiosConfig";
+import ingredientService from "../../../services/ingredientService";
 import { FiArrowLeft } from 'react-icons/fi';
 
 const CreateIngredient = () => {
@@ -98,7 +98,7 @@ const CreateIngredient = () => {
                 unit: form.unit
             };
 
-            const response = await api.post('/ingredients', sanitizedData);
+            const response = await ingredientService.createIngredient(sanitizedData);
 
             const successMsg = response?.data?.message
                 ? response.data.message

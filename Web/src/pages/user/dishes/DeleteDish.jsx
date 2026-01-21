@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Box, Spinner } from "@chakra-ui/react";
 import { useSnackbar } from 'notistack';
-import api from "../../../api/axiosConfig";
+import dishService from "../../../services/dishService";
 
 const DeleteDish = () => {
     const navigate = useNavigate();
@@ -18,7 +18,7 @@ const DeleteDish = () => {
             }
 
             try {
-                const response = await api.delete(`/dishes/${id}`);
+                const response = await dishService.deleteDish(id);
                 
                 const successMsg = response?.data?.message
                     ? response.data.message

@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import api from '../../../api/axiosConfig';
+import dishService from '../../../services/dishService';
+import ingredientService from '../../../services/ingredientService';
+import imageService from '../../../services/imageService';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { 
@@ -110,7 +112,7 @@ const CreateDish = () => {
     const fetchIngredients = async () => {
         try {
             setIsLoadingIngredients(true);
-            const response = await api.get('/ingredients/all');
+            const response = await ingredientService.getAllIngredients();
             setAvailableIngredients(response.data || []);
         } catch (error) {
             enqueueSnackbar('Failed to fetch ingredients', { variant: 'error' });
@@ -148,11 +150,7 @@ const CreateDish = () => {
             const uploadFormData = new FormData();
             uploadFormData.append('file', file);
 
-            const response = await api.post('/images/upload', uploadFormData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            });
+            const response = await imageService.uploadImage(uploadFormData);
 
             setFormData(prev => ({ ...prev, imageUrl: response.data }));
             setImagePreview(URL.createObjectURL(file));
@@ -284,7 +282,7 @@ const CreateDish = () => {
                 }))
             };
 
-            await api.post('/dishes', dishData);
+            await dishService.createDish(dishData);
 
             enqueueSnackbar('Dish created successfully', { variant: 'success' });
 

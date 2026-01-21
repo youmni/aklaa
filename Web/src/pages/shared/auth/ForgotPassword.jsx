@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import api from "../../../api/axiosConfig";
+import authService from "../../../services/authService";
 import { useNavigate, Link as RouterLink } from "react-router-dom";
 import {
     Button,
@@ -45,7 +45,7 @@ const PasswordReset = () => {
         setSuccessMessage("");
 
         try {
-            const response = await api.post("/auth/reset-password", { email: email.trim().toLowerCase() });
+            const response = await authService.requestPasswordReset(email.trim().toLowerCase());
 
             const successMsg = response?.data?.message
                 ? response.data.message

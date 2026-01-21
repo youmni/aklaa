@@ -4,7 +4,7 @@ import {
 } from '@chakra-ui/react';
 import { FiSearch } from 'react-icons/fi';
 import { useSnackbar } from 'notistack';
-import api from '../../../api/axiosConfig';
+import userService from '../../../services/userService';
 import UserDetailsModal from '../../../components/users/UserDetailsModal';
 import Pagination from '../../../components/ui/Pagination';
 
@@ -45,7 +45,7 @@ const GetUsers = () => {
             if (searchTerm) params.search = searchTerm;
             if (selectedType) params.type = selectedType;
 
-            const response = await api.get('/users', { params });
+            const response = await userService.getUsers(params);
             setUsers(response.data.users || []);
             console.log(response.data);
             setTotalPages(response.data.totalPages || 0);
@@ -68,7 +68,7 @@ const GetUsers = () => {
 
         try {
             setIsUpdatingRole(true);
-            await api.put(`/users/${selectedUser.id}`, null, { params: { type: newRole } });
+            await userService.updateUserRole(selectedUser.id, newRole);
 
             setSelectedUser({ ...selectedUser, userType: newRole });
             setUsers(users.map(user => user.id === selectedUser.id ? { ...user, userType: newRole } : user));
@@ -82,7 +82,7 @@ const GetUsers = () => {
 
     const handleEnable = async (id) => {
         try {
-            await api.put(`/users/enable/${id}`);
+            await userService.enableUser(id);
 
             setUsers(users.map(user => user.id === id ? { ...user, enabled: true } : user));
             if (selectedUser?.id === id) setSelectedUser({ ...selectedUser, enabled: true });
@@ -95,7 +95,7 @@ const GetUsers = () => {
 
     const handleDelete = async (id) => {
         try {
-            await api.delete(`/users/${id}`);
+            await userService.deleteUser(id);
 
             setUsers((prev) => prev.filter((user) => user.id !== id));
 

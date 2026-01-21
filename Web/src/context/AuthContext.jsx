@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect } from "react";
-import api from "../api/axiosConfig";
+import authService from "../services/authService";
 
 export const AuthContext = createContext({
   user: null,
@@ -22,7 +22,7 @@ export const AuthProvider = ({ children }) => {
 
     const initAuth = async () => {
       try {
-        const res = await api.get("/auth/me");
+        const res = await authService.getMe();
         if (mounted) setUser(res.data || null);
       } catch (err) {
         if (mounted) setUser(null);
