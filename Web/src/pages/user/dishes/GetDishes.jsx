@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Box, Button, Input, Stack, Spinner, Text, Grid, Badge, HStack, IconButton, VStack, Image } from "@chakra-ui/react";
 import { useSnackbar } from 'notistack';
 import { FiEdit2, FiTrash2, FiPlus, FiSearch, FiEye } from 'react-icons/fi';
-import api from "../../../api/axiosConfig";
+import dishService from "../../../services/dishService";
 import ConfirmDialog from "../../../components/ui/ConfirmDialog";
 import AddToCartModal from "../../../components/shoppingcart/AddToCartModal";
 import Pagination from "../../../components/ui/Pagination";
@@ -75,7 +75,7 @@ const GetDishes = () => {
                 params.append('countries', countryParams);
             }
 
-            const response = await api.get(`/dishes/filter?${params.toString()}`);
+            const response = await dishService.getDishes(Object.fromEntries(params));
             setDishes(response.data.dishes || []);
             setTotalPages(response.data.totalPages || 0);
             setTotalElements(response.data.totalElements || 0);

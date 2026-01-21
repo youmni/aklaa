@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { Box, Button, Input, Stack, Spinner } from "@chakra-ui/react";
 import { Field, Fieldset } from "@chakra-ui/react";
 import { useSnackbar } from 'notistack';
-import api from "../../../api/axiosConfig";
+import authService from "../../../services/authService";
+import userService from "../../../services/userService";
 import { FiArrowLeft } from 'react-icons/fi';
 import { AuthContext } from '../../../context/AuthContext';
 
@@ -83,7 +84,7 @@ const EditProfile = () => {
                 lastName: form.lastName.trim(),
                 email: form.email.trim().toLowerCase(),
             };
-            await api.put('/users/email', sanitizedData);
+            await userService.updateEmail(sanitizedData);
             const successMsg = 'Profile updated successfully. If the mail was changed, please confirm your new email address.';
 
             setSuccessMessage(successMsg);
@@ -93,7 +94,7 @@ const EditProfile = () => {
                 lastName: sanitizedData.lastName,
                 email: sanitizedData.email
             });
-            const me = await api.get("/auth/me");
+            const me = await authService.getMe();
             setUser(me.data || null);
         } catch (error) {
             const errMsg = 'Profile update failed. Please check your input and try again.';

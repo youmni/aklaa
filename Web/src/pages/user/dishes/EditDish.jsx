@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import api from '../../../api/axiosConfig';
+import dishService from '../../../services/dishService';
+import ingredientService from '../../../services/ingredientService';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { 
@@ -110,7 +111,7 @@ const EditDish = () => {
     const fetchDish = async () => {
         try {
             setIsLoading(true);
-            const response = await api.get(`/dishes/${id}`);
+            const response = await dishService.getDishById(id);
             const dish = response.data;
             
             setFormData({
@@ -137,11 +138,9 @@ const EditDish = () => {
     const fetchIngredients = async () => {
         try {
             setIsLoadingIngredients(true);
-            const response = await api.get('/ingredients', {
-                params: {
-                    page: 0,
-                    size: 1000
-                }
+            const response = await ingredientService.getIngredients({
+                page: 0,
+                size: 1000
             });
             setAvailableIngredients(response.data.ingredients || []);
         } catch (error) {
@@ -278,7 +277,7 @@ const EditDish = () => {
                 }))
             };
 
-            await api.put(`/dishes/${id}`, dishData);
+            await dishService.updateDish(id, dishData);
 
             enqueueSnackbar('Dish updated successfully', { variant: 'success' });
 

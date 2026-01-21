@@ -16,7 +16,7 @@ import {
 import { Field } from "../ui/field";
 import { useSnackbar } from 'notistack';
 import { FiCalendar, FiUsers, FiShoppingCart } from 'react-icons/fi';
-import api from '../../api/axiosConfig';
+import cartService from '../../services/cartService';
 
 const AddToCartModal = ({ isOpen, onClose, dish }) => {
     const { enqueueSnackbar } = useSnackbar();
@@ -54,7 +54,7 @@ const AddToCartModal = ({ isOpen, onClose, dish }) => {
         setErrors({});
         setIsLoading(true);
         try {
-            await api.post('/cart/add', {
+            await cartService.addToCart({
                 dishId: dish.id,
                 dayOfWeek: dayOfWeek,
                 people: people

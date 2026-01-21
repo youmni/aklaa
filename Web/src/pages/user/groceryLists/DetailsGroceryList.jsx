@@ -15,7 +15,7 @@ import {
 import { FaListUl, FaShoppingBasket, FaCheckCircle, FaEdit } from 'react-icons/fa';
 import { FiArrowLeft } from 'react-icons/fi';
 import { useSnackbar } from 'notistack';
-import api from '../../../api/axiosConfig';
+import groceryListService from '../../../services/groceryListService';
 
 const categoryLabels = {
     VEGETABLES: { name: 'Vegetables', color: 'green' },
@@ -71,7 +71,7 @@ const DetailsGroceryList = () => {
     const fetchGroceryListDetails = async () => {
         setLoading(true);
         try {
-            const response = await api.get(`/grocerylists/${id}/ingredients`);
+            const response = await groceryListService.getGroceryListIngredients(id);
             setGroceryData(response.data);
         } catch (error) {
             console.error('Error fetching grocery list details:', error);

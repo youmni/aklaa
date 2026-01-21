@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Box, Flex, Heading, HStack, IconButton, Input, Text, Badge, VStack } from '@chakra-ui/react';
 import { FaTrash, FaEdit, FaSave, FaTimes, FaUsers, FaCalendarAlt } from 'react-icons/fa';
 import { useSnackbar } from 'notistack';
-import api from '../../api/axiosConfig';
+import cartService from '../../services/cartService';
 
 const daysOfWeek = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY'];
 
@@ -37,7 +37,7 @@ const CartItem = ({ item, dish, onRefresh }) => {
 
     const handleSave = async () => {
         try {
-            await api.put(`/cart/edit/${item.id}`, {
+            await cartService.updateCartItem(item.id, {
                 dishId: item.dishId,
                 people: editForm.people,
                 dayOfWeek: editForm.dayOfWeek
@@ -53,7 +53,7 @@ const CartItem = ({ item, dish, onRefresh }) => {
 
     const handleDelete = async () => {
         try {
-            await api.delete(`/cart/delete/${item.id}`);
+            await cartService.deleteCartItem(item.id);
             enqueueSnackbar('Item removed from cart', { variant: 'success' });
             onRefresh();
         } catch (error) {

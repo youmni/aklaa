@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import api from '../../../api/axiosConfig.jsx';
+import userService from '../../../services/userService';
 import {
   Box,
   Text,
@@ -25,7 +25,7 @@ const ExportedUserData = () => {
     setLoading(true);
     setError(null);
     try {
-      const res = await api.get('/users/data/export', { responseType: 'blob' });
+      const res = await userService.exportUserData();
 
       const cd =
         res.headers['content-disposition'] ||

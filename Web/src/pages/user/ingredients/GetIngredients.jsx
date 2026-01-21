@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Box, Button, Input, Stack, Spinner, Text, Grid, Badge, HStack, IconButton, VStack } from "@chakra-ui/react";
 import { useSnackbar } from 'notistack';
 import { FiEdit2, FiTrash2, FiPlus, FiSearch } from 'react-icons/fi';
-import api from "../../../api/axiosConfig";
+import ingredientService from "../../../services/ingredientService";
 import ConfirmDialog from "../../../components/ui/ConfirmDialog";
 import Pagination from "../../../components/ui/Pagination";
 
@@ -66,7 +66,7 @@ const GetIngredients = () => {
                 params.append('categories', categoryParams);
             }
 
-            const response = await api.get(`/ingredients?${params.toString()}`);
+            const response = await ingredientService.getIngredients(Object.fromEntries(params));
             setIngredients(response.data.ingredients || []);
             setTotalPages(response.data.totalPages || 0);
             setTotalElements(response.data.totalElements || 0);
@@ -116,7 +116,7 @@ const GetIngredients = () => {
             onConfirm: async () => {
                 setConfirmLoading(true);
                 try {
-                    await api.delete(`/ingredients/${ingredient.id}`);
+                    await ingredientService.deleteIngredient(ingredient.id);
                     enqueueSnackbar('Ingredient verwijderd', { variant: 'success' });
                     setConfirmOpen(false);
                     fetchIngredients();

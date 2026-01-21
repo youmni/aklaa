@@ -5,7 +5,7 @@ import { FiTrash2} from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useSnackbar } from 'notistack';
-import api from '../../api/axiosConfig';
+import groceryListService from '../../services/groceryListService';
 import ConfirmDialog from '../ui/ConfirmDialog';
 
 const GroceryListCard = ({ list, status, onRefresh }) => {
@@ -60,7 +60,7 @@ const GroceryListCard = ({ list, status, onRefresh }) => {
     const handleConfirmDelete = async () => {
         setIsDeleting(true);
         try {
-            await api.delete(`/grocerylists/${list.id}`);
+            await groceryListService.deleteGroceryList(list.id);
             enqueueSnackbar('Grocery list deleted', { variant: 'success' });
             setIsConfirmOpen(false);
             if (onRefresh) onRefresh();

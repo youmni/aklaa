@@ -4,7 +4,7 @@ import { Box, Button, Input, Stack, Spinner } from "@chakra-ui/react";
 import { Fieldset } from "@chakra-ui/react";
 import { Field } from '../../../components/ui/field';
 import { useSnackbar } from 'notistack';
-import api from "../../../api/axiosConfig";
+import ingredientService from "../../../services/ingredientService";
 import { FiArrowLeft } from 'react-icons/fi';
 
 const UpdateIngredient = () => {
@@ -46,7 +46,7 @@ const UpdateIngredient = () => {
 
             setIsFetching(true);
             try {
-                const response = await api.get(`/ingredients/${id}`);
+                const response = await ingredientService.getIngredientById(id);
                 const ingredient = response.data;
                 
                 setForm({
@@ -130,7 +130,7 @@ const UpdateIngredient = () => {
                 unit: form.unit
             };
 
-            const response = await api.put(`/ingredients/${id}`, sanitizedData);
+            const response = await ingredientService.updateIngredient(id, sanitizedData);
 
             const successMsg = response?.data?.message
                 ? response.data.message

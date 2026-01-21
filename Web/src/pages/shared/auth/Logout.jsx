@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import api from "../../../api/axiosConfig";
+import authService from "../../../services/authService";
 import { useAuth } from "../../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 
@@ -8,7 +8,7 @@ const Logout = () => {
     const { setUser } = useAuth();
 
     useEffect(() => {
-        api.post("/auth/logout")
+        authService.logout()
             .then(() => {
                 setUser(null);
                 navigate("/auth/login");

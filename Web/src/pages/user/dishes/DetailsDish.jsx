@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import api from '../../../api/axiosConfig';
+import dishService from '../../../services/dishService';
 import {
     Box,
     Button,
@@ -34,7 +34,7 @@ const DetailsDish = () => {
     const fetchDish = async () => {
         try {
             setIsLoading(true);
-            const response = await api.get(`/dishes/${id}`);
+            const response = await dishService.getDishById(id);
             setDish(response.data);
         } catch (error) {
             enqueueSnackbar(error.response?.data?.message || 'Failed to fetch dish', { variant: 'error' });
