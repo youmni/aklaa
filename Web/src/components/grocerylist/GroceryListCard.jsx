@@ -2,6 +2,7 @@ import { Box, Flex, Heading, Text, Badge, HStack, VStack, Button } from '@chakra
 import { IconButton } from '@chakra-ui/react';
 import { FaCalendarAlt, FaShoppingBasket, FaChevronRight } from 'react-icons/fa';
 import { FiTrash2} from 'react-icons/fi';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useSnackbar } from 'notistack';
@@ -11,6 +12,7 @@ import ConfirmDialog from '../ui/ConfirmDialog';
 const GroceryListCard = ({ list, status, onRefresh }) => {
     const navigate = useNavigate();
     const { enqueueSnackbar } = useSnackbar();
+    const { t } = useTranslation('grocerylist');
     const [isConfirmOpen, setIsConfirmOpen] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
 
@@ -39,11 +41,11 @@ const GroceryListCard = ({ list, status, onRefresh }) => {
     const getStatusLabel = () => {
         switch (status) {
             case 'past':
-                return 'Completed';
+                return t('card.statusCompleted');
             case 'present':
-                return 'Active';
+                return t('card.statusActive');
             case 'future':
-                return 'Upcoming';
+                return t('card.statusUpcoming');
             default:
                 return '';
         }
@@ -61,12 +63,12 @@ const GroceryListCard = ({ list, status, onRefresh }) => {
         setIsDeleting(true);
         try {
             await groceryListService.deleteGroceryList(list.id);
-            enqueueSnackbar('Grocery list deleted', { variant: 'success' });
+            enqueueSnackbar(t('card.deleteSuccess'), { variant: 'success' });
             setIsConfirmOpen(false);
             if (onRefresh) onRefresh();
         } catch (err) {
             console.error('Error deleting grocery list:', err);
-            enqueueSnackbar('Failed to delete grocery list', { variant: 'error' });
+            enqueueSnackbar(t('card.deleteError'), { variant: 'error' });
         } finally {
             setIsDeleting(false);
         }
@@ -87,7 +89,7 @@ const GroceryListCard = ({ list, status, onRefresh }) => {
                 <VStack align="stretch" flex={1} gap={3}>
                     <Flex align="center" gap={3} flexWrap="wrap">
                         <Heading as="h3" fontSize={{ base: 'md', md: 'lg' }} color="#083951" fontWeight="600">
-                            Week {formatDate(list.startOfWeek)} - {formatDate(list.endOfWeek)}
+                            {t('card.weekLabel')} {formatDate(list.startOfWeek)} - {formatDate(list.endOfWeek)}
                         </Heading>
                         <Badge
                             colorScheme={getStatusColor()}
@@ -120,7 +122,7 @@ const GroceryListCard = ({ list, status, onRefresh }) => {
                         <HStack gap={2}>
                             <FaShoppingBasket size={14} color="#083951" />
                             <Text fontSize="sm" color="gray.700" fontWeight="500">
-                                {list.dishes.length} {list.dishes.length === 1 ? 'dish' : 'dishes'}
+                                {list.dishes.length === 1 ? '1 dish' : `${list.dishes.length} dishes`}
                             </Text>
                         </HStack>
                     )}
@@ -147,7 +149,7 @@ const GroceryListCard = ({ list, status, onRefresh }) => {
                         px={{ base: 4, md: 6 }}
                         w={{ base: '70%', md: 'auto' }}
                     >
-                        View Details
+                        {t('card.viewIngredients')}
                     </Button>
                     <IconButton
                         size={{ base: 'sm', md: 'sm' }}
@@ -164,10 +166,10 @@ const GroceryListCard = ({ list, status, onRefresh }) => {
                         isOpen={isConfirmOpen}
                         onClose={() => setIsConfirmOpen(false)}
                         onConfirm={handleConfirmDelete}
-                        title="Delete grocery list"
-                        description="Are you sure you want to delete this grocery list? This action cannot be undone."
-                        confirmLabel="Delete"
-                        cancelLabel="Cancel"
+                        title={t('card.confirmDeleteTitle')}
+                        description={t('card.confirmDeleteDescription')}
+                        confirmLabel={t('common.delete')}
+                        cancelLabel={t('common.cancel')}
                         confirmColorScheme="red"
                         isLoading={isDeleting}
                     />

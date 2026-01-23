@@ -1,0 +1,84 @@
+{
+  "common": {
+    "cart": "Panier",
+    "dish": "Plat",
+    "people": "Personnes",
+    "day": "Jour",
+    "quantity": "Quantité",
+    "add": "Ajouter",
+    "remove": "Supprimer",
+    "clear": "Vider",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "loading": "Chargement"
+  },
+  "header": {
+    "title": "Panier",
+    "clearButton": "Vider le Panier",
+    "saveButton": "Enregistrer comme Liste de Courses"
+  },
+  "empty": {
+    "title": "Votre Panier est Vide",
+    "description": "Commencez à ajouter des plats pour planifier vos repas de la semaine",
+    "browseDishesButton": "Parcourir les Plats"
+  },
+  "weekPlanning": {
+    "title": "Planification de la Semaine",
+    "startDate": "Date de Début",
+    "endDate": "Date de Fin",
+    "selectDates": "Sélectionnez les dates de semaine pour votre liste de courses"
+  },
+  "addToCart": {
+    "title": "Ajouter au Panier",
+    "subtitle": "Planifiez quand vous cuisinerez {{dishName}}",
+    "dayLabel": "Jour de la Semaine",
+    "dayPlaceholder": "Sélectionner un jour",
+    "peopleLabel": "Nombre de Personnes",
+    "peoplePlaceholder": "Combien de portions?",
+    "addButton": "Ajouter au Panier",
+    "cancelButton": "Annuler",
+    "selectDayError": "Veuillez sélectionner un jour",
+    "peopleRangeError": "Le nombre de personnes doit être au moins 1 et pas plus de 100",
+    "addSuccess": "{{dishName}} ajouté au panier!",
+    "addError": "Échec de l'ajout au panier"
+  },
+  "cartItem": {
+    "people": "{{count}} personne",
+    "people_other": "{{count}} personnes",
+    "removeButton": "Supprimer",
+    "confirmRemoveTitle": "Retirer du Panier",
+    "confirmRemoveDescription": "Êtes-vous sûr de vouloir retirer {{dishName}} de votre panier?",
+    "removeSuccess": "Retiré du panier",
+    "removeError": "Échec de la suppression de l'article"
+  },
+  "summary": {
+    "title": "Résumé du Panier",
+    "totalDishes": "Total de Plats",
+    "totalServings": "Total de Portions",
+    "dishes": "{{count}} plat",
+    "dishes_other": "{{count}} plats",
+    "servings": "{{count}} portion",
+    "servings_other": "{{count}} portions"
+  },
+  "cart": {
+    "title": "Panier",
+    "loading": "Chargement des articles du panier...",
+    "fetchError": "Échec du chargement des articles du panier",
+    "clearConfirm": "Êtes-vous sûr de vouloir vider votre panier?",
+    "clearSuccess": "Panier vidé avec succès",
+    "clearError": "Échec de la suppression du panier",
+    "selectDatesError": "Veuillez sélectionner les dates de début et de fin",
+    "emptyCartError": "Votre panier est vide",
+    "saveSuccess": "Liste de courses enregistrée avec succès",
+    "saveError": "Échec de l'enregistrement de la liste de courses"
+  },
+  "days": {
+    "MONDAY": "Lundi",
+    "TUESDAY": "Mardi",
+    "WEDNESDAY": "Mercredi",
+    "THURSDAY": "Jeudi",
+    "FRIDAY": "Vendredi",
+    "SATURDAY": "Samedi",
+    "SUNDAY": "Dimanche"
+  }
+}

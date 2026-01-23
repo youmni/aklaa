@@ -2,11 +2,13 @@ import { useState } from 'react';
 import { Box, Flex, Heading, HStack, IconButton, Input, Text, Badge, VStack } from '@chakra-ui/react';
 import { FaTrash, FaEdit, FaSave, FaTimes, FaUsers, FaCalendarAlt } from 'react-icons/fa';
 import { useSnackbar } from 'notistack';
+import { useTranslation } from 'react-i18next';
 import cartService from '../../services/cartService';
 
 const daysOfWeek = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY'];
 
 const CartItem = ({ item, dish, onRefresh }) => {
+    const { t } = useTranslation('cart');
     const [isEditing, setIsEditing] = useState(false);
     const [editForm, setEditForm] = useState({
         people: item.people,
@@ -43,21 +45,21 @@ const CartItem = ({ item, dish, onRefresh }) => {
                 dayOfWeek: editForm.dayOfWeek
             });
             
-            enqueueSnackbar('Cart item updated successfully', { variant: 'success' });
+            enqueueSnackbar(t('addToCart.addSuccess'), { variant: 'success' });
             setIsEditing(false);
             onRefresh();
         } catch (error) {
-            enqueueSnackbar('Failed to update cart item', { variant: 'error' });
+            enqueueSnackbar(t('addToCart.addError'), { variant: 'error' });
         }
     };
 
     const handleDelete = async () => {
         try {
             await cartService.deleteCartItem(item.id);
-            enqueueSnackbar('Item removed from cart', { variant: 'success' });
+            enqueueSnackbar(t('cartItem.removeSuccess'), { variant: 'success' });
             onRefresh();
         } catch (error) {
-            enqueueSnackbar('Failed to remove item', { variant: 'error' });
+            enqueueSnackbar(t('cartItem.removeError'), { variant: 'error' });
         }
     };
 
@@ -102,7 +104,7 @@ const CartItem = ({ item, dish, onRefresh }) => {
                                 <HStack gap={2}>
                                     <FaCalendarAlt color="#083951" size={14} />
                                     <Text fontSize="xs" fontWeight="600" color="gray.600">
-                                        Day
+                                        {t('addToCart.dayLabel')}
                                     </Text>
                                 </HStack>
                                 <select
@@ -119,7 +121,7 @@ const CartItem = ({ item, dish, onRefresh }) => {
                                 >
                                     {daysOfWeek.map(day => (
                                         <option key={day} value={day}>
-                                            {day.charAt(0) + day.slice(1).toLowerCase()}
+                                            {t(`days.${day}`)}
                                         </option>
                                     ))}
                                 </select>
@@ -128,7 +130,7 @@ const CartItem = ({ item, dish, onRefresh }) => {
                                 <HStack gap={2}>
                                     <FaUsers color="#083951" size={14} />
                                     <Text fontSize="xs" fontWeight="600" color="gray.600">
-                                        People
+                                        {t('addToCart.peopleLabel')}
                                     </Text>
                                 </HStack>
                                 <Input
@@ -153,13 +155,13 @@ const CartItem = ({ item, dish, onRefresh }) => {
                                     borderRadius="full"
                                     fontSize="xs"
                                 >
-                                    {item.dayOfWeek.charAt(0) + item.dayOfWeek.slice(1).toLowerCase()}
+                                    {t(`days.${item.dayOfWeek}`)}
                                 </Badge>
                             </HStack>
                             <HStack gap={2}>
                                 <FaUsers color="#083951" size={14} />
                                 <Text fontSize="sm" color="gray.700" fontWeight="500">
-                                    {item.people} {item.people === 1 ? 'person' : 'people'}
+                                    {item.people} {item.people === 1 ? t('common.people') : t('common.people')}
                                 </Text>
                             </HStack>
                         </HStack>

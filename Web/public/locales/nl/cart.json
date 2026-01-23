@@ -1,0 +1,84 @@
+{
+  "common": {
+    "cart": "Winkelwagen",
+    "dish": "Gerecht",
+    "people": "Personen",
+    "day": "Dag",
+    "quantity": "Hoeveelheid",
+    "add": "Toevoegen",
+    "remove": "Verwijderen",
+    "clear": "Leegmaken",
+    "save": "Opslaan",
+    "cancel": "Annuleren",
+    "loading": "Laden"
+  },
+  "header": {
+    "title": "Winkelwagen",
+    "clearButton": "Winkelwagen Leegmaken",
+    "saveButton": "Opslaan als Boodschappenlijst"
+  },
+  "empty": {
+    "title": "Uw Winkelwagen is Leeg",
+    "description": "Begin met het toevoegen van gerechten om uw wekelijkse maaltijden te plannen",
+    "browseDishesButton": "Gerechten Bekijken"
+  },
+  "weekPlanning": {
+    "title": "Weekplanning",
+    "startDate": "Startdatum",
+    "endDate": "Einddatum",
+    "selectDates": "Selecteer weekdata voor uw boodschappenlijst"
+  },
+  "addToCart": {
+    "title": "Toevoegen aan Winkelwagen",
+    "subtitle": "Plan wanneer u {{dishName}} gaat koken",
+    "dayLabel": "Dag van de Week",
+    "dayPlaceholder": "Selecteer een dag",
+    "peopleLabel": "Aantal Personen",
+    "peoplePlaceholder": "Hoeveel porties?",
+    "addButton": "Toevoegen aan Winkelwagen",
+    "cancelButton": "Annuleren",
+    "selectDayError": "Selecteer een dag",
+    "peopleRangeError": "Aantal personen moet minimaal 1 en maximaal 100 zijn",
+    "addSuccess": "{{dishName}} toegevoegd aan winkelwagen!",
+    "addError": "Toevoegen aan winkelwagen mislukt"
+  },
+  "cartItem": {
+    "people": "{{count}} persoon",
+    "people_other": "{{count}} personen",
+    "removeButton": "Verwijderen",
+    "confirmRemoveTitle": "Verwijderen uit Winkelwagen",
+    "confirmRemoveDescription": "Weet u zeker dat u {{dishName}} uit uw winkelwagen wilt verwijderen?",
+    "removeSuccess": "Verwijderd uit winkelwagen",
+    "removeError": "Verwijderen van item mislukt"
+  },
+  "summary": {
+    "title": "Winkelwagen Overzicht",
+    "totalDishes": "Totaal Gerechten",
+    "totalServings": "Totaal Porties",
+    "dishes": "{{count}} gerecht",
+    "dishes_other": "{{count}} gerechten",
+    "servings": "{{count}} portie",
+    "servings_other": "{{count}} porties"
+  },
+  "cart": {
+    "title": "Winkelwagen",
+    "loading": "Winkelwagen items laden...",
+    "fetchError": "Winkelwagen items laden mislukt",
+    "clearConfirm": "Weet u zeker dat u uw winkelwagen wilt leegmaken?",
+    "clearSuccess": "Winkelwagen succesvol geleegd",
+    "clearError": "Winkelwagen leegmaken mislukt",
+    "selectDatesError": "Selecteer start- en einddatum",
+    "emptyCartError": "Uw winkelwagen is leeg",
+    "saveSuccess": "Boodschappenlijst succesvol opgeslagen",
+    "saveError": "Boodschappenlijst opslaan mislukt"
+  },
+  "days": {
+    "MONDAY": "Maandag",
+    "TUESDAY": "Dinsdag",
+    "WEDNESDAY": "Woensdag",
+    "THURSDAY": "Donderdag",
+    "FRIDAY": "Vrijdag",
+    "SATURDAY": "Zaterdag",
+    "SUNDAY": "Zondag"
+  }
+}

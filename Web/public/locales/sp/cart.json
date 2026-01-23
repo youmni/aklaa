@@ -1,0 +1,84 @@
+{
+  "common": {
+    "cart": "Carrito",
+    "dish": "Plato",
+    "people": "Personas",
+    "day": "Día",
+    "quantity": "Cantidad",
+    "add": "Agregar",
+    "remove": "Eliminar",
+    "clear": "Vaciar",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "loading": "Cargando"
+  },
+  "header": {
+    "title": "Carrito de Compras",
+    "clearButton": "Vaciar Carrito",
+    "saveButton": "Guardar como Lista de Compras"
+  },
+  "empty": {
+    "title": "Su Carrito está Vacío",
+    "description": "Comience a agregar platos para planificar sus comidas semanales",
+    "browseDishesButton": "Explorar Platos"
+  },
+  "weekPlanning": {
+    "title": "Planificación Semanal",
+    "startDate": "Fecha de Inicio",
+    "endDate": "Fecha de Fin",
+    "selectDates": "Seleccione las fechas de la semana para su lista de compras"
+  },
+  "addToCart": {
+    "title": "Agregar al Carrito",
+    "subtitle": "Planifique cuándo cocinará {{dishName}}",
+    "dayLabel": "Día de la Semana",
+    "dayPlaceholder": "Seleccionar un día",
+    "peopleLabel": "Número de Personas",
+    "peoplePlaceholder": "¿Cuántas porciones?",
+    "addButton": "Agregar al Carrito",
+    "cancelButton": "Cancelar",
+    "selectDayError": "Por favor seleccione un día",
+    "peopleRangeError": "El número de personas debe ser al menos 1 y no más de 100",
+    "addSuccess": "¡{{dishName}} agregado al carrito!",
+    "addError": "Error al agregar al carrito"
+  },
+  "cartItem": {
+    "people": "{{count}} persona",
+    "people_other": "{{count}} personas",
+    "removeButton": "Eliminar",
+    "confirmRemoveTitle": "Eliminar del Carrito",
+    "confirmRemoveDescription": "¿Está seguro de que desea eliminar {{dishName}} de su carrito?",
+    "removeSuccess": "Eliminado del carrito",
+    "removeError": "Error al eliminar artículo"
+  },
+  "summary": {
+    "title": "Resumen del Carrito",
+    "totalDishes": "Total de Platos",
+    "totalServings": "Total de Porciones",
+    "dishes": "{{count}} plato",
+    "dishes_other": "{{count}} platos",
+    "servings": "{{count}} porción",
+    "servings_other": "{{count}} porciones"
+  },
+  "cart": {
+    "title": "Carrito de Compras",
+    "loading": "Cargando artículos del carrito...",
+    "fetchError": "Error al cargar artículos del carrito",
+    "clearConfirm": "¿Está seguro de que desea vaciar su carrito?",
+    "clearSuccess": "Carrito vaciado exitosamente",
+    "clearError": "Error al vaciar carrito",
+    "selectDatesError": "Por favor seleccione fechas de inicio y fin",
+    "emptyCartError": "Su carrito está vacío",
+    "saveSuccess": "Lista de compras guardada exitosamente",
+    "saveError": "Error al guardar lista de compras"
+  },
+  "days": {
+    "MONDAY": "Lunes",
+    "TUESDAY": "Martes",
+    "WEDNESDAY": "Miércoles",
+    "THURSDAY": "Jueves",
+    "FRIDAY": "Viernes",
+    "SATURDAY": "Sábado",
+    "SUNDAY": "Domingo"
+  }
+}

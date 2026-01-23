@@ -4,11 +4,13 @@ import { Tabs } from '@chakra-ui/react';
 import { FaListUl } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
+import { useTranslation } from 'react-i18next';
 import groceryListService from '../../../services/groceryListService';
 import GroceryListCard from '../../../components/grocerylist/GroceryListCard';
 import EmptyGroceryLists from '../../../components/grocerylist/EmptyGroceryLists';
 
 const GroceryLists = () => {
+    const { t } = useTranslation('grocerylist');
     const [groceryLists, setGroceryLists] = useState([]);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
@@ -26,7 +28,7 @@ const GroceryLists = () => {
             setGroceryLists(response.data);
         } catch (error) {
             console.error('Error fetching grocery lists:', error);
-            enqueueSnackbar('Failed to load grocery lists', { variant: 'error' });
+            enqueueSnackbar(t('list.fetchError'), { variant: 'error' });
         } finally {
             setLoading(false);
         }
@@ -61,7 +63,7 @@ const GroceryLists = () => {
             <Box bg="gray.50" minH="100vh" py={12}>
                 <Flex justify="center" align="center" minH="60vh" direction="column" gap={4}>
                     <Spinner size="xl" color="#083951" thickness="4px" />
-                    <Text fontSize="lg" color="gray.600">Loading grocery lists...</Text>
+                    <Text fontSize="lg" color="gray.600">{t('list.loading')}</Text>
                 </Flex>
             </Box>
         );
@@ -78,7 +80,7 @@ const GroceryLists = () => {
                     <Box px={{ base: 4, md: 8 }} py={8} bg="white" borderBottom="none">
                         <Flex align="center" gap={3} mb={6}>
                             <Text fontSize={{ base: "2xl", md: "3xl" }} fontWeight="bold" color="#083951">
-                                Grocery Lists
+                                {t('list.title')}
                             </Text>
                         </Flex>
 
@@ -109,7 +111,7 @@ const GroceryLists = () => {
                                     transition="all 0.2s"
                                     justifyContent="center"
                                 >
-                                    Past
+                                    {t('list.pastTab')}
                                 </Tabs.Trigger>
 
                                 <Tabs.Trigger
@@ -128,7 +130,7 @@ const GroceryLists = () => {
                                     transition="all 0.2s"
                                     justifyContent="center"
                                 >
-                                    Current
+                                    {t('list.presentTab')}
                                 </Tabs.Trigger>
 
                                 <Tabs.Trigger
@@ -147,7 +149,7 @@ const GroceryLists = () => {
                                     transition="all 0.2s"
                                     justifyContent="center"
                                 >
-                                    Upcoming
+                                    {t('list.futureTab')}
                                 </Tabs.Trigger>
                             </Tabs.List>
 
@@ -155,7 +157,7 @@ const GroceryLists = () => {
                                 <Tabs.Content value="past">
                                     <Box bg="gray.50" borderRadius="md" p={3} mx={{ base: 4, md: 8 }} mb={4}>
                                         <Text fontSize="sm" color="gray.600">
-                                            Warning: expired lists are automatically deleted after 1 month.
+                                            {t('list.pastWarning')}
                                         </Text>
                                     </Box>
                                     {past.length === 0 ? (
@@ -170,7 +172,7 @@ const GroceryLists = () => {
                                             mx={{ base: 4, md: 8 }}
                                         >
                                             <Text color="gray.500" fontSize="lg">
-                                                No past grocery lists
+                                                {t('list.noPast')}
                                             </Text>
                                         </Box>
                                     ) : (
@@ -200,10 +202,10 @@ const GroceryLists = () => {
                                             mx={{ base: 4, md: 8 }}
                                         >
                                             <Text color="gray.500" fontSize="lg">
-                                                No current grocery lists
+                                                {t('list.noPresent')}
                                             </Text>
                                             <Text color="gray.400" fontSize="sm" mt={2}>
-                                                Create one from your shopping cart
+                                                {t('list.noPresentHint')}
                                             </Text>
                                         </Box>
                                     ) : (
@@ -233,7 +235,7 @@ const GroceryLists = () => {
                                             mx={{ base: 4, md: 8 }}
                                         >
                                             <Text color="gray.500" fontSize="lg">
-                                                No upcoming grocery lists
+                                                {t('list.noFuture')}
                                             </Text>
                                         </Box>
                                     ) : (

@@ -15,10 +15,12 @@ import {
 } from '@chakra-ui/react';
 import { Field } from "../ui/field";
 import { useSnackbar } from 'notistack';
+import { useTranslation } from 'react-i18next';
 import { FiCalendar, FiUsers, FiShoppingCart } from 'react-icons/fi';
 import cartService from '../../services/cartService';
 
 const AddToCartModal = ({ isOpen, onClose, dish }) => {
+    const { t } = useTranslation('cart');
     const { enqueueSnackbar } = useSnackbar();
     const [dayOfWeek, setDayOfWeek] = useState('');
     const [people, setPeople] = useState(1);
@@ -26,24 +28,24 @@ const AddToCartModal = ({ isOpen, onClose, dish }) => {
     const [errors, setErrors] = useState({});
 
     const daysOfWeek = [
-        { value: 'MONDAY', label: 'Monday' },
-        { value: 'TUESDAY', label: 'Tuesday' },
-        { value: 'WEDNESDAY', label: 'Wednesday' },
-        { value: 'THURSDAY', label: 'Thursday' },
-        { value: 'FRIDAY', label: 'Friday' },
-        { value: 'SATURDAY', label: 'Saturday' },
-        { value: 'SUNDAY', label: 'Sunday' }
+        { value: 'MONDAY', label: t('days.MONDAY') },
+        { value: 'TUESDAY', label: t('days.TUESDAY') },
+        { value: 'WEDNESDAY', label: t('days.WEDNESDAY') },
+        { value: 'THURSDAY', label: t('days.THURSDAY') },
+        { value: 'FRIDAY', label: t('days.FRIDAY') },
+        { value: 'SATURDAY', label: t('days.SATURDAY') },
+        { value: 'SUNDAY', label: t('days.SUNDAY') }
     ];
 
     const handleSubmit = async () => {
         const newErrors = {};
 
         if (!dayOfWeek) {
-            newErrors.dayOfWeek = 'Please select a day';
+            newErrors.dayOfWeek = t('addToCart.selectDayError');
         }
 
         if (people < 1 || people > 100) {
-            newErrors.people = 'Number of people must be at least 1 and no more than 100';
+            newErrors.people = t('addToCart.peopleRangeError');
         }
 
         if (Object.keys(newErrors).length > 0) {
@@ -60,11 +62,10 @@ const AddToCartModal = ({ isOpen, onClose, dish }) => {
                 people: people
             });
             
-            enqueueSnackbar(`${dish.name} added to cart!`, { variant: 'success' });
+            enqueueSnackbar(t('addToCart.addSuccess'), { variant: 'success' });
             handleClose();
         } catch (error) {
-            const errMsg = error?.response?.data?.message || 'Failed to add to cart';
-            setErrors({ submit: errMsg });
+            setErrors({ submit: t('addToCart.addError') });
         } finally {
             setIsLoading(false);
         }
@@ -108,7 +109,7 @@ const AddToCartModal = ({ isOpen, onClose, dish }) => {
                                 <Icon fontSize="2xl">
                                     <FiShoppingCart />
                                 </Icon>
-                                Add to Cart
+                                {t('addToCart.title')}
                             </Dialog.Title>
                         </Box>
 
@@ -156,7 +157,7 @@ const AddToCartModal = ({ isOpen, onClose, dish }) => {
                                                 <FiCalendar />
                                             </Icon>
                                             <Text fontWeight="600" color="#083951">
-                                                Day of Week
+                                                {t('addToCart.dayLabel')}
                                             </Text>
                                         </HStack>
                                     }
@@ -169,7 +170,7 @@ const AddToCartModal = ({ isOpen, onClose, dish }) => {
                                         variant="outline"
                                     >
                                         <NativeSelect.Field
-                                            placeholder="Select a day"
+                                            placeholder={t('addToCart.selectDay')}
                                             value={dayOfWeek}
                                             onChange={(e) => {
                                                 setDayOfWeek(e.target.value);
@@ -204,7 +205,7 @@ const AddToCartModal = ({ isOpen, onClose, dish }) => {
                                                 <FiUsers />
                                             </Icon>
                                             <Text fontWeight="600" color="#083951">
-                                                Number of People
+                                                {t('addToCart.peopleLabel')}
                                             </Text>
                                         </HStack>
                                     }
@@ -272,7 +273,7 @@ const AddToCartModal = ({ isOpen, onClose, dish }) => {
                                     }}
                                     borderRadius="lg"
                                 >
-                                    Cancel
+                                    {t('addToCart.cancelButton')}
                                 </Button>
                                 <Button
                                     bg="#083951"
@@ -291,13 +292,13 @@ const AddToCartModal = ({ isOpen, onClose, dish }) => {
                                         transform: 'translateY(0)',
                                     }}
                                     transition="all 0.2s"
-                                    loadingText="Adding..."
+                                    loadingText={t('common.loading')}
                                     borderRadius="lg"
                                 >
                                     <Icon mr={2}>
                                         <FiShoppingCart />
                                     </Icon>
-                                    Add to Cart
+                                    {t('addToCart.addButton')}
                                 </Button>
                             </HStack>
                         </Dialog.Footer>

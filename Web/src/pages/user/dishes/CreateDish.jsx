@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import dishService from '../../../services/dishService';
 import ingredientService from '../../../services/ingredientService';
 import imageService from '../../../services/imageService';
@@ -72,6 +73,7 @@ const DISH_TAGS = [
 ];
 
 const CreateDish = () => {
+    const { t } = useTranslation('dish');
     const navigate = useNavigate();
     const { enqueueSnackbar } = useSnackbar();
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -105,7 +107,7 @@ const CreateDish = () => {
             const response = await ingredientService.getAllIngredients();
             setAvailableIngredients(response.data || []);
         } catch (error) {
-            enqueueSnackbar('Failed to fetch ingredients', { variant: 'error' });
+            enqueueSnackbar(t('create.fetchIngredientsError'), { variant: 'error' });
         } finally {
             setIsLoadingIngredients(false);
         }
@@ -131,7 +133,7 @@ const CreateDish = () => {
         if (!file) return;
 
         if (!file.type.startsWith('image/')) {
-            enqueueSnackbar('Please upload an image file', { variant: 'error' });
+            enqueueSnackbar(t('create.uploadImageTypeError'), { variant: 'error' });
             return;
         }
 
@@ -149,9 +151,9 @@ const CreateDish = () => {
                 setErrors(prev => ({ ...prev, imageUrl: '' }));
             }
 
-            enqueueSnackbar('Image uploaded successfully', { variant: 'success' });
+            enqueueSnackbar(t('create.uploadImageSuccess'), { variant: 'success' });
         } catch (error) {
-            enqueueSnackbar(error.response?.data?.message || 'Failed to upload image', { variant: 'error' });
+            enqueueSnackbar(t('create.uploadImageError'), { variant: 'error' });
         } finally {
             setIsUploadingImage(false);
         }
@@ -190,7 +192,7 @@ const CreateDish = () => {
             );
             
             if (isDuplicate) {
-                enqueueSnackbar('This ingredient has already been added', { variant: 'warning' });
+                enqueueSnackbar(t('create.duplicateIngredientWarning'), { variant: 'warning' });
                 return;
             }
         }
@@ -212,52 +214,52 @@ const CreateDish = () => {
         const newErrors = {};
 
         if (!formData.name || formData.name.length < 1 || formData.name.length > 100) {
-            newErrors.name = 'Name must be between 1 and 100 characters';
+            newErrors.name = t('create.validation.nameRequired');
         }
 
         if (!formData.description || formData.description.length < 10 || formData.description.length > 500) {
-            newErrors.description = 'Description must be between 10 and 500 characters';
+            newErrors.description = t('create.validation.descriptionRequired');
         }
 
         if (formData.tags.length === 0) {
-            newErrors.tags = 'At least one tag is required';
+            newErrors.tags = t('create.validation.tagsRequired');
         }
 
         if (!formData.type) {
-            newErrors.type = 'Cuisine type is required';
+            newErrors.type = t('create.validation.cuisineRequired');
         }
 
         if (!formData.imageUrl) {
-            newErrors.imageUrl = 'Image is required';
+            newErrors.imageUrl = t('create.validation.imageRequired');
         }
 
         if (formData.people < 1 || formData.people > 100) {
-            newErrors.people = 'People must be between 1 and 100';
+            newErrors.people = t('create.validation.peopleRange');
         }
 
         if (formData.ingredients.length === 0) {
-            newErrors.ingredients = 'At least one ingredient is required';
+            newErrors.ingredients = t('create.validation.ingredientsRequired');
         } else {
             formData.ingredients.forEach((ing, index) => {
                 if (!ing.ingredientId) {
-                    newErrors[`ingredient_${index}`] = 'Ingredient is required';
+                    newErrors[`ingredient_${index}`] = t('create.validation.ingredientRequired');
                 }
                 if (!ing.quantity || parseFloat(ing.quantity) < 0.001 || parseFloat(ing.quantity) > 1000000) {
-                    newErrors[`quantity_${index}`] = 'Quantity must be between 0.001 and 1000000';
+                    newErrors[`quantity_${index}`] = t('create.validation.quantityRange');
                 }
             });
         }
 
         if (formData.steps.length > 50) {
-            newErrors.steps = 'Maximum 50 steps allowed';
+            newErrors.steps = t('create.validation.stepsMax');
         }
 
         if (formData.steps.length > 0) {
             formData.steps.forEach((step, index) => {
                 if (!step.stepText || step.stepText.trim().length === 0) {
-                    newErrors[`step_${index}`] = 'Step cannot be empty';
+                    newErrors[`step_${index}`] = t('create.validation.stepEmpty');
                 } else if (step.stepText.trim().length < 5 || step.stepText.trim().length > 255) {
-                    newErrors[`step_${index}`] = 'Step must be between 5 and 255 characters';
+                    newErrors[`step_${index}`] = t('create.validation.stepRange');
                 }
             });
         }
@@ -270,7 +272,7 @@ const CreateDish = () => {
         e.preventDefault();
 
         if (!validateForm()) {
-            enqueueSnackbar('Please fix the errors in the form', { variant: 'error' });
+            enqueueSnackbar(t('create.validationError'), { variant: 'error' });
             return;
         }
 
@@ -299,11 +301,11 @@ const CreateDish = () => {
 
             await dishService.createDish(dishData);
 
-            enqueueSnackbar('Dish created successfully', { variant: 'success' });
+            enqueueSnackbar(t('create.createSuccess'), { variant: 'success' });
 
             navigate('/dishes');
         } catch (error) {
-            enqueueSnackbar(error.response?.data?.message || 'Failed to create dish', { variant: 'error' });
+            enqueueSnackbar(t('create.createError'), { variant: 'error' });
         } finally {
             setIsSubmitting(false);
         }
@@ -368,29 +370,30 @@ const CreateDish = () => {
 
             <VStack align="stretch" gap={8}>
                 <Box>
-                    <Heading fontSize="3xl" fontWeight="bold" color="#083951" mb={2}>Add Dish</Heading>
-                    <Text color="gray.600">Add a new dish to your collection</Text>
+                    <Heading fontSize="3xl" fontWeight="bold" color="#083951" mb={2}>{t('create.title')}</Heading>
+                    <Text color="gray.600">{t('create.subtitle')}</Text>
                 </Box>
 
                 <form onSubmit={handleSubmit}>
                     <VStack align="stretch" gap={6}>
                         <SimpleGrid columns={{ base: 1, md: 2 }} gap={6}>
-                            <Field label="Dish Name" required invalid={!!errors.name} errorText={errors.name}>
+                            <Field label={t('common.name')} required invalid={!!errors.name} errorText={errors.name}>
                                 <Input
                                     name="name"
                                     value={formData.name}
                                     onChange={handleInputChange}
-                                    placeholder=" e.g., Spaghetti Carbonara"
+                                    placeholder={t('create.namePlaceholder')}
                                     size="lg"
                                 />
                             </Field>
 
-                            <Field label="Number of Servings" required invalid={!!errors.people} errorText={errors.people}>
+                            <Field label={t('common.people')} required invalid={!!errors.people} errorText={errors.people}>
                                 <Input
                                     name="people"
                                     type="number"
                                     value={formData.people}
                                     onChange={handleInputChange}
+                                    placeholder={t('create.peoplePlaceholder')}
                                     min={1}
                                     max={100}
                                     size="lg"
@@ -398,12 +401,12 @@ const CreateDish = () => {
                             </Field>
                         </SimpleGrid>
 
-                        <Field label="Description" required invalid={!!errors.description} errorText={errors.description}>
+                        <Field label={t('common.description')} required invalid={!!errors.description} errorText={errors.description}>
                             <Textarea
                                 name="description"
                                 value={formData.description}
                                 onChange={handleInputChange}
-                                placeholder=" Describe your dish (10-500 characters)"
+                                placeholder={t('create.descriptionPlaceholder')}
                                 rows={4}
                                 size="lg"
                             />
@@ -413,7 +416,7 @@ const CreateDish = () => {
                         </Field>
 
                         <VStack align="stretch" spacing={4}>
-                            <Field label="Cuisine Type" required invalid={!!errors.type} errorText={errors.type}>
+                            <Field label={t('common.cuisine')} required invalid={!!errors.type} errorText={errors.type}>
                                 <NativeSelectRoot size="lg">
                                     <NativeSelectField
                                         name="type"
@@ -426,17 +429,17 @@ const CreateDish = () => {
                                             }
                                         }}
                                     >
-                                        <option value="" disabled>Select cuisine</option>
+                                        <option value="" disabled>{t('create.cuisinePlaceholder')}</option>
                                         {CUISINE_TYPES.map(type => (
                                             <option key={type.value} value={type.value}>
-                                                {type.label}
+                                                {t(`cuisines.${type.value}`)}
                                             </option>
                                         ))}
                                     </NativeSelectField>
                                 </NativeSelectRoot>
                             </Field>
 
-                            <Field label="Tags" required invalid={!!errors.tags} errorText={errors.tags}>
+                            <Field label={t('common.tags')} required invalid={!!errors.tags} errorText={errors.tags}>
                                 <Select.Root
                                     multiple
                                     collection={tagsCollection}
@@ -457,7 +460,7 @@ const CreateDish = () => {
                                                 color: formData.tags.length ? 'inherit' : '#A0AEC0'
                                             }}
                                         >
-                                            <Select.ValueText placeholder="Select tags" />
+                                            <Select.ValueText placeholder={t('create.tagsPlaceholder')} />
                                         </Select.Trigger>
                                         <Select.IndicatorGroup>
                                             <Select.Indicator />
@@ -468,7 +471,7 @@ const CreateDish = () => {
                                             <Select.Content>
                                                 {DISH_TAGS.map((tag) => (
                                                     <Select.Item item={tag} key={tag.value}>
-                                                        {tag.label}
+                                                        {t(`tags.${tag.value}`)}
                                                         <Select.ItemIndicator />
                                                     </Select.Item>
                                                 ))}
@@ -479,7 +482,7 @@ const CreateDish = () => {
                             </Field>
                         </VStack>
                         <Field
-                            label="Dish Image"
+                            label={t('create.imageLabel')}
                             required
                             invalid={!!errors.imageUrl}
                             errorText={errors.imageUrl}
@@ -504,7 +507,7 @@ const CreateDish = () => {
                                     >
                                         <VStack gap={2}>
                                             <FaUpload size={24} color="#083951" />
-                                            <Text fontWeight="medium" color="#083951">Click to upload image</Text>
+                                            <Text fontWeight="medium" color="#083951">{t('create.uploadImageButton')}</Text>
                                             <Text fontSize="sm" color="gray.500">PNG, JPG up to 10MB</Text>
                                         </VStack>
                                     </Button>
@@ -543,7 +546,7 @@ const CreateDish = () => {
                         </Field>
 
                         <Field
-                            label="Ingredients"
+                            label={t('common.ingredients')}
                             required
                             mb={4}
                             invalid={!!errors.ingredients}
@@ -559,7 +562,7 @@ const CreateDish = () => {
                                     _hover={{ bg: '#0a4960' }}
                                     px={6}
                                 >
-                                    <FaPlus style={{ marginRight: '8px' }} /> Add Ingredient
+                                    <FaPlus style={{ marginRight: '8px' }} /> {t('create.addIngredientButton')}
                                 </Button>
                             </Flex>
 
@@ -576,8 +579,8 @@ const CreateDish = () => {
                                 <VStack align="stretch" gap={3}>
                                     {formData.ingredients.length === 0 ? (
                                         <Box textAlign="center" py={12}>
-                                            <Text color="#083951" fontSize="lg" fontWeight="medium">No ingredients added yet</Text>
-                                            <Text color="gray.500" fontSize="sm" mt={2}>Click "Add Ingredient" to get started</Text>
+                                            <Text color="#083951" fontSize="lg" fontWeight="medium">{t('create.addIngredientButton')}</Text>
+                                            <Text color="gray.500" fontSize="sm" mt={2}>{t('steps.noStepsDescription')}</Text>
                                         </Box>
                                     ) : (
                                         formData.ingredients.map((ingredient, index) => (
@@ -594,7 +597,7 @@ const CreateDish = () => {
                                             >
                                                 <Box flex={2}>
                                                     <Field
-                                                        label={<Text color="gray.700">Ingredient</Text>}
+                                                        label={<Text color="gray.700">{t('create.ingredientLabel')}</Text>}
                                                         invalid={!!errors[`ingredient_${index}`]}
                                                         errorText={errors[`ingredient_${index}`]}
                                                     >
@@ -607,7 +610,7 @@ const CreateDish = () => {
                                                                 _hover={{ borderColor: 'gray.300' }}
                                                                 style={{ paddingLeft: 8 }}
                                                             >
-                                                                <option value="" disabled style={{ color: '#A0AEC0' }}>Select ingredient</option>
+                                                                <option value="" disabled style={{ color: '#A0AEC0' }}>{t('create.selectIngredient')}</option>
                                                                 {getAvailableIngredientsForIndex(index).map(ing => (
                                                                     <option key={ing.id} value={ing.id} style={{ color: 'initial' }}>
                                                                         {getIngredientDisplay(ing)}
@@ -619,7 +622,7 @@ const CreateDish = () => {
                                                 </Box>
                                                 <Box flex={1}>
                                                     <Field
-                                                        label={<Text color="gray.700">Quantity</Text>}
+                                                        label={<Text color="gray.700">{t('create.quantityLabel')}</Text>}
                                                         invalid={!!errors[`quantity_${index}`]}
                                                         errorText={errors[`quantity_${index}`]}
                                                     >
@@ -676,7 +679,7 @@ const CreateDish = () => {
                                 }}
                                 px={8}
                             >
-                                Create Dish
+                                {t('create.submitButton')}
                             </Button>
                         </Box>
                     </VStack>

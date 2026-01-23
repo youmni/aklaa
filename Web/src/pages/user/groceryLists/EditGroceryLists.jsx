@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import {
     Box,
     Container,
@@ -21,36 +22,25 @@ import { useSnackbar } from 'notistack';
 import groceryListService from '../../../services/groceryListService';
 import ingredientService from '../../../services/ingredientService';
 
-const categoryLabels = {
-    VEGETABLES: { name: 'Vegetables', color: 'green' },
-    FRUITS: { name: 'Fruits', color: 'red' },
-    DAIRY: { name: 'Dairy', color: 'blue' },
-    MEAT: { name: 'Meat', color: 'red' },
-    FISH: { name: 'Fish', color: 'cyan' },
-    GRAINS: { name: 'Grains', color: 'orange' },
-    SPICES: { name: 'Spices', color: 'red' },
-    BAKING: { name: 'Baking', color: 'yellow' },
-    DRINKS: { name: 'Drinks', color: 'purple' },
-    HOUSEHOLD: { name: 'Household', color: 'teal' },
-    OTHER: { name: 'Other', color: 'gray' },
-};
-
-const unitLabels = {
-    G: 'g',
-    KG: 'kg',
-    ML: 'ml',
-    L: 'L',
-    PCS: 'pcs',
-    TBSP: 'tbsp',
-    TSP: 'tsp',
-    CUP: 'cup',
-    PINCH: 'pinch',
+const categoryColors = {
+    VEGETABLES: 'green',
+    FRUITS: 'red',
+    DAIRY: 'blue',
+    MEAT: 'red',
+    FISH: 'cyan',
+    GRAINS: 'orange',
+    SPICES: 'red',
+    BAKING: 'yellow',
+    DRINKS: 'purple',
+    HOUSEHOLD: 'teal',
+    OTHER: 'gray',
 };
 
 const EditGroceryLists = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const { enqueueSnackbar } = useSnackbar();
+    const { t } = useTranslation('grocerylist');
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
     const [groceryData, setGroceryData] = useState(null);
@@ -83,7 +73,7 @@ const EditGroceryLists = () => {
             setIngredients(ingredientsMap);
         } catch (error) {
             console.error('Error fetching grocery list details:', error);
-            enqueueSnackbar('Failed to load grocery list details', { variant: 'error' });
+            enqueueSnackbar(t('edit.fetchError'), { variant: 'error' });
             navigate('/groceries');
         } finally {
             setLoading(false);
@@ -96,7 +86,7 @@ const EditGroceryLists = () => {
             setAllIngredients(response.data);
         } catch (error) {
             console.error('Error fetching ingredients:', error);
-            enqueueSnackbar('Failed to load ingredients', { variant: 'error' });
+            enqueueSnackbar(t('edit.fetchIngredientsError'), { variant: 'error' });
         }
     };
 
@@ -112,7 +102,7 @@ const EditGroceryLists = () => {
         }
 
         if (isNaN(numValue) || numValue < 0) {
-            enqueueSnackbar('Quantity must be a positive number', { variant: 'error' });
+            enqueueSnackbar(t('edit.quantityRequired'), { variant: 'error' });
             return;
         }
 
@@ -126,23 +116,23 @@ const EditGroceryLists = () => {
         const newIngredients = { ...ingredients };
         delete newIngredients[ingredientId];
         setIngredients(newIngredients);
-        enqueueSnackbar('Ingredient removed', { variant: 'info' });
+        enqueueSnackbar(t('edit.ingredientRemoved'), { variant: 'info' });
     };
 
     const handleAddIngredient = () => {
         if (!selectedIngredient || !newQuantity) {
-            enqueueSnackbar('Please select an ingredient and enter a quantity', { variant: 'warning' });
+            enqueueSnackbar(t('edit.selectIngredientAndQuantity'), { variant: 'warning' });
             return;
         }
 
         const numQuantity = parseFloat(newQuantity);
         if (isNaN(numQuantity) || numQuantity <= 0) {
-            enqueueSnackbar('Quantity must be a positive number', { variant: 'error' });
+            enqueueSnackbar(t('edit.quantityRequired'), { variant: 'error' });
             return;
         }
 
         if (ingredients[selectedIngredient]) {
-            enqueueSnackbar('This ingredient is already in the list', { variant: 'warning' });
+            enqueueSnackbar(t('edit.ingredientAlreadyExists'), { variant: 'warning' });
             return;
         }
 
@@ -161,7 +151,7 @@ const EditGroceryLists = () => {
         setSelectedIngredient(null);
         setNewQuantity('');
         setShowAddIngredient(false);
-        enqueueSnackbar('Ingredient added', { variant: 'success' });
+        enqueueSnackbar(t('edit.ingredientAdded'), { variant: 'success' });
     };
 
     const handleSave = async () => {
@@ -171,7 +161,7 @@ const EditGroceryLists = () => {
         });
 
         if (hasInvalidQuantity) {
-            enqueueSnackbar('All quantities must be positive numbers', { variant: 'error' });
+            enqueueSnackbar(t('edit.allQuantitiesPositive'), { variant: 'error' });
             return;
         }
 
@@ -185,11 +175,11 @@ const EditGroceryLists = () => {
             await groceryListService.updateGroceryList(id, {
                 ingredientsWithQuantity: cleanedIngredients
             });
-            enqueueSnackbar('Grocery list updated successfully', { variant: 'success' });
+            enqueueSnackbar(t('edit.updateSuccess'), { variant: 'success' });
             navigate(`/grocerylists/${id}/ingredients`);
         } catch (error) {
             console.error('Error updating grocery list:', error);
-            enqueueSnackbar('Failed to update grocery list', { variant: 'error' });
+            enqueueSnackbar(t('edit.updateError'), { variant: 'error' });
         } finally {
             setSaving(false);
         }
@@ -226,7 +216,7 @@ const EditGroceryLists = () => {
     const getSelectedIngredientName = () => {
         if (!selectedIngredient) return '';
         const ingredient = allIngredients.find(ing => ing.id === selectedIngredient);
-        return ingredient ? `${ingredient.name} (${unitLabels[ingredient.unit] || ingredient.unit})` : '';
+        return ingredient ? `${ingredient.name} (${t(`units.${ingredient.unit}`)})` : '';
     };
 
     if (loading) {
@@ -234,7 +224,7 @@ const EditGroceryLists = () => {
             <Box bg="gray.50" minH="100vh" py={12}>
                 <Flex justify="center" align="center" minH="60vh" direction="column" gap={4}>
                     <Spinner size="xl" color="#083951" thickness="4px" />
-                    <Text fontSize="lg" color="gray.600">Loading grocery list...</Text>
+                    <Text fontSize="lg" color="gray.600">{t('common.loading')}</Text>
                 </Flex>
             </Box>
         );
@@ -270,21 +260,21 @@ const EditGroceryLists = () => {
                                 py={6}
                                 fontSize="md"
                             >
-                                Cancel
+                                {t('edit.cancelButton')}
                             </Button>
                             <Button
                                 bg="#083951"
                                 color="white"
                                 onClick={handleSave}
                                 isLoading={saving}
-                                loadingText="Saving..."
+                                loadingText={t('common.loading')}
                                 _hover={{ bg: '#0a4a63' }}
                                 leftIcon={<FaSave />}
                                 px={6}
                                 py={6}
                                 fontSize="md"
                             >
-                                Save Changes
+                                {t('edit.saveButton')}
                             </Button>
                         </HStack>
                     </Flex>
@@ -299,11 +289,11 @@ const EditGroceryLists = () => {
                     >
                         <Flex align="center" gap={3} mb={2}>
                             <Heading size="lg" color="#083951" fontWeight="600">
-                                Edit Grocery List
+                                {t('edit.title')}
                             </Heading>
                         </Flex>
                         <Text color="gray.600">
-                            Modify quantities, add or remove ingredients
+                            {t('edit.subtitle')}
                         </Text>
                     </Box>
 
@@ -323,21 +313,21 @@ const EditGroceryLists = () => {
                                 variant="outline"
                                 w="100%"
                             >
-                                Add Ingredient
+                                {t('edit.addIngredientTitle')}
                             </Button>
                         ) : (
                             <VStack align="stretch" gap={4}>
                                 <Heading size="sm" color="#083951">
-                                    Add New Ingredient
+                                    {t('edit.addIngredientTitle')}
                                 </Heading>
                                 <Grid templateColumns={{ base: '1fr', md: '1fr 1fr auto' }} gap={4}>
                                     <Box>
                                         <Text fontSize="sm" fontWeight="500" mb={2} color="gray.700">
-                                            Select Ingredient
+                                            {t('edit.selectIngredient')}
                                         </Text>
                                         <VStack align="stretch" gap={2}>
                                             <Input
-                                                placeholder={selectedIngredient ? getSelectedIngredientName() : "Search ingredients..."}
+                                                placeholder={selectedIngredient ? getSelectedIngredientName() : t('edit.selectIngredient')}
                                                 value={searchTerm}
                                                 onChange={(e) => {
                                                     setSearchTerm(e.target.value);
@@ -391,14 +381,14 @@ const EditGroceryLists = () => {
                                                             >
                                                                 <Text fontWeight="500">{ing.name}</Text>
                                                                 <Text fontSize="xs" color="gray.600">
-                                                                    Unit: {unitLabels[ing.unit] || ing.unit} • Category: {categoryLabels[ing.category]?.name || ing.category}
+                                                                    Unit: {t(`units.${ing.unit}`)} • Category: {t(`categories.${ing.category}`)}
                                                                 </Text>
                                                             </Box>
                                                         ))
                                                     ) : (
                                                         <Box p={4} textAlign="center">
                                                             <Text color="gray.500" fontSize="sm">
-                                                                No ingredients found
+                                                                {t('edit.noIngredients')}
                                                             </Text>
                                                         </Box>
                                                     )}
@@ -408,7 +398,7 @@ const EditGroceryLists = () => {
                                     </Box>
                                     <Box>
                                         <Text fontSize="sm" fontWeight="500" mb={2} color="gray.700">
-                                            Quantity
+                                            {t('edit.quantityLabel')}
                                         </Text>
                                         <Input
                                             type="number"
@@ -416,7 +406,7 @@ const EditGroceryLists = () => {
                                             min="0"
                                             value={newQuantity}
                                             onChange={(e) => setNewQuantity(e.target.value)}
-                                            placeholder="0.00"
+                                            placeholder={t('edit.quantityPlaceholder')}
                                         />
                                     </Box>
                                     <Flex align="flex-end" gap={2}>
@@ -426,7 +416,7 @@ const EditGroceryLists = () => {
                                             px={6}
                                             py={5}
                                         >
-                                            Add
+                                            {t('edit.addButton')}
                                         </Button>
                                         <Button
                                             variant="outline"
@@ -440,7 +430,7 @@ const EditGroceryLists = () => {
                                             px={6}
                                             py={5}
                                         >
-                                            Cancel
+                                            {t('edit.cancelButton')}
                                         </Button>
                                     </Flex>
                                 </Grid>
@@ -470,7 +460,7 @@ const EditGroceryLists = () => {
                     >
                         <VStack align="stretch" gap={4}>
                             {Object.entries(groupedIngredients).map(([category, items]) => {
-                                const categoryInfo = categoryLabels[category] || categoryLabels.OTHER;
+                                const categoryColor = categoryColors[category] || categoryColors.OTHER;
                                 return (
                                     <Box
                                         key={category}
@@ -483,16 +473,16 @@ const EditGroceryLists = () => {
                                     >
                                         <Flex align="center" gap={3} mb={4}>
                                             <Heading size="md" color="#083951" fontWeight="600">
-                                                {categoryInfo.name}
+                                                {t(`categories.${category}`)}
                                             </Heading>
                                             <Badge
-                                                colorScheme={categoryInfo.color}
+                                                colorScheme={categoryColor}
                                                 px={3}
                                                 py={1}
                                                 borderRadius="full"
                                                 fontSize="xs"
                                             >
-                                                {items.length} {items.length === 1 ? 'item' : 'items'}
+                                                {t('card.itemsCount', { count: items.length })}
                                             </Badge>
                                         </Flex>
 
@@ -533,7 +523,7 @@ const EditGroceryLists = () => {
                                                             borderRadius="md"
                                                             fontSize="sm"
                                                         >
-                                                            {unitLabels[item.ingredient.unit] || item.ingredient.unit}
+                                                            {t(`units.${item.ingredient.unit}`)}
                                                         </Badge>
                                                         <IconButton
                                                             colorScheme="red"

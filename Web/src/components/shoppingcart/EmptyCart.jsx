@@ -1,14 +1,16 @@
 import { Button, Container, Flex, Heading, Text, VStack, Box } from '@chakra-ui/react';
 import { FaShoppingCart, FaUtensils } from 'react-icons/fa';
+import { useTranslation } from 'react-i18next';
 
 const EmptyCart = ({ onBrowseDishes }) => {
+    const { t } = useTranslation('cart');
     return (
         <Box bg="gray.50" minH="100vh" py={12}>
             <Container maxW="100%" px={8}>
                 <VStack align="stretch" gap={8}>
                     <Flex align="center" gap={3}>
                     <Text fontSize={{ base: "2xl", md: "3xl" }} fontWeight="bold" color="#083951">
-                        Shopping Cart
+                        {t('header.title')}
                     </Text>
                     </Flex>
 
@@ -34,10 +36,10 @@ const EmptyCart = ({ onBrowseDishes }) => {
                                 </Box>
                             </Flex>
                             <Heading size="md" mb={3} color="#083951">
-                                Your cart is empty
+                                {t('empty.title')}
                             </Heading>
                             <Text fontSize="md" color="gray.600" mb={8}>
-                                Add some delicious dishes to get started with your meal planning!
+                                {t('empty.description')}
                             </Text>
                             <Button 
                                 bg="#083951" 
@@ -49,7 +51,7 @@ const EmptyCart = ({ onBrowseDishes }) => {
                                 borderRadius="xl"
                                 px={8}
                             >
-                                Browse Dishes
+                                {t('empty.goToDishesButton')}
                             </Button>
                         </Box>
                     </Flex>

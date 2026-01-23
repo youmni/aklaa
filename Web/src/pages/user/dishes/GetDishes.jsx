@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Box, Button, Input, Stack, Spinner, Text, Grid, Badge, HStack, IconButton, VStack, Image } from "@chakra-ui/react";
 import { useSnackbar } from 'notistack';
 import { FiEdit2, FiTrash2, FiPlus, FiSearch, FiEye } from 'react-icons/fi';
@@ -9,6 +10,7 @@ import AddToCartModal from "../../../components/shoppingcart/AddToCartModal";
 import Pagination from "../../../components/ui/Pagination";
 
 const GetDishes = () => {
+    const { t } = useTranslation('dish');
     const navigate = useNavigate();
     const { enqueueSnackbar } = useSnackbar();
     const [dishes, setDishes] = useState([]);
@@ -80,8 +82,7 @@ const GetDishes = () => {
             setTotalPages(response.data.totalPages || 0);
             setTotalElements(response.data.totalElements || 0);
         } catch (error) {
-            const errMsg = error?.response?.data?.message || 'Failed to get dishes';
-            enqueueSnackbar(errMsg, { variant: 'error' });
+            enqueueSnackbar(t('list.fetchError'), { variant: 'error' });
         } finally {
             setIsLoading(false);
         }
@@ -108,9 +109,9 @@ const GetDishes = () => {
 
     const handleEdit = (dish) => {
         setConfirmPayload({
-            title: "Confirm Edit",
-            description: `Are you sure you want to edit "${dish.name}"?`,
-            confirmLabel: "Edit",
+            title: t('list.confirmEditTitle'),
+            description: t('list.confirmEditDescription', { name: dish.name }),
+            confirmLabel: t('common.edit'),
             confirmColorScheme: "blue",
             onConfirm: () => {
                 setConfirmOpen(false);
@@ -122,9 +123,9 @@ const GetDishes = () => {
 
     const handleDelete = (dish) => {
         setConfirmPayload({
-            title: "Confirm Delete",
-            description: `Are you sure you want to delete "${dish.name}"? This action cannot be undone.`,
-            confirmLabel: "Delete",
+            title: t('list.confirmDeleteTitle'),
+            description: t('list.confirmDeleteDescription', { name: dish.name }),
+            confirmLabel: t('common.delete'),
             confirmColorScheme: "red",
             onConfirm: async () => {
                 setConfirmLoading(true);
@@ -133,7 +134,7 @@ const GetDishes = () => {
                     setConfirmOpen(false);
                     fetchDishes();
                 } catch (err) {
-                    enqueueSnackbar(err?.response?.data?.message || 'Delete failed', { variant: 'error' });
+                    enqueueSnackbar(t('list.deleteError'), { variant: 'error' });
                 } finally {
                     setConfirmLoading(false);
                 }
@@ -197,7 +198,7 @@ const GetDishes = () => {
             <Stack mb={{ base: 4, md: 6, lg: 8 }} gap={{ base: 4, md: 6 }}>
                 <Stack direction={{ base: "column", sm: "row" }} justify="space-between" align={{ base: "stretch", sm: "center" }} gap={3}>
                     <Text fontSize={{ base: "2xl", md: "3xl" }} fontWeight="bold" color="#083951">
-                        Dishes
+                        {t('list.title')}
                     </Text>
                     <Button
                         bg="#083951"
@@ -209,7 +210,7 @@ const GetDishes = () => {
                         w={{ base: "full", sm: "auto" }}
                     >
                         <FiPlus style={{ marginRight: '8px' }} />
-                        Add Dish
+                        {t('list.createButton')}
                     </Button>
                 </Stack>
 
@@ -226,7 +227,7 @@ const GetDishes = () => {
                             <FiSearch color="#718096" size={18} />
                         </Box>
                         <Input
-                            placeholder="Search by name or description..."
+                            placeholder={t('list.searchPlaceholder')}
                             value={search}
                             onChange={handleSearchChange}
                             focusBorderColor="#083951"
@@ -249,10 +250,10 @@ const GetDishes = () => {
                                 height: window.innerWidth < 768 ? '2.5rem' : '3rem'
                             }}
                         >
-                            <option value="">All cuisines</option>
+                            <option value="">{t('list.allCuisines')}</option>
                             {cuisineTypes.map((cuisine) => (
                                 <option key={cuisine} value={cuisine}>
-                                    {cuisine.charAt(0) + cuisine.slice(1).toLowerCase().replace('_', ' ')}
+                                    {t(`cuisines.${cuisine}`)}
                                 </option>
                             ))}
                         </select>
@@ -260,7 +261,7 @@ const GetDishes = () => {
                 </Stack>
 
                 <Text fontSize="sm" color="gray.600" fontWeight="500">
-                    {totalElements} dish{totalElements !== 1 ? 'es' : ''} found
+                    {totalElements} {totalElements !== 1 ? t('list.title').toLowerCase() : t('list.title').toLowerCase().slice(0, -1)} {t('list.noResults').split(' ')[0].toLowerCase()}
                 </Text>
             </Stack>
 
@@ -376,7 +377,7 @@ const GetDishes = () => {
                                             fontWeight="700"
                                             backdropFilter="blur(10px)"
                                         >
-                                            {dish.type.charAt(0) + dish.type.slice(1).toLowerCase().replace('_', ' ')}
+                                            {t(`cuisines.${dish.type}`)}
                                         </Box>
                                     </Box>
 
@@ -410,12 +411,12 @@ const GetDishes = () => {
                                                                     fontSize="xs"
                                                                     fontWeight="600"
                                                                 >
-                                                                    {tag.charAt(0) + tag.slice(1).toLowerCase().replace('_', ' ')}
+                                                                    {t(`tags.${tag}`)}
                                                                 </Box>
                                                             );
                                                         })
                                                     ) : (
-                                                        <Text fontSize="xs" color="gray.400">No tags</Text>
+                                                        <Text fontSize="xs" color="gray.400">{t('list.noResults')}</Text>
                                                     )}
                                                     {dish.tags && dish.tags.length > 3 && (
                                                         <Text fontSize="xs" color="gray.500" fontWeight="600">
@@ -435,7 +436,7 @@ const GetDishes = () => {
                                             _hover={{ bg: "#0a4a63" }}
                                         >
                                             <FiPlus style={{ marginRight: '8px' }} />
-                                            Add to Cart
+                                            {t('common.addToCart')}
                                         </Button>
                                     </Stack>
                                 </Box>

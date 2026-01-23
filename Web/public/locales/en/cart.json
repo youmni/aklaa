@@ -1,0 +1,84 @@
+{
+  "common": {
+    "cart": "Shopping Cart",
+    "dish": "Dish",
+    "people": "People",
+    "day": "Day",
+    "quantity": "Quantity",
+    "add": "Add",
+    "remove": "Remove",
+    "clear": "Clear",
+    "save": "Save",
+    "cancel": "Cancel",
+    "loading": "Loading"
+  },
+  "header": {
+    "title": "Shopping Cart",
+    "clearButton": "Clear Cart",
+    "saveButton": "Save as Grocery List"
+  },
+  "empty": {
+    "title": "Your Cart is Empty",
+    "description": "Start adding dishes to plan your weekly meals",
+    "browseDishesButton": "Browse Dishes"
+  },
+  "weekPlanning": {
+    "title": "Week Planning",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "selectDates": "Select week dates for your grocery list"
+  },
+  "addToCart": {
+    "title": "Add to Cart",
+    "subtitle": "Plan when you'll cook {{dishName}}",
+    "dayLabel": "Day of Week",
+    "dayPlaceholder": "Select a day",
+    "peopleLabel": "Number of People",
+    "peoplePlaceholder": "How many servings?",
+    "addButton": "Add to Cart",
+    "cancelButton": "Cancel",
+    "selectDayError": "Please select a day",
+    "peopleRangeError": "Number of people must be at least 1 and no more than 100",
+    "addSuccess": "{{dishName}} added to cart!",
+    "addError": "Failed to add to cart"
+  },
+  "cartItem": {
+    "people": "{{count}} person",
+    "people_other": "{{count}} people",
+    "removeButton": "Remove",
+    "confirmRemoveTitle": "Remove from Cart",
+    "confirmRemoveDescription": "Are you sure you want to remove {{dishName}} from your cart?",
+    "removeSuccess": "Removed from cart",
+    "removeError": "Failed to remove item"
+  },
+  "summary": {
+    "title": "Cart Summary",
+    "totalDishes": "Total Dishes",
+    "totalServings": "Total Servings",
+    "dishes": "{{count}} dish",
+    "dishes_other": "{{count}} dishes",
+    "servings": "{{count}} serving",
+    "servings_other": "{{count}} servings"
+  },
+  "cart": {
+    "title": "Shopping Cart",
+    "loading": "Loading cart items...",
+    "fetchError": "Failed to load cart items",
+    "clearConfirm": "Are you sure you want to clear your cart?",
+    "clearSuccess": "Cart cleared successfully",
+    "clearError": "Failed to clear cart",
+    "selectDatesError": "Please select start and end dates",
+    "emptyCartError": "Your cart is empty",
+    "saveSuccess": "Grocery list saved successfully",
+    "saveError": "Failed to save grocery list"
+  },
+  "days": {
+    "MONDAY": "Monday",
+    "TUESDAY": "Tuesday",
+    "WEDNESDAY": "Wednesday",
+    "THURSDAY": "Thursday",
+    "FRIDAY": "Friday",
+    "SATURDAY": "Saturday",
+    "SUNDAY": "Sunday"
+  }
+}
