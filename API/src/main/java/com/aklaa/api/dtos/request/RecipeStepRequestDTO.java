@@ -17,6 +17,6 @@ public class RecipeStepRequestDTO {
     private int orderIndex;
 
     @NotBlank(message = "Step text cannot be empty")
-    @Size(max = 250, message = "Step description must not be longer than 250 characters")
+    @Size(min = 5, max = 255, message = "Step description must be between 5 and 255 characters")
     private String stepText;
 }

@@ -3,8 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import dishService from '../../../services/dishService';
 import ingredientService from '../../../services/ingredientService';
 import imageService from '../../../services/imageService';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
 import { 
     Box, 
     Button, 
@@ -26,6 +24,7 @@ import {
 } from '@chakra-ui/react';
 import { Select } from '@chakra-ui/react';
 import { Field } from '../../../components/ui/field';
+import StepManager from '../../../components/dishes/StepManager';
 import { FaPlus, FaTrash, FaUpload, FaTimes } from 'react-icons/fa';
 import { FiArrowLeft } from 'react-icons/fi';
 import { useSnackbar } from 'notistack';
@@ -72,15 +71,6 @@ const DISH_TAGS = [
     { label: 'Raw', value: 'RAW' }
 ];
 
-const quillModules = {
-    toolbar: [
-        ['bold', 'underline', 'strike'],
-        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-        [{ 'header': [1, 2, 3, false] }],
-        ['clean']
-    ]
-};
-
 const CreateDish = () => {
     const navigate = useNavigate();
     const { enqueueSnackbar } = useSnackbar();
@@ -94,10 +84,10 @@ const CreateDish = () => {
         description: '',
         tags: [],
         type: '',
-        cookingSteps: '',
         imageUrl: '',
         people: 1,
-        ingredients: []
+        ingredients: [],
+        steps: []
     });
 
     const [imagePreview, setImagePreview] = useState(null);
@@ -258,6 +248,16 @@ const CreateDish = () => {
             });
         }
 
+        if (formData.steps.length > 50) {
+            newErrors.steps = 'Maximum 50 steps allowed';
+        }
+
+        formData.steps.forEach((step, index) => {
+            if (step.stepText && (step.stepText.trim().length < 5 || step.stepText.trim().length > 255)) {
+                newErrors[`step_${index}`] = 'Step must be between 5 and 255 characters';
+            }
+        });
+
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
@@ -274,11 +274,19 @@ const CreateDish = () => {
             setIsSubmitting(true);
 
             const dishData = {
-                ...formData,
+                name: formData.name,
+                description: formData.description,
+                tags: formData.tags,
+                type: formData.type,
+                imageUrl: formData.imageUrl,
                 people: parseInt(formData.people),
                 ingredients: formData.ingredients.map(ing => ({
                     ingredientId: parseInt(ing.ingredientId),
                     quantity: parseFloat(ing.quantity)
+                })),
+                steps: formData.steps.map((step, index) => ({
+                    orderIndex: index + 1,
+                    stepText: step.stepText.trim()
                 }))
             };
 
@@ -305,6 +313,20 @@ const CreateDish = () => {
             .map((ing, idx) => idx !== currentIndex ? ing.ingredientId : null)
             .filter(Boolean);
         return availableIngredients.filter(ing => !selectedIds.includes(String(ing.id)));
+    };
+
+    const handleStepsChange = (newSteps) => {
+        setFormData(prev => ({ ...prev, steps: newSteps }));
+        const newErrors = { ...errors };
+        Object.keys(newErrors).forEach(key => {
+            if (key.startsWith('step_')) {
+                delete newErrors[key];
+            }
+        });
+        if (newErrors.steps) {
+            delete newErrors.steps;
+        }
+        setErrors(newErrors);
     };
 
     return (
@@ -629,46 +651,11 @@ const CreateDish = () => {
                             </Box>
                         </Field>
 
-                        <Box>
-                            <Heading size="md" mb={4}>Cooking Instructions</Heading>
-                            <Box 
-                                border="1px solid" 
-                                borderColor="gray.200" 
-                                borderRadius="md"
-                                overflow="hidden"
-                                sx={{
-                                    '& .ql-toolbar': {
-                                        borderBottom: '1px solid',
-                                        borderColor: 'transparent',
-                                        backgroundColor: 'transparent',
-                                        paddingLeft: 12,
-                                        paddingRight: 12
-                                    },
-                                    '& .ql-container': {
-                                        minHeight: '260px',
-                                        fontSize: '16px',
-                                        border: 'none',
-                                    },
-                                    '& .ql-editor': {
-                                        minHeight: '240px',
-                                        padding: '18px',
-                                        lineHeight: '1.6'
-                                    },
-                                    '& .ql-editor.ql-blank::before': {
-                                        color: 'gray.400',
-                                        fontStyle: 'normal',
-                                    }
-                                }}
-                            >
-                                <ReactQuill
-                                    theme="snow"
-                                    value={formData.cookingSteps}
-                                    onChange={(value) => setFormData(prev => ({ ...prev, cookingSteps: value }))}
-                                    modules={quillModules}
-                                    placeholder=" Write your cooking instructions here..."
-                                />
-                            </Box>
-                        </Box>
+                        <StepManager 
+                            steps={formData.steps}
+                            onChange={handleStepsChange}
+                            errors={errors}
+                        />
 
                         <Box pt={4}>
                             <Button

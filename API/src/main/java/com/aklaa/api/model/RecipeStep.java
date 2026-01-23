@@ -24,7 +24,7 @@ public class RecipeStep {
 
     private int orderIndex;
 
-    @Size(max = 250, message = "The step cannot exceed 250 characters")
+    @Size(min= 5, max = 255, message = "The step must be between 5 and 255 characters")
     private String recipeStep;
 
     @ManyToOne(fetch = FetchType.LAZY)
