@@ -1,0 +1,48 @@
+{
+  "editProfile": {
+    "title": "Editar perfil",
+    "subtitle": "Actualiza tu información personal",
+    "firstName": "Nombre",
+    "lastName": "Apellido",
+    "email": "Correo electrónico",
+    "saveButton": "Guardar cambios",
+    "cancelButton": "Cancelar",
+    "firstNameError": "El nombre debe tener entre 1 y 100 caracteres",
+    "lastNameError": "El apellido debe tener entre 1 y 100 caracteres",
+    "emailError": "Por favor, introduce una dirección de correo electrónico válida",
+    "updateSuccess": "Perfil actualizado con éxito",
+    "updateError": "Error al actualizar el perfil"
+  },
+  "deleteProfile": {
+    "title": "Eliminar perfil",
+    "description": "Eliminar una cuenta de usuario eliminará permanentemente todos los datos asociados, incluida la información personal, la configuración y el contenido cargado; se perderá el acceso a servicios y suscripciones, es posible que la recuperación no sea posible y algunos datos pueden conservarse con fines legales o regulatorios.",
+    "deleteButton": "Eliminar mi cuenta",
+    "confirmTitle": "Eliminar cuenta de usuario",
+    "confirmDescription": "¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.",
+    "confirmButton": "Eliminar",
+    "cancelButton": "Cancelar",
+    "deleteSuccess": "Cuenta eliminada. Redirigiendo al inicio de sesión...",
+    "deleteError": "Error al eliminar la cuenta"
+  },
+  "passwordReset": {
+    "title": "Cambiar contraseña",
+    "subtitle": "Actualiza la contraseña de tu cuenta",
+    "oldPassword": "Contraseña actual",
+    "newPassword": "Nueva contraseña",
+    "confirmPassword": "Confirmar nueva contraseña",
+    "saveButton": "Actualizar contraseña",
+    "cancelButton": "Cancelar",
+    "oldPasswordRequired": "La contraseña actual es obligatoria",
+    "newPasswordError": "La contraseña debe tener al menos 8 caracteres, incluir letras mayúsculas y minúsculas, un número y un carácter especial",
+    "confirmPasswordRequired": "La confirmación de contraseña es obligatoria",
+    "confirmPasswordMismatch": "Las contraseñas no coinciden",
+    "updateSuccess": "Contraseña actualizada con éxito",
+    "updateError": "La contraseña actual es incorrecta. Por favor, inténtalo de nuevo."
+  },
+  "exportData": {
+    "title": "Exporta tus datos personales",
+    "description": "De acuerdo con las regulaciones aplicables de protección de datos, incluido el Reglamento General de Protección de Datos (RGPD), tienes derecho a acceder y obtener una copia de los datos personales que procesamos sobre ti. La exportación se proporciona en un formato comúnmente utilizado y legible por máquina.",
+    "downloadButton": "Descargar mis datos",
+    "downloadError": "Error en la descarga"
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "editProfile": {
+    "title": "Profiel bewerken",
+    "subtitle": "Werk je persoonlijke informatie bij",
+    "firstName": "Voornaam",
+    "lastName": "Achternaam",
+    "email": "E-mailadres",
+    "saveButton": "Wijzigingen opslaan",
+    "cancelButton": "Annuleren",
+    "firstNameError": "Voornaam moet tussen 1 en 100 tekens zijn",
+    "lastNameError": "Achternaam moet tussen 1 en 100 tekens zijn",
+    "emailError": "Voer een geldig e-mailadres in",
+    "updateSuccess": "Profiel succesvol bijgewerkt",
+    "updateError": "Profiel bijwerken mislukt"
+  },
+  "deleteProfile": {
+    "title": "Profiel verwijderen",
+    "description": "Het verwijderen van een gebruikersaccount zal permanent alle gerelateerde gegevens verwijderen, inclusief persoonlijke informatie, instellingen en geüploade inhoud; toegang tot diensten en abonnementen gaat verloren, herstel is mogelijk niet mogelijk en sommige gegevens kunnen worden bewaard voor wettelijke of regelgevende doeleinden.",
+    "deleteButton": "Verwijder mijn account",
+    "confirmTitle": "Gebruikersaccount verwijderen",
+    "confirmDescription": "Weet je zeker dat je je account wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.",
+    "confirmButton": "Verwijderen",
+    "cancelButton": "Annuleren",
+    "deleteSuccess": "Account verwijderd. Doorverwijzen naar login...",
+    "deleteError": "Account verwijderen mislukt"
+  },
+  "passwordReset": {
+    "title": "Wachtwoord wijzigen",
+    "subtitle": "Werk je accountwachtwoord bij",
+    "oldPassword": "Huidig wachtwoord",
+    "newPassword": "Nieuw wachtwoord",
+    "confirmPassword": "Bevestig nieuw wachtwoord",
+    "saveButton": "Wachtwoord bijwerken",
+    "cancelButton": "Annuleren",
+    "oldPasswordRequired": "Huidig wachtwoord is verplicht",
+    "newPasswordError": "Wachtwoord moet minimaal 8 tekens bevatten, inclusief hoofd- en kleine letters, een cijfer en een speciaal teken",
+    "confirmPasswordRequired": "Wachtwoordbevestiging is verplicht",
+    "confirmPasswordMismatch": "Wachtwoorden komen niet overeen",
+    "updateSuccess": "Wachtwoord succesvol bijgewerkt",
+    "updateError": "Het huidige wachtwoord is onjuist. Probeer het opnieuw."
+  },
+  "exportData": {
+    "title": "Exporteer je persoonlijke gegevens",
+    "description": "In overeenstemming met de toepasselijke regelgeving voor gegevensbescherming, waaronder de Algemene Verordening Gegevensbescherming (AVG), heb je het recht om toegang te krijgen tot en een kopie te verkrijgen van de persoonlijke gegevens die we over je verwerken. De export wordt geleverd in een veelgebruikt, machineleesbaar formaat.",
+    "downloadButton": "Download mijn gegevens",
+    "downloadError": "Download mislukt"
+  }
+}

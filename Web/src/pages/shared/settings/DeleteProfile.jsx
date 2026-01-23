@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import userService from '../../../services/userService';
 import { useNavigate } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
@@ -16,6 +17,7 @@ import ConfirmDialog from '../../../components/ui/ConfirmDialog.jsx';
 
 
 const DeleteProfile = () => {
+  const { t } = useTranslation('settings');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [confirmOpen, setConfirmOpen] = useState(false);
@@ -30,11 +32,11 @@ const DeleteProfile = () => {
     setLoading(true);
     try {
       await userService.deleteUser();
-      enqueueSnackbar('Account deleted. Redirecting to login...', { variant: 'success' });
+      enqueueSnackbar(t('deleteProfile.deleteSuccess'), { variant: 'success' });
       setConfirmOpen(false);
       navigate('/auth/login');
     } catch (err) {
-      const message = err?.response?.data?.message || err?.response?.data || err.message || 'Delete failed';
+      const message = t('deleteProfile.deleteError');
       setError(message);
       enqueueSnackbar(message, { variant: 'error' });
     } finally {
@@ -44,9 +46,9 @@ const DeleteProfile = () => {
 
   return (
     <Box maxW="full" mx="auto" bg="white" p={6}>
-      <Heading as="h2" size="3xl" mb={3} color="red.500" fontWeight="bold">Delete Profile</Heading>
+      <Heading as="h2" size="3xl" mb={3} color="red.500" fontWeight="bold">{t('deleteProfile.title')}</Heading>
       <Text fontSize="sm" color="gray.600" mb={4}>
-        Deleting a user account will permanently remove all associated data, including personal information, settings, and uploaded content; access to services and subscriptions will be lost, recovery may not be possible, and some data may be retained for legal or regulatory purposes.
+        {t('deleteProfile.description')}
       </Text>
 
       {error && (
@@ -68,17 +70,17 @@ const DeleteProfile = () => {
           colorPalette="red"
           variant="solid"
         >
-          Delete my account
+          {t('deleteProfile.deleteButton')}
         </Button>
       </HStack>
       <ConfirmDialog
         isOpen={confirmOpen}
         onClose={() => setConfirmOpen(false)}
-        title="Delete User Account"
-        description="Are you sure you want to delete your account? This action cannot be undone."
+        title={t('deleteProfile.confirmTitle')}
+        description={t('deleteProfile.confirmDescription')}
         onConfirm={confirmDelete}
-        confirmLabel="Delete"
-        cancelLabel="Cancel"
+        confirmLabel={t('deleteProfile.confirmButton')}
+        cancelLabel={t('deleteProfile.cancelButton')}
         confirmColorScheme="red"
         isLoading={loading}
       />

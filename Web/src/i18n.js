@@ -9,7 +9,7 @@ i18n
     lng: 'sp',
     fallbackLng: 'en',
     
-    ns: ['common', 'auth', 'user', 'ingredient', 'dish', 'grocerylist', 'cart'],
+    ns: ['common', 'auth', 'user', 'ingredient', 'dish', 'grocerylist', 'cart', 'settings'],
     defaultNS: 'common',
 
     debug: false,

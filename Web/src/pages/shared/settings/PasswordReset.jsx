@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from 'react-i18next';
 import { Box, Button, Input, Stack, Spinner } from "@chakra-ui/react";
 import { Fieldset } from "@chakra-ui/react";
 import { Field } from '../../../components/ui/field';
 import { useSnackbar } from 'notistack';
 import authService from "../../../services/authService";
 const PasswordReset = () => {
+    const { t } = useTranslation('settings');
     const { enqueueSnackbar } = useSnackbar();
     const [form, setForm] = useState({
         oldPassword: "",
@@ -39,19 +41,19 @@ const PasswordReset = () => {
         const newErrors = {};
 
         if (!form.oldPassword || form.oldPassword.trim() === "") {
-            newErrors.oldPassword = "Old Password is required";
+            newErrors.oldPassword = t('passwordReset.oldPasswordRequired');
         }
 
         const pwd = form.newPassword || "";
         const pwdPattern = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!])(?=\S+$).{8,}$/;
         if (!pwd || !pwdPattern.test(pwd)) {
-            newErrors.newPassword = "Password must be at least 8 characters, include upper and lower case letters, a number, and a special character";
+            newErrors.newPassword = t('passwordReset.newPasswordError');
         }
 
         if (!form.confirmNewPassword || form.confirmNewPassword.trim() === "") {
-            newErrors.confirmNewPassword = "Confirm Password is required";
+            newErrors.confirmNewPassword = t('passwordReset.confirmPasswordRequired');
         } else if (form.confirmNewPassword !== form.newPassword) {
-            newErrors.confirmNewPassword = "Confirm Password does not match new password";
+            newErrors.confirmNewPassword = t('passwordReset.confirmPasswordMismatch');
         }
 
         setErrors(newErrors);
@@ -70,12 +72,12 @@ const PasswordReset = () => {
         try {
             const res = await authService.resetPassword(form);
 
-            const successMsg = 'Password was updated successfully.';
+            const successMsg = t('passwordReset.updateSuccess');
             setSuccessMessage(successMsg);
             enqueueSnackbar(successMsg, { variant: 'success' });
             setForm({ oldPassword: "", newPassword: "", confirmNewPassword: "" });
         } catch (error) {
-            const errMsg = 'The current password is incorrect. Please try again.';
+            const errMsg = t('passwordReset.updateError');
             setErrors({ submit: errMsg });
         } finally {
             setIsLoading(false);
@@ -105,10 +107,10 @@ const PasswordReset = () => {
                 <Fieldset.Root size="lg">
                     <Stack>
                         <Fieldset.Legend fontSize="3xl" fontWeight="bold" color={'#083951'}>
-                            Reset Password
+                            {t('passwordReset.title')}
                         </Fieldset.Legend>
                         <Fieldset.HelperText>
-                            Enter your current password and choose a new secure password.
+                            {t('passwordReset.subtitle')}
                         </Fieldset.HelperText>
                     </Stack>
 
@@ -125,7 +127,7 @@ const PasswordReset = () => {
                             </Box>
                         )}
 
-                        <Field label="Old Password" required invalid={!!errors.oldPassword} errorText={errors.oldPassword}>
+                        <Field label={t('passwordReset.oldPassword')} required invalid={!!errors.oldPassword} errorText={errors.oldPassword}>
                             <Input
                                 name="oldPassword"
                                 type="password"
@@ -135,7 +137,7 @@ const PasswordReset = () => {
                             />
                         </Field>
 
-                        <Field label="New Password" required invalid={!!errors.newPassword} errorText={errors.newPassword}>
+                        <Field label={t('passwordReset.newPassword')} required invalid={!!errors.newPassword} errorText={errors.newPassword}>
                             <Input
                                 name="newPassword"
                                 type="password"
@@ -145,7 +147,7 @@ const PasswordReset = () => {
                             />
                         </Field>
 
-                        <Field label="Confirm New Password" required invalid={!!errors.confirmNewPassword} errorText={errors.confirmNewPassword}>
+                        <Field label={t('passwordReset.confirmPassword')} required invalid={!!errors.confirmNewPassword} errorText={errors.confirmNewPassword}>
                             <Input
                                 name="confirmNewPassword"
                                 type="password"
@@ -167,7 +169,7 @@ const PasswordReset = () => {
                         isDisabled={isLoading}
                         _hover={{ bg: "#0a4a63" }}
                     >
-                        Reset Password
+                        {t('passwordReset.saveButton')}
                     </Button>
                 </Fieldset.Root>
             </form>

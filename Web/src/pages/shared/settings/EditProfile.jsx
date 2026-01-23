@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from 'react-i18next';
 import { Box, Button, Input, Stack, Spinner } from "@chakra-ui/react";
 import { Field, Fieldset } from "@chakra-ui/react";
 import { useSnackbar } from 'notistack';
@@ -10,6 +11,7 @@ import { AuthContext } from '../../../context/AuthContext';
 
 const EditProfile = () => {
     const navigate = useNavigate();
+    const { t } = useTranslation('settings');
     const { enqueueSnackbar } = useSnackbar();
     const { user, setUser } = useContext(AuthContext);
 
@@ -50,17 +52,17 @@ const EditProfile = () => {
 
         const sanitizedFirstName = sanitizeInput(form.firstName);
         if (sanitizedFirstName.length < 1 || sanitizedFirstName.length > 100) {
-            newErrors.firstName = "First name must be between 1 and 100 characters";
+            newErrors.firstName = t('editProfile.firstNameError');
         }
 
         const sanitizedLastName = sanitizeInput(form.lastName);
         if (sanitizedLastName.length < 1 || sanitizedLastName.length > 100) {
-            newErrors.lastName = "Last name must be between 1 and 100 characters";
+            newErrors.lastName = t('editProfile.lastNameError');
         }
 
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!form.email || !emailRegex.test(form.email)) {
-            newErrors.email = "Please enter a valid email address";
+            newErrors.email = t('editProfile.emailError');
         }
 
         setErrors(newErrors);
@@ -85,7 +87,7 @@ const EditProfile = () => {
                 email: form.email.trim().toLowerCase(),
             };
             await userService.updateEmail(sanitizedData);
-            const successMsg = 'Profile updated successfully. If the mail was changed, please confirm your new email address.';
+            const successMsg = t('editProfile.updateSuccess');
 
             setSuccessMessage(successMsg);
             enqueueSnackbar(successMsg, { variant: 'success' });
@@ -97,7 +99,7 @@ const EditProfile = () => {
             const me = await authService.getMe();
             setUser(me.data || null);
         } catch (error) {
-            const errMsg = 'Profile update failed. Please check your input and try again.';
+            const errMsg = t('editProfile.updateError');
             setErrors({
                 submit: errMsg
             });
@@ -129,10 +131,10 @@ const EditProfile = () => {
                 <Fieldset.Root size="lg" w="100%">
                     <Stack w="100%">
                         <Fieldset.Legend fontSize="3xl" fontWeight="bold" color={'#083951'}>
-                            Edit Profile
+                            {t('editProfile.title')}
                         </Fieldset.Legend>
                         <Fieldset.HelperText>
-                            Please fill in the profile details below.
+                            {t('editProfile.subtitle')}
                         </Fieldset.HelperText>
                     </Stack>
 
@@ -164,7 +166,7 @@ const EditProfile = () => {
                         )}
 
                         <Field.Root invalid={!!errors.firstName}>
-                            <Field.Label>First Name</Field.Label>
+                            <Field.Label>{t('editProfile.firstName')}</Field.Label>
                             <Input
                                 name="firstName"
                                 type="text"
@@ -180,7 +182,7 @@ const EditProfile = () => {
                         </Field.Root>
 
                         <Field.Root invalid={!!errors.lastName}>
-                            <Field.Label>Last Name</Field.Label>
+                            <Field.Label>{t('editProfile.lastName')}</Field.Label>
                             <Input
                                 name="lastName"
                                 type="text"
@@ -196,7 +198,7 @@ const EditProfile = () => {
                         </Field.Root>
 
                         <Field.Root invalid={!!errors.email}>
-                            <Field.Label>Email</Field.Label>
+                            <Field.Label>{t('editProfile.email')}</Field.Label>
                             <Input
                                 name="email"
                                 type="email"
@@ -224,7 +226,7 @@ const EditProfile = () => {
                             bg: "#0a4a63"
                         }}
                     >
-                        Update Profile
+                        {t('editProfile.saveButton')}
                     </Button>
                 </Fieldset.Root>
             </form>
