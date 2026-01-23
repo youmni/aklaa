@@ -9,7 +9,7 @@ i18n
     lng: 'sp',
     fallbackLng: 'en',
     
-    ns: ['common', 'faq', 'home'],
+    ns: ['common', 'faq', 'home', 'auth', 'user', 'ingredient'],
     defaultNS: 'common',
 
     debug: false,

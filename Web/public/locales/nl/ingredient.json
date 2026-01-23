@@ -1,0 +1,79 @@
+{
+  "common": {
+    "backButton": "Terug naar ingrediënten",
+    "noDescription": "geen beschrijving"
+  },
+  "list": {
+    "title": "Ingrediënten",
+    "addButton": "Ingrediënt toevoegen",
+    "searchPlaceholder": "Zoeken op naam of beschrijving...",
+    "allCategories": "Alle categorieën",
+    "ingredientsFound": "{{count}} ingrediënt gevonden",
+    "ingredientsFound_other": "{{count}} ingrediënten gevonden",
+    "fetchFailed": "Ingrediënten ophalen mislukt",
+    "confirmEditTitle": "Bewerken bevestigen",
+    "confirmEditDescription": "Weet u zeker dat u \"{{name}}\" wilt bewerken? Dit kan invloed hebben op bestaande recepten die dit ingrediënt gebruiken.",
+    "confirmEditButton": "Bewerken",
+    "confirmDeleteTitle": "Verwijderen bevestigen",
+    "confirmDeleteDescription": "Weet u zeker dat u \"{{name}}\" wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.",
+    "confirmDeleteButton": "Verwijderen",
+    "deleteSuccess": "Ingrediënt verwijderd",
+    "deleteFailed": "Verwijderen mislukt"
+  },
+  "create": {
+    "title": "Ingrediënt toevoegen",
+    "subtitle": "Vul de ingrediëntdetails hieronder in.",
+    "nameLabel": "Naam",
+    "descriptionLabel": "Beschrijving",
+    "categoryLabel": "Categorie",
+    "unitLabel": "Eenheid",
+    "selectCategory": "Selecteer een categorie",
+    "selectUnit": "Selecteer een eenheid",
+    "submitButton": "Ingrediënt aanmaken",
+    "nameRequired": "Naam is verplicht",
+    "nameLength": "Naam moet tussen 1 en 100 tekens lang zijn",
+    "descriptionLength": "Beschrijving mag maximaal 250 tekens bevatten",
+    "categoryRequired": "Categorie is verplicht",
+    "unitRequired": "Eenheid is verplicht",
+    "createSuccess": "Ingrediënt succesvol aangemaakt.",
+    "createFailed": "Ingrediënt aanmaken mislukt. Controleer uw invoer en probeer het opnieuw."
+  },
+  "edit": {
+    "title": "Ingrediënt bijwerken",
+    "subtitle": "Werk de ingrediëntdetails hieronder bij.",
+    "submitButton": "Ingrediënt bijwerken",
+    "updateSuccess": "Ingrediënt succesvol bijgewerkt.",
+    "updateFailed": "Ingrediënt bijwerken mislukt. Controleer uw invoer en probeer het opnieuw.",
+    "fetchFailed": "Ingrediënt ophalen mislukt"
+  },
+  "delete": {
+    "noIngredientSelected": "Geen ingrediënt geselecteerd",
+    "deleteSuccess": "Ingrediënt succesvol verwijderd.",
+    "deleteFailed": "Ingrediënt verwijderen mislukt. Probeer het opnieuw.",
+    "deleting": "Ingrediënt verwijderen..."
+  },
+  "categories": {
+    "VEGETABLES": "Groenten",
+    "FRUITS": "Fruit",
+    "DAIRY": "Zuivel",
+    "MEAT": "Vlees",
+    "FISH": "Vis",
+    "GRAINS": "Granen",
+    "SPICES": "Kruiden",
+    "BAKING": "Bakken",
+    "DRINKS": "Dranken",
+    "HOUSEHOLD": "Huishouden",
+    "OTHER": "Overig"
+  },
+  "units": {
+    "G": "g",
+    "KG": "kg",
+    "ML": "ml",
+    "L": "l",
+    "PCS": "stk",
+    "TBSP": "el",
+    "TSP": "tl",
+    "CUP": "kop",
+    "PINCH": "snufje"
+  }
+}

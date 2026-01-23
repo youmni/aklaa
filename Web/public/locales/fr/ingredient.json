@@ -1,0 +1,79 @@
+{
+  "common": {
+    "backButton": "Retour aux ingrédients",
+    "noDescription": "pas de description"
+  },
+  "list": {
+    "title": "Ingrédients",
+    "addButton": "Ajouter un ingrédient",
+    "searchPlaceholder": "Rechercher par nom ou description...",
+    "allCategories": "Toutes les catégories",
+    "ingredientsFound": "{{count}} ingrédient trouvé",
+    "ingredientsFound_other": "{{count}} ingrédients trouvés",
+    "fetchFailed": "Échec de la récupération des ingrédients",
+    "confirmEditTitle": "Confirmer la modification",
+    "confirmEditDescription": "Êtes-vous sûr de vouloir modifier \"{{name}}\" ? Cela pourrait affecter les recettes existantes utilisant cet ingrédient.",
+    "confirmEditButton": "Modifier",
+    "confirmDeleteTitle": "Confirmer la suppression",
+    "confirmDeleteDescription": "Êtes-vous sûr de vouloir supprimer \"{{name}}\" ? Cette action ne peut pas être annulée.",
+    "confirmDeleteButton": "Supprimer",
+    "deleteSuccess": "Ingrédient supprimé",
+    "deleteFailed": "Échec de la suppression"
+  },
+  "create": {
+    "title": "Ajouter un ingrédient",
+    "subtitle": "Veuillez remplir les détails de l'ingrédient ci-dessous.",
+    "nameLabel": "Nom",
+    "descriptionLabel": "Description",
+    "categoryLabel": "Catégorie",
+    "unitLabel": "Unité",
+    "selectCategory": "Sélectionner une catégorie",
+    "selectUnit": "Sélectionner une unité",
+    "submitButton": "Créer l'ingrédient",
+    "nameRequired": "Le nom est requis",
+    "nameLength": "Le nom doit contenir entre 1 et 100 caractères",
+    "descriptionLength": "La description doit contenir au maximum 250 caractères",
+    "categoryRequired": "La catégorie est requise",
+    "unitRequired": "L'unité est requise",
+    "createSuccess": "Ingrédient créé avec succès.",
+    "createFailed": "Échec de la création de l'ingrédient. Veuillez vérifier vos données et réessayer."
+  },
+  "edit": {
+    "title": "Mettre à jour l'ingrédient",
+    "subtitle": "Veuillez mettre à jour les détails de l'ingrédient ci-dessous.",
+    "submitButton": "Mettre à jour l'ingrédient",
+    "updateSuccess": "Ingrédient mis à jour avec succès.",
+    "updateFailed": "Échec de la mise à jour de l'ingrédient. Veuillez vérifier vos données et réessayer.",
+    "fetchFailed": "Échec de la récupération de l'ingrédient"
+  },
+  "delete": {
+    "noIngredientSelected": "Aucun ingrédient sélectionné",
+    "deleteSuccess": "Ingrédient supprimé avec succès.",
+    "deleteFailed": "Échec de la suppression de l'ingrédient. Veuillez réessayer.",
+    "deleting": "Suppression de l'ingrédient..."
+  },
+  "categories": {
+    "VEGETABLES": "Légumes",
+    "FRUITS": "Fruits",
+    "DAIRY": "Produits laitiers",
+    "MEAT": "Viande",
+    "FISH": "Poisson",
+    "GRAINS": "Céréales",
+    "SPICES": "Épices",
+    "BAKING": "Pâtisserie",
+    "DRINKS": "Boissons",
+    "HOUSEHOLD": "Ménage",
+    "OTHER": "Autre"
+  },
+  "units": {
+    "G": "g",
+    "KG": "kg",
+    "ML": "ml",
+    "L": "l",
+    "PCS": "pcs",
+    "TBSP": "c.s.",
+    "TSP": "c.c.",
+    "CUP": "tasse",
+    "PINCH": "pincée"
+  }
+}
