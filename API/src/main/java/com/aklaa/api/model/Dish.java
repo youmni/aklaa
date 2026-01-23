@@ -1,5 +1,6 @@
 package com.aklaa.api.model;
 
+import com.aklaa.api.dtos.request.DishIngredientRequestInfoDTO;
 import com.aklaa.api.model.enums.CuisineType;
 import com.aklaa.api.model.enums.DishTag;
 import jakarta.persistence.*;
@@ -14,6 +15,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 @Data
 @AllArgsConstructor
@@ -44,9 +46,15 @@ public class Dish {
     @NotNull(message = "Cuisine type is required")
     private CuisineType type;
 
-    @Lob
-    @Column(columnDefinition = "TEXT")
-    private String cookingSteps;
+    @OneToMany(
+            mappedBy = "dish",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    @OrderBy("orderIndex ASC")
+    @Size(max = 50, message = "A dish cannot have more than 50 steps")
+    @Builder.Default
+    private List<RecipeStep> steps = new ArrayList<>();
 
     @Column(nullable = false)
     @NotBlank(message = "Image URL is required")
@@ -76,4 +84,28 @@ public class Dish {
 
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    public void replaceIngredients(List<DishIngredientRequestInfoDTO> infos, Function<Long, Ingredient> ingredientResolver) {
+        dishIngredients.clear();
+
+        infos.forEach(info -> {
+            DishIngredient di = DishIngredient.builder()
+                    .ingredient(ingredientResolver.apply(info.getIngredientId()))
+                    .quantity(info.getQuantity())
+                    .dish(this)
+                    .build();
+
+            dishIngredients.add(di);
+        });
+    }
+
+    public void replaceSteps(List<RecipeStep> newSteps) {
+        steps.clear();
+        newSteps.forEach(this::addStep);
+    }
+
+    public void addStep(RecipeStep step) {
+        steps.add(step);
+        step.setDish(this);
+    }
 }
