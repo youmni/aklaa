@@ -1,0 +1,18 @@
+{
+  "sidebar": {
+    "account": "Cuenta",
+    "login": "Iniciar sesión",
+    "register": "Registrarse",
+    "users": "Usuarios",
+    "groceries": "Compras",
+    "ingredients": "Ingredientes",
+    "dishes": "Platos",
+    "lists": "Listas",
+    "cart": "Carrito de compras",
+    "settings": "Configuración",
+    "exportData": "Exportar datos",
+    "profile": "Perfil",
+    "resetPassword": "Restablecer contraseña",
+    "logout": "Cerrar sesión"
+  }
+}

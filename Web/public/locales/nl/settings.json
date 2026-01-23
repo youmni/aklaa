@@ -5,13 +5,22 @@
     "firstName": "Voornaam",
     "lastName": "Achternaam",
     "email": "E-mailadres",
+    "language": "Taal",
+    "selectLanguage": "Selecteer je voorkeurstaal",
     "saveButton": "Wijzigingen opslaan",
     "cancelButton": "Annuleren",
     "firstNameError": "Voornaam moet tussen 1 en 100 tekens zijn",
     "lastNameError": "Achternaam moet tussen 1 en 100 tekens zijn",
     "emailError": "Voer een geldig e-mailadres in",
     "updateSuccess": "Profiel succesvol bijgewerkt",
-    "updateError": "Profiel bijwerken mislukt"
+    "updateError": "Profiel bijwerken mislukt",
+    "languageChanged": "Taal succesvol gewijzigd"
+  },
+  "languages": {
+    "en": "English",
+    "fr": "Français",
+    "nl": "Nederlands",
+    "sp": "Español"
   },
   "deleteProfile": {
     "title": "Profiel verwijderen",

@@ -5,13 +5,22 @@
     "firstName": "Nombre",
     "lastName": "Apellido",
     "email": "Correo electrónico",
+    "language": "Idioma",
+    "selectLanguage": "Selecciona tu idioma preferido",
     "saveButton": "Guardar cambios",
     "cancelButton": "Cancelar",
     "firstNameError": "El nombre debe tener entre 1 y 100 caracteres",
     "lastNameError": "El apellido debe tener entre 1 y 100 caracteres",
     "emailError": "Por favor, introduce una dirección de correo electrónico válida",
     "updateSuccess": "Perfil actualizado con éxito",
-    "updateError": "Error al actualizar el perfil"
+    "updateError": "Error al actualizar el perfil",
+    "languageChanged": "Idioma cambiado con éxito"
+  },
+  "languages": {
+    "en": "English",
+    "fr": "Français",
+    "nl": "Nederlands",
+    "sp": "Español"
   },
   "deleteProfile": {
     "title": "Eliminar perfil",

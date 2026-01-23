@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 import { Box, Text, Link, VStack } from '@chakra-ui/react';
 import { FiChevronDown, FiChevronRight } from 'react-icons/fi';
+import { useTranslation } from 'react-i18next';
 
-const SidebarItem = ({ id, label, href, children, level = 0, isFooter = false }) => {
+const SidebarItem = ({ id, labelKey, href, children, level = 0, isFooter = false }) => {
+  const { t } = useTranslation('navigation');
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
   const hasChildren = children && children.length > 0;
@@ -35,7 +37,7 @@ const SidebarItem = ({ id, label, href, children, level = 0, isFooter = false })
           transition="all 0.2s"
         >
           <Text fontWeight={level === 0 ? 'semibold' : 'medium'} fontSize="sm" color="gray.700">
-            {label}
+            {t(labelKey)}
           </Text>
           <Box color="gray.500">
             {isOpen ? <FiChevronDown size={18} /> : <FiChevronRight size={18} />}
@@ -78,7 +80,7 @@ const SidebarItem = ({ id, label, href, children, level = 0, isFooter = false })
         fontSize="sm"
         color={isFooter ? (isActive ? 'red.700' : 'red.600') : (isActive ? 'blue.700' : 'gray.700')}
       >
-        {label}
+        {t(labelKey)}
       </Text>
     </Link>
   );

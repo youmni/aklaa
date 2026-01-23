@@ -1,0 +1,18 @@
+{
+  "sidebar": {
+    "account": "Account",
+    "login": "Inloggen",
+    "register": "Registreren",
+    "users": "Gebruikers",
+    "groceries": "Boodschappen",
+    "ingredients": "Ingrediënten",
+    "dishes": "Gerechten",
+    "lists": "Lijsten",
+    "cart": "Winkelwagen",
+    "settings": "Instellingen",
+    "exportData": "Gegevens exporteren",
+    "profile": "Profiel",
+    "resetPassword": "Wachtwoord resetten",
+    "logout": "Uitloggen"
+  }
+}

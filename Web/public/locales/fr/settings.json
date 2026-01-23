@@ -5,13 +5,22 @@
     "firstName": "Prénom",
     "lastName": "Nom",
     "email": "Adresse e-mail",
+    "language": "Langue",
+    "selectLanguage": "Sélectionnez votre langue préférée",
     "saveButton": "Enregistrer les modifications",
     "cancelButton": "Annuler",
     "firstNameError": "Le prénom doit contenir entre 1 et 100 caractères",
     "lastNameError": "Le nom doit contenir entre 1 et 100 caractères",
     "emailError": "Veuillez saisir une adresse e-mail valide",
     "updateSuccess": "Profil mis à jour avec succès",
-    "updateError": "Échec de la mise à jour du profil"
+    "updateError": "Échec de la mise à jour du profil",
+    "languageChanged": "Langue modifiée avec succès"
+  },
+  "languages": {
+    "en": "English",
+    "fr": "Français",
+    "nl": "Nederlands",
+    "sp": "Español"
   },
   "deleteProfile": {
     "title": "Supprimer le profil",

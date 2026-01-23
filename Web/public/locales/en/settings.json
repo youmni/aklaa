@@ -5,13 +5,22 @@
     "firstName": "First Name",
     "lastName": "Last Name",
     "email": "Email Address",
+    "language": "Language",
+    "selectLanguage": "Select your preferred language",
     "saveButton": "Save Changes",
     "cancelButton": "Cancel",
     "firstNameError": "First name must be between 1 and 100 characters",
     "lastNameError": "Last name must be between 1 and 100 characters",
     "emailError": "Please enter a valid email address",
     "updateSuccess": "Profile updated successfully",
-    "updateError": "Failed to update profile"
+    "updateError": "Failed to update profile",
+    "languageChanged": "Language changed successfully"
+  },
+  "languages": {
+    "en": "English",
+    "fr": "Français",
+    "nl": "Nederlands",
+    "sp": "Español"
   },
   "deleteProfile": {
     "title": "Delete Profile",

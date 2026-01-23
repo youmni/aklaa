@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
-import { Box, Button, Input, Stack, Spinner } from "@chakra-ui/react";
+import { Box, Button, Input, Stack, Spinner, Portal, Select, createListCollection } from "@chakra-ui/react";
 import { Field, Fieldset } from "@chakra-ui/react";
 import { useSnackbar } from 'notistack';
 import authService from "../../../services/authService";
@@ -11,15 +11,25 @@ import { AuthContext } from '../../../context/AuthContext';
 
 const EditProfile = () => {
     const navigate = useNavigate();
-    const { t } = useTranslation('settings');
+    const { t, i18n } = useTranslation('settings');
     const { enqueueSnackbar } = useSnackbar();
     const { user, setUser } = useContext(AuthContext);
+
+    const languages = createListCollection({
+        items: [
+            { label: t('languages.en'), value: "en" },
+            { label: t('languages.fr'), value: "fr" },
+            { label: t('languages.nl'), value: "nl" },
+            { label: t('languages.sp'), value: "sp" },
+        ],
+    });
 
     const [form, setForm] = useState({
         firstName: user?.firstName || "",
         lastName: user?.lastName || "",
         email: user?.email || ""
     });
+    const [selectedLanguage, setSelectedLanguage] = useState([i18n.language || 'en']);
     const [errors, setErrors] = useState({});
     const [isLoading, setIsLoading] = useState(false);
     const [successMessage, setSuccessMessage] = useState("");
@@ -41,6 +51,14 @@ const EditProfile = () => {
         if (successMessage) {
             setSuccessMessage("");
         }
+    };
+
+    const handleLanguageChange = (details) => {
+        const newLanguage = details.value[0];
+        setSelectedLanguage(details.value);
+        i18n.changeLanguage(newLanguage);
+        localStorage.setItem('preferredLanguage', newLanguage);
+        enqueueSnackbar(t('editProfile.languageChanged'), { variant: 'success' });
     };
 
     const sanitizeInput = (input) => {
@@ -211,6 +229,39 @@ const EditProfile = () => {
                             {errors.email && (
                                 <Field.ErrorText>{errors.email}</Field.ErrorText>
                             )}
+                        </Field.Root>
+
+                        <Field.Root>
+                            <Field.Label>{t('editProfile.language')}</Field.Label>
+                            <Field.HelperText>{t('editProfile.selectLanguage')}</Field.HelperText>
+                            <Select.Root 
+                                collection={languages} 
+                                value={selectedLanguage}
+                                onValueChange={handleLanguageChange}
+                                width="100%"
+                            >
+                                <Select.HiddenSelect />
+                                <Select.Control>
+                                    <Select.Trigger>
+                                        <Select.ValueText placeholder={t('editProfile.selectLanguage')} />
+                                    </Select.Trigger>
+                                    <Select.IndicatorGroup>
+                                        <Select.Indicator />
+                                    </Select.IndicatorGroup>
+                                </Select.Control>
+                                <Portal>
+                                    <Select.Positioner>
+                                        <Select.Content>
+                                            {languages.items.map((language) => (
+                                                <Select.Item item={language} key={language.value}>
+                                                    {language.label}
+                                                    <Select.ItemIndicator />
+                                                </Select.Item>
+                                            ))}
+                                        </Select.Content>
+                                    </Select.Positioner>
+                                </Portal>
+                            </Select.Root>
                         </Field.Root>
                     </Fieldset.Content>
                     <Button

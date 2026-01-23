@@ -1,0 +1,18 @@
+{
+  "sidebar": {
+    "account": "Account",
+    "login": "Login",
+    "register": "Register",
+    "users": "Users",
+    "groceries": "Groceries",
+    "ingredients": "Ingredients",
+    "dishes": "Dishes",
+    "lists": "Lists",
+    "cart": "Shopping Cart",
+    "settings": "Settings",
+    "exportData": "Export User Data",
+    "profile": "Profile",
+    "resetPassword": "Reset Password",
+    "logout": "Logout"
+  }
+}
