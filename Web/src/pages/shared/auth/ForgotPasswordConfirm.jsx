@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useSearchParams, Link as RouterLink } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import authService from "../../../services/authService";
 import {
     Button,
@@ -13,6 +14,7 @@ import StatusCard from "../../../components/ui/StatusMessageCard";
 import { Field } from "../../../components/ui/field";
 
 const PasswordResetConfirm = () => {
+    const { t } = useTranslation('auth');
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const token = searchParams.get("token");
@@ -30,7 +32,7 @@ const PasswordResetConfirm = () => {
 
     useEffect(() => {
         if (!token) {
-            setErrors({ token: "No token provided." });
+            setErrors({ token: t('forgotPasswordConfirm.noToken') });
             setIsLoading(false);
             return;
         }
@@ -41,7 +43,7 @@ const PasswordResetConfirm = () => {
                 setTokenValid(true);
             } catch (err) {
                 const apiMessage = err.response?.data?.message || err.response?.data;
-                setErrors({ token: apiMessage || "Token is invalid or expired." });
+                setErrors({ token: apiMessage || t('forgotPasswordConfirm.tokenInvalid') });
             } finally {
                 setIsLoading(false);
             }
@@ -64,10 +66,10 @@ const PasswordResetConfirm = () => {
     const validateForm = () => {
         const newErrors = {};
         if (!form.newPassword || !passwordRegex.test(form.newPassword)) {
-            newErrors.newPassword = "Password must be at least 8 characters, include upper and lower case letters, a number and a special character, and contain no spaces.";
+            newErrors.newPassword = t('forgotPasswordConfirm.passwordInvalid');
         }
         if (form.newPassword !== form.confirmPassword) {
-            newErrors.confirmPassword = "Passwords do not match.";
+            newErrors.confirmPassword = t('forgotPasswordConfirm.passwordMismatch');
         }
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
@@ -86,12 +88,12 @@ const PasswordResetConfirm = () => {
                 token,
                 newPassword: form.newPassword
             });
-            const msg = response?.data?.message || response?.data || "Password successfully updated!";
+            const msg = response?.data?.message || response?.data || t('forgotPasswordConfirm.resetSuccess');
             setSuccessMessage(msg);
             setForm({ newPassword: "", confirmPassword: "" });
             navigate("/auth/login");
         } catch (err) {
-            const apiMessage = err.response?.data?.message || err.response?.data || "Error updating password.";
+            const apiMessage = err.response?.data?.message || err.response?.data || t('forgotPasswordConfirm.resetFailed');
             setErrors({ submit: apiMessage });
         } finally {
             setIsLoading(false);
@@ -110,10 +112,10 @@ const PasswordResetConfirm = () => {
         return (
             <StatusCard
                 success={false}
-                title="Password reset failed"
+                title={t('forgotPasswordConfirm.resetFailedTitle')}
                 message={errors.token}
                 onPrimaryClick={() => navigate("/auth/password-reset")}
-                primaryText="Request new link"
+                primaryText={t('forgotPasswordConfirm.requestNewLink')}
             />
         );
     }
@@ -122,10 +124,10 @@ const PasswordResetConfirm = () => {
         return (
             <StatusCard
                 success={false}
-                title="Update failed"
+                title={t('forgotPasswordConfirm.updateFailedTitle')}
                 message={errors.submit}
                 onPrimaryClick={() => navigate("/auth/password-reset")}
-                primaryText="Request new link"
+                primaryText={t('forgotPasswordConfirm.requestNewLink')}
             />
         );
     }
@@ -161,9 +163,9 @@ const PasswordResetConfirm = () => {
                 <form onSubmit={handleSubmit}>
                     <Fieldset.Root size="lg">
                         <Stack>
-                            <Fieldset.Legend>Reset password</Fieldset.Legend>
+                            <Fieldset.Legend>{t('forgotPasswordConfirm.title')}</Fieldset.Legend>
                             <Fieldset.HelperText>
-                                Enter a new password and confirm it.
+                                {t('forgotPasswordConfirm.subtitle')}
                             </Fieldset.HelperText>
                         </Stack>
 
@@ -182,7 +184,7 @@ const PasswordResetConfirm = () => {
                             )}
 
                             <Stack spacing={4}>
-                                <Field label="New password" required invalid={!!errors.newPassword} errorText={errors.newPassword}>
+                                <Field label={t('forgotPasswordConfirm.newPasswordLabel')} required invalid={!!errors.newPassword} errorText={errors.newPassword}>
                                     <Input
                                         name="newPassword"
                                         type="password"
@@ -191,7 +193,7 @@ const PasswordResetConfirm = () => {
                                     />
                                 </Field>
 
-                                <Field label="Confirm password" required invalid={!!errors.confirmPassword} errorText={errors.confirmPassword}>
+                                <Field label={t('forgotPasswordConfirm.confirmPasswordLabel')} required invalid={!!errors.confirmPassword} errorText={errors.confirmPassword}>
                                     <Input
                                         name="confirmPassword"
                                         type="password"
@@ -210,7 +212,7 @@ const PasswordResetConfirm = () => {
                             spinnerPlacement="center"
                             isDisabled={isLoading}
                         >
-                            Reset password
+                            {t('forgotPasswordConfirm.submitButton')}
                         </Button>
                     </Fieldset.Root>
                 </form>

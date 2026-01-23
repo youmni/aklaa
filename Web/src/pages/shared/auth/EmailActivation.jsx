@@ -1,20 +1,22 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import api from '../../../api/axiosConfig';
 import { Box, Heading, Spinner, Text } from '@chakra-ui/react';
 import StatusCard from '../../../components/ui/StatusMessageCard';
 
 function EmailActivation() {
+  const { t } = useTranslation('auth');
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const [message, setMessage] = useState("Activating your new email...");
+  const [message, setMessage] = useState(t('emailActivation.activating'));
   const [isLoading, setIsLoading] = useState(true);
   const [isSuccess, setIsSuccess] = useState(false);
   
   useEffect(() => {
     const token = searchParams.get("token");
     if (!token) {
-      setMessage("No email token provided. Please check your email for the activation link.");
+      setMessage(t('emailActivation.noToken'));
       setIsLoading(false);
       setIsSuccess(false);
       return;
@@ -23,16 +25,16 @@ function EmailActivation() {
     api
       .get(`/users/email-confirm?token=${token}`)
       .then(() => {
-        setMessage("Your new email has been successfully activated!");
+        setMessage(t('emailActivation.success'));
         setIsSuccess(true);
         setIsLoading(false);
       })
       .catch(() => {
-        setMessage("Activation failed. The token may be invalid or expired. Please try again or contact support.");
+        setMessage(t('emailActivation.failed'));
         setIsSuccess(false);
         setIsLoading(false);
       });
-  }, [searchParams]);
+  }, [searchParams, t]);
 
   const handleGoToLogin = () => {
     navigate('/auth/login');
@@ -73,10 +75,10 @@ function EmailActivation() {
   return (
     <StatusCard
       success={isSuccess}
-      title={isSuccess ? "New Email Activation Successful!" : "New Email Activation Failed"}
+      title={isSuccess ? t('emailActivation.successTitle') : t('emailActivation.failedTitle')}
       message={message}
       onPrimaryClick={isSuccess ? handleGoToLogin : handleGoHome}
-      primaryText={isSuccess ? "Go to Login" : "Go to Home"}
+      primaryText={isSuccess ? t('emailActivation.goToLogin') : t('emailActivation.goToHome')}
     />
   );
 }
