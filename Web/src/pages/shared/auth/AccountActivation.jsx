@@ -1,20 +1,22 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import { Box, Heading, Spinner, Text } from '@chakra-ui/react';
 import StatusCard from '../../../components/ui/StatusMessageCard';
 
 function AccountActivation() {
+  const { t } = useTranslation('auth');
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const [message, setMessage] = useState("Activating your account...");
+  const [message, setMessage] = useState(t('accountActivation.activating'));
   const [isLoading, setIsLoading] = useState(true);
   const [isSuccess, setIsSuccess] = useState(false);
   
   useEffect(() => {
     const token = searchParams.get("token");
     if (!token) {
-      setMessage("No activation token provided. Please check your email for the activation link.");
+      setMessage(t('accountActivation.noToken'));
       setIsLoading(false);
       setIsSuccess(false);
       return;
@@ -23,16 +25,16 @@ function AccountActivation() {
     axios
       .get(`${import.meta.env.VITE_BACKEND_URL}/api/auth/activate?token=${token}`)
       .then(() => {
-        setMessage("Your account has been successfully activated! You can now log in.");
+        setMessage(t('accountActivation.success'));
         setIsSuccess(true);
         setIsLoading(false);
       })
       .catch(() => {
-        setMessage("Activation failed. The token may be invalid or expired. Please try registering again or contact support.");
+        setMessage(t('accountActivation.failed'));
         setIsSuccess(false);
         setIsLoading(false);
       });
-  }, [searchParams]);
+  }, [searchParams, t]);
 
   const handleGoToLogin = () => {
     navigate('/auth/login');
@@ -73,10 +75,10 @@ function AccountActivation() {
   return (
     <StatusCard
       success={isSuccess}
-      title={isSuccess ? "Activation Successful!" : "Activation Failed"}
+      title={isSuccess ? t('accountActivation.successTitle') : t('accountActivation.failedTitle')}
       message={message}
       onPrimaryClick={isSuccess ? handleGoToLogin : handleGoHome}
-      primaryText={isSuccess ? "Go to Login" : "Go to Home"}
+      primaryText={isSuccess ? t('accountActivation.goToLogin') : t('accountActivation.goToHome')}
     />
   );
 }

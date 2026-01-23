@@ -4,19 +4,19 @@ import { FaTools } from 'react-icons/fa';
 export const sidebarItems = [
   {
     id: 'auth',
-    label: 'Account',
+    labelKey: 'sidebar.account',
     roles: [],
     children: [
       {
         id: 'login',
-        label: 'Login',
+        labelKey: 'sidebar.login',
         href: '/auth/login',
         roles: [],
         hideWhenLoggedIn: true,
       },
       {
         id: 'register',
-        label: 'Register',
+        labelKey: 'sidebar.register',
         href: '/auth/register',
         roles: [],
         hideWhenLoggedIn: true,
@@ -25,24 +25,24 @@ export const sidebarItems = [
   },
   {
     id: 'users',
-    label: 'Users',
+    labelKey: 'sidebar.users',
     href: '/admin/users',
     roles: ['ADMIN'],
   },
   {
     id: 'groceries',
-    label: 'Groceries',
+    labelKey: 'sidebar.groceries',
     roles: [],
     children: [
       {
         id: 'ingredients',
-        label: 'Ingredients',
+        labelKey: 'sidebar.ingredients',
         href: '/ingredients',
         roles: ['USER', 'ADMIN'],
       },
       {
         id: 'dishes',
-        label: 'Dishes',
+        labelKey: 'sidebar.dishes',
         href: '/dishes',
         roles: ['USER', 'ADMIN'],
       }
@@ -50,30 +50,30 @@ export const sidebarItems = [
   },
   {
     id: 'grocerylists',
-    label: 'Lists',
+    labelKey: 'sidebar.lists',
     href: '/grocerylists',
     roles: ['USER', 'ADMIN'],
   },
   {
     id: 'settings',
-    label: 'Settings',
+    labelKey: 'sidebar.settings',
     roles: [],
     children: [
       {
         id: 'export',
-        label: 'Export User Data',
+        labelKey: 'sidebar.exportData',
         href: '/settings/export',
         roles: ['USER', 'ADMIN'],
       },
             {
         id: 'profile',
-        label: 'Profile',
+        labelKey: 'sidebar.profile',
         href: '/settings/profile',
         roles: ['USER', 'ADMIN'],
       },
       {
         id: 'password-reset',
-        label: 'Reset Password',
+        labelKey: 'sidebar.resetPassword',
         href: '/settings/password-reset',
         roles: ['USER', 'ADMIN'],
       },
@@ -84,7 +84,7 @@ export const sidebarItems = [
 export const sidebarFooterItems = [
   {
     id: 'logout',
-    label: 'Logout',
+    labelKey: 'sidebar.logout',
     href: '/auth/logout',
     roles: ['USER', 'ADMIN'],
     isFooter: true,

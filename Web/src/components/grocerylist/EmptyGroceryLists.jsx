@@ -1,14 +1,17 @@
 import { Button, Container, Flex, Heading, Text, VStack, Box } from '@chakra-ui/react';
 import { FaListUl, FaShoppingCart } from 'react-icons/fa';
+import { useTranslation } from 'react-i18next';
 
 const EmptyGroceryLists = ({ onGoToCart }) => {
+    const { t } = useTranslation('grocerylist');
+    
     return (
         <Box bg="gray.50" minH="100vh" py={12}>
             <Container maxW="100%" px={8}>
                 <VStack align="stretch" gap={8}>
                     <Flex align="center" gap={3}>
                         <Text fontSize={{ base: "2xl", md: "3xl" }} fontWeight="bold" color="#083951">
-                            Grocery Lists
+                            {t('common.groceryList')}
                         </Text>
                     </Flex>
 
@@ -34,10 +37,10 @@ const EmptyGroceryLists = ({ onGoToCart }) => {
                                 </Box>
                             </Flex>
                             <Heading size="md" mb={3} color="#083951">
-                                No grocery lists yet
+                                {t('empty.title')}
                             </Heading>
                             <Text fontSize="md" color="gray.600" mb={8}>
-                                Create your first grocery list by adding dishes to your cart and saving it!
+                                {t('empty.description')}
                             </Text>
                             <Button
                                 bg="#083951"
@@ -49,7 +52,7 @@ const EmptyGroceryLists = ({ onGoToCart }) => {
                                 borderRadius="xl"
                                 px={8}
                             >
-                                Go to Cart
+                                {t('empty.goToCartButton')}
                             </Button>
                         </Box>
                     </Flex>

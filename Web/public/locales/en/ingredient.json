@@ -1,0 +1,79 @@
+{
+  "common": {
+    "backButton": "Back to ingredients",
+    "noDescription": "no description"
+  },
+  "list": {
+    "title": "Ingredients",
+    "addButton": "Add Ingredient",
+    "searchPlaceholder": "Search by name or description...",
+    "allCategories": "All categories",
+    "ingredientsFound": "{{count}} ingredient found",
+    "ingredientsFound_other": "{{count}} ingredients found",
+    "fetchFailed": "Failed to get ingredients",
+    "confirmEditTitle": "Confirm Edit",
+    "confirmEditDescription": "Are you sure you want to edit \"{{name}}\"? This could have an effect on existing recipes using this ingredient.",
+    "confirmEditButton": "Edit",
+    "confirmDeleteTitle": "Confirm Delete",
+    "confirmDeleteDescription": "Are you sure you want to delete \"{{name}}\"? This action cannot be undone.",
+    "confirmDeleteButton": "Delete",
+    "deleteSuccess": "Ingredient deleted",
+    "deleteFailed": "Delete failed"
+  },
+  "create": {
+    "title": "Add Ingredient",
+    "subtitle": "Please fill in the ingredient details below.",
+    "nameLabel": "Name",
+    "descriptionLabel": "Description",
+    "categoryLabel": "Category",
+    "unitLabel": "Unit",
+    "selectCategory": "Select a category",
+    "selectUnit": "Select a unit",
+    "submitButton": "Create Ingredient",
+    "nameRequired": "Name is required",
+    "nameLength": "Name must be between 1 and 100 characters",
+    "descriptionLength": "Description must be maximum 250 characters",
+    "categoryRequired": "Category is required",
+    "unitRequired": "Unit is required",
+    "createSuccess": "Ingredient created successfully.",
+    "createFailed": "Ingredient creation failed. Please check your input and try again."
+  },
+  "edit": {
+    "title": "Update Ingredient",
+    "subtitle": "Please update the ingredient details below.",
+    "submitButton": "Update Ingredient",
+    "updateSuccess": "Ingredient updated successfully.",
+    "updateFailed": "Ingredient update failed. Please check your input and try again.",
+    "fetchFailed": "Failed to fetch ingredient"
+  },
+  "delete": {
+    "noIngredientSelected": "No ingredient selected",
+    "deleteSuccess": "Ingredient deleted successfully.",
+    "deleteFailed": "Failed to delete ingredient. Please try again.",
+    "deleting": "Deleting ingredient..."
+  },
+  "categories": {
+    "VEGETABLES": "Vegetables",
+    "FRUITS": "Fruits",
+    "DAIRY": "Dairy",
+    "MEAT": "Meat",
+    "FISH": "Fish",
+    "GRAINS": "Grains",
+    "SPICES": "Spices",
+    "BAKING": "Baking",
+    "DRINKS": "Drinks",
+    "HOUSEHOLD": "Household",
+    "OTHER": "Other"
+  },
+  "units": {
+    "G": "g",
+    "KG": "kg",
+    "ML": "ml",
+    "L": "l",
+    "PCS": "pcs",
+    "TBSP": "tbsp",
+    "TSP": "tsp",
+    "CUP": "cup",
+    "PINCH": "pinch"
+  }
+}

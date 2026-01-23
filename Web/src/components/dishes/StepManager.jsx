@@ -8,10 +8,13 @@ import {
     VStack,
     Flex
 } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 import { Field } from '../ui/field';
 import { FaPlus, FaTrash, FaArrowUp, FaArrowDown } from 'react-icons/fa';
 
 const StepManager = ({ steps, onChange, errors = {} }) => {
+    const { t } = useTranslation('dish');
+    
     const handleAddStep = () => {
         onChange([...steps, { stepText: '' }]);
     };
@@ -42,7 +45,7 @@ const StepManager = ({ steps, onChange, errors = {} }) => {
 
     return (
         <Field
-            label="Cooking Steps"
+            label={t('steps.label')}
             mb={4}
             invalid={!!errors.steps}
             errorText={errors.steps}
@@ -58,7 +61,7 @@ const StepManager = ({ steps, onChange, errors = {} }) => {
                     px={6}
                     isDisabled={steps.length >= 50}
                 >
-                    <FaPlus style={{ marginRight: '8px' }} /> Add Step
+                    <FaPlus style={{ marginRight: '8px' }} /> {t('steps.addButton')}
                 </Button>
             </Flex>
 
@@ -75,8 +78,8 @@ const StepManager = ({ steps, onChange, errors = {} }) => {
                 <VStack align="stretch" gap={3}>
                     {steps.length === 0 ? (
                         <Box textAlign="center" py={12}>
-                            <Text color="#083951" fontSize="lg" fontWeight="medium">No steps added yet</Text>
-                            <Text color="gray.500" fontSize="sm" mt={2}>Click "Add Step" to get started</Text>
+                            <Text color="#083951" fontSize="lg" fontWeight="medium">{t('steps.noSteps')}</Text>
+                            <Text color="gray.500" fontSize="sm" mt={2}>{t('steps.noStepsDescription')}</Text>
                         </Box>
                     ) : (
                         steps.map((step, index) => (
@@ -113,12 +116,12 @@ const StepManager = ({ steps, onChange, errors = {} }) => {
                                     </VStack>
                                     <Box flex={1}>
                                         <Field
-                                            label={<Text color="gray.700" fontWeight="medium">Step {index + 1}</Text>}
+                                            label={<Text color="gray.700" fontWeight="medium">{t('details.step')} {index + 1}</Text>}
                                             invalid={!!errors[`step_${index}`]}
                                             errorText={errors[`step_${index}`]}
                                         >
                                             <Textarea
-                                                placeholder=" Describe this cooking step..."
+                                                placeholder={t('steps.stepPlaceholder')}
                                                 value={step.stepText}
                                                 onChange={(e) => handleStepChange(index, e.target.value)}
                                                 rows={3}

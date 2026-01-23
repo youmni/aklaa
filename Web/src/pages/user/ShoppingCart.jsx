@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Container, Flex, Text, VStack, Spinner, Box } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
+import { useTranslation } from 'react-i18next';
 import cartService from '../../services/cartService';
 import dishService from '../../services/dishService';
 import groceryListService from '../../services/groceryListService';
@@ -12,6 +13,7 @@ import CartSummary from '../../components/shoppingcart/CartSummary';
 import EmptyCart from '../../components/shoppingcart/EmptyCart';
 
 const ShoppingCart = () => {
+    const { t } = useTranslation('cart');
     const [cartItems, setCartItems] = useState([]);
     const [dishes, setDishes] = useState({});
     const [startOfWeek, setStartOfWeek] = useState('');
@@ -66,33 +68,33 @@ const ShoppingCart = () => {
             }
         } catch (error) {
             console.error('Error fetching cart:', error);
-            enqueueSnackbar('Failed to load cart items', { variant: 'error' });
+            enqueueSnackbar(t('cart.fetchError'), { variant: 'error' });
         } finally {
             setLoading(false);
         }
     };
 
     const handleClearCart = async () => {
-        if (!window.confirm('Are you sure you want to clear your cart?')) return;
+        if (!window.confirm(t('header.confirmClearDescription'))) return;
         
         try {
             await cartService.clearCart();
-            enqueueSnackbar('Cart cleared successfully', { variant: 'success' });
+            enqueueSnackbar(t('cart.clearSuccess'), { variant: 'success' });
             setCartItems([]);
             setDishes({});
         } catch (error) {
-            enqueueSnackbar('Failed to clear cart', { variant: 'error' });
+            enqueueSnackbar(t('cart.clearError'), { variant: 'error' });
         }
     };
 
     const handleSaveCart = async () => {
         if (!startOfWeek || !endOfWeek) {
-            enqueueSnackbar('Please select start and end dates', { variant: 'error' });
+            enqueueSnackbar(t('cart.saveError'), { variant: 'error' });
             return;
         }
 
         if (cartItems.length === 0) {
-            enqueueSnackbar('Your cart is empty', { variant: 'error' });
+            enqueueSnackbar(t('cart.saveError'), { variant: 'error' });
             return;
         }
 
@@ -102,12 +104,12 @@ const ShoppingCart = () => {
                 endOfWeek: `${endOfWeek}T23:59:59`
             });
             
-            enqueueSnackbar('Grocery list saved successfully', { variant: 'success' });
+            enqueueSnackbar(t('cart.saveSuccess'), { variant: 'success' });
             setCartItems([]);
             setDishes({});
             navigate('/dishes');
         } catch (error) {
-            enqueueSnackbar('Failed to save grocery list', { variant: 'error' });
+            enqueueSnackbar(t('cart.saveError'), { variant: 'error' });
         }
     };
 
@@ -116,7 +118,7 @@ const ShoppingCart = () => {
             <Box bg="gray.50" minH="100vh" py={12}>
                 <Flex justify="center" align="center" minH="60vh" direction="column" gap={4}>
                     <Spinner size="xl" color="#083951" thickness="4px" />
-                    <Text fontSize="lg" color="gray.600">Loading your cart...</Text>
+                    <Text fontSize="lg" color="gray.600">{t('common.loading')}</Text>
                 </Flex>
             </Box>
         );

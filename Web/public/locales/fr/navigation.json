@@ -1,0 +1,18 @@
+{
+  "sidebar": {
+    "account": "Compte",
+    "login": "Connexion",
+    "register": "S'inscrire",
+    "users": "Utilisateurs",
+    "groceries": "Épicerie",
+    "ingredients": "Ingrédients",
+    "dishes": "Plats",
+    "lists": "Listes",
+    "cart": "Panier",
+    "settings": "Paramètres",
+    "exportData": "Exporter les données",
+    "profile": "Profil",
+    "resetPassword": "Réinitialiser le mot de passe",
+    "logout": "Déconnexion"
+  }
+}

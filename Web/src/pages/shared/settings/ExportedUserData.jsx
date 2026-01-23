@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import userService from '../../../services/userService';
 import {
   Box,
@@ -18,6 +19,7 @@ function parseFilename(contentDisposition) {
 }
 
 const ExportedUserData = () => {
+  const { t } = useTranslation('settings');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -45,7 +47,7 @@ const ExportedUserData = () => {
       a.remove();
       window.URL.revokeObjectURL(url);
     } catch (err) {
-      setError(err?.response?.data || err.message || 'Download failed');
+      setError(t('exportData.downloadError'));
     } finally {
       setLoading(false);
     }
@@ -60,13 +62,10 @@ const ExportedUserData = () => {
       <Stack spacing={4} maxW="1200px" mx="auto">
         <Stack spacing={2}>
           <Text fontSize="3xl" color="#083951" fontWeight="bold">
-            Export your personal data
+            {t('exportData.title')}
           </Text>
           <Text fontSize="sm" color="#000000ff">
-            In accordance with applicable data protection regulations, including
-            the General Data Protection Regulation (GDPR), you have the right to
-            access and obtain a copy of the personal data we process about you.
-            The export is provided in a commonly used, machine-readable format.
+            {t('exportData.description')}
           </Text>
 
           {error && (
@@ -85,7 +84,7 @@ const ExportedUserData = () => {
           loadingText="Preparing"
           w="100%"
         >
-          Download data
+          {t('exportData.downloadButton')}
         </Button>
       </Stack>
     </Box>

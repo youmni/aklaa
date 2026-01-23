@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import authService from "../../../services/authService";
 import RedirectToPath from "../../../components/navigation/Redirect";
 import { useAuth } from "../../../hooks/useAuth";
@@ -14,6 +15,7 @@ import {
 import { Field } from '../../../components/ui/field';
 
 const Login = () => {
+    const { t } = useTranslation('auth');
     const navigate = useNavigate();
     const [form, setForm] = useState({
         email: "",
@@ -47,12 +49,12 @@ const Login = () => {
     const validateForm = () => {
         const newErrors = {};
         if (!form.email || form.email.trim() === "") {
-            newErrors.email = "Email is verplicht";
+            newErrors.email = t('login.emailRequired');
         } else if (!/\S+@\S+\.\S+/.test(form.email.trim())) {
-            newErrors.email = "Ongeldig e-mailadres";
+            newErrors.email = t('login.emailInvalid');
         }
         if (!form.password || form.password === "") {
-            newErrors.password = "Wachtwoord is verplicht";
+            newErrors.password = t('login.passwordRequired');
         }
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
@@ -82,7 +84,7 @@ const Login = () => {
 
             const successMsg = response?.data?.message
                 ? response.data.message
-                : `Login successful for ${form.email}.`;
+                : t('login.loginSuccess', { email: form.email });
 
             setSuccessMessage(successMsg);
             setForm({
@@ -94,7 +96,7 @@ const Login = () => {
             const errMsg =
                 error?.response?.data?.message ||
                 error?.message ||
-                'Login failed. Please check your email and password and try again.';
+                t('login.loginFailed');
 
             setErrors({
                 submit: errMsg
@@ -139,14 +141,14 @@ const Login = () => {
                 <form onSubmit={handleSubmit}>
                     <Box position="absolute" top={4} right={4} fontSize="sm">
                         <RouterLink to="/auth/password-reset" style={{ textDecoration: 'underline', color: '#000000ff', fontWeight: 600 }}>
-                            Forgot password?
+                            {t('login.forgotPassword')}
                         </RouterLink>
                     </Box>
                     <Fieldset.Root size="lg">
                         <Stack>
-                            <Fieldset.Legend>Login</Fieldset.Legend>
+                            <Fieldset.Legend>{t('login.title')}</Fieldset.Legend>
                             <Fieldset.HelperText>
-                                Please fill in the Login form below to access your account.
+                                {t('login.subtitle')}
                             </Fieldset.HelperText>
                         </Stack>
 
@@ -177,7 +179,7 @@ const Login = () => {
                                 </Box>
                             )}
 
-                            <Field label="Email address" required invalid={!!errors.email} errorText={errors.email}>
+                            <Field label={t('login.emailLabel')} required invalid={!!errors.email} errorText={errors.email}>
                                 <Input
                                     name="email"
                                     type="email"
@@ -186,7 +188,7 @@ const Login = () => {
                                 />
                             </Field>
 
-                            <Field label="Password" required invalid={!!errors.password} errorText={errors.password}>
+                            <Field label={t('login.passwordLabel')} required invalid={!!errors.password} errorText={errors.password}>
                                 <Input
                                     name="password"
                                     type="password"
@@ -204,12 +206,12 @@ const Login = () => {
                             spinnerPlacement="center"
                             isDisabled={isLoading}
                         >
-                            Login
+                            {t('login.submitButton')}
                         </Button>
                         <Box mt={4} textAlign="center" fontSize="sm">
-                            Not registered yet?{' '}
+                            {t('login.notRegistered')}{' '}
                             <RouterLink to="/auth/register" style={{ textDecoration: 'underline', color: '#319795', fontWeight: 600 }}>
-                                Register
+                                {t('login.registerLink')}
                             </RouterLink>
                         </Box>
                     </Fieldset.Root>

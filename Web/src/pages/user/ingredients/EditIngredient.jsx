@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Box, Button, Input, Stack, Spinner } from "@chakra-ui/react";
 import { Fieldset } from "@chakra-ui/react";
 import { Field } from '../../../components/ui/field';
@@ -8,6 +9,7 @@ import ingredientService from "../../../services/ingredientService";
 import { FiArrowLeft } from 'react-icons/fi';
 
 const UpdateIngredient = () => {
+    const { t } = useTranslation('ingredient');
     const navigate = useNavigate();
     const { id } = useParams();
     const { enqueueSnackbar } = useSnackbar();
@@ -56,7 +58,7 @@ const UpdateIngredient = () => {
                     unit: ingredient.unit || ""
                 });
             } catch (error) {
-                const errMsg = error?.response?.data?.message || 'Failed to fetch ingredient';
+                const errMsg = t('edit.fetchFailed');
                 enqueueSnackbar(errMsg, { variant: 'error' });
                 navigate('/ingredients');
             } finally {
@@ -90,21 +92,21 @@ const UpdateIngredient = () => {
         const newErrors = {};
         
         if (!form.name || form.name.trim() === "") {
-            newErrors.name = "Name is required";
+            newErrors.name = t('create.nameRequired');
         } else if (form.name.trim().length < 1 || form.name.trim().length > 100) {
-            newErrors.name = "Name must be between 1 and 100 characters";
+            newErrors.name = t('create.nameLength');
         }
 
         if (form.description && form.description.length > 250) {
-            newErrors.description = "Description must be maximum 250 characters";
+            newErrors.description = t('create.descriptionLength');
         }
 
         if (!form.category || form.category === "") {
-            newErrors.category = "Category is required";
+            newErrors.category = t('create.categoryRequired');
         }
 
         if (!form.unit || form.unit === "") {
-            newErrors.unit = "Unit is required";
+            newErrors.unit = t('create.unitRequired');
         }
 
         setErrors(newErrors);
@@ -132,9 +134,7 @@ const UpdateIngredient = () => {
 
             const response = await ingredientService.updateIngredient(id, sanitizedData);
 
-            const successMsg = response?.data?.message
-                ? response.data.message
-                : `Ingredient updated successfully.`;
+            const successMsg = t('edit.updateSuccess');
 
             setSuccessMessage(successMsg);
             enqueueSnackbar(successMsg, { variant: 'success' });
@@ -143,10 +143,7 @@ const UpdateIngredient = () => {
                 navigate('/ingredients');
             }, 1000);
         } catch (error) {
-            const errMsg =
-                error?.response?.data?.message ||
-                error?.message ||
-                'Ingredient update failed. Please check your input and try again.';
+            const errMsg = t('edit.updateFailed');
 
             setErrors({
                 submit: errMsg
@@ -180,7 +177,7 @@ const UpdateIngredient = () => {
                     variant="ghost"
                     color="#083951"
                     onClick={() => navigate('/ingredients')}
-                    aria-label="Terug naar ingredients"
+                    aria-label={t('common.backButton')}
                 >
                     <FiArrowLeft />
                 </Button>
@@ -206,10 +203,10 @@ const UpdateIngredient = () => {
                 <Fieldset.Root size="lg">
                     <Stack>
                         <Fieldset.Legend fontSize="3xl" fontWeight="bold" color={'#083951'}>
-                            Update Ingredient
+                            {t('edit.title')}
                         </Fieldset.Legend>
                         <Fieldset.HelperText>
-                            Please update the ingredient details below.
+                            {t('edit.subtitle')}
                         </Fieldset.HelperText>
                     </Stack>
 
@@ -240,7 +237,7 @@ const UpdateIngredient = () => {
                             </Box>
                         )}
 
-                        <Field label="Name" required invalid={!!errors.name} errorText={errors.name}>
+                        <Field label={t('create.nameLabel')} required invalid={!!errors.name} errorText={errors.name}>
                             <Input
                                 name="name"
                                 type="text"
@@ -251,7 +248,7 @@ const UpdateIngredient = () => {
                             />
                         </Field>
 
-                        <Field label="Description" invalid={!!errors.description} errorText={errors.description}>
+                        <Field label={t('create.descriptionLabel')} invalid={!!errors.description} errorText={errors.description}>
                             <Input
                                 name="description"
                                 type="text"
@@ -262,7 +259,7 @@ const UpdateIngredient = () => {
                             />
                         </Field>
 
-                        <Field label="Category" required invalid={!!errors.category} errorText={errors.category}>
+                        <Field label={t('create.categoryLabel')} required invalid={!!errors.category} errorText={errors.category}>
                             <select
                                 name="category"
                                 value={form.category}
@@ -275,16 +272,16 @@ const UpdateIngredient = () => {
                                     fontSize: '1rem'
                                 }}
                             >
-                                <option value="">Select a category</option>
+                                <option value="">{t('create.selectCategory')}</option>
                                 {categories.map((cat) => (
                                     <option key={cat} value={cat}>
-                                        {cat.charAt(0) + cat.slice(1).toLowerCase()}
+                                        {t(`categories.${cat}`)}
                                     </option>
                                 ))}
                             </select>
                         </Field>
 
-                        <Field label="Unit" required invalid={!!errors.unit} errorText={errors.unit}>
+                        <Field label={t('create.unitLabel')} required invalid={!!errors.unit} errorText={errors.unit}>
                             <select
                                 name="unit"
                                 value={form.unit}
@@ -297,10 +294,10 @@ const UpdateIngredient = () => {
                                     fontSize: '1rem'
                                 }}
                             >
-                                <option value="">Select a unit</option>
+                                <option value="">{t('create.selectUnit')}</option>
                                 {units.map((unit) => (
                                     <option key={unit} value={unit}>
-                                        {unit.toLowerCase()}
+                                        {t(`units.${unit}`)}
                                     </option>
                                 ))}
                             </select>
@@ -319,7 +316,7 @@ const UpdateIngredient = () => {
                             bg: "#0a4a63"
                         }}
                     >
-                        Update Ingredient
+                        {t('edit.submitButton')}
                     </Button>
                 </Fieldset.Root>
             </form>

@@ -1,0 +1,42 @@
+{
+  "management": {
+    "title": "Gestión de usuarios",
+    "subtitle": "Gestionar y ver todos los usuarios registrados",
+    "searchPlaceholder": "Buscar por nombre, apellido o correo electrónico...",
+    "allTypes": "Todos los tipos",
+    "roleAdmin": "Administrador",
+    "roleBlacklisted": "Lista negra",
+    "roleUser": "Usuario",
+    "noUsersFound": "No se encontraron usuarios",
+    "noUsersFoundDescription": "Aún no hay usuarios registrados",
+    "adjustFilters": "Intente ajustar sus filtros de búsqueda",
+    "showing": "Mostrando {{start}} - {{end}} de {{total}} usuarios",
+    "firstNameColumn": "Nombre",
+    "lastNameColumn": "Apellido",
+    "roleColumn": "Rol",
+    "roleUpdatedSuccess": "Rol de usuario actualizado con éxito",
+    "roleUpdateFailed": "Error al actualizar el rol de usuario",
+    "userEnabledSuccess": "Usuario habilitado con éxito",
+    "userEnableFailed": "Error al habilitar usuario",
+    "userDeletedSuccess": "Eliminado con éxito",
+    "userDeleteFailed": "Error al eliminar usuario",
+    "fetchUsersFailed": "Error al obtener usuarios"
+  },
+  "details": {
+    "title": "Detalles del usuario",
+    "userId": "ID de usuario",
+    "firstName": "Nombre",
+    "lastName": "Apellido",
+    "emailAddress": "Dirección de correo electrónico",
+    "accountType": "Tipo de cuenta",
+    "accountStatus": "Estado de la cuenta",
+    "enableAccount": "Habilitar cuenta",
+    "enabled": "Habilitado",
+    "deleteUser": "Eliminar usuario",
+    "updating": "Actualizando...",
+    "deleteConfirmTitle": "Eliminar usuario",
+    "deleteConfirmDescription": "¿Está seguro de que desea eliminar este usuario? Esta acción no se puede deshacer.",
+    "confirmDelete": "Eliminar",
+    "cancel": "Cancelar"
+  }
+}

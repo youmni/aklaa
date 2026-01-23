@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import authService from "../../../services/authService";
 import { useNavigate, Link as RouterLink } from "react-router-dom";
 import {
@@ -13,6 +14,7 @@ import {
 import { Field } from '../../../components/ui/field';
 
 const PasswordReset = () => {
+    const { t } = useTranslation('auth');
     const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [errors, setErrors] = useState({});
@@ -28,9 +30,9 @@ const PasswordReset = () => {
     const validateForm = () => {
         const newErrors = {};
         if (!email.trim()) {
-            newErrors.email = "Email is required.";
+            newErrors.email = t('forgotPassword.emailRequired');
         } else if (!/\S+@\S+\.\S+/.test(email.trim())) {
-            newErrors.email = "Invalid email address.";
+            newErrors.email = t('forgotPassword.emailInvalid');
         }
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
@@ -49,7 +51,7 @@ const PasswordReset = () => {
 
             const successMsg = response?.data?.message
                 ? response.data.message
-                : "If an account with that email exists, a password reset link has been sent.";
+                : t('forgotPassword.resetSuccess');
 
             setSuccessMessage(successMsg);
             setEmail("");
@@ -58,7 +60,7 @@ const PasswordReset = () => {
                 submit:
                     error?.response?.data?.message ||
                     error?.message ||
-                    "Password reset failed. Please check your email and try again.",
+                    t('forgotPassword.resetFailed'),
             });
         } finally {
             setIsLoading(false);
@@ -78,7 +80,7 @@ const PasswordReset = () => {
             >
                 <Box position="absolute" top={4} right={4} fontSize="sm">
                     <RouterLink to="/auth/login" style={{ textDecoration: 'underline', color: '#000000ff', fontWeight: 600 }}>
-                        Back to login
+                        {t('forgotPassword.backToLogin')}
                     </RouterLink>
                 </Box>
 
@@ -103,9 +105,9 @@ const PasswordReset = () => {
                 <form onSubmit={handleSubmit}>
                     <Fieldset.Root size="lg">
                         <Stack>
-                            <Fieldset.Legend>Reset Password</Fieldset.Legend>
+                            <Fieldset.Legend>{t('forgotPassword.title')}</Fieldset.Legend>
                             <Fieldset.HelperText>
-                                Enter your email address to receive a password reset link.
+                                {t('forgotPassword.subtitle')}
                             </Fieldset.HelperText>
                         </Stack>
 
@@ -138,13 +140,13 @@ const PasswordReset = () => {
                                 </Box>
                             )}
 
-                            <Field label="Email" required invalid={!!errors.email} errorText={errors.email}>
+                            <Field label={t('forgotPassword.emailLabel')} required invalid={!!errors.email} errorText={errors.email}>
                                 <Input
                                     name="email"
                                     type="email"
                                     value={email}
                                     onChange={handleChange}
-                                    placeholder="example@mail.com"
+                                    placeholder={t('forgotPassword.emailPlaceholder')}
                                 />
                             </Field>
 
@@ -158,12 +160,12 @@ const PasswordReset = () => {
                             spinnerPlacement="center"
                             isDisabled={isLoading}
                         >
-                            Send Reset Link
+                            {t('forgotPassword.submitButton')}
                         </Button>
                         <Box mt={4} textAlign="center" fontSize="sm">
-                            Don't have an account?{' '}
+                            {t('forgotPassword.dontHaveAccount')}{' '}
                             <RouterLink to="/auth/register" style={{ color: '#319795', fontWeight: 600 }}>
-                                Register
+                                {t('forgotPassword.registerLink')}
                             </RouterLink>
                         </Box>
                     </Fieldset.Root>

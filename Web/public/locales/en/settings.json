@@ -1,0 +1,57 @@
+{
+  "editProfile": {
+    "title": "Edit Profile",
+    "subtitle": "Update your personal information",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "Email Address",
+    "language": "Language",
+    "selectLanguage": "Select your preferred language",
+    "saveButton": "Save Changes",
+    "cancelButton": "Cancel",
+    "firstNameError": "First name must be between 1 and 100 characters",
+    "lastNameError": "Last name must be between 1 and 100 characters",
+    "emailError": "Please enter a valid email address",
+    "updateSuccess": "Profile updated successfully",
+    "updateError": "Failed to update profile",
+    "languageChanged": "Language changed successfully"
+  },
+  "languages": {
+    "en": "English",
+    "fr": "Français",
+    "nl": "Nederlands",
+    "sp": "Español"
+  },
+  "deleteProfile": {
+    "title": "Delete Profile",
+    "description": "Deleting a user account will permanently remove all associated data, including personal information, settings, and uploaded content; access to services and subscriptions will be lost, recovery may not be possible, and some data may be retained for legal or regulatory purposes.",
+    "deleteButton": "Delete my account",
+    "confirmTitle": "Delete User Account",
+    "confirmDescription": "Are you sure you want to delete your account? This action cannot be undone.",
+    "confirmButton": "Delete",
+    "cancelButton": "Cancel",
+    "deleteSuccess": "Account deleted. Redirecting to login...",
+    "deleteError": "Failed to delete account"
+  },
+  "passwordReset": {
+    "title": "Change Password",
+    "subtitle": "Update your account password",
+    "oldPassword": "Current Password",
+    "newPassword": "New Password",
+    "confirmPassword": "Confirm New Password",
+    "saveButton": "Update Password",
+    "cancelButton": "Cancel",
+    "oldPasswordRequired": "Current password is required",
+    "newPasswordError": "Password must be at least 8 characters, include upper and lower case letters, a number, and a special character",
+    "confirmPasswordRequired": "Confirm password is required",
+    "confirmPasswordMismatch": "Passwords do not match",
+    "updateSuccess": "Password was updated successfully",
+    "updateError": "The current password is incorrect. Please try again."
+  },
+  "exportData": {
+    "title": "Export your personal data",
+    "description": "In accordance with applicable data protection regulations, including the General Data Protection Regulation (GDPR), you have the right to access and obtain a copy of the personal data we process about you. The export is provided in a commonly used, machine-readable format.",
+    "downloadButton": "Download My Data",
+    "downloadError": "Download failed"
+  }
+}

@@ -1,6 +1,8 @@
 import { Box, HStack, Heading, Input, Text, VStack } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 
 const WeekPlanningCard = ({ startOfWeek, endOfWeek, onStartChange, onEndChange }) => {
+    const { t } = useTranslation('cart');
     return (
         <Box
             bg="white"
@@ -11,12 +13,12 @@ const WeekPlanningCard = ({ startOfWeek, endOfWeek, onStartChange, onEndChange }
             borderColor="gray.200"
         >
             <Heading size="sm" mb={4} color="#083951">
-                Week Planning
+                {t('weekPlanning.selectWeek')}
             </Heading>
             <HStack gap={6} align="start">
                 <VStack align="stretch" flex={1} gap={2}>
                     <Text fontSize="sm" fontWeight="600" color="gray.700">
-                        Start of Week
+                        {t('weekPlanning.selectWeek')}
                     </Text>
                     <Input
                         type="date"
@@ -29,7 +31,7 @@ const WeekPlanningCard = ({ startOfWeek, endOfWeek, onStartChange, onEndChange }
                 </VStack>
                 <VStack align="stretch" flex={1} gap={2}>
                     <Text fontSize="sm" fontWeight="600" color="gray.700">
-                        End of Week
+                        {t('weekPlanning.selectWeek')}
                     </Text>
                     <Input
                         type="date"

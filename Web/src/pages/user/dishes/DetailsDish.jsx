@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import dishService from '../../../services/dishService';
 import {
     Box,
@@ -21,6 +22,7 @@ import { FaUsers } from 'react-icons/fa';
 import { useSnackbar } from 'notistack';
 
 const DetailsDish = () => {
+    const { t } = useTranslation('dish');
     const { id } = useParams();
     const navigate = useNavigate();
     const { enqueueSnackbar } = useSnackbar();
@@ -37,7 +39,7 @@ const DetailsDish = () => {
             const response = await dishService.getDishById(id);
             setDish(response.data);
         } catch (error) {
-            enqueueSnackbar(error.response?.data?.message || 'Failed to fetch dish', { variant: 'error' });
+            enqueueSnackbar(t('details.fetchError'), { variant: 'error' });
             navigate('/dishes');
         } finally {
             setIsLoading(false);
@@ -97,11 +99,11 @@ const DetailsDish = () => {
                         <HStack>
                             <FaUsers color="#083951" />
                             <Text color="gray.600" fontWeight="medium">
-                                {dish.people} {dish.people === 1 ? 'Serving' : 'Servings'}
+                                {dish.people} {dish.people === 1 ? t('details.serving') : t('details.servings')}
                             </Text>
                         </HStack>
                         <Badge colorScheme="blue" fontSize="sm" px={3} py={1}>
-                            {formatCuisineType(dish.type)}
+                            {t(`cuisines.${dish.type}`)}
                         </Badge>
                     </Flex>
                 </Box>
@@ -122,7 +124,7 @@ const DetailsDish = () => {
 
                 {dish.tags && dish.tags.length > 0 && (
                     <Box>
-                        <Heading size="md" mb={3} color="#083951">Tags</Heading>
+                        <Heading size="md" mb={3} color="#083951">{t('details.tags')}</Heading>
                         <Flex flexWrap="wrap" gap={2}>
                             {dish.tags.map((tag, index) => (
                                 <Badge
@@ -133,7 +135,7 @@ const DetailsDish = () => {
                                     py={1}
                                     borderRadius="full"
                                 >
-                                    {formatTag(tag)}
+                                    {t(`tags.${tag}`)}
                                 </Badge>
                             ))}
                         </Flex>
@@ -141,14 +143,14 @@ const DetailsDish = () => {
                 )}
 
                 <Box>
-                    <Heading size="md" mb={3} color="#083951">Description</Heading>
+                    <Heading size="md" mb={3} color="#083951">{t('common.description')}</Heading>
                     <Text color="gray.700" lineHeight="1.8" fontSize="lg">
                         {dish.description}
                     </Text>
                 </Box>
 
                 <Box>
-                    <Heading size="md" mb={4} color="#083951">Ingredients</Heading>
+                    <Heading size="md" mb={4} color="#083951">{t('details.ingredients')}</Heading>
                     <Card.Root bg="gray.50" borderRadius="lg" p={6}>
                         <SimpleGrid columns={{ base: 1, md: 2 }} gap={4}>
                             {dish.ingredients && dish.ingredients.length > 0 ? (
@@ -171,7 +173,7 @@ const DetailsDish = () => {
                                     </Flex>
                                 ))
                             ) : (
-                                <Text color="gray.500">No ingredients listed</Text>
+                                <Text color="gray.500">{t('list.noResults')}</Text>
                             )}
                         </SimpleGrid>
                     </Card.Root>
@@ -180,7 +182,7 @@ const DetailsDish = () => {
                 {dish.cookingSteps && dish.cookingSteps.length > 0 && (
                     <Box>
                         <Heading size="md" mb={4} color="#083951">
-                            Cooking Instructions
+                            {t('details.cookingSteps')}
                         </Heading>
                         <Accordion.Root multiple defaultValue={['0']}>
                             {dish.cookingSteps.map((step, index) => {
@@ -197,7 +199,7 @@ const DetailsDish = () => {
                                             _hover={{ bg: 'gray.50' }}
                                         >
                                             <Text fontWeight="medium" color="#083951">
-                                                Step {step.orderIndex}
+                                                {t('details.step')} {step.orderIndex}
                                             </Text>
                                         </Accordion.ItemTrigger>
                                         <Accordion.ItemContent>

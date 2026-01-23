@@ -15,35 +15,25 @@ import {
 import { FaListUl, FaShoppingBasket, FaCheckCircle, FaEdit } from 'react-icons/fa';
 import { FiArrowLeft } from 'react-icons/fi';
 import { useSnackbar } from 'notistack';
+import { useTranslation } from 'react-i18next';
 import groceryListService from '../../../services/groceryListService';
 
-const categoryLabels = {
-    VEGETABLES: { name: 'Vegetables', color: 'green' },
-    FRUITS: { name: 'Fruits', color: 'red' },
-    DAIRY: { name: 'Dairy', color: 'blue' },
-    MEAT: { name: 'Meat', color: 'red' },
-    FISH: { name: 'Fish', color: 'cyan' },
-    GRAINS: { name: 'Grains', color: 'orange' },
-    SPICES: { name: 'Spices', color: 'red' },
-    BAKING: { name: 'Baking', color: 'yellow' },
-    DRINKS: { name: 'Drinks', color: 'purple' },
-    HOUSEHOLD: { name: 'Household', color: 'teal' },
-    OTHER: { name: 'Other', color: 'gray' },
-};
-
-const unitLabels = {
-    G: 'g',
-    KG: 'kg',
-    ML: 'ml',
-    L: 'L',
-    PCS: 'pcs',
-    TBSP: 'tbsp',
-    TSP: 'tsp',
-    CUP: 'cup',
-    PINCH: 'pinch',
+const categoryColors = {
+    VEGETABLES: 'green',
+    FRUITS: 'red',
+    DAIRY: 'blue',
+    MEAT: 'red',
+    FISH: 'cyan',
+    GRAINS: 'orange',
+    SPICES: 'red',
+    BAKING: 'yellow',
+    DRINKS: 'purple',
+    HOUSEHOLD: 'teal',
+    OTHER: 'gray',
 };
 
 const DetailsGroceryList = () => {
+    const { t } = useTranslation('grocerylist');
     const { id } = useParams();
     const navigate = useNavigate();
     const { enqueueSnackbar } = useSnackbar();
@@ -75,7 +65,7 @@ const DetailsGroceryList = () => {
             setGroceryData(response.data);
         } catch (error) {
             console.error('Error fetching grocery list details:', error);
-            enqueueSnackbar('Failed to load grocery list details', { variant: 'error' });
+            enqueueSnackbar(t('details.fetchError'), { variant: 'error' });
             navigate('/groceries');
         } finally {
             setLoading(false);
@@ -109,7 +99,7 @@ const DetailsGroceryList = () => {
 
     const formatQuantity = (quantity, unit) => {
         const formatted = quantity % 1 === 0 ? quantity.toFixed(0) : quantity.toFixed(2);
-        return `${formatted} ${unitLabels[unit] || unit}`;
+        return `${formatted} ${t(`units.${unit}`)}`;
     };
 
     if (loading) {
@@ -117,7 +107,7 @@ const DetailsGroceryList = () => {
             <Box bg="gray.50" minH="100vh" py={12}>
                 <Flex justify="center" align="center" minH="60vh" direction="column" gap={4}>
                     <Spinner size="xl" color="#083951" thickness="4px" />
-                    <Text fontSize="lg" color="gray.600">Loading grocery list...</Text>
+                    <Text fontSize="lg" color="gray.600">{t('common.loading')}</Text>
                 </Flex>
             </Box>
         );
@@ -147,7 +137,7 @@ const DetailsGroceryList = () => {
                         <HStack gap={3}>
                             <HStack gap={2}>
                                 <Text fontSize="lg" fontWeight="600" color="#083951">
-                                    {totalChecked} / {totalItems} items checked
+                                    {t('details.checkedItems', { checked: totalChecked, total: totalItems })}
                                 </Text>
                             </HStack>
                             <Button
@@ -158,7 +148,7 @@ const DetailsGroceryList = () => {
                                 leftIcon={<FaEdit />}
                                 px={6}
                             >
-                                Edit
+                                {t('details.edit')}
                             </Button>
                         </HStack>
                     </Flex>
@@ -173,16 +163,16 @@ const DetailsGroceryList = () => {
                     >
                         <Flex align="center" gap={3} mb={2}>
                             <Heading size="lg" color="#083951" fontWeight="600">
-                                Grocery List
+                                {t('common.groceryList')}
                             </Heading>
                         </Flex>
                         <Text color="gray.600">
-                            Total: {totalItems} {totalItems === 1 ? 'ingredient' : 'ingredients'}
+                            {t('common.total')}: {totalItems === 1 ? t('details.ingredient', { count: totalItems }) : t('details.ingredients', { count: totalItems })}
                         </Text>
                     </Box>
 
                     {Object.entries(groupedIngredients).map(([category, items]) => {
-                        const categoryInfo = categoryLabels[category] || categoryLabels.OTHER;
+                        const categoryColor = categoryColors[category] || categoryColors.OTHER;
                         return (
                             <Box
                                 key={category}
@@ -195,16 +185,16 @@ const DetailsGroceryList = () => {
                             >
                                 <Flex align="center" gap={3} mb={4}>
                                     <Heading size="md" color="#083951" fontWeight="600">
-                                        {categoryInfo.name}
+                                        {t(`categories.${category}`)}
                                     </Heading>
                                     <Badge
-                                        colorScheme={categoryInfo.color}
+                                        colorScheme={categoryColor}
                                         px={3}
                                         py={1}
                                         borderRadius="full"
                                         fontSize="xs"
                                     >
-                                        {items.length} {items.length === 1 ? 'item' : 'items'}
+                                        {items.length} {items.length === 1 ? t('details.item') : t('details.items')}
                                     </Badge>
                                 </Flex>
 

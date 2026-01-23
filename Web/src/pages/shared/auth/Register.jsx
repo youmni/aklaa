@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate, Link as RouterLink } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import authService from "../../../services/authService";
 import {
   Button,
@@ -12,6 +13,7 @@ import {
 import { Field } from '../../../components/ui/field';
 
 const Register = () => {
+  const { t } = useTranslation('auth');
   const [form, setForm] = useState({
     firstName: "",
     lastName: "",
@@ -35,25 +37,25 @@ const Register = () => {
 
     const sanitizedFirstName = sanitizeInput(form.firstName);
     if (sanitizedFirstName.length < 1 || sanitizedFirstName.length > 100) {
-      newErrors.firstName = "First name must be between 1 and 100 characters";
+      newErrors.firstName = t('register.firstNameRequired');
     }
 
     const sanitizedLastName = sanitizeInput(form.lastName);
     if (sanitizedLastName.length < 1 || sanitizedLastName.length > 100) {
-      newErrors.lastName = "Last name must be between 1 and 100 characters";
+      newErrors.lastName = t('register.lastNameRequired');
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!form.email || !emailRegex.test(form.email)) {
-      newErrors.email = "Please enter a valid email address";
+      newErrors.email = t('register.emailInvalid');
     }
 
     if (!form.password || !passwordRegex.test(form.password)) {
-      newErrors.password = "Password must be at least 8 characters with uppercase, lowercase, number and special character (@#$%^&+=!)";
+      newErrors.password = t('register.passwordInvalid');
     }
 
     if (!form.confirmPassword || form.password !== form.confirmPassword) {
-      newErrors.confirmPassword = "Passwords do not match";
+      newErrors.confirmPassword = t('register.passwordMismatch');
     }
 
     setErrors(newErrors);
@@ -101,7 +103,7 @@ const Register = () => {
 
       await authService.register(sanitizedData);
 
-      setSuccessMessage(`Registration successful! An activation email has been sent to ${form.email}. Please check your inbox and follow the instructions to activate your account.`);
+      setSuccessMessage(t('register.registerSuccess', { email: form.email }));
 
       setForm({
         firstName: "",
@@ -113,7 +115,7 @@ const Register = () => {
 
     } catch (error) {
       setErrors({
-        submit: 'Registration failed. This email address may already be in use or there was a problem with the registration. Please try again or contact support if the problem persists.'
+        submit: t('register.registerFailed')
       });
     } finally {
       setIsLoading(false);
@@ -151,9 +153,9 @@ const Register = () => {
         <form onSubmit={handleSubmit}>
           <Fieldset.Root size="lg">
             <Stack>
-              <Fieldset.Legend>Registration</Fieldset.Legend>
+              <Fieldset.Legend>{t('register.title')}</Fieldset.Legend>
               <Fieldset.HelperText>
-                Please fill in the Registration form below to become a member of aklaa.
+                {t('register.subtitle')}
               </Fieldset.HelperText>
             </Stack>
 
@@ -184,7 +186,7 @@ const Register = () => {
                 </Box>
               )}
 
-              <Field label="First Name" required invalid={!!errors.firstName} errorText={errors.firstName}>
+              <Field label={t('register.firstNameLabel')} required invalid={!!errors.firstName} errorText={errors.firstName}>
                 <Input
                   name="firstName"
                   value={form.firstName}
@@ -192,7 +194,7 @@ const Register = () => {
                 />
               </Field>
 
-              <Field label="Last Name" required invalid={!!errors.lastName} errorText={errors.lastName}>
+              <Field label={t('register.lastNameLabel')} required invalid={!!errors.lastName} errorText={errors.lastName}>
                 <Input
                   name="lastName"
                   value={form.lastName}
@@ -200,7 +202,7 @@ const Register = () => {
                 />
               </Field>
 
-              <Field label="Email address" required invalid={!!errors.email} errorText={errors.email}>
+              <Field label={t('register.emailLabel')} required invalid={!!errors.email} errorText={errors.email}>
                 <Input
                   name="email"
                   type="email"
@@ -209,7 +211,7 @@ const Register = () => {
                 />
               </Field>
 
-              <Field label="Password" required invalid={!!errors.password} errorText={errors.password}>
+              <Field label={t('register.passwordLabel')} required invalid={!!errors.password} errorText={errors.password}>
                 <Input
                   name="password"
                   type="password"
@@ -218,7 +220,7 @@ const Register = () => {
                 />
               </Field>
 
-              <Field label="Confirm Password" required invalid={!!errors.confirmPassword} errorText={errors.confirmPassword}>
+              <Field label={t('register.confirmPasswordLabel')} required invalid={!!errors.confirmPassword} errorText={errors.confirmPassword}>
                 <Input
                   name="confirmPassword"
                   type="password"
@@ -236,12 +238,12 @@ const Register = () => {
               spinnerPlacement="center"
               isDisabled={isLoading}
             >
-              Submit
+              {t('register.submitButton')}
             </Button>
             <Box mt={4} textAlign="center" fontSize="sm">
-              Already have an account?{' '}
+              {t('register.alreadyHaveAccount')}{' '}
               <RouterLink to="/auth/login" style={{ textDecoration: 'underline', color: '#319795', fontWeight: 600 }}>
-                Login
+                {t('register.loginLink')}
               </RouterLink>
             </Box>
           </Fieldset.Root>

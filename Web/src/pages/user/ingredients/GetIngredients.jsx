@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Box, Button, Input, Stack, Spinner, Text, Grid, Badge, HStack, IconButton, VStack } from "@chakra-ui/react";
 import { useSnackbar } from 'notistack';
 import { FiEdit2, FiTrash2, FiPlus, FiSearch } from 'react-icons/fi';
@@ -8,6 +9,7 @@ import ConfirmDialog from "../../../components/ui/ConfirmDialog";
 import Pagination from "../../../components/ui/Pagination";
 
 const GetIngredients = () => {
+    const { t } = useTranslation('ingredient');
     const navigate = useNavigate();
     const { enqueueSnackbar } = useSnackbar();
     const [ingredients, setIngredients] = useState([]);
@@ -71,7 +73,7 @@ const GetIngredients = () => {
             setTotalPages(response.data.totalPages || 0);
             setTotalElements(response.data.totalElements || 0);
         } catch (error) {
-            const errMsg = error?.response?.data?.message || 'Failed to get ingredients';
+            const errMsg = t('list.fetchFailed');
             enqueueSnackbar(errMsg, { variant: 'error' });
         } finally {
             setIsLoading(false);
@@ -95,9 +97,9 @@ const GetIngredients = () => {
 
     const handleEdit = (ingredient) => {
         setConfirmPayload({
-            title: "Confirm Edit",
-            description: `Are you sure you want to edit "${ingredient.name}"? This could have an effect on existing recipes using this ingredient.`,
-            confirmLabel: "Edit",
+            title: t('list.confirmEditTitle'),
+            description: t('list.confirmEditDescription', { name: ingredient.name }),
+            confirmLabel: t('list.confirmEditButton'),
             confirmColorScheme: "blue",
             onConfirm: () => {
                 setConfirmOpen(false);
@@ -109,19 +111,19 @@ const GetIngredients = () => {
 
     const handleDelete = (ingredient) => {
         setConfirmPayload({
-            title: "Confirm Delete",
-            description: `Are you sure you want to delete "${ingredient.name}"? This action cannot be undone.`,
-            confirmLabel: "Delete",
+            title: t('list.confirmDeleteTitle'),
+            description: t('list.confirmDeleteDescription', { name: ingredient.name }),
+            confirmLabel: t('list.confirmDeleteButton'),
             confirmColorScheme: "red",
             onConfirm: async () => {
                 setConfirmLoading(true);
                 try {
                     await ingredientService.deleteIngredient(ingredient.id);
-                    enqueueSnackbar('Ingredient verwijderd', { variant: 'success' });
+                    enqueueSnackbar(t('list.deleteSuccess'), { variant: 'success' });
                     setConfirmOpen(false);
                     fetchIngredients();
                 } catch (err) {
-                    enqueueSnackbar(err?.response?.data?.message || 'Verwijderen mislukt', { variant: 'error' });
+                    enqueueSnackbar(t('list.deleteFailed'), { variant: 'error' });
                 } finally {
                     setConfirmLoading(false);
                 }
@@ -158,7 +160,7 @@ const GetIngredients = () => {
             <Stack mb={{ base: 4, md: 6, lg: 8 }} gap={{ base: 4, md: 6 }}>
                 <Stack direction={{ base: "column", sm: "row" }} justify="space-between" align={{ base: "stretch", sm: "center" }} gap={3}>
                     <Text fontSize={{ base: "2xl", md: "3xl" }} fontWeight="bold" color="#083951">
-                        Ingredients
+                        {t('list.title')}
                     </Text>
                     <Button
                         bg="#083951"
@@ -170,7 +172,7 @@ const GetIngredients = () => {
                         w={{ base: "full", sm: "auto" }}
                     >
                         <FiPlus style={{ marginRight: '8px' }} />
-                        Add Ingredient
+                        {t('list.addButton')}
                     </Button>
                 </Stack>
 
@@ -187,7 +189,7 @@ const GetIngredients = () => {
                             <FiSearch color="#718096" size={18} />
                         </Box>
                         <Input
-                            placeholder="Search by name or description..."
+                            placeholder={t('list.searchPlaceholder')}
                             value={search}
                             onChange={handleSearchChange}
                             focusBorderColor="#083951"
@@ -210,10 +212,10 @@ const GetIngredients = () => {
                                 height: window.innerWidth < 768 ? '2.5rem' : '3rem'
                             }}
                         >
-                            <option value="">All categories</option>
+                            <option value="">{t('list.allCategories')}</option>
                             {categories.map((cat) => (
                                 <option key={cat} value={cat}>
-                                    {cat.charAt(0) + cat.slice(1).toLowerCase()}
+                                    {t(`categories.${cat}`)}
                                 </option>
                             ))}
                         </select>
@@ -221,7 +223,7 @@ const GetIngredients = () => {
                 </Stack>
 
                 <Text fontSize="sm" color="gray.600" fontWeight="500">
-                    {totalElements} ingredient{totalElements !== 1 ? 's' : ''} found
+                    {t('list.ingredientsFound', { count: totalElements })}
                 </Text>
             </Stack>
 
@@ -300,10 +302,10 @@ const GetIngredients = () => {
                                             fontSize="sm"
                                             color={ingredient.description && ingredient.description.trim() ? "gray.600" : "gray.400"}
                                             noOfLines={3}
-                                            title={ingredient.description && ingredient.description.trim() ? ingredient.description : "no description"}
+                                            title={ingredient.description && ingredient.description.trim() ? ingredient.description : t('common.noDescription')}
                                             sx={{ overflowWrap: 'anywhere', wordBreak: 'break-word', whiteSpace: 'normal' }}
                                         >
-                                            {ingredient.description && ingredient.description.trim() ? ingredient.description : "no description"}
+                                            {ingredient.description && ingredient.description.trim() ? ingredient.description : t('common.noDescription')}
                                         </Text>
 
                                         <HStack justify="space-between" pt={2} flexWrap="wrap" gap={2}>
@@ -318,7 +320,7 @@ const GetIngredients = () => {
                                                 fontSize={{ base: "xs", md: "sm" }}
                                                 fontWeight="600"
                                             >
-                                                {ingredient.category.charAt(0) + ingredient.category.slice(1).toLowerCase()}
+                                                {t(`categories.${ingredient.category}`)}
                                             </Box>
                                             <Box
                                                 px={{ base: 2, md: 3 }}
@@ -331,7 +333,7 @@ const GetIngredients = () => {
                                                 fontSize={{ base: "xs", md: "sm" }}
                                                 fontWeight="600"
                                             >
-                                                {ingredient.unit.toLowerCase()}
+                                                {t(`units.${ingredient.unit}`)}
                                             </Box>
                                         </HStack>
                                     </Stack>

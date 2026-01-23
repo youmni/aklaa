@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Button, Input, Stack, Spinner } from "@chakra-ui/react";
+import { useTranslation } from 'react-i18next';
+import { Box, Button, Input, Stack, Spinner, Portal, Select, createListCollection } from "@chakra-ui/react";
 import { Field, Fieldset } from "@chakra-ui/react";
 import { useSnackbar } from 'notistack';
 import authService from "../../../services/authService";
@@ -10,14 +11,25 @@ import { AuthContext } from '../../../context/AuthContext';
 
 const EditProfile = () => {
     const navigate = useNavigate();
+    const { t, i18n } = useTranslation('settings');
     const { enqueueSnackbar } = useSnackbar();
     const { user, setUser } = useContext(AuthContext);
+
+    const languages = createListCollection({
+        items: [
+            { label: t('languages.en'), value: "en" },
+            { label: t('languages.fr'), value: "fr" },
+            { label: t('languages.nl'), value: "nl" },
+            { label: t('languages.sp'), value: "sp" },
+        ],
+    });
 
     const [form, setForm] = useState({
         firstName: user?.firstName || "",
         lastName: user?.lastName || "",
         email: user?.email || ""
     });
+    const [selectedLanguage, setSelectedLanguage] = useState([i18n.language || 'en']);
     const [errors, setErrors] = useState({});
     const [isLoading, setIsLoading] = useState(false);
     const [successMessage, setSuccessMessage] = useState("");
@@ -41,6 +53,14 @@ const EditProfile = () => {
         }
     };
 
+    const handleLanguageChange = (details) => {
+        const newLanguage = details.value[0];
+        setSelectedLanguage(details.value);
+        i18n.changeLanguage(newLanguage);
+        localStorage.setItem('preferredLanguage', newLanguage);
+        enqueueSnackbar(t('editProfile.languageChanged'), { variant: 'success' });
+    };
+
     const sanitizeInput = (input) => {
         return input.trim().replace(/[<>]/g, '');
     };
@@ -50,17 +70,17 @@ const EditProfile = () => {
 
         const sanitizedFirstName = sanitizeInput(form.firstName);
         if (sanitizedFirstName.length < 1 || sanitizedFirstName.length > 100) {
-            newErrors.firstName = "First name must be between 1 and 100 characters";
+            newErrors.firstName = t('editProfile.firstNameError');
         }
 
         const sanitizedLastName = sanitizeInput(form.lastName);
         if (sanitizedLastName.length < 1 || sanitizedLastName.length > 100) {
-            newErrors.lastName = "Last name must be between 1 and 100 characters";
+            newErrors.lastName = t('editProfile.lastNameError');
         }
 
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!form.email || !emailRegex.test(form.email)) {
-            newErrors.email = "Please enter a valid email address";
+            newErrors.email = t('editProfile.emailError');
         }
 
         setErrors(newErrors);
@@ -85,7 +105,7 @@ const EditProfile = () => {
                 email: form.email.trim().toLowerCase(),
             };
             await userService.updateEmail(sanitizedData);
-            const successMsg = 'Profile updated successfully. If the mail was changed, please confirm your new email address.';
+            const successMsg = t('editProfile.updateSuccess');
 
             setSuccessMessage(successMsg);
             enqueueSnackbar(successMsg, { variant: 'success' });
@@ -97,7 +117,7 @@ const EditProfile = () => {
             const me = await authService.getMe();
             setUser(me.data || null);
         } catch (error) {
-            const errMsg = 'Profile update failed. Please check your input and try again.';
+            const errMsg = t('editProfile.updateError');
             setErrors({
                 submit: errMsg
             });
@@ -129,10 +149,10 @@ const EditProfile = () => {
                 <Fieldset.Root size="lg" w="100%">
                     <Stack w="100%">
                         <Fieldset.Legend fontSize="3xl" fontWeight="bold" color={'#083951'}>
-                            Edit Profile
+                            {t('editProfile.title')}
                         </Fieldset.Legend>
                         <Fieldset.HelperText>
-                            Please fill in the profile details below.
+                            {t('editProfile.subtitle')}
                         </Fieldset.HelperText>
                     </Stack>
 
@@ -164,7 +184,7 @@ const EditProfile = () => {
                         )}
 
                         <Field.Root invalid={!!errors.firstName}>
-                            <Field.Label>First Name</Field.Label>
+                            <Field.Label>{t('editProfile.firstName')}</Field.Label>
                             <Input
                                 name="firstName"
                                 type="text"
@@ -180,7 +200,7 @@ const EditProfile = () => {
                         </Field.Root>
 
                         <Field.Root invalid={!!errors.lastName}>
-                            <Field.Label>Last Name</Field.Label>
+                            <Field.Label>{t('editProfile.lastName')}</Field.Label>
                             <Input
                                 name="lastName"
                                 type="text"
@@ -196,7 +216,7 @@ const EditProfile = () => {
                         </Field.Root>
 
                         <Field.Root invalid={!!errors.email}>
-                            <Field.Label>Email</Field.Label>
+                            <Field.Label>{t('editProfile.email')}</Field.Label>
                             <Input
                                 name="email"
                                 type="email"
@@ -209,6 +229,39 @@ const EditProfile = () => {
                             {errors.email && (
                                 <Field.ErrorText>{errors.email}</Field.ErrorText>
                             )}
+                        </Field.Root>
+
+                        <Field.Root>
+                            <Field.Label>{t('editProfile.language')}</Field.Label>
+                            <Field.HelperText>{t('editProfile.selectLanguage')}</Field.HelperText>
+                            <Select.Root 
+                                collection={languages} 
+                                value={selectedLanguage}
+                                onValueChange={handleLanguageChange}
+                                width="100%"
+                            >
+                                <Select.HiddenSelect />
+                                <Select.Control>
+                                    <Select.Trigger>
+                                        <Select.ValueText placeholder={t('editProfile.selectLanguage')} />
+                                    </Select.Trigger>
+                                    <Select.IndicatorGroup>
+                                        <Select.Indicator />
+                                    </Select.IndicatorGroup>
+                                </Select.Control>
+                                <Portal>
+                                    <Select.Positioner>
+                                        <Select.Content>
+                                            {languages.items.map((language) => (
+                                                <Select.Item item={language} key={language.value}>
+                                                    {language.label}
+                                                    <Select.ItemIndicator />
+                                                </Select.Item>
+                                            ))}
+                                        </Select.Content>
+                                    </Select.Positioner>
+                                </Portal>
+                            </Select.Root>
                         </Field.Root>
                     </Fieldset.Content>
                     <Button
@@ -224,7 +277,7 @@ const EditProfile = () => {
                             bg: "#0a4a63"
                         }}
                     >
-                        Update Profile
+                        {t('editProfile.saveButton')}
                     </Button>
                 </Fieldset.Root>
             </form>

@@ -1,0 +1,57 @@
+{
+  "editProfile": {
+    "title": "Modifier le profil",
+    "subtitle": "Mettre à jour vos informations personnelles",
+    "firstName": "Prénom",
+    "lastName": "Nom",
+    "email": "Adresse e-mail",
+    "language": "Langue",
+    "selectLanguage": "Sélectionnez votre langue préférée",
+    "saveButton": "Enregistrer les modifications",
+    "cancelButton": "Annuler",
+    "firstNameError": "Le prénom doit contenir entre 1 et 100 caractères",
+    "lastNameError": "Le nom doit contenir entre 1 et 100 caractères",
+    "emailError": "Veuillez saisir une adresse e-mail valide",
+    "updateSuccess": "Profil mis à jour avec succès",
+    "updateError": "Échec de la mise à jour du profil",
+    "languageChanged": "Langue modifiée avec succès"
+  },
+  "languages": {
+    "en": "English",
+    "fr": "Français",
+    "nl": "Nederlands",
+    "sp": "Español"
+  },
+  "deleteProfile": {
+    "title": "Supprimer le profil",
+    "description": "La suppression d'un compte utilisateur supprimera définitivement toutes les données associées, y compris les informations personnelles, les paramètres et le contenu téléchargé ; l'accès aux services et aux abonnements sera perdu, la récupération peut ne pas être possible et certaines données peuvent être conservées à des fins légales ou réglementaires.",
+    "deleteButton": "Supprimer mon compte",
+    "confirmTitle": "Supprimer le compte utilisateur",
+    "confirmDescription": "Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.",
+    "confirmButton": "Supprimer",
+    "cancelButton": "Annuler",
+    "deleteSuccess": "Compte supprimé. Redirection vers la connexion...",
+    "deleteError": "Échec de la suppression du compte"
+  },
+  "passwordReset": {
+    "title": "Changer le mot de passe",
+    "subtitle": "Mettre à jour le mot de passe de votre compte",
+    "oldPassword": "Mot de passe actuel",
+    "newPassword": "Nouveau mot de passe",
+    "confirmPassword": "Confirmer le nouveau mot de passe",
+    "saveButton": "Mettre à jour le mot de passe",
+    "cancelButton": "Annuler",
+    "oldPasswordRequired": "Le mot de passe actuel est requis",
+    "newPasswordError": "Le mot de passe doit contenir au moins 8 caractères, inclure des lettres majuscules et minuscules, un chiffre et un caractère spécial",
+    "confirmPasswordRequired": "La confirmation du mot de passe est requise",
+    "confirmPasswordMismatch": "Les mots de passe ne correspondent pas",
+    "updateSuccess": "Le mot de passe a été mis à jour avec succès",
+    "updateError": "Le mot de passe actuel est incorrect. Veuillez réessayer."
+  },
+  "exportData": {
+    "title": "Exporter vos données personnelles",
+    "description": "Conformément aux réglementations applicables en matière de protection des données, y compris le Règlement général sur la protection des données (RGPD), vous avez le droit d'accéder et d'obtenir une copie des données personnelles que nous traitons vous concernant. L'exportation est fournie dans un format couramment utilisé et lisible par machine.",
+    "downloadButton": "Télécharger mes données",
+    "downloadError": "Échec du téléchargement"
+  }
+}

@@ -1,9 +1,11 @@
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import authService from "../../../services/authService";
 import { useAuth } from "../../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 
 const Logout = () => {
+    const { t } = useTranslation('auth');
     const navigate = useNavigate();
     const { setUser } = useAuth();
 
@@ -18,6 +20,6 @@ const Logout = () => {
             });
     }, [navigate, setUser]);
 
-    return <div>Logging out...</div>;
+    return <div>{t('logout.loggingOut')}</div>;
 };
 export default Logout;
