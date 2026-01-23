@@ -36,9 +36,8 @@ public class DishRequestDTO {
     @NotNull(message = "Cuisine type is required")
     private CuisineType type;
 
-    @Lob
-    @Column(columnDefinition = "TEXT")
-    private String cookingSteps;
+    @Size(min = 1, max = 50, message = "A dish must have between 1 and 50 steps")
+    private List<@Valid RecipeStepRequestDTO> steps;
 
     @NotBlank(message = "Image URL is required")
     @Size(max = 255, message = "Image URL must be shorter than 255 characters")

@@ -19,7 +19,7 @@ public class DishResponseDTO {
     private String description;
     private List<DishTag> tags;
     private CuisineType type;
-    private String cookingSteps;
+    private List<RecipeStepResponseDTO> cookingSteps;
     private String imageUrl;
     private int people;
     private List<DishIngredientResponseInfoDTO> ingredients;

@@ -2,8 +2,6 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import dishService from '../../../services/dishService';
 import ingredientService from '../../../services/ingredientService';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
 import { 
     Box, 
     Button, 
@@ -24,6 +22,7 @@ import {
 } from '@chakra-ui/react';
 import { Select } from '@chakra-ui/react';
 import { Field } from '../../../components/ui/field';
+import StepManager from '../../../components/dishes/StepManager';
 import { FaPlus, FaTrash } from 'react-icons/fa';
 import { FiArrowLeft } from 'react-icons/fi';
 import { useSnackbar } from 'notistack';
@@ -70,15 +69,6 @@ const DISH_TAGS = [
     { label: 'Raw', value: 'RAW' }
 ];
 
-const quillModules = {
-    toolbar: [
-        ['bold', 'underline', 'strike'],
-        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-        [{ 'header': [1, 2, 3, false] }],
-        ['clean']
-    ]
-};
-
 const EditDish = () => {
     const { id } = useParams();
     const navigate = useNavigate();
@@ -93,10 +83,10 @@ const EditDish = () => {
         description: '',
         tags: [],
         type: '',
-        cookingSteps: '',
         imageUrl: '',
         people: 1,
-        ingredients: []
+        ingredients: [],
+        steps: []
     });
 
     const [errors, setErrors] = useState({});
@@ -119,13 +109,17 @@ const EditDish = () => {
                 description: dish.description,
                 tags: dish.tags,
                 type: dish.type,
-                cookingSteps: dish.cookingSteps || '',
                 imageUrl: dish.imageUrl,
                 people: dish.people,
                 ingredients: dish.ingredients.map(ing => ({
                     ingredientId: String(ing.ingredient.id),
                     quantity: String(ing.quantity)
-                }))
+                })),
+                steps: (dish.cookingSteps && Array.isArray(dish.cookingSteps)) 
+                    ? dish.cookingSteps.map(step => ({
+                        stepText: step.recipeStep || ''
+                    })) 
+                    : []
             });
         } catch (error) {
             enqueueSnackbar(error.response?.data?.message || 'Failed to fetch dish', { variant: 'error' });
@@ -138,10 +132,7 @@ const EditDish = () => {
     const fetchIngredients = async () => {
         try {
             setIsLoadingIngredients(true);
-            const response = await ingredientService.getIngredients({
-                page: 0,
-                size: 1000
-            });
+            const response = await ingredientService.getIngredients();
             setAvailableIngredients(response.data.ingredients || []);
         } catch (error) {
             enqueueSnackbar('Failed to fetch ingredients', { variant: 'error' });
@@ -208,6 +199,20 @@ const EditDish = () => {
         }
     };
 
+    const handleStepsChange = (newSteps) => {
+        setFormData(prev => ({ ...prev, steps: newSteps }));
+        const newErrors = { ...errors };
+        Object.keys(newErrors).forEach(key => {
+            if (key.startsWith('step_')) {
+                delete newErrors[key];
+            }
+        });
+        if (newErrors.steps) {
+            delete newErrors.steps;
+        }
+        setErrors(newErrors);
+    };
+
     const validateForm = () => {
         const newErrors = {};
 
@@ -248,6 +253,20 @@ const EditDish = () => {
             });
         }
 
+        if (formData.steps.length > 50) {
+            newErrors.steps = 'Maximum 50 steps allowed';
+        }
+
+        if (formData.steps.length > 0) {
+            formData.steps.forEach((step, index) => {
+                if (!step.stepText || step.stepText.trim().length === 0) {
+                    newErrors[`step_${index}`] = 'Step cannot be empty';
+                } else if (step.stepText.trim().length < 5 || step.stepText.trim().length > 255) {
+                    newErrors[`step_${index}`] = 'Step must be between 5 and 255 characters';
+                }
+            });
+        }
+
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
@@ -268,7 +287,6 @@ const EditDish = () => {
                 description: formData.description,
                 tags: formData.tags,
                 type: formData.type,
-                cookingSteps: formData.cookingSteps,
                 imageUrl: formData.imageUrl,
                 people: parseInt(formData.people),
                 ingredients: formData.ingredients.map(ing => ({
@@ -276,6 +294,14 @@ const EditDish = () => {
                     quantity: parseFloat(ing.quantity)
                 }))
             };
+
+            if (formData.steps.length > 0) {
+                dishData.steps = formData.steps.map((step, index) => ({
+                    orderIndex: index + 1,
+                    stepText: step.stepText.trim()
+                }));
+            }
+
 
             await dishService.updateDish(id, dishData);
 
@@ -597,46 +623,11 @@ const EditDish = () => {
                             </Box>
                         </Field>
 
-                        <Box>
-                            <Heading size="md" mb={4}>Cooking Instructions</Heading>
-                            <Box 
-                                border="1px solid" 
-                                borderColor="gray.200" 
-                                borderRadius="md"
-                                overflow="hidden"
-                                sx={{
-                                    '& .ql-toolbar': {
-                                        borderBottom: '1px solid',
-                                        borderColor: 'transparent',
-                                        backgroundColor: 'transparent',
-                                        paddingLeft: 12,
-                                        paddingRight: 12
-                                    },
-                                    '& .ql-container': {
-                                        minHeight: '260px',
-                                        fontSize: '16px',
-                                        border: 'none',
-                                    },
-                                    '& .ql-editor': {
-                                        minHeight: '240px',
-                                        padding: '18px',
-                                        lineHeight: '1.6'
-                                    },
-                                    '& .ql-editor.ql-blank::before': {
-                                        color: 'gray.400',
-                                        fontStyle: 'normal',
-                                    }
-                                }}
-                            >
-                                <ReactQuill
-                                    theme="snow"
-                                    value={formData.cookingSteps}
-                                    onChange={(value) => setFormData(prev => ({ ...prev, cookingSteps: value }))}
-                                    modules={quillModules}
-                                    placeholder=" Write your cooking instructions here..."
-                                />
-                            </Box>
-                        </Box>
+                        <StepManager 
+                            steps={formData.steps}
+                            onChange={handleStepsChange}
+                            errors={errors}
+                        />
 
                         <Box pt={4}>
                             <Button

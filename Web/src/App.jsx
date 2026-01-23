@@ -27,6 +27,7 @@ import ExportedUserData from "./pages/shared/settings/ExportedUserData";
 import Profile from "./pages/shared/settings/Profile";
 import EmailActivation from "./pages/shared/auth/EmailActivation";
 import PasswordReset from "./pages/shared/settings/PasswordReset";
+
 const App = () => {
   return (
     <Router>
