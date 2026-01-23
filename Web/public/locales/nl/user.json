@@ -1,0 +1,42 @@
+{
+  "management": {
+    "title": "Gebruikersbeheer",
+    "subtitle": "Beheer en bekijk alle geregistreerde gebruikers",
+    "searchPlaceholder": "Zoeken op voornaam, achternaam of e-mail...",
+    "allTypes": "Alle typen",
+    "roleAdmin": "Beheerder",
+    "roleBlacklisted": "Geblokkeerd",
+    "roleUser": "Gebruiker",
+    "noUsersFound": "Geen gebruikers gevonden",
+    "noUsersFoundDescription": "Er zijn nog geen gebruikers geregistreerd",
+    "adjustFilters": "Probeer uw zoekfilters aan te passen",
+    "showing": "{{start}} - {{end}} van {{total}} gebruikers weergeven",
+    "firstNameColumn": "Voornaam",
+    "lastNameColumn": "Achternaam",
+    "roleColumn": "Rol",
+    "roleUpdatedSuccess": "Gebruikersrol succesvol bijgewerkt",
+    "roleUpdateFailed": "Gebruikersrol bijwerken mislukt",
+    "userEnabledSuccess": "Gebruiker succesvol ingeschakeld",
+    "userEnableFailed": "Gebruiker inschakelen mislukt",
+    "userDeletedSuccess": "Succesvol verwijderd",
+    "userDeleteFailed": "Gebruiker verwijderen mislukt",
+    "fetchUsersFailed": "Gebruikers ophalen mislukt"
+  },
+  "details": {
+    "title": "Gebruikersdetails",
+    "userId": "Gebruikers-ID",
+    "firstName": "Voornaam",
+    "lastName": "Achternaam",
+    "emailAddress": "E-mailadres",
+    "accountType": "Accounttype",
+    "accountStatus": "Accountstatus",
+    "enableAccount": "Account inschakelen",
+    "enabled": "Ingeschakeld",
+    "deleteUser": "Gebruiker verwijderen",
+    "updating": "Bijwerken...",
+    "deleteConfirmTitle": "Gebruiker verwijderen",
+    "deleteConfirmDescription": "Weet u zeker dat u deze gebruiker wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.",
+    "confirmDelete": "Verwijderen",
+    "cancel": "Annuleren"
+  }
+}

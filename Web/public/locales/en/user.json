@@ -1,0 +1,42 @@
+{
+  "management": {
+    "title": "Users Management",
+    "subtitle": "Manage and view all registered users",
+    "searchPlaceholder": "Search by first name, last name or email...",
+    "allTypes": "All types",
+    "roleAdmin": "Admin",
+    "roleBlacklisted": "Blacklisted",
+    "roleUser": "User",
+    "noUsersFound": "No users found",
+    "noUsersFoundDescription": "There are no users registered yet",
+    "adjustFilters": "Try adjusting your search filters",
+    "showing": "Showing {{start}} - {{end}} of {{total}} users",
+    "firstNameColumn": "First Name",
+    "lastNameColumn": "Last Name",
+    "roleColumn": "Role",
+    "roleUpdatedSuccess": "User role updated successfully",
+    "roleUpdateFailed": "Failed to update user role",
+    "userEnabledSuccess": "User enabled successfully",
+    "userEnableFailed": "Failed to enable user",
+    "userDeletedSuccess": "Deleted successfully",
+    "userDeleteFailed": "Failed to delete user",
+    "fetchUsersFailed": "Failed to fetch users"
+  },
+  "details": {
+    "title": "User Details",
+    "userId": "User ID",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "emailAddress": "Email Address",
+    "accountType": "Account Type",
+    "accountStatus": "Account Status",
+    "enableAccount": "Enable Account",
+    "enabled": "Enabled",
+    "deleteUser": "Delete User",
+    "updating": "Updating...",
+    "deleteConfirmTitle": "Delete user",
+    "deleteConfirmDescription": "Are you sure you want to delete this user? This action cannot be undone.",
+    "confirmDelete": "Delete",
+    "cancel": "Cancel"
+  }
+}

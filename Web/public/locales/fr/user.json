@@ -1,0 +1,42 @@
+{
+  "management": {
+    "title": "Gestion des utilisateurs",
+    "subtitle": "Gérer et visualiser tous les utilisateurs enregistrés",
+    "searchPlaceholder": "Rechercher par prénom, nom ou e-mail...",
+    "allTypes": "Tous les types",
+    "roleAdmin": "Administrateur",
+    "roleBlacklisted": "Liste noire",
+    "roleUser": "Utilisateur",
+    "noUsersFound": "Aucun utilisateur trouvé",
+    "noUsersFoundDescription": "Il n'y a pas encore d'utilisateurs enregistrés",
+    "adjustFilters": "Essayez d'ajuster vos filtres de recherche",
+    "showing": "Affichage de {{start}} - {{end}} sur {{total}} utilisateurs",
+    "firstNameColumn": "Prénom",
+    "lastNameColumn": "Nom",
+    "roleColumn": "Rôle",
+    "roleUpdatedSuccess": "Rôle de l'utilisateur mis à jour avec succès",
+    "roleUpdateFailed": "Échec de la mise à jour du rôle de l'utilisateur",
+    "userEnabledSuccess": "Utilisateur activé avec succès",
+    "userEnableFailed": "Échec de l'activation de l'utilisateur",
+    "userDeletedSuccess": "Supprimé avec succès",
+    "userDeleteFailed": "Échec de la suppression de l'utilisateur",
+    "fetchUsersFailed": "Échec de la récupération des utilisateurs"
+  },
+  "details": {
+    "title": "Détails de l'utilisateur",
+    "userId": "ID utilisateur",
+    "firstName": "Prénom",
+    "lastName": "Nom",
+    "emailAddress": "Adresse e-mail",
+    "accountType": "Type de compte",
+    "accountStatus": "Statut du compte",
+    "enableAccount": "Activer le compte",
+    "enabled": "Activé",
+    "deleteUser": "Supprimer l'utilisateur",
+    "updating": "Mise à jour...",
+    "deleteConfirmTitle": "Supprimer l'utilisateur",
+    "deleteConfirmDescription": "Êtes-vous sûr de vouloir supprimer cet utilisateur ? Cette action ne peut pas être annulée.",
+    "confirmDelete": "Supprimer",
+    "cancel": "Annuler"
+  }
+}

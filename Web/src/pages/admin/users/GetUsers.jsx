@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
     Box, Heading, Input, Stack, Text, HStack, VStack, Table, IconButton, Button, ButtonGroup, NativeSelectRoot, NativeSelectField, Spinner, Badge, Dialog, DataList, CloseButton, Portal
 } from '@chakra-ui/react';
@@ -9,6 +10,7 @@ import UserDetailsModal from '../../../components/users/UserDetailsModal';
 import Pagination from '../../../components/ui/Pagination';
 
 const GetUsers = () => {
+    const { t } = useTranslation('user');
     const { enqueueSnackbar } = useSnackbar();
     const [users, setUsers] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -51,7 +53,7 @@ const GetUsers = () => {
             setTotalPages(response.data.totalPages || 0);
             setTotalElements(response.data.totalElements || 0);
         } catch (error) {
-            enqueueSnackbar(error.response?.data?.message || 'Failed to fetch users', { variant: 'error' });
+            enqueueSnackbar(t('management.fetchUsersFailed'), { variant: 'error' });
         } finally {
             setIsLoading(false);
         }
@@ -72,9 +74,9 @@ const GetUsers = () => {
 
             setSelectedUser({ ...selectedUser, userType: newRole });
             setUsers(users.map(user => user.id === selectedUser.id ? { ...user, userType: newRole } : user));
-            enqueueSnackbar('User role updated successfully', { variant: 'success' });
+            enqueueSnackbar(t('management.roleUpdatedSuccess'), { variant: 'success' });
         } catch (error) {
-            enqueueSnackbar(error.response?.data?.message || 'Failed to update user role', { variant: 'error' });
+            enqueueSnackbar(t('management.roleUpdateFailed'), { variant: 'error' });
         } finally {
             setIsUpdatingRole(false);
         }
@@ -87,9 +89,9 @@ const GetUsers = () => {
             setUsers(users.map(user => user.id === id ? { ...user, enabled: true } : user));
             if (selectedUser?.id === id) setSelectedUser({ ...selectedUser, enabled: true });
 
-            enqueueSnackbar('User enabled successfully', { variant: 'success' });
+            enqueueSnackbar(t('management.userEnabledSuccess'), { variant: 'success' });
         } catch (error) {
-            enqueueSnackbar(error.response?.data?.message || 'Failed to enable user', { variant: 'error' });
+            enqueueSnackbar(t('management.userEnableFailed'), { variant: 'error' });
         }
     };
 
@@ -101,9 +103,9 @@ const GetUsers = () => {
 
             if (selectedUser?.id === id) setSelectedUser(null);
 
-            enqueueSnackbar('Deleted successfully', { variant: 'success' });
+            enqueueSnackbar(t('management.userDeletedSuccess'), { variant: 'success' });
         } catch (error) {
-            enqueueSnackbar(error.response?.data?.message || 'Failed to delete user', { variant: 'error' });
+            enqueueSnackbar(t('management.userDeleteFailed'), { variant: 'error' });
         }
     };
 
@@ -112,10 +114,10 @@ const GetUsers = () => {
             <VStack align="stretch" gap={6} maxW="1400px" mx="auto">
                 <Box>
                     <Heading fontSize="3xl" fontWeight="bold" color="#083951" mb={2}>
-                        Users Management
+                        {t('management.title')}
                     </Heading>
                     <Text color="gray.600" fontSize="md">
-                        Manage and view all registered users
+                        {t('management.subtitle')}
                     </Text>
                 </Box>
 
@@ -132,7 +134,7 @@ const GetUsers = () => {
                             <FiSearch color="#718096" size={18} />
                         </Box>
                         <Input
-                            placeholder="Search by first name, last name or email..."
+                            placeholder={t('management.searchPlaceholder')}
                             value={searchTerm}
                             onChange={handleSearchChange}
                             focusBorderColor="#083951"
@@ -155,10 +157,10 @@ const GetUsers = () => {
                                 height: window.innerWidth < 768 ? '2.5rem' : '3rem'
                             }}
                         >
-                            <option value="">All types</option>
-                            <option value="ADMIN">Admin</option>
-                            <option value="BLACKLISTED">Blacklisted</option>
-                            <option value="USER">User</option>
+                            <option value="">{t('management.allTypes')}</option>
+                            <option value="ADMIN">{t('management.roleAdmin')}</option>
+                            <option value="BLACKLISTED">{t('management.roleBlacklisted')}</option>
+                            <option value="USER">{t('management.roleUser')}</option>
                         </select>
                     </Box>
                 </Stack>
@@ -169,25 +171,29 @@ const GetUsers = () => {
                     </Box>
                 ) : users.length === 0 ? (
                     <Box textAlign="center" py={20} bg="white" borderRadius="xl" border="1px solid" borderColor="gray.200" boxShadow="sm">
-                        <Text fontSize="xl" color="gray.500" fontWeight="medium">No users found</Text>
+                        <Text fontSize="xl" color="gray.500" fontWeight="medium">{t('management.noUsersFound')}</Text>
                         <Text color="gray.400" mt={2}>
-                            {searchTerm || selectedType ? 'Try adjusting your search filters' : 'There are no users registered yet'}
+                            {searchTerm || selectedType ? t('management.adjustFilters') : t('management.noUsersFoundDescription')}
                         </Text>
                     </Box>
                 ) : (
                     <Box bg="white" borderRadius="xl" overflow="hidden" border="1px solid" borderColor="gray.200" boxShadow="md">
                         <Box p={6} borderBottom="1px solid" borderColor="gray.200" bg="gray.50">
                             <Text fontSize="sm" color="gray.600" fontWeight="medium">
-                                Showing {(page * pageSize) + 1} - {Math.min((page + 1) * pageSize, totalElements)} of {totalElements} users
+                                {t('management.showing', { 
+                                    start: (page * pageSize) + 1, 
+                                    end: Math.min((page + 1) * pageSize, totalElements), 
+                                    total: totalElements 
+                                })}
                             </Text>
                         </Box>
 
                         <Table.Root size="lg" variant="plain">
                             <Table.Header>
                                 <Table.Row>
-                                    <Table.ColumnHeader style={{ color: "#083951", textAlign: 'left', padding: '12px' }}>First Name</Table.ColumnHeader >
-                                    <Table.ColumnHeader style={{ color: "#083951", textAlign: 'left', padding: '12px' }}>Last Name</Table.ColumnHeader >
-                                    <Table.ColumnHeader style={{ color: "#083951", textAlign: 'left', padding: '12px' }}>Role</Table.ColumnHeader >
+                                    <Table.ColumnHeader style={{ color: "#083951", textAlign: 'left', padding: '12px' }}>{t('management.firstNameColumn')}</Table.ColumnHeader >
+                                    <Table.ColumnHeader style={{ color: "#083951", textAlign: 'left', padding: '12px' }}>{t('management.lastNameColumn')}</Table.ColumnHeader >
+                                    <Table.ColumnHeader style={{ color: "#083951", textAlign: 'left', padding: '12px' }}>{t('management.roleColumn')}</Table.ColumnHeader >
                                 </Table.Row>
                             </Table.Header>
                             <Table.Body>
@@ -207,10 +213,10 @@ const GetUsers = () => {
                                                 alignItems="center"
                                             >
                                                 {user.userType === 'ADMIN'
-                                                    ? 'Admin'
+                                                    ? t('management.roleAdmin')
                                                     : user.userType === 'BLACKLISTED'
-                                                        ? 'Blacklisted'
-                                                        : 'User'}                                            
+                                                        ? t('management.roleBlacklisted')
+                                                        : t('management.roleUser')}                                            
                                             </Badge>
                                         </Table.Cell>
                                     </Table.Row>

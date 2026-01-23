@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
     Box,
     Text,
@@ -25,7 +26,7 @@ const UserDetailsModal = ({
     handleDelete,
     enablingId
 }) => {
-
+    const { t } = useTranslation('user');
     const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 
     if (!selectedUser) return null;
@@ -57,7 +58,7 @@ const UserDetailsModal = ({
 
                             <Dialog.Header pb={2} pt={6} px={6}>
                                 <Dialog.Title fontSize="2xl" fontWeight="bold" color="#083951">
-                                    User Details
+                                    {t('details.title')}
                                 </Dialog.Title>
                             </Dialog.Header>
 
@@ -78,7 +79,7 @@ const UserDetailsModal = ({
                                             textTransform="uppercase"
                                             letterSpacing="wide"
                                         >
-                                            User ID
+                                            {t('details.userId')}
                                         </Text>
                                         <Text fontSize="lg" fontWeight="bold" color="#083951">
                                             #{selectedUser.id}
@@ -95,7 +96,7 @@ const UserDetailsModal = ({
                                                 textTransform="uppercase"
                                                 letterSpacing="wide"
                                             >
-                                                First Name
+                                                {t('details.firstName')}
                                             </Text>
                                             <Text fontSize="md" fontWeight="semibold" color="gray.800">
                                                 {selectedUser.firstName}
@@ -111,7 +112,7 @@ const UserDetailsModal = ({
                                                 textTransform="uppercase"
                                                 letterSpacing="wide"
                                             >
-                                                Last Name
+                                                {t('details.lastName')}
                                             </Text>
                                             <Text fontSize="md" fontWeight="semibold" color="gray.800">
                                                 {selectedUser.lastName}
@@ -128,7 +129,7 @@ const UserDetailsModal = ({
                                             textTransform="uppercase"
                                             letterSpacing="wide"
                                         >
-                                            Email Address
+                                            {t('details.emailAddress')}
                                         </Text>
                                         <Text fontSize="md" fontWeight="medium" color="gray.800">
                                             {selectedUser.email}
@@ -144,7 +145,7 @@ const UserDetailsModal = ({
                                             textTransform="uppercase"
                                             letterSpacing="wide"
                                         >
-                                            Account Type
+                                            {t('details.accountType')}
                                         </Text>
                                         <NativeSelectRoot size="md" disabled={isUpdatingRole}>
                                             <NativeSelectField
@@ -157,16 +158,16 @@ const UserDetailsModal = ({
                                                 borderRadius="md"
                                                 cursor="pointer"
                                             >
-                                                <option value="USER">User</option>
-                                                <option value="ADMIN">Admin</option>
-                                                <option value="BLACKLISTED">Blacklisted</option>
+                                                <option value="USER">{t('management.roleUser')}</option>
+                                                <option value="ADMIN">{t('management.roleAdmin')}</option>
+                                                <option value="BLACKLISTED">{t('management.roleBlacklisted')}</option>
                                             </NativeSelectField>
                                         </NativeSelectRoot>
                                         {isUpdatingRole && (
                                             <HStack mt={2}>
                                                 <Spinner size="sm" color="#083951" />
                                                 <Text fontSize="xs" color="gray.600">
-                                                    Updating...
+                                                    {t('details.updating')}
                                                 </Text>
                                             </HStack>
                                         )}
@@ -181,7 +182,7 @@ const UserDetailsModal = ({
                                             textTransform="uppercase"
                                             letterSpacing="wide"
                                         >
-                                            Account Status
+                                            {t('details.accountStatus')}
                                         </Text>
                                         <HStack justify="flex-start" align="center" spacing={4}>
                                             {!selectedUser.enabled ? (
@@ -189,11 +190,11 @@ const UserDetailsModal = ({
                                                     size="md"
                                                     onClick={() => handleEnable(selectedUser.id)}
                                                 >
-                                                    Enable Account
+                                                    {t('details.enableAccount')}
                                                 </Button>
                                             ) : (
                                                 <Badge size="md" fontWeight="semibold">
-                                                    Enabled
+                                                    {t('details.enabled')}
                                                 </Badge>
                                             )}
                                         </HStack>
@@ -204,7 +205,7 @@ const UserDetailsModal = ({
                                         width="full"
                                         onClick={() => setIsDeleteOpen(true)}
                                     >
-                                        Delete User
+                                        {t('details.deleteUser')}
                                     </Button>
 
                                 </VStack>
@@ -217,10 +218,10 @@ const UserDetailsModal = ({
             <ConfirmDialog
                 isOpen={isDeleteOpen}
                 onClose={() => setIsDeleteOpen(false)}
-                title="Delete user"
-                description="Are you sure you want to delete this user? This action cannot be undone."
-                confirmLabel="Delete"
-                cancelLabel="Cancel"
+                title={t('details.deleteConfirmTitle')}
+                description={t('details.deleteConfirmDescription')}
+                confirmLabel={t('details.confirmDelete')}
+                cancelLabel={t('details.cancel')}
                 confirmColorScheme="red"
                 onConfirm={() => {
                     handleDelete(selectedUser.id);
