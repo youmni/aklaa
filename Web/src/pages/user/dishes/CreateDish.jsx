@@ -252,11 +252,15 @@ const CreateDish = () => {
             newErrors.steps = 'Maximum 50 steps allowed';
         }
 
-        formData.steps.forEach((step, index) => {
-            if (step.stepText && (step.stepText.trim().length < 5 || step.stepText.trim().length > 255)) {
-                newErrors[`step_${index}`] = 'Step must be between 5 and 255 characters';
-            }
-        });
+        if (formData.steps.length > 0) {
+            formData.steps.forEach((step, index) => {
+                if (!step.stepText || step.stepText.trim().length === 0) {
+                    newErrors[`step_${index}`] = 'Step cannot be empty';
+                } else if (step.stepText.trim().length < 5 || step.stepText.trim().length > 255) {
+                    newErrors[`step_${index}`] = 'Step must be between 5 and 255 characters';
+                }
+            });
+        }
 
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
@@ -283,12 +287,15 @@ const CreateDish = () => {
                 ingredients: formData.ingredients.map(ing => ({
                     ingredientId: parseInt(ing.ingredientId),
                     quantity: parseFloat(ing.quantity)
-                })),
-                steps: formData.steps.map((step, index) => ({
-                    orderIndex: index + 1,
-                    stepText: step.stepText.trim()
                 }))
             };
+
+            if (formData.steps.length > 0) {
+                dishData.steps = formData.steps.map((step, index) => ({
+                    orderIndex: index + 1,
+                    stepText: step.stepText.trim()
+                }));
+            }
 
             await dishService.createDish(dishData);
 

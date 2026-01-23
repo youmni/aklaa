@@ -115,9 +115,11 @@ const EditDish = () => {
                     ingredientId: String(ing.ingredient.id),
                     quantity: String(ing.quantity)
                 })),
-                steps: dish.steps ? dish.steps.map(step => ({
-                    stepText: step.stepText
-                })) : []
+                steps: (dish.cookingSteps && Array.isArray(dish.cookingSteps)) 
+                    ? dish.cookingSteps.map(step => ({
+                        stepText: step.recipeStep || ''
+                    })) 
+                    : []
             });
         } catch (error) {
             enqueueSnackbar(error.response?.data?.message || 'Failed to fetch dish', { variant: 'error' });
@@ -130,10 +132,7 @@ const EditDish = () => {
     const fetchIngredients = async () => {
         try {
             setIsLoadingIngredients(true);
-            const response = await ingredientService.getIngredients({
-                page: 0,
-                size: 1000
-            });
+            const response = await ingredientService.getIngredients();
             setAvailableIngredients(response.data.ingredients || []);
         } catch (error) {
             enqueueSnackbar('Failed to fetch ingredients', { variant: 'error' });
@@ -202,7 +201,6 @@ const EditDish = () => {
 
     const handleStepsChange = (newSteps) => {
         setFormData(prev => ({ ...prev, steps: newSteps }));
-        // Clear step-related errors
         const newErrors = { ...errors };
         Object.keys(newErrors).forEach(key => {
             if (key.startsWith('step_')) {
@@ -259,11 +257,15 @@ const EditDish = () => {
             newErrors.steps = 'Maximum 50 steps allowed';
         }
 
-        formData.steps.forEach((step, index) => {
-            if (step.stepText && (step.stepText.trim().length < 5 || step.stepText.trim().length > 255)) {
-                newErrors[`step_${index}`] = 'Step must be between 5 and 255 characters';
-            }
-        });
+        if (formData.steps.length > 0) {
+            formData.steps.forEach((step, index) => {
+                if (!step.stepText || step.stepText.trim().length === 0) {
+                    newErrors[`step_${index}`] = 'Step cannot be empty';
+                } else if (step.stepText.trim().length < 5 || step.stepText.trim().length > 255) {
+                    newErrors[`step_${index}`] = 'Step must be between 5 and 255 characters';
+                }
+            });
+        }
 
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
@@ -290,12 +292,16 @@ const EditDish = () => {
                 ingredients: formData.ingredients.map(ing => ({
                     ingredientId: parseInt(ing.ingredientId),
                     quantity: parseFloat(ing.quantity)
-                })),
-                steps: formData.steps.map((step, index) => ({
-                    orderIndex: index + 1,
-                    stepText: step.stepText.trim()
                 }))
             };
+
+            if (formData.steps.length > 0) {
+                dishData.steps = formData.steps.map((step, index) => ({
+                    orderIndex: index + 1,
+                    stepText: step.stepText.trim()
+                }));
+            }
+
 
             await dishService.updateDish(id, dishData);
 

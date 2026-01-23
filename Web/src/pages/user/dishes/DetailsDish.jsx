@@ -13,12 +13,12 @@ import {
     Badge,
     Spinner,
     HStack,
-    Card
+    Card,
+    Accordion
 } from '@chakra-ui/react';
 import { FiArrowLeft, FiEdit } from 'react-icons/fi';
 import { FaUsers } from 'react-icons/fa';
 import { useSnackbar } from 'notistack';
-import MarkdownRenderer from '../../../components/ui/MarkdownRenderer';
 
 const DetailsDish = () => {
     const { id } = useParams();
@@ -177,14 +177,45 @@ const DetailsDish = () => {
                     </Card.Root>
                 </Box>
 
-                {dish.cookingSteps && (
+                {dish.cookingSteps && dish.cookingSteps.length > 0 && (
                     <Box>
                         <Heading size="md" mb={4} color="#083951">
                             Cooking Instructions
                         </Heading>
-                        <Box boxShadow="sm" p={6} bg="gray.50" borderRadius="lg">
-                            <MarkdownRenderer content={dish.cookingSteps} />
-                        </Box>
+                        <Accordion.Root multiple defaultValue={['0']}>
+                            {dish.cookingSteps.map((step, index) => {
+                                return (
+                                    <Accordion.Item key={index} value={String(index)}>
+                                        <Accordion.ItemTrigger
+                                            bg="white"
+                                            borderRadius="md"
+                                            border="1px solid"
+                                            borderColor="gray.200"
+                                            p={4}
+                                            mb={2}
+                                            cursor="pointer"
+                                            _hover={{ bg: 'gray.50' }}
+                                        >
+                                            <Text fontWeight="medium" color="#083951">
+                                                Step {step.orderIndex}
+                                            </Text>
+                                        </Accordion.ItemTrigger>
+                                        <Accordion.ItemContent>
+                                            <Accordion.ItemBody
+                                                bg="gray.50"
+                                                p={4}
+                                                borderRadius="md"
+                                                mb={2}
+                                            >
+                                                <Text color="gray.700" lineHeight="1.8">
+                                                    {step.recipeStep}
+                                                </Text>
+                                            </Accordion.ItemBody>
+                                        </Accordion.ItemContent>
+                                    </Accordion.Item>
+                                );
+                            })}
+                        </Accordion.Root>
                     </Box>
                 )}
 

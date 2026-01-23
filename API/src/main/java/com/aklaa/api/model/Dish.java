@@ -86,16 +86,37 @@ public class Dish {
     private LocalDateTime updatedAt;
 
     public void replaceIngredients(List<DishIngredientRequestInfoDTO> infos, Function<Long, Ingredient> ingredientResolver) {
-        dishIngredients.clear();
-
+        List<Long> newIngredientIds = infos.stream()
+                .map(DishIngredientRequestInfoDTO::getIngredientId)
+                .toList();
+        
+        dishIngredients.removeIf(di -> !newIngredientIds.contains(di.getIngredient().getId()));
+        
         infos.forEach(info -> {
-            DishIngredient di = DishIngredient.builder()
-                    .ingredient(ingredientResolver.apply(info.getIngredientId()))
-                    .quantity(info.getQuantity())
-                    .dish(this)
-                    .build();
-
-            dishIngredients.add(di);
+            Ingredient ingredient = ingredientResolver.apply(info.getIngredientId());
+            
+            DishIngredient existingDi = dishIngredients.stream()
+                    .filter(di -> di.getIngredient().getId().equals(ingredient.getId()))
+                    .findFirst()
+                    .orElse(null);
+            
+            if (existingDi != null) {
+                existingDi.setQuantity(info.getQuantity());
+            } else {
+                DishIngredientKey key = DishIngredientKey.builder()
+                        .dishId(this.id)
+                        .ingredientId(ingredient.getId())
+                        .build();
+                
+                DishIngredient di = DishIngredient.builder()
+                        .id(key)
+                        .ingredient(ingredient)
+                        .quantity(info.getQuantity())
+                        .dish(this)
+                        .build();
+                
+                dishIngredients.add(di);
+            }
         });
     }
 
