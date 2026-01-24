@@ -35,13 +35,6 @@ const DetailsDish = () => {
     const [dish, setDish] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
 
-    const exportOptions = createListCollection({
-        items: [
-            { label: t('details.exportJSON'), value: 'json' },
-            { label: t('details.exportPDF'), value: 'pdf' }
-        ]
-    });
-
     useEffect(() => {
         fetchDish();
     }, [id]);
@@ -81,8 +74,11 @@ const DetailsDish = () => {
             if (exportType === 'json') {
                 exportDishAsJSON(dish);
                 enqueueSnackbar(t('details.exportSuccess'), { variant: 'success' });
-            } else if (exportType === 'pdf') {
-                await exportDishAsPDF(dish, t);
+            } else if (exportType === 'pdf-light') {
+                await exportDishAsPDF(dish, t, 'light');
+                enqueueSnackbar(t('details.exportSuccess'), { variant: 'success' });
+            } else if (exportType === 'pdf-dark') {
+                await exportDishAsPDF(dish, t, 'dark');
                 enqueueSnackbar(t('details.exportSuccess'), { variant: 'success' });
             }
         } catch (error) {
@@ -122,7 +118,13 @@ const DetailsDish = () => {
 
                 <HStack gap={4}>
                     <Select.Root
-                        collection={exportOptions}
+                        collection={createListCollection({
+                            items: [
+                                { label: t('details.exportJSON'), value: 'json' },
+                                { label: 'PDF Light', value: 'pdf-light' },
+                                { label: 'PDF Dark', value: 'pdf-dark' }
+                            ]
+                        })}
                         size="md"
                         width="200px"
                         onValueChange={handleExport}
@@ -142,12 +144,18 @@ const DetailsDish = () => {
                         <Portal>
                             <Select.Positioner>
                                 <Select.Content>
-                                    {exportOptions.items.map((option) => (
-                                        <Select.Item item={option} key={option.value}>
-                                            {option.label}
-                                            <Select.ItemIndicator />
-                                        </Select.Item>
-                                    ))}
+                                    <Select.Item item={{ label: t('details.exportJSON'), value: 'json' }}>
+                                        {t('details.exportJSON')}
+                                        <Select.ItemIndicator />
+                                    </Select.Item>
+                                    <Select.Item item={{ label: 'PDF Light', value: 'pdf-light' }}>
+                                        PDF Light
+                                        <Select.ItemIndicator />
+                                    </Select.Item>
+                                    <Select.Item item={{ label: 'PDF Dark', value: 'pdf-dark' }}>
+                                        PDF Dark
+                                        <Select.ItemIndicator />
+                                    </Select.Item>
                                 </Select.Content>
                             </Select.Positioner>
                         </Portal>

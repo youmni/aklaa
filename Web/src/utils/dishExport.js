@@ -21,8 +21,9 @@ export const exportDishAsJSON = (dish) => {
  * Export dish data as PDF file
  * @param {Object} dish - The dish object to export
  * @param {Function} t - Translation function
+ * @param {String} theme - Theme mode: 'light' or 'dark'
  */
-export const exportDishAsPDF = async (dish, t) => {
+export const exportDishAsPDF = async (dish, t, theme = 'dark') => {
   const doc = new jsPDF();
   let yPosition = 0;
   const pageWidth = doc.internal.pageSize.width;
@@ -30,18 +31,31 @@ export const exportDishAsPDF = async (dish, t) => {
   const margin = 20;
   const contentWidth = pageWidth - (margin * 2);
 
-  const darkBg = [30, 41, 59];
-  const boxBg = [51, 65, 85];
-  const cyan = [14, 165, 233];
-  const lightText = [241, 245, 249];
-  const mediumGray = [148, 163, 184];
-  const white = [255, 255, 255];
+  let bgColor, boxBg, cyan, textColor, mediumGray, white, borderColor;
+  
+  if (theme === 'light') {
+    bgColor = [255, 255, 255];
+    boxBg = [243, 244, 246]; 
+    cyan = [14, 165, 233];
+    textColor = [17, 24, 39];
+    mediumGray = [107, 114, 128];
+    white = [255, 255, 255];
+    borderColor = [209, 213, 219];
+  } else {
+    bgColor = [30, 41, 59];
+    boxBg = [51, 65, 85];
+    cyan = [14, 165, 233];
+    textColor = [241, 245, 249]
+    mediumGray = [148, 163, 184];
+    white = [255, 255, 255];
+    borderColor = [0, 0, 0];
+  }
 
   const checkPageBreak = (requiredSpace = 20) => {
     if (yPosition + requiredSpace > pageHeight - 35) {
       addFooter();
       doc.addPage();
-      doc.setFillColor(...darkBg);
+      doc.setFillColor(...bgColor);
       doc.rect(0, 0, pageWidth, pageHeight, 'F');
       yPosition = margin;
       return true;
@@ -65,7 +79,7 @@ export const exportDishAsPDF = async (dish, t) => {
     doc.text(new Date().toLocaleDateString(), pageWidth - margin, pageHeight - 12, { align: 'right' });
   };
 
-  doc.setFillColor(...darkBg);
+  doc.setFillColor(...bgColor);
   doc.rect(0, 0, pageWidth, pageHeight, 'F');
 
   yPosition = 20;
@@ -79,7 +93,7 @@ export const exportDishAsPDF = async (dish, t) => {
   
   doc.setFontSize(10);
   doc.setFont(undefined, 'bold');
-  doc.setTextColor(...lightText);
+  doc.setTextColor(...textColor);
   
   const servingsText = `${dish.people} ${dish.people === 1 ? t('details.serving') : t('details.servings')}`;
   doc.text(servingsText, margin, yPosition);
@@ -92,7 +106,7 @@ export const exportDishAsPDF = async (dish, t) => {
   doc.setFillColor(...cyan);
   doc.roundedRect(xPosCuisine, yPosition - 5, cuisineWidth, 7, 3, 3, 'F');
   
-  doc.setDrawColor(0, 0, 0);
+  doc.setDrawColor(...borderColor);
   doc.setLineWidth(0.5);
   doc.roundedRect(xPosCuisine, yPosition - 5, cuisineWidth, 7, 3, 3);
   
@@ -130,7 +144,7 @@ export const exportDishAsPDF = async (dish, t) => {
             
             doc.restoreGraphicsState();
             
-            doc.setDrawColor(0, 0, 0);
+            doc.setDrawColor(...borderColor);
             doc.setLineWidth(2);
             doc.rect(margin, yPosition, imgWidth, imgHeight);
             
@@ -183,7 +197,7 @@ export const exportDishAsPDF = async (dish, t) => {
       doc.setFillColor(...cyan);
       doc.roundedRect(xPos, yPosition - 5, tagWidth, tagHeight, 3, 3, 'F');
       
-      doc.setDrawColor(0, 0, 0);
+      doc.setDrawColor(...borderColor);
       doc.setLineWidth(0.5);
       doc.roundedRect(xPos, yPosition - 5, tagWidth, tagHeight, 3, 3);
       
@@ -207,7 +221,7 @@ export const exportDishAsPDF = async (dish, t) => {
     
     yPosition += 10;
     
-    doc.setTextColor(...lightText);
+    doc.setTextColor(...textColor);
     doc.setFontSize(10);
     doc.setFont(undefined, 'bold');
     const descLines = doc.splitTextToSize(dish.description, contentWidth);
@@ -237,7 +251,7 @@ export const exportDishAsPDF = async (dish, t) => {
     doc.setFillColor(...boxBg);
     doc.roundedRect(margin, yPosition - 5, contentWidth, 9, 3, 3, 'F');
     
-    doc.setDrawColor(0, 0, 0);
+    doc.setDrawColor(...borderColor);
     doc.setLineWidth(0.5);
     doc.roundedRect(margin, yPosition - 5, contentWidth, 9, 3, 3);
     
@@ -246,7 +260,7 @@ export const exportDishAsPDF = async (dish, t) => {
     doc.setFont(undefined, 'bold');
     doc.text(`${ingredientName}`, margin + 5, yPosition);
     
-    doc.setTextColor(...lightText);
+    doc.setTextColor(...textColor);
     doc.setFont(undefined, 'bold');
     const qtyText = `${quantity} ${unit}`;
     const qtyWidth = doc.getTextWidth(qtyText);
@@ -276,7 +290,7 @@ export const exportDishAsPDF = async (dish, t) => {
     doc.setFillColor(...boxBg);
     doc.roundedRect(margin, yPosition - 3, contentWidth, stepHeight, 3, 3, 'F');
     
-    doc.setDrawColor(0, 0, 0);
+    doc.setDrawColor(...borderColor);
     doc.setLineWidth(0.5);
     doc.roundedRect(margin, yPosition - 3, contentWidth, stepHeight, 3, 3);
     
@@ -285,7 +299,7 @@ export const exportDishAsPDF = async (dish, t) => {
     doc.setFont(undefined, 'bold');
     doc.text(`Step ${step.orderIndex}`, margin + 5, yPosition + 3);
     
-    doc.setTextColor(...lightText);
+    doc.setTextColor(...textColor);
     doc.setFontSize(10);
     doc.setFont(undefined, 'bold');
     doc.text(stepLines, margin + 5, yPosition + 9);
