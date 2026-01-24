@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useThemeColors } from '../../../hooks/useThemeColors';
 import dishService from '../../../services/dishService';
+import { exportDishAsJSON, exportDishAsPDF } from '../../../utils/dishExport';
 import {
     Box,
     Button,
@@ -16,9 +17,12 @@ import {
     Spinner,
     HStack,
     Card,
-    Accordion
+    Accordion,
+    createListCollection,
+    Portal,
+    Select
 } from '@chakra-ui/react';
-import { FiArrowLeft, FiEdit } from 'react-icons/fi';
+import { FiArrowLeft, FiDownload } from 'react-icons/fi';
 import { FaUsers } from 'react-icons/fa';
 import { useSnackbar } from 'notistack';
 
@@ -30,6 +34,13 @@ const DetailsDish = () => {
     const colors = useThemeColors();
     const [dish, setDish] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
+
+    const exportOptions = createListCollection({
+        items: [
+            { label: t('details.exportJSON'), value: 'json' },
+            { label: t('details.exportPDF'), value: 'pdf' }
+        ]
+    });
 
     useEffect(() => {
         fetchDish();
@@ -62,6 +73,24 @@ const DetailsDish = () => {
         ).join(' ');
     };
 
+    const handleExport = async (details) => {
+        const exportType = details.value[0];
+        if (!exportType) return;
+
+        try {
+            if (exportType === 'json') {
+                exportDishAsJSON(dish);
+                enqueueSnackbar(t('details.exportSuccess'), { variant: 'success' });
+            } else if (exportType === 'pdf') {
+                await exportDishAsPDF(dish, t);
+                enqueueSnackbar(t('details.exportSuccess'), { variant: 'success' });
+            }
+        } catch (error) {
+            console.error('Export error:', error);
+            enqueueSnackbar(t('details.exportError'), { variant: 'error' });
+        }
+    };
+
     if (isLoading) {
         return (
             <Box
@@ -90,6 +119,40 @@ const DetailsDish = () => {
                 >
                     <FiArrowLeft />
                 </Button>
+
+                <HStack gap={4}>
+                    <Select.Root
+                        collection={exportOptions}
+                        size="md"
+                        width="200px"
+                        onValueChange={handleExport}
+                    >
+                        <Select.HiddenSelect />
+                        <Select.Control>
+                            <Select.Trigger>
+                                <HStack>
+                                    <FiDownload />
+                                    <Select.ValueText placeholder={t('details.exportLabel')} />
+                                </HStack>
+                            </Select.Trigger>
+                            <Select.IndicatorGroup>
+                                <Select.Indicator />
+                            </Select.IndicatorGroup>
+                        </Select.Control>
+                        <Portal>
+                            <Select.Positioner>
+                                <Select.Content>
+                                    {exportOptions.items.map((option) => (
+                                        <Select.Item item={option} key={option.value}>
+                                            {option.label}
+                                            <Select.ItemIndicator />
+                                        </Select.Item>
+                                    ))}
+                                </Select.Content>
+                            </Select.Positioner>
+                        </Portal>
+                    </Select.Root>
+                </HStack>
             </Flex>
 
             <VStack align="stretch" gap={8}>
