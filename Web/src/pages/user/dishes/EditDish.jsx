@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useThemeColors } from '../../../hooks/useThemeColors';
 import dishService from '../../../services/dishService';
 import ingredientService from '../../../services/ingredientService';
 import { 
@@ -75,6 +76,7 @@ const EditDish = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const { enqueueSnackbar } = useSnackbar();
+    const colors = useThemeColors();
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [availableIngredients, setAvailableIngredients] = useState([]);
@@ -338,17 +340,17 @@ const EditDish = () => {
                 justifyContent="center"
                 minH="calc(100vh - 73px)"
             >
-                <Spinner size="xl" thickness="4px" color="#083951" />
+                <Spinner size="xl" thickness="4px" color={colors.text.brand} />
             </Box>
         );
     }
 
     return (
-        <Box p={8} maxW="1200px" mx="auto" bg="white" minH="calc(100vh - 73px)" fontSize="md">
+        <Box p={8} maxW="1200px" mx="auto" bg={colors.bg.primary} minH="calc(100vh - 73px)" fontSize="md">
             <Box mb={4}>
                 <Button
                     variant="ghost"
-                    color="#083951"
+                    color={colors.text.brand}
                     onClick={() => navigate('/dishes')}
                     aria-label="Back to dishes"
                 >
@@ -363,20 +365,20 @@ const EditDish = () => {
                     left={0}
                     right={0}
                     bottom={0}
-                    bg="rgba(255,255,255,0.6)"
+                    bg={colors.modal.overlay}
                     display="flex"
                     alignItems="center"
                     justifyContent="center"
                     zIndex={10}
                 >
-                    <Spinner size="xl" thickness="4px" color="#083951" />
+                    <Spinner size="xl" thickness="4px" color={colors.text.brand} />
                 </Box>
             )}
 
             <VStack align="stretch" gap={8}>
                 <Box>
-                    <Heading fontSize="3xl" fontWeight="bold" color="#083951" mb={2}>{t('edit.title')}</Heading>
-                    <Text color="gray.600">{t('edit.subtitle')}</Text>
+                    <Heading fontSize="3xl" fontWeight="bold" color={colors.text.brand} mb={2}>{t('edit.title')}</Heading>
+                    <Text color={colors.text.secondary}>{t('edit.subtitle')}</Text>
                 </Box>
 
                 <form onSubmit={handleSubmit}>
@@ -522,9 +524,9 @@ const EditDish = () => {
                                     size="md"
                                     onClick={handleAddIngredient}
                                     type="button"
-                                    bg="#083951"
+                                    bg={colors.button.primary.bg}
                                     color="white"
-                                    _hover={{ bg: '#0a4960' }}
+                                    _hover={{ bg: colors.button.primary.hover }}
                                     px={6}
                                 >
                                     <FaPlus style={{ marginRight: '8px' }} /> {t('edit.addIngredientButton')}
@@ -535,34 +537,34 @@ const EditDish = () => {
                                 maxH="420px" 
                                 overflowY="auto" 
                                 p={4}
-                                bg="white"
+                                bg={colors.card.bg}
                                 borderRadius="lg"
                                 border="1px solid"
-                                borderColor="gray.200"
+                                borderColor={colors.border.default}
                                 boxShadow="sm"
                             >
                                 <VStack align="stretch" gap={3}>
                                     {formData.ingredients.length === 0 ? (
                                         <Box textAlign="center" py={12}>
-                                            <Text color="#083951" fontSize="lg" fontWeight="medium">{t('edit.addIngredientButton')}</Text>
-                                            <Text color="gray.500" fontSize="sm" mt={2}>{t('steps.noStepsDescription')}</Text>
+                                            <Text color={colors.text.brand} fontSize="lg" fontWeight="medium">{t('edit.addIngredientButton')}</Text>
+                                            <Text color={colors.text.secondary} fontSize="sm" mt={2}>{t('steps.noStepsDescription')}</Text>
                                         </Box>
                                     ) : (
                                         formData.ingredients.map((ingredient, index) => (
                                             <Box 
                                                 key={index} 
                                                 p={4} 
-                                                bg="white" 
+                                                bg={colors.bg.tertiary}
                                                 borderRadius="md" 
                                                 border="1px solid" 
-                                                borderColor="gray.200" 
+                                                borderColor={colors.border.default} 
                                                 display="flex" 
                                                 alignItems="center" 
                                                 gap={3}
                                             >
                                                 <Box flex={2}>
                                                     <Field
-                                                        label={<Text color="gray.700">{t('edit.ingredientLabel')}</Text>}
+                                                        label={<Text color={colors.text.primary}>{t('edit.ingredientLabel')}</Text>}
                                                         invalid={!!errors[`ingredient_${index}`]}
                                                         errorText={errors[`ingredient_${index}`]}
                                                     >
@@ -570,9 +572,10 @@ const EditDish = () => {
                                                             <NativeSelectField
                                                                 value={ingredient.ingredientId}
                                                                 onChange={(e) => handleIngredientChange(index, 'ingredientId', e.target.value)}
-                                                                bg="white"
-                                                                borderColor="gray.200"
-                                                                _hover={{ borderColor: 'gray.300' }}
+                                                                bg={colors.bg.tertiary}
+                                                                color={colors.text.primary}
+                                                                borderColor={colors.border.default}
+                                                                _hover={{ borderColor: colors.border.hover }}
                                                                 style={{ paddingLeft: 8 }}
                                                             >
                                                                 <option value="" disabled style={{ color: '#A0AEC0' }}>{t('edit.selectIngredient')}</option>
@@ -587,7 +590,7 @@ const EditDish = () => {
                                                 </Box>
                                                 <Box flex={1}>
                                                     <Field
-                                                        label={<Text color="gray.700">{t('edit.quantityLabel')}</Text>}
+                                                        label={<Text color={colors.text.primary}>{t('edit.quantityLabel')}</Text>}
                                                         invalid={!!errors[`quantity_${index}`]}
                                                         errorText={errors[`quantity_${index}`]}
                                                     >
@@ -599,11 +602,11 @@ const EditDish = () => {
                                                             step="0.001"
                                                             min="0.001"
                                                             size="lg"
-                                                            bg="white"
-                                                            color="inherit"
-                                                            borderColor="gray.200"
-                                                            _hover={{ borderColor: 'gray.300' }}
-                                                            _placeholder={{ color: 'gray.400' }}
+                                                            bg={colors.input.bg}
+                                                            color={colors.text.primary}
+                                                            borderColor={colors.border.default}
+                                                            _hover={{ borderColor: colors.border.hover }}
+                                                            _placeholder={{ color: colors.text.tertiary }}
                                                         />
                                                     </Field>
                                                 </Box>
@@ -635,12 +638,12 @@ const EditDish = () => {
                         <Box pt={4}>
                             <Button
                                 type="submit"
-                                bg="#083951"
+                                bg={colors.button.primary.bg}
                                 color="white"
                                 width="full"
                                 isLoading={isSubmitting}
                                 _hover={{
-                                    bg: '#0a4960'
+                                    bg: colors.button.primary.hover
                                 }}
                                 px={8}
                             >

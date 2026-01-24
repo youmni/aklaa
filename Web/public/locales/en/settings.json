@@ -7,6 +7,8 @@
     "email": "Email Address",
     "language": "Language",
     "selectLanguage": "Select your preferred language",
+    "theme": "Theme",
+    "themeDescription": "Switch between light and dark mode",
     "saveButton": "Save Changes",
     "cancelButton": "Cancel",
     "firstNameError": "First name must be between 1 and 100 characters",

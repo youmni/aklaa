@@ -11,9 +11,11 @@ import {
 import { useTranslation } from 'react-i18next';
 import { Field } from '../ui/field';
 import { FaPlus, FaTrash, FaArrowUp, FaArrowDown } from 'react-icons/fa';
+import { useThemeColors } from '../../hooks/useThemeColors';
 
 const StepManager = ({ steps, onChange, errors = {} }) => {
     const { t } = useTranslation('dish');
+    const colors = useThemeColors();
     
     const handleAddStep = () => {
         onChange([...steps, { stepText: '' }]);
@@ -55,9 +57,9 @@ const StepManager = ({ steps, onChange, errors = {} }) => {
                     size="md"
                     onClick={handleAddStep}
                     type="button"
-                    bg="#083951"
+                    bg={colors.button.primary.bg}
                     color="white"
-                    _hover={{ bg: '#0a4960' }}
+                    _hover={{ bg: colors.button.primary.hover }}
                     px={6}
                     isDisabled={steps.length >= 50}
                 >
@@ -69,27 +71,27 @@ const StepManager = ({ steps, onChange, errors = {} }) => {
                 maxH="420px" 
                 overflowY="auto" 
                 p={4}
-                bg="white"
+                bg={colors.card.bg}
                 borderRadius="lg"
                 border="1px solid"
-                borderColor="gray.200"
+                borderColor={colors.border.default}
                 boxShadow="sm"
             >
                 <VStack align="stretch" gap={3}>
                     {steps.length === 0 ? (
                         <Box textAlign="center" py={12}>
-                            <Text color="#083951" fontSize="lg" fontWeight="medium">{t('steps.noSteps')}</Text>
-                            <Text color="gray.500" fontSize="sm" mt={2}>{t('steps.noStepsDescription')}</Text>
+                            <Text color={colors.text.brand} fontSize="lg" fontWeight="medium">{t('steps.noSteps')}</Text>
+                            <Text color={colors.text.secondary} fontSize="sm" mt={2}>{t('steps.noStepsDescription')}</Text>
                         </Box>
                     ) : (
                         steps.map((step, index) => (
                             <Box 
                                 key={index} 
                                 p={4} 
-                                bg="white" 
+                                bg={colors.bg.tertiary}
                                 borderRadius="md" 
                                 border="1px solid" 
-                                borderColor="gray.200"
+                                borderColor={colors.border.default}
                             >
                                 <HStack align="flex-start" gap={3}>
                                     <VStack gap={2} pt={2}>
@@ -99,7 +101,7 @@ const StepManager = ({ steps, onChange, errors = {} }) => {
                                             isDisabled={index === 0}
                                             aria-label="Move step up"
                                             size="sm"
-                                            color={index === 0 ? 'gray.300' : '#083951'}
+                                            color={index === 0 ? colors.text.tertiary : colors.text.brand}
                                         >
                                             <FaArrowUp />
                                         </IconButton>
@@ -109,14 +111,14 @@ const StepManager = ({ steps, onChange, errors = {} }) => {
                                             isDisabled={index === steps.length - 1}
                                             aria-label="Move step down"
                                             size="sm"
-                                            color={index === steps.length - 1 ? 'gray.300' : '#083951'}
+                                            color={index === steps.length - 1 ? colors.text.tertiary : colors.text.brand}
                                         >
                                             <FaArrowDown />
                                         </IconButton>
                                     </VStack>
                                     <Box flex={1}>
                                         <Field
-                                            label={<Text color="gray.700" fontWeight="medium">{t('details.step')} {index + 1}</Text>}
+                                            label={<Text color={colors.text.primary} fontWeight="medium">{t('details.step')} {index + 1}</Text>}
                                             invalid={!!errors[`step_${index}`]}
                                             errorText={errors[`step_${index}`]}
                                         >
@@ -126,11 +128,12 @@ const StepManager = ({ steps, onChange, errors = {} }) => {
                                                 onChange={(e) => handleStepChange(index, e.target.value)}
                                                 rows={3}
                                                 size="lg"
-                                                bg="white"
-                                                borderColor="gray.200"
-                                                _hover={{ borderColor: 'gray.300' }}
+                                                bg={colors.input.bg}
+                                                borderColor={colors.border.default}
+                                                color={colors.text.primary}
+                                                _hover={{ borderColor: colors.border.hover }}
                                             />
-                                            <Text fontSize="sm" color="gray.500" mt={1}>
+                                            <Text fontSize="sm" color={colors.text.secondary} mt={1}>
                                                 {step.stepText.length}/255 characters
                                             </Text>
                                         </Field>

@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useThemeColors } from '../../../hooks/useThemeColors';
 import axios from 'axios';
 import { Box, Heading, Spinner, Text } from '@chakra-ui/react';
 import StatusCard from '../../../components/ui/StatusMessageCard';
 
 function AccountActivation() {
   const { t } = useTranslation('auth');
+  const colors = useThemeColors();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const [message, setMessage] = useState(t('accountActivation.activating'));
@@ -48,7 +50,7 @@ function AccountActivation() {
     return (
       <Box
         minH="100vh"
-        bg="gray.50"
+        bg={colors.bg.page}
         display="flex"
         alignItems="center"
         justifyContent="center"
@@ -56,15 +58,15 @@ function AccountActivation() {
       >
         <Box
           p={8}
-          bg="white"
+          bg={colors.card.bg}
           borderRadius="lg"
-          boxShadow="lg"
+          boxShadow={colors.card.shadow}
           w="full"
           maxW="md"
           textAlign="center"
         >
           <Spinner size="xl" color="teal.500" thickness="4px" />
-          <Heading size="lg" color="gray.700" mt={4}>
+          <Heading size="lg" color={colors.text.primary} mt={4}>
             {message}
           </Heading>
         </Box>

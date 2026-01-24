@@ -1,13 +1,15 @@
 import { Button, Flex, Heading, Text, HStack } from '@chakra-ui/react';
 import { FaShoppingCart, FaTrash, FaExclamationTriangle } from 'react-icons/fa';
 import { useTranslation } from 'react-i18next';
+import { useThemeColors } from '../../hooks/useThemeColors';
 
 const CartHeader = ({ itemCount, onClearCart }) => {
     const { t } = useTranslation('cart');
+    const colors = useThemeColors();
     return (
         <Flex justify="space-between" align="center" mb={2} flexWrap="wrap" gap={4}>
             <Flex align="center" gap={3}>
-                    <Text fontSize={{ base: "2xl", md: "3xl" }} fontWeight="bold" color="#083951">
+                    <Text fontSize={{ base: "2xl", md: "3xl" }} fontWeight="bold" color={colors.text.brand}>
                         {t('header.title')}
                     </Text>
             </Flex>

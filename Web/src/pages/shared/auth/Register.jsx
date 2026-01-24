@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, Link as RouterLink } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useThemeColors } from "../../../hooks/useThemeColors";
 import authService from "../../../services/authService";
 import {
   Button,
@@ -14,6 +15,7 @@ import { Field } from '../../../components/ui/field';
 
 const Register = () => {
   const { t } = useTranslation('auth');
+  const colors = useThemeColors();
   const [form, setForm] = useState({
     firstName: "",
     lastName: "",
@@ -123,12 +125,14 @@ const Register = () => {
   };
 
   return (
-    <Box minH="100vh" bg="gray.50" display="flex" alignItems="center" justifyContent="center">
+    <Box minH="100vh" bg={colors.bg.page} display="flex" alignItems="center" justifyContent="center">
       <Box
         p={8}
-        bg="white"
+        bg={colors.card.bg}
         borderRadius="lg"
-        boxShadow="lg"
+        boxShadow={colors.card.shadow}
+        border="1px solid"
+        borderColor={colors.border.default}
         w="full"
         maxW="md"
         position="relative"
@@ -140,14 +144,14 @@ const Register = () => {
             left={0}
             right={0}
             bottom={0}
-            bg="rgba(255,255,255,0.6)"
+            bg={colors.modal.overlay}
             display="flex"
             alignItems="center"
             justifyContent="center"
             borderRadius="lg"
             zIndex={10}
           >
-            <Spinner size="xl" thickness="4px" color="teal.500" />
+            <Spinner size="xl" thickness="4px" color={colors.text.brand} />
           </Box>
         )}
         <form onSubmit={handleSubmit}>
@@ -191,6 +195,9 @@ const Register = () => {
                   name="firstName"
                   value={form.firstName}
                   onChange={handleChange}
+                  borderColor={colors.border.default}
+                  focusBorderColor={colors.text.brand}
+                  _hover={{ borderColor: colors.border.hover }}
                 />
               </Field>
 
@@ -199,6 +206,9 @@ const Register = () => {
                   name="lastName"
                   value={form.lastName}
                   onChange={handleChange}
+                  borderColor={colors.border.default}
+                  focusBorderColor={colors.text.brand}
+                  _hover={{ borderColor: colors.border.hover }}
                 />
               </Field>
 
@@ -208,6 +218,9 @@ const Register = () => {
                   type="email"
                   value={form.email}
                   onChange={handleChange}
+                  borderColor={colors.border.default}
+                  focusBorderColor={colors.text.brand}
+                  _hover={{ borderColor: colors.border.hover }}
                 />
               </Field>
 
@@ -217,6 +230,9 @@ const Register = () => {
                   type="password"
                   value={form.password}
                   onChange={handleChange}
+                  borderColor={colors.border.default}
+                  focusBorderColor={colors.text.brand}
+                  _hover={{ borderColor: colors.border.hover }}
                 />
               </Field>
 
@@ -226,12 +242,17 @@ const Register = () => {
                   type="password"
                   value={form.confirmPassword}
                   onChange={handleChange}
+                  borderColor={colors.border.default}
+                  focusBorderColor={colors.text.brand}
+                  _hover={{ borderColor: colors.border.hover }}
                 />
               </Field>
             </Fieldset.Content>
             <Button
               type="submit"
-              colorScheme="teal"
+              bg={colors.button.primary.bg}
+              color="white"
+              _hover={{ bg: colors.button.primary.hover }}
               width="full"
               mt={4}
               isLoading={isLoading}
@@ -240,9 +261,9 @@ const Register = () => {
             >
               {t('register.submitButton')}
             </Button>
-            <Box mt={4} textAlign="center" fontSize="sm">
+            <Box mt={4} textAlign="center" fontSize="sm" color={colors.text.secondary}>
               {t('register.alreadyHaveAccount')}{' '}
-              <RouterLink to="/auth/login" style={{ textDecoration: 'underline', color: '#319795', fontWeight: 600 }}>
+              <RouterLink to="/auth/login" style={{ textDecoration: 'underline', color: colors.text.brand, fontWeight: 600 }}>
                 {t('register.loginLink')}
               </RouterLink>
             </Box>

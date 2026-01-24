@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useSearchParams, Link as RouterLink } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useThemeColors } from "../../../hooks/useThemeColors";
 import authService from "../../../services/authService";
 import {
     Button,
@@ -16,6 +17,7 @@ import { Field } from "../../../components/ui/field";
 const PasswordResetConfirm = () => {
     const { t } = useTranslation('auth');
     const navigate = useNavigate();
+    const colors = useThemeColors();
     const [searchParams] = useSearchParams();
     const token = searchParams.get("token");
 

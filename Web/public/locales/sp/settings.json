@@ -7,6 +7,8 @@
     "email": "Correo electrónico",
     "language": "Idioma",
     "selectLanguage": "Selecciona tu idioma preferido",
+    "theme": "Tema",
+    "themeDescription": "Cambiar entre modo claro y oscuro",
     "saveButton": "Guardar cambios",
     "cancelButton": "Cancelar",
     "firstNameError": "El nombre debe tener entre 1 y 100 caracteres",

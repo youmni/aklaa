@@ -8,6 +8,7 @@ import {
   Stack,
 } from '@chakra-ui/react';
 import { FiDownload } from 'react-icons/fi';
+import { useThemeColors } from '../../../hooks/useThemeColors';
 
 function parseFilename(contentDisposition) {
   if (!contentDisposition) return null;
@@ -20,6 +21,7 @@ function parseFilename(contentDisposition) {
 
 const ExportedUserData = () => {
   const { t } = useTranslation('settings');
+  const colors = useThemeColors();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -58,13 +60,14 @@ const ExportedUserData = () => {
       maxW="1200px"
       mx="auto"
       p={6}
+      bg={colors.bg.primary}
     >
       <Stack spacing={4} maxW="1200px" mx="auto">
         <Stack spacing={2}>
-          <Text fontSize="3xl" color="#083951" fontWeight="bold">
+          <Text fontSize="3xl" color={colors.text.brand} fontWeight="bold">
             {t('exportData.title')}
           </Text>
-          <Text fontSize="sm" color="#000000ff">
+          <Text fontSize="sm" color={colors.text.secondary}>
             {t('exportData.description')}
           </Text>
 
@@ -79,7 +82,9 @@ const ExportedUserData = () => {
           onClick={handleDownload}
           isLoading={loading}
           leftIcon={<FiDownload />}
-          colorPalette="blue"
+          bg={colors.button.primary.bg}
+          color="white"
+          _hover={{ bg: colors.button.primary.hover }}
           size="md"
           loadingText="Preparing"
           w="100%"

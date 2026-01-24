@@ -1,19 +1,21 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
-import { Box, Button, Input, Stack, Spinner, Portal, Select, createListCollection } from "@chakra-ui/react";
+import { useThemeColors } from '../../../hooks/useThemeColors';
+import { Box, Button, Input, Stack, Spinner, Portal, Select, createListCollection, Text, HStack } from "@chakra-ui/react";
 import { Field, Fieldset } from "@chakra-ui/react";
 import { useSnackbar } from 'notistack';
 import authService from "../../../services/authService";
 import userService from "../../../services/userService";
-import { FiArrowLeft } from 'react-icons/fi';
 import { AuthContext } from '../../../context/AuthContext';
+import { ColorModeButton } from '../../../components/ui/color-mode';
 
 const EditProfile = () => {
     const navigate = useNavigate();
     const { t, i18n } = useTranslation('settings');
     const { enqueueSnackbar } = useSnackbar();
     const { user, setUser } = useContext(AuthContext);
+    const colors = useThemeColors();
 
     const languages = createListCollection({
         items: [
@@ -127,7 +129,7 @@ const EditProfile = () => {
     };
 
     return (
-        <Box w="100%" maxW="full" mx="auto" bg="white" p={6}>
+        <Box w="100%" maxW="full" mx="auto" bg={colors.bg.primary} p={6}>
 
             {isLoading && (
                 <Box
@@ -136,19 +138,19 @@ const EditProfile = () => {
                     left={0}
                     right={0}
                     bottom={0}
-                    bg="rgba(255,255,255,0.6)"
+                    bg={colors.modal.overlay}
                     display="flex"
                     alignItems="center"
                     justifyContent="center"
                     zIndex={10}
                 >
-                    <Spinner size="xl" thickness="4px" color="#083951" />
+                    <Spinner size="xl" thickness="4px" color="teal.500" />
                 </Box>
             )}
             <form onSubmit={handleSubmit} style={{ width: '100%' }}>
                 <Fieldset.Root size="lg" w="100%">
                     <Stack w="100%">
-                        <Fieldset.Legend fontSize="3xl" fontWeight="bold" color={'#083951'}>
+                        <Fieldset.Legend fontSize="3xl" fontWeight="bold" color={colors.text.brand}>
                             {t('editProfile.title')}
                         </Fieldset.Legend>
                         <Fieldset.HelperText>
@@ -191,7 +193,7 @@ const EditProfile = () => {
                                 value={form.firstName}
                                 onChange={handleChange}
                                 maxLength={100}
-                                focusBorderColor="#083951"
+                                focusBorderColor={colors.text.brand}
                                 width="100%"
                             />
                             {errors.firstName && (
@@ -207,7 +209,7 @@ const EditProfile = () => {
                                 value={form.lastName}
                                 onChange={handleChange}
                                 maxLength={250}
-                                focusBorderColor="#083951"
+                                focusBorderColor={colors.text.brand}
                                 width="100%"
                             />
                             {errors.lastName && (
@@ -223,7 +225,7 @@ const EditProfile = () => {
                                 value={form.email}
                                 onChange={handleChange}
                                 maxLength={250}
-                                focusBorderColor="#083951"
+                                focusBorderColor={colors.text.brand}
                                 width="100%"
                             />
                             {errors.email && (
@@ -233,7 +235,6 @@ const EditProfile = () => {
 
                         <Field.Root>
                             <Field.Label>{t('editProfile.language')}</Field.Label>
-                            <Field.HelperText>{t('editProfile.selectLanguage')}</Field.HelperText>
                             <Select.Root 
                                 collection={languages} 
                                 value={selectedLanguage}
@@ -263,10 +264,17 @@ const EditProfile = () => {
                                 </Portal>
                             </Select.Root>
                         </Field.Root>
+
+                        <Field.Root>
+                            <Field.Label>{t('editProfile.theme')}</Field.Label>
+                            <HStack mt={2}>
+                                <ColorModeButton />
+                            </HStack>
+                        </Field.Root>
                     </Fieldset.Content>
                     <Button
                         type="submit"
-                        bg="#083951"
+                        bg={colors.button.primary.bg}
                         color="white"
                         width="full"
                         mt={4}
@@ -274,7 +282,7 @@ const EditProfile = () => {
                         spinnerPlacement="center"
                         isDisabled={isLoading}
                         _hover={{
-                            bg: "#0a4a63"
+                            bg: colors.button.primary.hover
                         }}
                     >
                         {t('editProfile.saveButton')}

@@ -3,21 +3,20 @@ import { useTranslation } from 'react-i18next';
 import userService from '../../../services/userService';
 import { useNavigate } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
-import { FiDownload } from 'react-icons/fi';
+import { useThemeColors } from '../../../hooks/useThemeColors';
 import {
   Box,
   Text,
   Button,
-  Stack,
   HStack,
   Heading,
-  Divider,
 } from '@chakra-ui/react';
 import ConfirmDialog from '../../../components/ui/ConfirmDialog.jsx';
 
 
 const DeleteProfile = () => {
   const { t } = useTranslation('settings');
+  const colors = useThemeColors();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [confirmOpen, setConfirmOpen] = useState(false);
@@ -45,9 +44,9 @@ const DeleteProfile = () => {
   };
 
   return (
-    <Box maxW="full" mx="auto" bg="white" p={6}>
+    <Box maxW="full" mx="auto" bg={colors.bg.primary} p={6}>
       <Heading as="h2" size="3xl" mb={3} color="red.500" fontWeight="bold">{t('deleteProfile.title')}</Heading>
-      <Text fontSize="sm" color="gray.600" mb={4}>
+      <Text fontSize="sm" color={colors.text.secondary} mb={4}>
         {t('deleteProfile.description')}
       </Text>
 

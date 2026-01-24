@@ -17,6 +17,7 @@ import { FiArrowLeft } from 'react-icons/fi';
 import { useSnackbar } from 'notistack';
 import { useTranslation } from 'react-i18next';
 import groceryListService from '../../../services/groceryListService';
+import { useThemeColors } from '../../../hooks/useThemeColors';
 
 const categoryColors = {
     VEGETABLES: 'green',
@@ -37,6 +38,7 @@ const DetailsGroceryList = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const { enqueueSnackbar } = useSnackbar();
+    const colors = useThemeColors();
     const [loading, setLoading] = useState(true);
     const [groceryData, setGroceryData] = useState(null);
     const [checkedItems, setCheckedItems] = useState(new Set());
@@ -104,10 +106,10 @@ const DetailsGroceryList = () => {
 
     if (loading) {
         return (
-            <Box bg="gray.50" minH="100vh" py={12}>
+            <Box bg={colors.bg.page} minH="100vh" py={12}>
                 <Flex justify="center" align="center" minH="60vh" direction="column" gap={4}>
-                    <Spinner size="xl" color="#083951" thickness="4px" />
-                    <Text fontSize="lg" color="gray.600">{t('common.loading')}</Text>
+                    <Spinner size="xl" color={colors.text.brand} thickness="4px" />
+                    <Text fontSize="lg" color={colors.text.secondary}>{t('common.loading')}</Text>
                 </Flex>
             </Box>
         );
@@ -122,13 +124,13 @@ const DetailsGroceryList = () => {
     const totalItems = groceryData.totalElements;
 
     return (
-        <Box bg="gray.50" minH="100vh" py={8}>
+        <Box bg={colors.bg.page} minH="100vh" py={8}>
             <Container maxW="1200px" px={8}>
                 <VStack align="stretch" gap={6}>
                     <Flex justify="space-between" align="center" flexWrap="wrap" gap={4}>
                         <Button
                             variant="ghost"
-                            color="#083951"
+                            color={colors.text.brand}
                             onClick={() => navigate('/grocerylists')}
                             aria-label="Back to grocery lists"
                         >
@@ -136,15 +138,15 @@ const DetailsGroceryList = () => {
                         </Button>
                         <HStack gap={3}>
                             <HStack gap={2}>
-                                <Text fontSize="lg" fontWeight="600" color="#083951">
+                                <Text fontSize="lg" fontWeight="600" color={colors.text.brand}>
                                     {t('details.checkedItems', { checked: totalChecked, total: totalItems })}
                                 </Text>
                             </HStack>
                             <Button
-                                bg="#083951"
+                                bg={colors.button.primary.bg}
                                 color="white"
                                 onClick={() => navigate(`/grocerylists/${id}/edit`)}
-                                _hover={{ bg: '#0a4a63' }}
+                                _hover={{ bg: colors.button.primary.hover }}
                                 leftIcon={<FaEdit />}
                                 px={6}
                             >
@@ -154,19 +156,19 @@ const DetailsGroceryList = () => {
                     </Flex>
 
                     <Box
-                        bg="white"
+                        bg={colors.card.bg}
                         borderRadius="xl"
                         p={6}
-                        boxShadow="sm"
+                        boxShadow={colors.card.shadow}
                         border="1px solid"
-                        borderColor="gray.200"
+                        borderColor={colors.border.default}
                     >
                         <Flex align="center" gap={3} mb={2}>
-                            <Heading size="lg" color="#083951" fontWeight="600">
+                            <Heading size="lg" color={colors.text.brand} fontWeight="600">
                                 {t('common.groceryList')}
                             </Heading>
                         </Flex>
-                        <Text color="gray.600">
+                        <Text color={colors.text.secondary}>
                             {t('common.total')}: {totalItems === 1 ? t('details.ingredient', { count: totalItems }) : t('details.ingredients', { count: totalItems })}
                         </Text>
                     </Box>
@@ -176,15 +178,15 @@ const DetailsGroceryList = () => {
                         return (
                             <Box
                                 key={category}
-                                bg="white"
+                                bg={colors.card.bg}
                                 borderRadius="xl"
                                 p={6}
-                                boxShadow="sm"
+                                boxShadow={colors.card.shadow}
                                 border="1px solid"
-                                borderColor="gray.200"
+                                borderColor={colors.border.default}
                             >
                                 <Flex align="center" gap={3} mb={4}>
-                                    <Heading size="md" color="#083951" fontWeight="600">
+                                    <Heading size="md" color={colors.text.brand} fontWeight="600">
                                         {t(`categories.${category}`)}
                                     </Heading>
                                     <Badge
@@ -208,9 +210,9 @@ const DetailsGroceryList = () => {
                                                 gap={3}
                                                 p={3}
                                                 borderRadius="lg"
-                                                bg={isChecked ? 'gray.50' : 'transparent'}
+                                                bg={isChecked ? colors.bg.tertiary : 'transparent'}
                                                 transition="all 0.2s"
-                                                _hover={{ bg: 'gray.50' }}
+                                                _hover={{ bg: colors.bg.tertiary }}
                                                 cursor="pointer"
                                                 onClick={() => toggleCheck(item.ingredient.id)}
                                             >
@@ -219,8 +221,8 @@ const DetailsGroceryList = () => {
                                                     h="24px"
                                                     borderRadius="md"
                                                     border="2px solid"
-                                                    borderColor={isChecked ? '#083951' : 'gray.300'}
-                                                    bg={isChecked ? '#083951' : 'white'}
+                                                    borderColor={isChecked ? colors.text.brand : colors.border.default}
+                                                    bg={isChecked ? colors.text.brand : colors.card.bg}
                                                     display="flex"
                                                     alignItems="center"
                                                     justifyContent="center"
@@ -233,7 +235,7 @@ const DetailsGroceryList = () => {
                                                 <Text
                                                     flex={1}
                                                     fontSize="md"
-                                                    color={isChecked ? 'gray.500' : 'gray.800'}
+                                                    color={isChecked ? colors.text.tertiary : colors.text.primary}
                                                     textDecoration={isChecked ? 'line-through' : 'none'}
                                                     fontWeight="500"
                                                 >

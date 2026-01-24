@@ -4,12 +4,14 @@ import { useTranslation } from "react-i18next";
 import { Box, Spinner } from "@chakra-ui/react";
 import { useSnackbar } from 'notistack';
 import dishService from "../../../services/dishService";
+import { useThemeColors } from '../../../hooks/useThemeColors';
 
 const DeleteDish = () => {
     const { t } = useTranslation('dish');
     const navigate = useNavigate();
     const { id } = useParams();
     const { enqueueSnackbar } = useSnackbar();
+    const colors = useThemeColors();
 
     useEffect(() => {
         const deleteDish = async () => {
@@ -38,13 +40,13 @@ const DeleteDish = () => {
             p={8}
             maxW="1200px"
             mx="auto"
-            bg="white"
+            bg={colors.bg.page}
             minH="calc(100vh - 73px)"
             display="flex"
             alignItems="center"
             justifyContent="center"
         >
-            <Spinner size="xl" thickness="4px" color="#083951" />
+            <Spinner size="xl" thickness="4px" color={colors.text.brand} />
         </Box>
     );
 };

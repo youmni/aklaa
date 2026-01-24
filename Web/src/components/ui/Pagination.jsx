@@ -1,8 +1,10 @@
 import React from 'react';
 import { Stack, HStack, IconButton, Button, Text } from '@chakra-ui/react';
 import { FiChevronLeft, FiChevronRight, FiChevronsLeft, FiChevronsRight } from 'react-icons/fi';
+import { useThemeColors } from '../../hooks/useThemeColors';
 
 const Pagination = ({ page = 0, totalPages = 0, onPageChange = () => {} }) => {
+    const colors = useThemeColors();
     if (!totalPages || totalPages <= 1) return null;
 
     const renderPageButtons = () => {
@@ -17,12 +19,12 @@ const Pagination = ({ page = 0, totalPages = 0, onPageChange = () => {} }) => {
                         key={index}
                         onClick={() => onPageChange(index)}
                         size={{ base: 'sm', md: 'md' }}
-                        bg={page === index ? '#083951' : 'white'}
-                        color={page === index ? 'white' : '#083951'}
+                        bg={page === index ? colors.button.primary.bg : colors.card.bg}
+                        color={page === index ? 'white' : colors.text.brand}
                         borderWidth="2px"
-                        borderColor="#083951"
+                        borderColor={colors.border.default}
                         _hover={{
-                            bg: page === index ? '#0a4a63' : 'gray.50'
+                            bg: page === index ? colors.button.primary.hover : colors.bg.hover
                         }}
                         fontWeight="600"
                         minW={{ base: '36px', md: '40px' }}
@@ -49,9 +51,10 @@ const Pagination = ({ page = 0, totalPages = 0, onPageChange = () => {} }) => {
                     disabled={page === 0}
                     size={{ base: 'sm', md: 'md' }}
                     variant="outline"
-                    borderColor="#083951"
-                    color="#083951"
-                    _hover={{ bg: 'gray.50' }}
+                    borderColor={colors.border.default}
+                    color={colors.text.brand}
+                    bg={colors.card.bg}
+                    _hover={{ bg: colors.bg.hover }}
                     display={{ base: 'none', sm: 'inline-flex' }}
                     aria-label="First page"
                 >
@@ -62,9 +65,10 @@ const Pagination = ({ page = 0, totalPages = 0, onPageChange = () => {} }) => {
                     disabled={page === 0}
                     size={{ base: 'sm', md: 'md' }}
                     variant="outline"
-                    borderColor="#083951"
-                    color="#083951"
-                    _hover={{ bg: 'gray.50' }}
+                    borderColor={colors.border.default}
+                    color={colors.text.brand}
+                    bg={colors.card.bg}
+                    _hover={{ bg: colors.bg.hover }}
                     aria-label="Previous page"
                 >
                     <FiChevronLeft />
@@ -77,9 +81,10 @@ const Pagination = ({ page = 0, totalPages = 0, onPageChange = () => {} }) => {
                     disabled={page === totalPages - 1}
                     size={{ base: 'sm', md: 'md' }}
                     variant="outline"
-                    borderColor="#083951"
-                    color="#083951"
-                    _hover={{ bg: 'gray.50' }}
+                    borderColor={colors.border.default}
+                    color={colors.text.brand}
+                    bg={colors.card.bg}
+                    _hover={{ bg: colors.bg.hover }}
                     aria-label="Next page"
                 >
                     <FiChevronRight />
@@ -89,9 +94,10 @@ const Pagination = ({ page = 0, totalPages = 0, onPageChange = () => {} }) => {
                     disabled={page === totalPages - 1}
                     size={{ base: 'sm', md: 'md' }}
                     variant="outline"
-                    borderColor="#083951"
-                    color="#083951"
-                    _hover={{ bg: 'gray.50' }}
+                    borderColor={colors.border.default}
+                    color={colors.text.brand}
+                    bg={colors.card.bg}
+                    _hover={{ bg: colors.bg.hover }}
                     display={{ base: 'none', sm: 'inline-flex' }}
                     aria-label="Last page"
                 >

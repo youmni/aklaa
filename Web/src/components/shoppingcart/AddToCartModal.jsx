@@ -18,10 +18,12 @@ import { useSnackbar } from 'notistack';
 import { useTranslation } from 'react-i18next';
 import { FiCalendar, FiUsers, FiShoppingCart } from 'react-icons/fi';
 import cartService from '../../services/cartService';
+import { useThemeColors } from '../../hooks/useThemeColors';
 
 const AddToCartModal = ({ isOpen, onClose, dish }) => {
     const { t } = useTranslation('cart');
     const { enqueueSnackbar } = useSnackbar();
+    const colors = useThemeColors();
     const [dayOfWeek, setDayOfWeek] = useState('');
     const [people, setPeople] = useState(1);
     const [isLoading, setIsLoading] = useState(false);
@@ -82,7 +84,7 @@ const AddToCartModal = ({ isOpen, onClose, dish }) => {
         <Dialog.Root open={isOpen} onOpenChange={(e) => !e.open && handleClose()}>
             <Portal>
                 <Dialog.Backdrop 
-                    bg="blackAlpha.600" 
+                    bg={colors.modal.overlay}
                     backdropFilter="blur(8px)"
                 />
                 <Dialog.Positioner>
@@ -92,9 +94,10 @@ const AddToCartModal = ({ isOpen, onClose, dish }) => {
                         maxW="500px"
                         shadow="2xl"
                         overflow="hidden"
+                        bg={colors.modal.bg}
                     >
                         <Box
-                            bgGradient="linear(to-r, #083951, #0a4a63)"
+                            bg={colors.button.primary.bg}
                             px={6}
                             py={5}
                         >
@@ -117,33 +120,24 @@ const AddToCartModal = ({ isOpen, onClose, dish }) => {
                             <VStack gap={6} align="stretch">
                                 <Box
                                     p={5}
-                                    bgGradient="linear(to-br, blue.50, cyan.50)"
+                                    bg={colors.bg.tertiary}
                                     borderRadius="xl"
-                                    borderWidth="2px"
-                                    borderColor="blue.200"
+                                    borderWidth="1px"
+                                    borderColor={colors.border.default}
                                     position="relative"
                                     overflow="hidden"
-                                    _before={{
-                                        content: '""',
-                                        position: 'absolute',
-                                        top: 0,
-                                        left: 0,
-                                        right: 0,
-                                        height: '4px',
-                                        bgGradient: 'linear(to-r, #083951, cyan.400)',
-                                    }}
                                 >
                                     <Text 
                                         fontSize="xl" 
                                         fontWeight="bold" 
-                                        color="#083951"
+                                        color={colors.text.brand}
                                         mb={1}
                                     >
                                         {dish?.name}
                                     </Text>
                                     <Text 
                                         fontSize="sm" 
-                                        color="gray.600"
+                                        color={colors.text.secondary}
                                         fontWeight="500"
                                     >
                                         {dish?.type?.charAt(0) + dish?.type?.slice(1).toLowerCase().replace('_', ' ')}
@@ -153,10 +147,10 @@ const AddToCartModal = ({ isOpen, onClose, dish }) => {
                                 <Field 
                                     label={
                                         <HStack gap={2}>
-                                            <Icon color="#083951">
+                                            <Icon color={colors.text.brand}>
                                                 <FiCalendar />
                                             </Icon>
-                                            <Text fontWeight="600" color="#083951">
+                                            <Text fontWeight="600" color={colors.text.brand}>
                                                 {t('addToCart.dayLabel')}
                                             </Text>
                                         </HStack>
@@ -176,11 +170,11 @@ const AddToCartModal = ({ isOpen, onClose, dish }) => {
                                                 setDayOfWeek(e.target.value);
                                                 setErrors({ ...errors, dayOfWeek: '' });
                                             }}
-                                            borderColor={errors.dayOfWeek ? "red.500" : "gray.300"}
-                                            _hover={{ borderColor: errors.dayOfWeek ? "red.600" : '#083951' }}
+                                            borderColor={errors.dayOfWeek ? "red.500" : colors.border.default}
+                                            _hover={{ borderColor: errors.dayOfWeek ? "red.600" : colors.text.brand }}
                                             _focus={{ 
-                                                borderColor: errors.dayOfWeek ? "red.500" : '#083951',
-                                                boxShadow: errors.dayOfWeek ? '0 0 0 1px red.500' : '0 0 0 1px #083951'
+                                                borderColor: errors.dayOfWeek ? "red.500" : colors.text.brand,
+                                                boxShadow: errors.dayOfWeek ? '0 0 0 1px red.500' : `0 0 0 1px ${colors.text.brand}`
                                             }}
                                             borderRadius="lg"
                                             fontWeight="500"
@@ -194,17 +188,17 @@ const AddToCartModal = ({ isOpen, onClose, dish }) => {
                                                 )}
                                             </For>
                                         </NativeSelect.Field>
-                                        <NativeSelect.Indicator color="#083951" />
+                                        <NativeSelect.Indicator color={colors.text.brand} />
                                     </NativeSelect.Root>
                                 </Field>
 
                                 <Field 
                                     label={
                                         <HStack gap={2}>
-                                            <Icon color="#083951">
+                                            <Icon color={colors.text.brand}>
                                                 <FiUsers />
                                             </Icon>
-                                            <Text fontWeight="600" color="#083951">
+                                            <Text fontWeight="600" color={colors.text.brand}>
                                                 {t('addToCart.peopleLabel')}
                                             </Text>
                                         </HStack>
@@ -223,11 +217,11 @@ const AddToCartModal = ({ isOpen, onClose, dish }) => {
                                         min={1}
                                         max={100}
                                         size="lg"
-                                        borderColor={errors.people ? "red.500" : "gray.300"}
-                                        _hover={{ borderColor: errors.people ? "red.600" : '#083951' }}
+                                        borderColor={errors.people ? "red.500" : colors.border.default}
+                                        _hover={{ borderColor: errors.people ? "red.600" : colors.text.brand }}
                                         _focus={{ 
-                                            borderColor: errors.people ? "red.500" : '#083951',
-                                            boxShadow: errors.people ? '0 0 0 1px red.500' : '0 0 0 1px #083951'
+                                            borderColor: errors.people ? "red.500" : colors.text.brand,
+                                            boxShadow: errors.people ? '0 0 0 1px red.500' : `0 0 0 1px ${colors.text.brand}`
                                         }}
                                         borderRadius="lg"
                                         fontWeight="500"
@@ -254,29 +248,29 @@ const AddToCartModal = ({ isOpen, onClose, dish }) => {
                         <Dialog.Footer 
                             px={6} 
                             py={4}
-                            bg="gray.50"
+                            bg={colors.bg.tertiary}
                             borderTopWidth="1px"
-                            borderColor="gray.200"
+                            borderColor={colors.border.default}
                         >
                             <HStack gap={3} w="full" justify="flex-end">
                                 <Button
                                     variant="outline"
                                     onClick={handleClose}
-                                    borderColor="gray.300"
-                                    color="gray.700"
+                                    borderColor={colors.border.default}
+                                    color={colors.text.secondary}
                                     fontWeight="600"
                                     size="lg"
                                     px={6}
                                     _hover={{ 
-                                        bg: 'gray.100',
-                                        borderColor: 'gray.400'
+                                        bg: colors.bg.hover,
+                                        borderColor: colors.border.hover
                                     }}
                                     borderRadius="lg"
                                 >
                                     {t('addToCart.cancelButton')}
                                 </Button>
                                 <Button
-                                    bg="#083951"
+                                    bg={colors.button.primary.bg}
                                     color="white"
                                     onClick={handleSubmit}
                                     loading={isLoading}
@@ -284,7 +278,7 @@ const AddToCartModal = ({ isOpen, onClose, dish }) => {
                                     size="lg"
                                     px={6}
                                     _hover={{ 
-                                        bg: '#0a4a63',
+                                        bg: colors.button.primary.hover,
                                         transform: 'translateY(-2px)',
                                         shadow: 'lg'
                                     }}

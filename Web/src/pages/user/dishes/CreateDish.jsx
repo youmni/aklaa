@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useThemeColors } from '../../../hooks/useThemeColors';
 import dishService from '../../../services/dishService';
 import ingredientService from '../../../services/ingredientService';
 import imageService from '../../../services/imageService';
@@ -76,6 +77,7 @@ const CreateDish = () => {
     const { t } = useTranslation('dish');
     const navigate = useNavigate();
     const { enqueueSnackbar } = useSnackbar();
+    const colors = useThemeColors();
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isUploadingImage, setIsUploadingImage] = useState(false);
     const [availableIngredients, setAvailableIngredients] = useState([]);
@@ -339,11 +341,11 @@ const CreateDish = () => {
     };
 
     return (
-        <Box p={8} maxW="1200px" mx="auto" bg="white" minH="calc(100vh - 73px)" fontSize="md">
+        <Box p={8} maxW="1200px" mx="auto" bg={colors.bg.primary} minH="calc(100vh - 73px)" fontSize="md">
             <Box mb={4}>
                 <Button
                     variant="ghost"
-                    color="#083951"
+                    color={colors.text.brand}
                     onClick={() => navigate('/dishes')}
                     aria-label="Back to dishes"
                 >
@@ -358,20 +360,20 @@ const CreateDish = () => {
                     left={0}
                     right={0}
                     bottom={0}
-                    bg="rgba(255,255,255,0.6)"
+                    bg={colors.modal.overlay}
                     display="flex"
                     alignItems="center"
                     justifyContent="center"
                     zIndex={10}
                 >
-                    <Spinner size="xl" thickness="4px" color="#083951" />
+                    <Spinner size="xl" thickness="4px" color={colors.text.brand} />
                 </Box>
             )}
 
             <VStack align="stretch" gap={8}>
                 <Box>
-                    <Heading fontSize="3xl" fontWeight="bold" color="#083951" mb={2}>{t('create.title')}</Heading>
-                    <Text color="gray.600">{t('create.subtitle')}</Text>
+                    <Heading fontSize="3xl" fontWeight="bold" color={colors.text.brand} mb={2}>{t('create.title')}</Heading>
+                    <Text color={colors.text.secondary}>{t('create.subtitle')}</Text>
                 </Box>
 
                 <form onSubmit={handleSubmit}>
@@ -495,20 +497,20 @@ const CreateDish = () => {
                                         htmlFor="image-upload"
                                         size="lg"
                                         bg="transparent"
-                                        color="#083951"
+                                        color={colors.text.brand}
                                         variant="outline"
                                         isLoading={isUploadingImage}
                                         cursor="pointer"
                                         w="full"
                                         h="120px"
                                         border="2px dashed"
-                                        borderColor="rgba(8,57,81,0.12)"
-                                        _hover={{ bg: 'gray.50' }}
+                                        borderColor={colors.border.default}
+                                        _hover={{ bg: colors.bg.hover }}
                                     >
                                         <VStack gap={2}>
-                                            <FaUpload size={24} color="#083951" />
-                                            <Text fontWeight="medium" color="#083951">{t('create.uploadImageButton')}</Text>
-                                            <Text fontSize="sm" color="gray.500">PNG, JPG up to 10MB</Text>
+                                            <FaUpload size={24} color={colors.text.brand} />
+                                            <Text fontWeight="medium" color={colors.text.brand}>{t('create.uploadImageButton')}</Text>
+                                            <Text fontSize="sm" color={colors.text.secondary}>PNG, JPG up to 10MB</Text>
                                         </VStack>
                                     </Button>
                                     <Input
@@ -557,9 +559,9 @@ const CreateDish = () => {
                                     size="md"
                                     onClick={handleAddIngredient}
                                     type="button"
-                                    bg="#083951"
+                                    bg={colors.button.primary.bg}
                                     color="white"
-                                    _hover={{ bg: '#0a4960' }}
+                                    _hover={{ bg: colors.button.primary.hover }}
                                     px={6}
                                 >
                                     <FaPlus style={{ marginRight: '8px' }} /> {t('create.addIngredientButton')}
@@ -570,34 +572,34 @@ const CreateDish = () => {
                                 maxH="420px" 
                                 overflowY="auto" 
                                 p={4}
-                                bg="white"
+                                bg={colors.card.bg}
                                 borderRadius="lg"
                                 border="1px solid"
-                                borderColor="gray.200"
+                                borderColor={colors.border.default}
                                 boxShadow="sm"
                             >
                                 <VStack align="stretch" gap={3}>
                                     {formData.ingredients.length === 0 ? (
                                         <Box textAlign="center" py={12}>
-                                            <Text color="#083951" fontSize="lg" fontWeight="medium">{t('create.addIngredientButton')}</Text>
-                                            <Text color="gray.500" fontSize="sm" mt={2}>{t('steps.noStepsDescription')}</Text>
+                                            <Text color={colors.text.brand} fontSize="lg" fontWeight="medium">{t('create.addIngredientButton')}</Text>
+                                            <Text color={colors.text.secondary} fontSize="sm" mt={2}>{t('steps.noStepsDescription')}</Text>
                                         </Box>
                                     ) : (
                                         formData.ingredients.map((ingredient, index) => (
                                             <Box 
                                                 key={index} 
                                                 p={4} 
-                                                bg="white" 
+                                                bg={colors.bg.tertiary}
                                                 borderRadius="md" 
                                                 border="1px solid" 
-                                                borderColor="gray.200" 
+                                                borderColor={colors.border.default} 
                                                 display="flex" 
                                                 alignItems="center" 
                                                 gap={3}
                                             >
                                                 <Box flex={2}>
                                                     <Field
-                                                        label={<Text color="gray.700">{t('create.ingredientLabel')}</Text>}
+                                                        label={<Text color={colors.text.primary}>{t('create.ingredientLabel')}</Text>}
                                                         invalid={!!errors[`ingredient_${index}`]}
                                                         errorText={errors[`ingredient_${index}`]}
                                                     >
@@ -605,9 +607,10 @@ const CreateDish = () => {
                                                             <NativeSelectField
                                                                 value={ingredient.ingredientId}
                                                                 onChange={(e) => handleIngredientChange(index, 'ingredientId', e.target.value)}
-                                                                bg="white"
-                                                                borderColor="gray.200"
-                                                                _hover={{ borderColor: 'gray.300' }}
+                                                                bg={colors.bg.tertiary}
+                                                                color={colors.text.primary}
+                                                                borderColor={colors.border.default}
+                                                                _hover={{ borderColor: colors.border.hover }}
                                                                 style={{ paddingLeft: 8 }}
                                                             >
                                                                 <option value="" disabled style={{ color: '#A0AEC0' }}>{t('create.selectIngredient')}</option>
@@ -622,7 +625,7 @@ const CreateDish = () => {
                                                 </Box>
                                                 <Box flex={1}>
                                                     <Field
-                                                        label={<Text color="gray.700">{t('create.quantityLabel')}</Text>}
+                                                        label={<Text color={colors.text.primary}>{t('create.quantityLabel')}</Text>}
                                                         invalid={!!errors[`quantity_${index}`]}
                                                         errorText={errors[`quantity_${index}`]}
                                                     >
@@ -634,11 +637,11 @@ const CreateDish = () => {
                                                             step="0.001"
                                                             min="0.001"
                                                             size="lg"
-                                                            bg="white"
-                                                            color="inherit"
-                                                            borderColor="gray.200"
-                                                            _hover={{ borderColor: 'gray.300' }}
-                                                            _placeholder={{ color: 'gray.400' }}
+                                                            bg={colors.input.bg}
+                                                            color={colors.text.primary}
+                                                            borderColor={colors.border.default}
+                                                            _hover={{ borderColor: colors.border.hover }}
+                                                            _placeholder={{ color: colors.text.tertiary }}
                                                         />
                                                     </Field>
                                                 </Box>
@@ -670,12 +673,12 @@ const CreateDish = () => {
                         <Box pt={4}>
                             <Button
                                 type="submit"
-                                bg="#083951"
+                                bg={colors.button.primary.bg}
                                 color="white"
                                 width="full"
                                 isLoading={isSubmitting}
                                 _hover={{
-                                    bg: '#0a4960'
+                                    bg: colors.button.primary.hover
                                 }}
                                 px={8}
                             >
