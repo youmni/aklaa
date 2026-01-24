@@ -47,7 +47,7 @@ const CartItem = ({ item, dish, onRefresh }) => {
                 dayOfWeek: editForm.dayOfWeek
             });
             
-            enqueueSnackbar(t('addToCart.addSuccess'), { variant: 'success' });
+            enqueueSnackbar(t('cartItem.updateSuccess'), { variant: 'success' });
             setIsEditing(false);
             onRefresh();
         } catch (error) {
@@ -163,7 +163,7 @@ const CartItem = ({ item, dish, onRefresh }) => {
                             <HStack gap={2}>
                                 <FaUsers color={colors.text.brand} size={14} />
                                 <Text fontSize="sm" color={colors.text.secondary} fontWeight="500">
-                                    {item.people} {item.people === 1 ? t('common.people') : t('common.people')}
+                                    {t('cartItem.people', { count: item.people })}
                                 </Text>
                             </HStack>
                         </HStack>

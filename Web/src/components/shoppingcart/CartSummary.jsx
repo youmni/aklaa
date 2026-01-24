@@ -19,7 +19,7 @@ const CartSummary = ({ itemCount, onSave }) => {
         >
             <Flex justify="space-between" align="center" gap={4} flexWrap="wrap">
                 <Text fontSize="lg" fontWeight="600" color={colors.text.brand}>
-                    {t('common.total')}: {itemCount} {itemCount === 1 ? t('common.dish') : t('common.dish') + 's'}
+                    {t('summary.title')}: {itemCount} {itemCount === 1 ? t('common.dish') : t('common.dish') + 's'}
                 </Text>
                 <Button
                     bg={colors.button.primary.bg}
@@ -31,7 +31,7 @@ const CartSummary = ({ itemCount, onSave }) => {
                     borderRadius="xl"
                     px={8}
                 >
-                    {t('header.saveGroceryList')}
+                    {t('header.saveButton')}
                 </Button>
             </Flex>
         </Box>

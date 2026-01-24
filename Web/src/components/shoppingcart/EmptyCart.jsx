@@ -53,7 +53,7 @@ const EmptyCart = ({ onBrowseDishes }) => {
                                 borderRadius="xl"
                                 px={8}
                             >
-                                {t('empty.goToDishesButton')}
+                                {t('empty.browseDishesButton')}
                             </Button>
                         </Box>
                     </Flex>

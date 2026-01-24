@@ -267,7 +267,7 @@ const GetDishes = () => {
                 </Stack>
 
                 <Text fontSize="sm" color={colors.text.secondary} fontWeight="500">
-                    {totalElements} {totalElements !== 1 ? t('list.title').toLowerCase() : t('list.title').toLowerCase().slice(0, -1)} {t('list.noResults').split(' ')[0].toLowerCase()}
+                    {totalElements} {totalElements === 1 ? t('list.dish') : t('list.dishes')} {t('list.found')}
                 </Text>
             </Stack>
 
@@ -333,40 +333,37 @@ const GetDishes = () => {
                                             top={2}
                                             right={2}
                                             gap={1}
-                                            bg="rgba(255, 255, 255, 0.95)"
+                                            bg={colors.card.bg}
                                             borderRadius="md"
                                             p={1}
                                         >
                                             <IconButton
                                                 size="sm"
-                                                bg="green.500"
-                                                color="white"
-                                                variant="solid"
+                                                color={colors.icon.view.default}
+                                                variant="ghost"
                                                 onClick={() => handleDetails(dish)}
                                                 aria-label="View details"
-                                                _hover={{ bg: "green.600" }}
+                                                _hover={{ bg: "transparent", color: colors.icon.view.hover }}
                                             >
                                                 <FiEye size={16} />
                                             </IconButton>
                                             <IconButton
                                                 size="sm"
-                                                bg="blue.500"
-                                                color="white"
-                                                variant="solid"
+                                                color={colors.icon.edit.default}
+                                                variant="ghost"
                                                 onClick={() => handleEdit(dish)}
                                                 aria-label="Edit dish"
-                                                _hover={{ bg: "blue.600" }}
+                                                _hover={{ bg: "transparent", color: colors.icon.edit.hover }}
                                             >
                                                 <FiEdit2 size={16} />
                                             </IconButton>
                                             <IconButton
                                                 size="sm"
-                                                bg="red.500"
-                                                color="white"
-                                                variant="solid"
+                                                color={colors.icon.delete.default}
+                                                variant="ghost"
                                                 onClick={() => handleDelete(dish)}
                                                 aria-label="Delete dish"
-                                                _hover={{ bg: "red.600" }}
+                                                _hover={{ bg: "transparent", color: colors.icon.delete.hover }}
                                             >
                                                 <FiTrash2 size={16} />
                                             </IconButton>

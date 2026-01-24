@@ -49,7 +49,8 @@
     "confirmRemoveTitle": "Remove from Cart",
     "confirmRemoveDescription": "Are you sure you want to remove {{dishName}} from your cart?",
     "removeSuccess": "Removed from cart",
-    "removeError": "Failed to remove item"
+    "removeError": "Failed to remove item",
+    "updateSuccess": "Cart item updated successfully"
   },
   "summary": {
     "title": "Cart Summary",

@@ -104,7 +104,7 @@ const DetailsDish = () => {
                                 {dish.people} {dish.people === 1 ? t('details.serving') : t('details.servings')}
                             </Text>
                         </HStack>
-                        <Badge colorScheme="blue" fontSize="sm" px={3} py={1}>
+                        <Badge colorPalette="blue" fontSize="sm" px={3} py={1}>
                             {t(`cuisines.${dish.type}`)}
                         </Badge>
                     </Flex>
@@ -131,7 +131,7 @@ const DetailsDish = () => {
                             {dish.tags.map((tag, index) => (
                                 <Badge
                                     key={index}
-                                    colorScheme="teal"
+                                    colorPalette="teal"
                                     fontSize="sm"
                                     px={3}
                                     py={1}
@@ -206,12 +206,12 @@ const DetailsDish = () => {
                                         </Accordion.ItemTrigger>
                                         <Accordion.ItemContent>
                                             <Accordion.ItemBody
-                                                bg="gray.50"
+                                                bg={colors.card.bg}
                                                 p={4}
                                                 borderRadius="md"
                                                 mb={2}
                                             >
-                                                <Text color="gray.700" lineHeight="1.8">
+                                                <Text color={colors.text.primary} lineHeight="1.8">
                                                     {step.recipeStep}
                                                 </Text>
                                             </Accordion.ItemBody>

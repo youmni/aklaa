@@ -77,7 +77,7 @@ const ShoppingCart = () => {
     };
 
     const handleClearCart = async () => {
-        if (!window.confirm(t('header.confirmClearDescription'))) return;
+        if (!window.confirm(t('cart.clearConfirm'))) return;
         
         try {
             await cartService.clearCart();

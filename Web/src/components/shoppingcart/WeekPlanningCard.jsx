@@ -15,12 +15,12 @@ const WeekPlanningCard = ({ startOfWeek, endOfWeek, onStartChange, onEndChange }
             borderColor={colors.border.default}
         >
             <Heading size="sm" mb={4} color={colors.text.brand}>
-                {t('weekPlanning.selectWeek')}
+                {t('weekPlanning.title')}
             </Heading>
             <HStack gap={6} align="start">
                 <VStack align="stretch" flex={1} gap={2}>
                     <Text fontSize="sm" fontWeight="600" color={colors.text.primary}>
-                        {t('weekPlanning.selectWeek')}
+                        {t('weekPlanning.startDate')}
                     </Text>
                     <Input
                         type="date"
@@ -36,7 +36,7 @@ const WeekPlanningCard = ({ startOfWeek, endOfWeek, onStartChange, onEndChange }
                 </VStack>
                 <VStack align="stretch" flex={1} gap={2}>
                     <Text fontSize="sm" fontWeight="600" color={colors.text.primary}>
-                        {t('weekPlanning.selectWeek')}
+                        {t('weekPlanning.endDate')}
                     </Text>
                     <Input
                         type="date"

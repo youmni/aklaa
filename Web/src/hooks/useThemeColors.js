@@ -106,6 +106,21 @@ export const useThemeColors = () => {
       text: useColorModeValue('gray.700', 'gray.100'),
     },
 
+    icon: {
+      view: {
+        default: useColorModeValue('green.600', 'cyan.400'),
+        hover: useColorModeValue('green.700', 'cyan.300'),
+      },
+      edit: {
+        default: useColorModeValue('blue.600', 'purple.400'),
+        hover: useColorModeValue('blue.700', 'purple.300'),
+      },
+      delete: {
+        default: useColorModeValue('red.600', 'red.400'),
+        hover: useColorModeValue('red.700', 'red.300'),
+      },
+    },
+
     shadow: {
       sm: useColorModeValue('sm', 'dark-lg'),
       md: useColorModeValue('md', 'dark-lg'),

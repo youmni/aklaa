@@ -25,7 +25,7 @@ const CartHeader = ({ itemCount, onClearCart }) => {
                     px={6}
                 >
                     <HStack gap={2}>
-                        <Text>{t('header.clearCart')}</Text>
+                        <Text>{t('header.clearButton')}</Text>
                         <Text fontSize="xs" opacity={0.9}>({itemCount} {itemCount === 1 ? t('common.dish') : t('common.dish') + 's'})</Text>
                     </HStack>
                 </Button>

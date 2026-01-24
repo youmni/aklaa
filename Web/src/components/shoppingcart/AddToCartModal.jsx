@@ -64,7 +64,7 @@ const AddToCartModal = ({ isOpen, onClose, dish }) => {
                 people: people
             });
             
-            enqueueSnackbar(t('addToCart.addSuccess'), { variant: 'success' });
+            enqueueSnackbar(t('addToCart.addSuccess', { dishName: dish.name }), { variant: 'success' });
             handleClose();
         } catch (error) {
             setErrors({ submit: t('addToCart.addError') });
@@ -164,7 +164,7 @@ const AddToCartModal = ({ isOpen, onClose, dish }) => {
                                         variant="outline"
                                     >
                                         <NativeSelect.Field
-                                            placeholder={t('addToCart.selectDay')}
+                                            placeholder={t('addToCart.dayPlaceholder')}
                                             value={dayOfWeek}
                                             onChange={(e) => {
                                                 setDayOfWeek(e.target.value);

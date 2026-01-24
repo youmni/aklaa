@@ -49,7 +49,8 @@
     "confirmRemoveTitle": "Eliminar del Carrito",
     "confirmRemoveDescription": "¿Está seguro de que desea eliminar {{dishName}} de su carrito?",
     "removeSuccess": "Eliminado del carrito",
-    "removeError": "Error al eliminar artículo"
+    "removeError": "Error al eliminar artículo",
+    "updateSuccess": "Artículo del carrito actualizado exitosamente"
   },
   "summary": {
     "title": "Resumen del Carrito",
