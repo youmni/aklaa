@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useThemeColors } from '../../../hooks/useThemeColors';
 import dishService from '../../../services/dishService';
 import {
     Box,
@@ -26,6 +27,7 @@ const DetailsDish = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const { enqueueSnackbar } = useSnackbar();
+    const colors = useThemeColors();
     const [dish, setDish] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -68,7 +70,7 @@ const DetailsDish = () => {
                 justifyContent="center"
                 minH="calc(100vh - 73px)"
             >
-                <Spinner size="xl" thickness="4px" color="#083951" />
+                <Spinner size="xl" thickness="4px" color={colors.text.brand} />
             </Box>
         );
     }
@@ -78,11 +80,11 @@ const DetailsDish = () => {
     }
 
     return (
-        <Box p={8} maxW="1200px" mx="auto" bg="white" minH="calc(100vh - 73px)" fontSize="md">
+        <Box p={8} maxW="1200px" mx="auto" bg={colors.bg.primary} minH="calc(100vh - 73px)" fontSize="md">
             <Flex mb={6} justify="space-between" align="center">
                 <Button
                     variant="ghost"
-                    color="#083951"
+                    color={colors.text.brand}
                     onClick={() => navigate('/dishes')}
                     aria-label="Back to dishes"
                 >
@@ -92,17 +94,17 @@ const DetailsDish = () => {
 
             <VStack align="stretch" gap={8}>
                 <Box>
-                    <Heading fontSize="3xl" fontWeight="bold" color="#083951" mb={2}>
+                    <Heading fontSize="3xl" fontWeight="bold" color={colors.text.brand} mb={2}>
                         {dish.name}
                     </Heading>
                     <Flex align="center" gap={4} mt={4}>
                         <HStack>
-                            <FaUsers color="#083951" />
-                            <Text color="gray.600" fontWeight="medium">
+                            <FaUsers color={colors.text.brand} />
+                            <Text color={colors.text.secondary} fontWeight="medium">
                                 {dish.people} {dish.people === 1 ? t('details.serving') : t('details.servings')}
                             </Text>
                         </HStack>
-                        <Badge colorScheme="blue" fontSize="sm" px={3} py={1}>
+                        <Badge colorPalette="blue" fontSize="sm" px={3} py={1}>
                             {t(`cuisines.${dish.type}`)}
                         </Badge>
                     </Flex>
@@ -124,12 +126,12 @@ const DetailsDish = () => {
 
                 {dish.tags && dish.tags.length > 0 && (
                     <Box>
-                        <Heading size="md" mb={3} color="#083951">{t('details.tags')}</Heading>
+                        <Heading size="md" mb={3} color={colors.text.brand}>{t('details.tags')}</Heading>
                         <Flex flexWrap="wrap" gap={2}>
                             {dish.tags.map((tag, index) => (
                                 <Badge
                                     key={index}
-                                    colorScheme="teal"
+                                    colorPalette="teal"
                                     fontSize="sm"
                                     px={3}
                                     py={1}
@@ -143,31 +145,31 @@ const DetailsDish = () => {
                 )}
 
                 <Box>
-                    <Heading size="md" mb={3} color="#083951">{t('common.description')}</Heading>
-                    <Text color="gray.700" lineHeight="1.8" fontSize="lg">
+                    <Heading size="md" mb={3} color={colors.text.brand}>{t('common.description')}</Heading>
+                    <Text color={colors.text.primary} lineHeight="1.8" fontSize="lg">
                         {dish.description}
                     </Text>
                 </Box>
 
                 <Box>
-                    <Heading size="md" mb={4} color="#083951">{t('details.ingredients')}</Heading>
-                    <Card.Root bg="gray.50" borderRadius="lg" p={6}>
+                    <Heading size="md" mb={4} color={colors.text.brand}>{t('details.ingredients')}</Heading>
+                    <Card.Root bg={colors.bg.tertiary} borderRadius="lg" p={6}>
                         <SimpleGrid columns={{ base: 1, md: 2 }} gap={4}>
                             {dish.ingredients && dish.ingredients.length > 0 ? (
                                 dish.ingredients.map((item, index) => (
                                     <Flex
                                         key={index}
                                         p={4}
-                                        bg="white"
+                                        bg={colors.card.bg}
                                         borderRadius="md"
                                         boxShadow="sm"
                                         justify="space-between"
                                         align="center"
                                     >
-                                        <Text fontWeight="medium" color="#083951">
+                                        <Text fontWeight="medium" color={colors.text.brand}>
                                             {item.ingredient.name}
                                         </Text>
-                                        <Text color="gray.600" fontWeight="semibold">
+                                        <Text color={colors.text.secondary} fontWeight="semibold">
                                             {item.quantity} {item.ingredient.unit}
                                         </Text>
                                     </Flex>
@@ -181,7 +183,7 @@ const DetailsDish = () => {
 
                 {dish.cookingSteps && dish.cookingSteps.length > 0 && (
                     <Box>
-                        <Heading size="md" mb={4} color="#083951">
+                        <Heading size="md" mb={4} color={colors.text.brand}>
                             {t('details.cookingSteps')}
                         </Heading>
                         <Accordion.Root multiple defaultValue={['0']}>
@@ -189,27 +191,27 @@ const DetailsDish = () => {
                                 return (
                                     <Accordion.Item key={index} value={String(index)}>
                                         <Accordion.ItemTrigger
-                                            bg="white"
+                                            bg={colors.card.bg}
                                             borderRadius="md"
                                             border="1px solid"
-                                            borderColor="gray.200"
+                                            borderColor={colors.border.default}
                                             p={4}
                                             mb={2}
                                             cursor="pointer"
-                                            _hover={{ bg: 'gray.50' }}
+                                            _hover={{ bg: colors.bg.hover }}
                                         >
-                                            <Text fontWeight="medium" color="#083951">
+                                            <Text fontWeight="medium" color={colors.text.brand}>
                                                 {t('details.step')} {step.orderIndex}
                                             </Text>
                                         </Accordion.ItemTrigger>
                                         <Accordion.ItemContent>
                                             <Accordion.ItemBody
-                                                bg="gray.50"
+                                                bg={colors.card.bg}
                                                 p={4}
                                                 borderRadius="md"
                                                 mb={2}
                                             >
-                                                <Text color="gray.700" lineHeight="1.8">
+                                                <Text color={colors.text.primary} lineHeight="1.8">
                                                     {step.recipeStep}
                                                 </Text>
                                             </Accordion.ItemBody>

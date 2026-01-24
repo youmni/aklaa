@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useThemeColors } from '../../../hooks/useThemeColors';
 import {
     Box, Heading, Input, Stack, Text, HStack, VStack, Table, IconButton, Button, ButtonGroup, NativeSelectRoot, NativeSelectField, Spinner, Badge, Dialog, DataList, CloseButton, Portal
 } from '@chakra-ui/react';
@@ -12,6 +13,7 @@ import Pagination from '../../../components/ui/Pagination';
 const GetUsers = () => {
     const { t } = useTranslation('user');
     const { enqueueSnackbar } = useSnackbar();
+    const colors = useThemeColors();
     const [users, setUsers] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
@@ -110,13 +112,13 @@ const GetUsers = () => {
     };
 
     return (
-        <Box p={8} bg="white" minH="calc(100vh - 73px)">
+        <Box p={8} bg={colors.bg.primary} minH="calc(100vh - 73px)">
             <VStack align="stretch" gap={6} maxW="1400px" mx="auto">
                 <Box>
-                    <Heading fontSize="3xl" fontWeight="bold" color="#083951" mb={2}>
+                    <Heading fontSize="3xl" fontWeight="bold" color={colors.text.brand} mb={2}>
                         {t('management.title')}
                     </Heading>
-                    <Text color="gray.600" fontSize="md">
+                    <Text color={colors.text.secondary} fontSize="md">
                         {t('management.subtitle')}
                     </Text>
                 </Box>
@@ -137,7 +139,10 @@ const GetUsers = () => {
                             placeholder={t('management.searchPlaceholder')}
                             value={searchTerm}
                             onChange={handleSearchChange}
-                            focusBorderColor="#083951"
+                            focusBorderColor={colors.text.brand}
+                            bg={colors.input.bg}
+                            borderColor={colors.border.default}
+                            color={colors.text.primary}
                             pl="2.5rem"
                             size={{ base: "md", md: "lg" }}
                         />
@@ -150,9 +155,10 @@ const GetUsers = () => {
                                 width: '100%',
                                 padding: window.innerWidth < 768 ? '0.5rem 0.75rem' : '0.75rem 1rem',
                                 borderRadius: '0.5rem',
-                                border: '1px solid #E2E8F0',
+                                border: `1px solid ${colors.border.default}`,
                                 fontSize: '1rem',
-                                backgroundColor: 'white',
+                                backgroundColor: colors.input.bg,
+                                color: colors.text.primary,
                                 cursor: 'pointer',
                                 height: window.innerWidth < 768 ? '2.5rem' : '3rem'
                             }}
@@ -167,19 +173,19 @@ const GetUsers = () => {
 
                 {isLoading ? (
                     <Box display="flex" justifyContent="center" py={20}>
-                        <Spinner size="xl" thickness="4px" color="#083951" />
+                        <Spinner size="xl" thickness="4px" color={colors.text.brand} />
                     </Box>
                 ) : users.length === 0 ? (
-                    <Box textAlign="center" py={20} bg="white" borderRadius="xl" border="1px solid" borderColor="gray.200" boxShadow="sm">
-                        <Text fontSize="xl" color="gray.500" fontWeight="medium">{t('management.noUsersFound')}</Text>
-                        <Text color="gray.400" mt={2}>
+                    <Box textAlign="center" py={20} bg={colors.card.bg} borderRadius="xl" border="1px solid" borderColor={colors.border.default} boxShadow="sm">
+                        <Text fontSize="xl" color={colors.text.secondary} fontWeight="medium">{t('management.noUsersFound')}</Text>
+                        <Text color={colors.text.tertiary} mt={2}>
                             {searchTerm || selectedType ? t('management.adjustFilters') : t('management.noUsersFoundDescription')}
                         </Text>
                     </Box>
                 ) : (
-                    <Box bg="white" borderRadius="xl" overflow="hidden" border="1px solid" borderColor="gray.200" boxShadow="md">
-                        <Box p={6} borderBottom="1px solid" borderColor="gray.200" bg="gray.50">
-                            <Text fontSize="sm" color="gray.600" fontWeight="medium">
+                    <Box bg={colors.card.bg} borderRadius="xl" overflow="hidden" border="1px solid" borderColor={colors.border.default} boxShadow="md">
+                        <Box p={6} borderBottom="1px solid" borderColor={colors.border.default} bg={colors.bg.tertiary}>
+                            <Text fontSize="sm" color={colors.text.secondary} fontWeight="medium">
                                 {t('management.showing', { 
                                     start: (page * pageSize) + 1, 
                                     end: Math.min((page + 1) * pageSize, totalElements), 
@@ -191,16 +197,21 @@ const GetUsers = () => {
                         <Table.Root size="lg" variant="plain">
                             <Table.Header>
                                 <Table.Row>
-                                    <Table.ColumnHeader style={{ color: "#083951", textAlign: 'left', padding: '12px' }}>{t('management.firstNameColumn')}</Table.ColumnHeader >
-                                    <Table.ColumnHeader style={{ color: "#083951", textAlign: 'left', padding: '12px' }}>{t('management.lastNameColumn')}</Table.ColumnHeader >
-                                    <Table.ColumnHeader style={{ color: "#083951", textAlign: 'left', padding: '12px' }}>{t('management.roleColumn')}</Table.ColumnHeader >
+                                    <Table.ColumnHeader style={{ color: colors.text.brand, textAlign: 'left', padding: '12px', fontWeight: '600' }}>{t('management.firstNameColumn')}</Table.ColumnHeader >
+                                    <Table.ColumnHeader style={{ color: colors.text.brand, textAlign: 'left', padding: '12px', fontWeight: '600' }}>{t('management.lastNameColumn')}</Table.ColumnHeader >
+                                    <Table.ColumnHeader style={{ color: colors.text.brand, textAlign: 'left', padding: '12px', fontWeight: '600' }}>{t('management.roleColumn')}</Table.ColumnHeader >
                                 </Table.Row>
                             </Table.Header>
                             <Table.Body>
                                 {users.map((user) => (
-                                    <Table.Row key={user.id} onClick={() => handleRowClick(user)} style={{ cursor: 'pointer' }}>
-                                        <Table.Cell style={{ padding: '12px' }}>{user.firstName}</Table.Cell>
-                                        <Table.Cell style={{ padding: '12px' }}>{user.lastName}</Table.Cell>
+                                    <Table.Row 
+                                        key={user.id} 
+                                        onClick={() => handleRowClick(user)} 
+                                        style={{ cursor: 'pointer' }}
+                                        _hover={{ bg: colors.bg.hover }}
+                                    >
+                                        <Table.Cell style={{ padding: '12px', color: colors.text.primary }}>{user.firstName}</Table.Cell>
+                                        <Table.Cell style={{ padding: '12px', color: colors.text.primary }}>{user.lastName}</Table.Cell>
                                         <Table.Cell style={{ padding: '12px' }}>
                                             <Badge
                                                 colorPalette={user.userType === 'ADMIN' ? 'green' : (user.userType === 'BLACKLISTED' ? 'purple' : 'blue')}

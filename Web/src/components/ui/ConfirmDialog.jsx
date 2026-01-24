@@ -10,6 +10,7 @@ import {
     Dialog,
 } from "@chakra-ui/react";
 import { FiAlertCircle } from "react-icons/fi";
+import { useThemeColors } from '../../hooks/useThemeColors';
 
 const ConfirmDialog = ({
     isOpen,
@@ -24,6 +25,7 @@ const ConfirmDialog = ({
     IconComponent = FiAlertCircle,
 }) => {
     const confirmRef = useRef();
+    const colors = useThemeColors();
 
     useEffect(() => {
         if (!isOpen) return;
@@ -53,7 +55,7 @@ const ConfirmDialog = ({
 
                 <Dialog.Positioner>
                     <Dialog.Content
-                        bg="white"
+                        bg={colors.modal.bg}
                         borderRadius="12px"
                         boxShadow="0 10px 30px rgba(2,6,23,0.2)"
                         maxW="560px"
@@ -67,7 +69,7 @@ const ConfirmDialog = ({
                             gap={4}
                             align="flex-start"
                             borderBottom="1px"
-                            borderColor="gray.100"
+                            borderColor={colors.border.default}
                         >
                             <Box
                                 minW="44px"
@@ -91,13 +93,13 @@ const ConfirmDialog = ({
                                 <Text
                                     fontWeight="700"
                                     fontSize={{ base: "md", md: "lg" }}
-                                    color="gray.800"
+                                    color={colors.text.primary}
                                     mb={1}
                                 >
                                     {title}
                                 </Text>
                                 {description && (
-                                    <Text color="gray.600" fontSize="sm" lineHeight="1.4">
+                                    <Text color={colors.text.secondary} fontSize="sm" lineHeight="1.4">
                                         {description}
                                     </Text>
                                 )}
@@ -112,14 +114,14 @@ const ConfirmDialog = ({
                             justify="flex-end"
                             align="center"
                             borderTop="1px"
-                            borderColor="gray.50"
+                            borderColor={colors.border.default}
                         >
                             <Button
                                 variant="ghost"
                                 onClick={onClose}
                                 isDisabled={isLoading}
                                 borderRadius="8px"
-                                _hover={{ bg: "gray.100" }}
+                                _hover={{ bg: colors.bg.hover }}
                             >
                                 {cancelLabel}
                             </Button>

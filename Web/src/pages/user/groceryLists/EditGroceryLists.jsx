@@ -21,6 +21,7 @@ import { FiArrowLeft } from 'react-icons/fi';
 import { useSnackbar } from 'notistack';
 import groceryListService from '../../../services/groceryListService';
 import ingredientService from '../../../services/ingredientService';
+import { useThemeColors } from '../../../hooks/useThemeColors';
 
 const categoryColors = {
     VEGETABLES: 'green',
@@ -41,6 +42,7 @@ const EditGroceryLists = () => {
     const navigate = useNavigate();
     const { enqueueSnackbar } = useSnackbar();
     const { t } = useTranslation('grocerylist');
+    const colors = useThemeColors();
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
     const [groceryData, setGroceryData] = useState(null);
@@ -221,10 +223,10 @@ const EditGroceryLists = () => {
 
     if (loading) {
         return (
-            <Box bg="gray.50" minH="100vh" py={12}>
+            <Box bg={colors.bg.page} minH="100vh" py={12}>
                 <Flex justify="center" align="center" minH="60vh" direction="column" gap={4}>
-                    <Spinner size="xl" color="#083951" thickness="4px" />
-                    <Text fontSize="lg" color="gray.600">{t('common.loading')}</Text>
+                    <Spinner size="xl" color={colors.text.brand} thickness="4px" />
+                    <Text fontSize="lg" color={colors.text.secondary}>{t('common.loading')}</Text>
                 </Flex>
             </Box>
         );
@@ -238,13 +240,13 @@ const EditGroceryLists = () => {
     const availableIngredients = getAvailableIngredients();
 
     return (
-        <Box bg="gray.50" minH="100vh" py={8}>
+        <Box bg={colors.bg.page} minH="100vh" py={8}>
             <Container maxW="1200px" px={8}>
                 <VStack align="stretch" gap={6}>
                     <Flex justify="space-between" align="center" flexWrap="wrap" gap={4}>
                         <Button
                             variant="ghost"
-                            color="#083951"
+                            color={colors.text.brand}
                             onClick={() => navigate(`/grocerylists/${id}/ingredients`)}
                             aria-label="Back to grocery lists"
                         >
@@ -263,12 +265,12 @@ const EditGroceryLists = () => {
                                 {t('edit.cancelButton')}
                             </Button>
                             <Button
-                                bg="#083951"
+                                bg={colors.button.primary.bg}
                                 color="white"
                                 onClick={handleSave}
                                 isLoading={saving}
                                 loadingText={t('common.loading')}
-                                _hover={{ bg: '#0a4a63' }}
+                                _hover={{ bg: colors.button.primary.hover }}
                                 leftIcon={<FaSave />}
                                 px={6}
                                 py={6}
@@ -280,30 +282,30 @@ const EditGroceryLists = () => {
                     </Flex>
 
                     <Box
-                        bg="white"
+                        bg={colors.card.bg}
                         borderRadius="xl"
                         p={6}
-                        boxShadow="sm"
+                        boxShadow={colors.card.shadow}
                         border="1px solid"
-                        borderColor="gray.200"
+                        borderColor={colors.border.default}
                     >
                         <Flex align="center" gap={3} mb={2}>
-                            <Heading size="lg" color="#083951" fontWeight="600">
+                            <Heading size="lg" color={colors.text.brand} fontWeight="600">
                                 {t('edit.title')}
                             </Heading>
                         </Flex>
-                        <Text color="gray.600">
+                        <Text color={colors.text.secondary}>
                             {t('edit.subtitle')}
                         </Text>
                     </Box>
 
                     <Box
-                        bg="white"
+                        bg={colors.card.bg}
                         borderRadius="xl"
                         p={6}
                         boxShadow="sm"
                         border="1px solid"
-                        borderColor="gray.200"
+                        borderColor={colors.border.default}
                     >
                         {!showAddIngredient ? (
                             <Button
@@ -317,12 +319,12 @@ const EditGroceryLists = () => {
                             </Button>
                         ) : (
                             <VStack align="stretch" gap={4}>
-                                <Heading size="sm" color="#083951">
+                                <Heading size="sm" color={colors.text.brand}>
                                     {t('edit.addIngredientTitle')}
                                 </Heading>
                                 <Grid templateColumns={{ base: '1fr', md: '1fr 1fr auto' }} gap={4}>
                                     <Box>
-                                        <Text fontSize="sm" fontWeight="500" mb={2} color="gray.700">
+                                        <Text fontSize="sm" fontWeight="500" mb={2} color={colors.text.primary}>
                                             {t('edit.selectIngredient')}
                                         </Text>
                                         <VStack align="stretch" gap={2}>
@@ -341,9 +343,9 @@ const EditGroceryLists = () => {
                                                     maxH="250px"
                                                     overflowY="auto"
                                                     border="1px solid"
-                                                    borderColor="gray.200"
+                                                    borderColor={colors.border.default}
                                                     borderRadius="md"
-                                                    bg="white"
+                                                    bg={colors.card.bg}
                                                     boxShadow="md"
                                                     css={{
                                                         '&::-webkit-scrollbar': {
@@ -367,10 +369,10 @@ const EditGroceryLists = () => {
                                                                 key={ing.id}
                                                                 p={3}
                                                                 cursor="pointer"
-                                                                bg={selectedIngredient === ing.id ? 'blue.50' : 'white'}
+                                                                bg={selectedIngredient === ing.id ? colors.bg.hover : colors.card.bg}
                                                                 borderBottom="1px solid"
-                                                                borderColor="gray.100"
-                                                                _hover={{ bg: 'gray.50' }}
+                                                                borderColor={colors.border.default}
+                                                                _hover={{ bg: colors.bg.hover }}
                                                                 onClick={() => {
                                                                     setSelectedIngredient(ing.id);
                                                                     setSearchTerm('');
@@ -379,15 +381,15 @@ const EditGroceryLists = () => {
                                                                 fontSize="sm"
                                                                 transition="all 0.2s"
                                                             >
-                                                                <Text fontWeight="500">{ing.name}</Text>
-                                                                <Text fontSize="xs" color="gray.600">
+                                                                <Text fontWeight="500" color={colors.text.primary}>{ing.name}</Text>
+                                                                <Text fontSize="xs" color={colors.text.secondary}>
                                                                     Unit: {t(`units.${ing.unit}`)} • Category: {t(`categories.${ing.category}`)}
                                                                 </Text>
                                                             </Box>
                                                         ))
                                                     ) : (
                                                         <Box p={4} textAlign="center">
-                                                            <Text color="gray.500" fontSize="sm">
+                                                            <Text color={colors.text.secondary} fontSize="sm">
                                                                 {t('edit.noIngredients')}
                                                             </Text>
                                                         </Box>
@@ -397,7 +399,7 @@ const EditGroceryLists = () => {
                                         </VStack>
                                     </Box>
                                     <Box>
-                                        <Text fontSize="sm" fontWeight="500" mb={2} color="gray.700">
+                                        <Text fontSize="sm" fontWeight="500" mb={2} color={colors.text.primary}>
                                             {t('edit.quantityLabel')}
                                         </Text>
                                         <Input
@@ -411,7 +413,9 @@ const EditGroceryLists = () => {
                                     </Box>
                                     <Flex align="flex-end" gap={2}>
                                         <Button
-                                            colorScheme="blue"
+                                            bg={colors.button.primary.bg}
+                                            color="white"
+                                            _hover={{ bg: colors.button.primary.hover }}
                                             onClick={handleAddIngredient}
                                             px={6}
                                             py={5}
@@ -464,15 +468,15 @@ const EditGroceryLists = () => {
                                 return (
                                     <Box
                                         key={category}
-                                        bg="white"
+                                        bg={colors.card.bg}
                                         borderRadius="xl"
                                         p={6}
-                                        boxShadow="sm"
+                                        boxShadow={colors.card.shadow}
                                         border="1px solid"
-                                        borderColor="gray.200"
+                                        borderColor={colors.border.default}
                                     >
                                         <Flex align="center" gap={3} mb={4}>
-                                            <Heading size="md" color="#083951" fontWeight="600">
+                                            <Heading size="md" color={colors.text.brand} fontWeight="600">
                                                 {t(`categories.${category}`)}
                                             </Heading>
                                             <Badge
@@ -495,13 +499,13 @@ const EditGroceryLists = () => {
                                                     p={4}
                                                     borderRadius="lg"
                                                     border="1px solid"
-                                                    borderColor="gray.200"
-                                                    bg="gray.50"
+                                                    borderColor={colors.border.default}
+                                                    bg={colors.bg.tertiary}
                                                 >
                                                     <Text
                                                         flex={1}
                                                         fontSize="md"
-                                                        color="gray.800"
+                                                        color={colors.text.primary}
                                                         fontWeight="500"
                                                     >
                                                         {item.ingredient.name}
@@ -514,7 +518,9 @@ const EditGroceryLists = () => {
                                                             value={ingredients[item.ingredient.id] || ''}
                                                             onChange={(e) => handleQuantityChange(item.ingredient.id, e.target.value)}
                                                             w="120px"
-                                                            bg="white"
+                                                            bg={colors.input.bg}
+                                                            borderColor={colors.border.default}
+                                                            color={colors.text.primary}
                                                         />
                                                         <Badge
                                                             colorScheme="blue"

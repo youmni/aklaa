@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useThemeColors } from '../../../hooks/useThemeColors';
 import { Box, Button, Input, Stack, Spinner, Text, Grid, Badge, HStack, IconButton, VStack, Image } from "@chakra-ui/react";
 import { useSnackbar } from 'notistack';
 import { FiEdit2, FiTrash2, FiPlus, FiSearch, FiEye } from 'react-icons/fi';
@@ -13,6 +14,7 @@ const GetDishes = () => {
     const { t } = useTranslation('dish');
     const navigate = useNavigate();
     const { enqueueSnackbar } = useSnackbar();
+    const colors = useThemeColors();
     const [dishes, setDishes] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [search, setSearch] = useState("");
@@ -194,17 +196,17 @@ const GetDishes = () => {
     };
 
     return (
-        <Box p={{ base: 4, md: 6, lg: 8 }} maxW="1400px" mx="auto" bg="white" minH="calc(100vh - 73px)">
+        <Box p={{ base: 4, md: 6, lg: 8 }} maxW="1400px" mx="auto" bg={colors.bg.primary} minH="calc(100vh - 73px)">
             <Stack mb={{ base: 4, md: 6, lg: 8 }} gap={{ base: 4, md: 6 }}>
                 <Stack direction={{ base: "column", sm: "row" }} justify="space-between" align={{ base: "stretch", sm: "center" }} gap={3}>
-                    <Text fontSize={{ base: "2xl", md: "3xl" }} fontWeight="bold" color="#083951">
+                    <Text fontSize={{ base: "2xl", md: "3xl" }} fontWeight="bold" color={colors.text.brand}>
                         {t('list.title')}
                     </Text>
                     <Button
-                        bg="#083951"
+                        bg={colors.button.primary.bg}
                         color="white"
                         onClick={() => navigate('/dishes/add')}
-                        _hover={{ bg: "#0a4a63" }}
+                        _hover={{ bg: colors.button.primary.hover }}
                         size={{ base: "md", md: "lg" }}
                         px={{ base: 4, md: 6 }}
                         w={{ base: "full", sm: "auto" }}
@@ -230,7 +232,10 @@ const GetDishes = () => {
                             placeholder={t('list.searchPlaceholder')}
                             value={search}
                             onChange={handleSearchChange}
-                            focusBorderColor="#083951"
+                            focusBorderColor={colors.text.brand}
+                            bg={colors.input.bg}
+                            borderColor={colors.border.default}
+                            color={colors.text.primary}
                             pl="2.5rem"
                             size={{ base: "md", md: "lg" }}
                         />
@@ -243,9 +248,10 @@ const GetDishes = () => {
                                 width: '100%',
                                 padding: window.innerWidth < 768 ? '0.5rem 0.75rem' : '0.75rem 1rem',
                                 borderRadius: '0.5rem',
-                                border: '1px solid #E2E8F0',
+                                border: `1px solid ${colors.border.default}`,
                                 fontSize: '1rem',
-                                backgroundColor: 'white',
+                                backgroundColor: colors.input.bg,
+                                color: colors.text.primary,
                                 cursor: 'pointer',
                                 height: window.innerWidth < 768 ? '2.5rem' : '3rem'
                             }}
@@ -260,14 +266,14 @@ const GetDishes = () => {
                     </Box>
                 </Stack>
 
-                <Text fontSize="sm" color="gray.600" fontWeight="500">
-                    {totalElements} {totalElements !== 1 ? t('list.title').toLowerCase() : t('list.title').toLowerCase().slice(0, -1)} {t('list.noResults').split(' ')[0].toLowerCase()}
+                <Text fontSize="sm" color={colors.text.secondary} fontWeight="500">
+                    {totalElements} {totalElements === 1 ? t('list.dish') : t('list.dishes')} {t('list.found')}
                 </Text>
             </Stack>
 
             {isLoading ? (
                 <Box display="flex" justifyContent="center" alignItems="center" minH="400px">
-                    <Spinner size="xl" thickness="4px" color="#083951" />
+                    <Spinner size="xl" thickness="4px" color={colors.text.brand} />
                 </Box>
             ) : (
                 <>
@@ -288,13 +294,14 @@ const GetDishes = () => {
                                     key={dish.id}
                                     borderWidth="2px"
                                     borderRadius="xl"
-                                    borderColor="gray.200"
-                                    bg="white"
+                                    borderColor={colors.border.default}
+                                    bg={colors.card.bg}
                                     overflow="hidden"
                                     _hover={{
                                         shadow: "xl",
                                         transform: "translateY(-4px)",
-                                        borderColor: "#083951"
+                                        borderColor: colors.text.brand,
+                                        bg: colors.card.hover
                                     }}
                                     transition="all 0.3s"
                                     display="flex"
@@ -326,37 +333,37 @@ const GetDishes = () => {
                                             top={2}
                                             right={2}
                                             gap={1}
-                                            bg="rgba(255, 255, 255, 0.95)"
+                                            bg={colors.card.bg}
                                             borderRadius="md"
                                             p={1}
                                         >
                                             <IconButton
                                                 size="sm"
-                                                colorPalette="green"
+                                                color={colors.icon.view.default}
                                                 variant="ghost"
                                                 onClick={() => handleDetails(dish)}
                                                 aria-label="View details"
-                                                _hover={{ bg: "green.50" }}
+                                                _hover={{ bg: "transparent", color: colors.icon.view.hover }}
                                             >
                                                 <FiEye size={16} />
                                             </IconButton>
                                             <IconButton
                                                 size="sm"
-                                                colorPalette="blue"
+                                                color={colors.icon.edit.default}
                                                 variant="ghost"
                                                 onClick={() => handleEdit(dish)}
                                                 aria-label="Edit dish"
-                                                _hover={{ bg: "blue.50" }}
+                                                _hover={{ bg: "transparent", color: colors.icon.edit.hover }}
                                             >
                                                 <FiEdit2 size={16} />
                                             </IconButton>
                                             <IconButton
                                                 size="sm"
-                                                colorPalette="red"
+                                                color={colors.icon.delete.default}
                                                 variant="ghost"
                                                 onClick={() => handleDelete(dish)}
                                                 aria-label="Delete dish"
-                                                _hover={{ bg: "red.50" }}
+                                                _hover={{ bg: "transparent", color: colors.icon.delete.hover }}
                                             >
                                                 <FiTrash2 size={16} />
                                             </IconButton>
@@ -386,7 +393,7 @@ const GetDishes = () => {
                                             <Text
                                                 fontSize={{ base: "lg", md: "xl" }}
                                                 fontWeight="bold"
-                                                color="#083951"
+                                                color={colors.text.brand}
                                                 isTruncated
                                                 title={dish.name}
                                             >
@@ -428,12 +435,12 @@ const GetDishes = () => {
                                         </VStack>
 
                                         <Button
-                                            bg="#083951"
+                                            bg={colors.button.primary.bg}
                                             color="white"
                                             size="md"
                                             w="full"
                                             onClick={() => handleAddToCart(dish)}
-                                            _hover={{ bg: "#0a4a63" }}
+                                            _hover={{ bg: colors.button.primary.hover }}
                                         >
                                             <FiPlus style={{ marginRight: '8px' }} />
                                             {t('common.addToCart')}

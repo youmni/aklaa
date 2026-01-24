@@ -5,12 +5,14 @@ import { FaListUl } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 import { useTranslation } from 'react-i18next';
+import { useThemeColors } from '../../../hooks/useThemeColors';
 import groceryListService from '../../../services/groceryListService';
 import GroceryListCard from '../../../components/grocerylist/GroceryListCard';
 import EmptyGroceryLists from '../../../components/grocerylist/EmptyGroceryLists';
 
 const GroceryLists = () => {
     const { t } = useTranslation('grocerylist');
+    const colors = useThemeColors();
     const [groceryLists, setGroceryLists] = useState([]);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
@@ -60,10 +62,10 @@ const GroceryLists = () => {
 
     if (loading) {
         return (
-            <Box bg="gray.50" minH="100vh" py={12}>
+            <Box bg={colors.bg.page} minH="100vh" py={12}>
                 <Flex justify="center" align="center" minH="60vh" direction="column" gap={4}>
-                    <Spinner size="xl" color="#083951" thickness="4px" />
-                    <Text fontSize="lg" color="gray.600">{t('list.loading')}</Text>
+                    <Spinner size="xl" color={colors.text.brand} thickness="4px" />
+                    <Text fontSize="lg" color={colors.text.secondary}>{t('list.loading')}</Text>
                 </Flex>
             </Box>
         );
@@ -74,12 +76,12 @@ const GroceryLists = () => {
     }
 
     return (
-        <Box bg="white" minH="100vh">
+        <Box bg={colors.bg.primary} minH="100vh">
             <Container maxW="100%" px={{ base: 4, md: 0 }}>
                 <VStack align="stretch" gap={0}>
-                    <Box px={{ base: 4, md: 8 }} py={8} bg="white" borderBottom="none">
+                    <Box px={{ base: 4, md: 8 }} py={8} borderBottom="none">
                         <Flex align="center" gap={3} mb={6}>
-                            <Text fontSize={{ base: "2xl", md: "3xl" }} fontWeight="bold" color="#083951">
+                            <Text fontSize={{ base: "2xl", md: "3xl" }} fontWeight="bold" color={colors.text.brand}>
                                 {t('list.title')}
                             </Text>
                         </Flex>
@@ -87,7 +89,7 @@ const GroceryLists = () => {
                         <Tabs.RootProvider value={tabs} variant="plain">
                         <Box w="100%">
                             <Tabs.List
-                                bg="gray.100"
+                                bg={colors.bg.tertiary}
                                 borderRadius="lg"
                                 p={1}
                                 display="grid"
@@ -102,10 +104,10 @@ const GroceryLists = () => {
                                     borderRadius="md"
                                     fontWeight="500"
                                     fontSize={{ base: "xs", md: "sm" }}
-                                    color="gray.700"
+                                    color={colors.text.secondary}
                                     _selected={{
-                                        bg: "white",
-                                        color: "#083951",
+                                        bg: colors.card.bg,
+                                        color: colors.text.brand,
                                         shadow: "sm"
                                     }}
                                     transition="all 0.2s"
@@ -121,10 +123,10 @@ const GroceryLists = () => {
                                     borderRadius="md"
                                     fontWeight="500"
                                     fontSize={{ base: "xs", md: "sm" }}
-                                    color="gray.700"
+                                    color={colors.text.secondary}
                                     _selected={{
-                                        bg: "white",
-                                        color: "#083951",
+                                        bg: colors.card.bg,
+                                        color: colors.text.brand,
                                         shadow: "sm"
                                     }}
                                     transition="all 0.2s"
@@ -140,10 +142,10 @@ const GroceryLists = () => {
                                     borderRadius="md"
                                     fontWeight="500"
                                     fontSize={{ base: "xs", md: "sm" }}
-                                    color="gray.700"
+                                    color={colors.text.secondary}
                                     _selected={{
-                                        bg: "white",
-                                        color: "#083951",
+                                        bg: colors.card.bg,
+                                        color: colors.text.brand,
                                         shadow: "sm"
                                     }}
                                     transition="all 0.2s"
@@ -155,23 +157,23 @@ const GroceryLists = () => {
 
                             <Box px={0} py={6}>
                                 <Tabs.Content value="past">
-                                    <Box bg="gray.50" borderRadius="md" p={3} mx={{ base: 4, md: 8 }} mb={4}>
-                                        <Text fontSize="sm" color="gray.600">
+                                    <Box bg={colors.bg.tertiary} borderRadius="md" p={3} mx={{ base: 4, md: 8 }} mb={4}>
+                                        <Text fontSize="sm" color={colors.text.secondary}>
                                             {t('list.pastWarning')}
                                         </Text>
                                     </Box>
                                     {past.length === 0 ? (
                                         <Box
-                                            bg="white"
+                                            bg={colors.card.bg}
                                             borderRadius="xl"
                                             p={12}
                                             textAlign="center"
                                             boxShadow="sm"
                                             border="1px solid"
-                                            borderColor="gray.200"
+                                            borderColor={colors.border.default}
                                             mx={{ base: 4, md: 8 }}
                                         >
-                                            <Text color="gray.500" fontSize="lg">
+                                            <Text color={colors.text.secondary} fontSize="lg">
                                                 {t('list.noPast')}
                                             </Text>
                                         </Box>
@@ -192,19 +194,19 @@ const GroceryLists = () => {
                                 <Tabs.Content value="present">
                                     {present.length === 0 ? (
                                         <Box
-                                            bg="white"
+                                            bg={colors.card.bg}
                                             borderRadius="xl"
                                             p={12}
                                             textAlign="center"
                                             boxShadow="sm"
                                             border="1px solid"
-                                            borderColor="gray.200"
+                                            borderColor={colors.border.default}
                                             mx={{ base: 4, md: 8 }}
                                         >
-                                            <Text color="gray.500" fontSize="lg">
+                                            <Text color={colors.text.secondary} fontSize="lg">
                                                 {t('list.noPresent')}
                                             </Text>
-                                            <Text color="gray.400" fontSize="sm" mt={2}>
+                                            <Text color={colors.text.tertiary} fontSize="sm" mt={2}>
                                                 {t('list.noPresentHint')}
                                             </Text>
                                         </Box>
@@ -225,16 +227,16 @@ const GroceryLists = () => {
                                 <Tabs.Content value="future">
                                     {future.length === 0 ? (
                                         <Box
-                                            bg="white"
+                                            bg={colors.card.bg}
                                             borderRadius="xl"
                                             p={12}
                                             textAlign="center"
                                             boxShadow="sm"
                                             border="1px solid"
-                                            borderColor="gray.200"
+                                            borderColor={colors.border.default}
                                             mx={{ base: 4, md: 8 }}
                                         >
-                                            <Text color="gray.500" fontSize="lg">
+                                            <Text color={colors.text.secondary} fontSize="lg">
                                                 {t('list.noFuture')}
                                             </Text>
                                         </Box>

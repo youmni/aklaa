@@ -49,7 +49,8 @@
     "confirmRemoveTitle": "Verwijderen uit Winkelwagen",
     "confirmRemoveDescription": "Weet u zeker dat u {{dishName}} uit uw winkelwagen wilt verwijderen?",
     "removeSuccess": "Verwijderd uit winkelwagen",
-    "removeError": "Verwijderen van item mislukt"
+    "removeError": "Verwijderen van item mislukt",
+    "updateSuccess": "Winkelwagen item succesvol bijgewerkt"
   },
   "summary": {
     "title": "Winkelwagen Overzicht",

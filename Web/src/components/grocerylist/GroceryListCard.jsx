@@ -8,11 +8,13 @@ import { useState } from 'react';
 import { useSnackbar } from 'notistack';
 import groceryListService from '../../services/groceryListService';
 import ConfirmDialog from '../ui/ConfirmDialog';
+import { useThemeColors } from '../../hooks/useThemeColors';
 
 const GroceryListCard = ({ list, status, onRefresh }) => {
     const navigate = useNavigate();
     const { enqueueSnackbar } = useSnackbar();
     const { t } = useTranslation('grocerylist');
+    const colors = useThemeColors();
     const [isConfirmOpen, setIsConfirmOpen] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
 
@@ -76,19 +78,19 @@ const GroceryListCard = ({ list, status, onRefresh }) => {
 
     return (
         <Box
-            bg="white"
+            bg={colors.card.bg}
             borderRadius={{ base: 'lg', md: 'xl' }}
             p={{ base: 4, md: 6 }}
             boxShadow="sm"
             border="1px solid"
-            borderColor="gray.200"
+            borderColor={colors.border.default}
             transition="all 0.2s"
             _hover={{ boxShadow: 'md', transform: 'translateY(-2px)' }}
         >
             <Flex direction={{ base: 'column', md: 'row' }} justify="space-between" align="start" gap={4}>
                 <VStack align="stretch" flex={1} gap={3}>
                     <Flex align="center" gap={3} flexWrap="wrap">
-                        <Heading as="h3" fontSize={{ base: 'md', md: 'lg' }} color="#083951" fontWeight="600">
+                        <Heading as="h3" fontSize={{ base: 'md', md: 'lg' }} color={colors.text.brand} fontWeight="600">
                             {t('card.weekLabel')} {formatDate(list.startOfWeek)} - {formatDate(list.endOfWeek)}
                         </Heading>
                         <Badge
@@ -102,14 +104,14 @@ const GroceryListCard = ({ list, status, onRefresh }) => {
                         </Badge>
                     </Flex>
 
-                    <HStack gap={4} flexWrap="wrap" color="gray.600">
+                    <HStack gap={4} flexWrap="wrap" color={colors.text.secondary}>
                         <HStack gap={2}>
                             <FaCalendarAlt size={14} />
                             <Text fontSize="sm">
                                 {formatDate(list.startOfWeek)}
                             </Text>
                         </HStack>
-                        <Text fontSize="sm" color="gray.400">•</Text>
+                        <Text fontSize="sm" color={colors.text.tertiary}>•</Text>
                         <HStack gap={2}>
                             <FaCalendarAlt size={14} />
                             <Text fontSize="sm">
@@ -120,8 +122,8 @@ const GroceryListCard = ({ list, status, onRefresh }) => {
 
                     {list.dishes && list.dishes.length > 0 && (
                         <HStack gap={2}>
-                            <FaShoppingBasket size={14} color="#083951" />
-                            <Text fontSize="sm" color="gray.700" fontWeight="500">
+                            <FaShoppingBasket size={14} color={colors.text.brand} />
+                            <Text fontSize="sm" color={colors.text.primary} fontWeight="500">
                                 {list.dishes.length === 1 ? '1 dish' : `${list.dishes.length} dishes`}
                             </Text>
                         </HStack>
@@ -139,11 +141,11 @@ const GroceryListCard = ({ list, status, onRefresh }) => {
                     w={{ base: '100%', md: 'auto' }}
                 >
                     <Button
-                        bg="#083951"
+                        bg={colors.button.primary.bg}
                         color="white"
                         size={{ base: 'sm', md: 'md' }}
                         rightIcon={<FaChevronRight />}
-                        _hover={{ bg: "#0a4a63" }}
+                        _hover={{ bg: colors.button.primary.hover }}
                         borderRadius="lg"
                         onClick={handleViewIngredients}
                         px={{ base: 4, md: 6 }}

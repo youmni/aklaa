@@ -7,6 +7,8 @@
     "email": "E-mailadres",
     "language": "Taal",
     "selectLanguage": "Selecteer je voorkeurstaal",
+    "theme": "Thema",
+    "themeDescription": "Schakel tussen lichte en donkere modus",
     "saveButton": "Wijzigingen opslaan",
     "cancelButton": "Annuleren",
     "firstNameError": "Voornaam moet tussen 1 en 100 tekens zijn",

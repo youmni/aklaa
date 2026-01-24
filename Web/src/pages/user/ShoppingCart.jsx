@@ -3,6 +3,7 @@ import { Container, Flex, Text, VStack, Spinner, Box } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 import { useTranslation } from 'react-i18next';
+import { useThemeColors } from '../../hooks/useThemeColors';
 import cartService from '../../services/cartService';
 import dishService from '../../services/dishService';
 import groceryListService from '../../services/groceryListService';
@@ -14,6 +15,7 @@ import EmptyCart from '../../components/shoppingcart/EmptyCart';
 
 const ShoppingCart = () => {
     const { t } = useTranslation('cart');
+    const colors = useThemeColors();
     const [cartItems, setCartItems] = useState([]);
     const [dishes, setDishes] = useState({});
     const [startOfWeek, setStartOfWeek] = useState('');
@@ -75,7 +77,7 @@ const ShoppingCart = () => {
     };
 
     const handleClearCart = async () => {
-        if (!window.confirm(t('header.confirmClearDescription'))) return;
+        if (!window.confirm(t('cart.clearConfirm'))) return;
         
         try {
             await cartService.clearCart();
@@ -115,7 +117,7 @@ const ShoppingCart = () => {
 
     if (loading) {
         return (
-            <Box bg="gray.50" minH="100vh" py={12}>
+            <Box bg={colors.bg.page} minH="100vh" py={12}>
                 <Flex justify="center" align="center" minH="60vh" direction="column" gap={4}>
                     <Spinner size="xl" color="#083951" thickness="4px" />
                     <Text fontSize="lg" color="gray.600">{t('common.loading')}</Text>
@@ -129,7 +131,7 @@ const ShoppingCart = () => {
     }
 
     return (
-        <Box bg="gray.50" minH="100vh" py={8}>
+        <Box bg={colors.bg.page} minH="100vh" py={8}>
             <Container maxW="100%" px={8}>
                 <VStack align="stretch" gap={6}>
                     <CartHeader 

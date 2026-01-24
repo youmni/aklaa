@@ -49,7 +49,8 @@
     "confirmRemoveTitle": "Retirer du Panier",
     "confirmRemoveDescription": "Êtes-vous sûr de vouloir retirer {{dishName}} de votre panier?",
     "removeSuccess": "Retiré du panier",
-    "removeError": "Échec de la suppression de l'article"
+    "removeError": "Échec de la suppression de l'article",
+    "updateSuccess": "Article du panier mis à jour avec succès"
   },
   "summary": {
     "title": "Résumé du Panier",

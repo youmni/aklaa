@@ -7,6 +7,8 @@
     "email": "Adresse e-mail",
     "language": "Langue",
     "selectLanguage": "Sélectionnez votre langue préférée",
+    "theme": "Thème",
+    "themeDescription": "Basculer entre le mode clair et sombre",
     "saveButton": "Enregistrer les modifications",
     "cancelButton": "Annuler",
     "firstNameError": "Le prénom doit contenir entre 1 et 100 caractères",

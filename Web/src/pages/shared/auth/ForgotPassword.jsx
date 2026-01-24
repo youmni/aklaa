@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import authService from "../../../services/authService";
 import { useNavigate, Link as RouterLink } from "react-router-dom";
+import { useThemeColors } from "../../../hooks/useThemeColors";
 import {
     Button,
     Fieldset,
@@ -16,6 +17,7 @@ import { Field } from '../../../components/ui/field';
 const PasswordReset = () => {
     const { t } = useTranslation('auth');
     const navigate = useNavigate();
+    const colors = useThemeColors();
     const [email, setEmail] = useState("");
     const [errors, setErrors] = useState({});
     const [isLoading, setIsLoading] = useState(false);
@@ -68,18 +70,20 @@ const PasswordReset = () => {
     };
 
     return (
-        <Box minH="100vh" bg="gray.50" display="flex" alignItems="center" justifyContent="center">
+        <Box minH="100vh" bg={colors.bg.page} display="flex" alignItems="center" justifyContent="center">
             <Box
                 p={8}
-                bg="white"
+                bg={colors.card.bg}
                 borderRadius="lg"
-                boxShadow="lg"
+                boxShadow={colors.card.shadow}
+                border="1px solid"
+                borderColor={colors.border.default}
                 w="full"
                 maxW="md"
                 position="relative"
             >
                 <Box position="absolute" top={4} right={4} fontSize="sm">
-                    <RouterLink to="/auth/login" style={{ textDecoration: 'underline', color: '#000000ff', fontWeight: 600 }}>
+                    <RouterLink to="/auth/login" style={{ textDecoration: 'underline', color: colors.text.brand, fontWeight: 600 }}>
                         {t('forgotPassword.backToLogin')}
                     </RouterLink>
                 </Box>
@@ -91,14 +95,14 @@ const PasswordReset = () => {
                         left={0}
                         right={0}
                         bottom={0}
-                        bg="rgba(255,255,255,0.6)"
+                        bg={colors.modal.overlay}
                         display="flex"
                         alignItems="center"
                         justifyContent="center"
                         borderRadius="lg"
                         zIndex={10}
                     >
-                        <Spinner size="xl" thickness="4px" color="teal.500" />
+                        <Spinner size="xl" thickness="4px" color={colors.text.brand} />
                     </Box>
                 )}
 
@@ -147,13 +151,18 @@ const PasswordReset = () => {
                                     value={email}
                                     onChange={handleChange}
                                     placeholder={t('forgotPassword.emailPlaceholder')}
+                                    borderColor={colors.border.default}
+                                    focusBorderColor={colors.text.brand}
+                                    _hover={{ borderColor: colors.border.hover }}
                                 />
                             </Field>
 
                         </Fieldset.Content>
                         <Button
                             type="submit"
-                            colorScheme="teal"
+                            bg={colors.button.primary.bg}
+                            color="white"
+                            _hover={{ bg: colors.button.primary.hover }}
                             width="full"
                             mt={4}
                             isLoading={isLoading}
@@ -162,9 +171,9 @@ const PasswordReset = () => {
                         >
                             {t('forgotPassword.submitButton')}
                         </Button>
-                        <Box mt={4} textAlign="center" fontSize="sm">
+                        <Box mt={4} textAlign="center" fontSize="sm" color={colors.text.secondary}>
                             {t('forgotPassword.dontHaveAccount')}{' '}
-                            <RouterLink to="/auth/register" style={{ color: '#319795', fontWeight: 600 }}>
+                            <RouterLink to="/auth/register" style={{ color: colors.text.brand, fontWeight: 600 }}>
                                 {t('forgotPassword.registerLink')}
                             </RouterLink>
                         </Box>

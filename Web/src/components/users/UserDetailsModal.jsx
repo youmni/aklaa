@@ -15,6 +15,7 @@ import {
     Dialog,
 } from "@chakra-ui/react";
 import ConfirmDialog from '../ui/ConfirmDialog.jsx';
+import { useThemeColors } from '../../hooks/useThemeColors';
 
 const UserDetailsModal = ({
     isOpen,
@@ -27,6 +28,7 @@ const UserDetailsModal = ({
     enablingId
 }) => {
     const { t } = useTranslation('user');
+    const colors = useThemeColors();
     const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 
     if (!selectedUser) return null;
@@ -45,6 +47,7 @@ const UserDetailsModal = ({
                             borderRadius="xl"
                             maxW="600px"
                             position="relative"
+                            bg={colors.modal.bg}
                         >
                             <Dialog.CloseTrigger asChild>
                                 <CloseButton
@@ -57,7 +60,7 @@ const UserDetailsModal = ({
                             </Dialog.CloseTrigger>
 
                             <Dialog.Header pb={2} pt={6} px={6}>
-                                <Dialog.Title fontSize="2xl" fontWeight="bold" color="#083951">
+                                <Dialog.Title fontSize="2xl" fontWeight="bold" color={colors.text.brand}>
                                     {t('details.title')}
                                 </Dialog.Title>
                             </Dialog.Header>
@@ -66,14 +69,14 @@ const UserDetailsModal = ({
                                 <VStack align="stretch" gap={5}>
                                     <Box
                                         p={4}
-                                        bg="gray.50"
+                                        bg={colors.bg.tertiary}
                                         borderRadius="lg"
                                         borderLeft="4px solid"
-                                        borderColor="#083951"
+                                        borderColor={colors.text.brand}
                                     >
                                         <Text
                                             fontSize="xs"
-                                            color="gray.600"
+                                            color={colors.text.secondary}
                                             fontWeight="medium"
                                             mb={1}
                                             textTransform="uppercase"
@@ -81,16 +84,16 @@ const UserDetailsModal = ({
                                         >
                                             {t('details.userId')}
                                         </Text>
-                                        <Text fontSize="lg" fontWeight="bold" color="#083951">
+                                        <Text fontSize="lg" fontWeight="bold" color={colors.text.brand}>
                                             #{selectedUser.id}
                                         </Text>
                                     </Box>
 
                                     <HStack gap={4}>
-                                        <Box flex={1} p={4} bg="gray.50" borderRadius="lg">
+                                        <Box flex={1} p={4} bg={colors.bg.tertiary} borderRadius="lg">
                                             <Text
                                                 fontSize="xs"
-                                                color="gray.600"
+                                                color={colors.text.secondary}
                                                 fontWeight="medium"
                                                 mb={1}
                                                 textTransform="uppercase"
@@ -98,15 +101,15 @@ const UserDetailsModal = ({
                                             >
                                                 {t('details.firstName')}
                                             </Text>
-                                            <Text fontSize="md" fontWeight="semibold" color="gray.800">
+                                            <Text fontSize="md" fontWeight="semibold" color={colors.text.primary}>
                                                 {selectedUser.firstName}
                                             </Text>
                                         </Box>
 
-                                        <Box flex={1} p={4} bg="gray.50" borderRadius="lg">
+                                        <Box flex={1} p={4} bg={colors.bg.tertiary} borderRadius="lg">
                                             <Text
                                                 fontSize="xs"
-                                                color="gray.600"
+                                                color={colors.text.secondary}
                                                 fontWeight="medium"
                                                 mb={1}
                                                 textTransform="uppercase"
@@ -114,16 +117,16 @@ const UserDetailsModal = ({
                                             >
                                                 {t('details.lastName')}
                                             </Text>
-                                            <Text fontSize="md" fontWeight="semibold" color="gray.800">
+                                            <Text fontSize="md" fontWeight="semibold" color={colors.text.primary}>
                                                 {selectedUser.lastName}
                                             </Text>
                                         </Box>
                                     </HStack>
 
-                                    <Box p={4} bg="gray.50" borderRadius="lg">
+                                    <Box p={4} bg={colors.bg.tertiary} borderRadius="lg">
                                         <Text
                                             fontSize="xs"
-                                            color="gray.600"
+                                            color={colors.text.secondary}
                                             fontWeight="medium"
                                             mb={1}
                                             textTransform="uppercase"
@@ -131,15 +134,15 @@ const UserDetailsModal = ({
                                         >
                                             {t('details.emailAddress')}
                                         </Text>
-                                        <Text fontSize="md" fontWeight="medium" color="gray.800">
+                                        <Text fontSize="md" fontWeight="medium" color={colors.text.primary}>
                                             {selectedUser.email}
                                         </Text>
                                     </Box>
 
-                                    <Box p={4} bg="gray.50" borderRadius="lg">
+                                    <Box p={4} bg={colors.bg.tertiary} borderRadius="lg">
                                         <Text
                                             fontSize="xs"
-                                            color="gray.600"
+                                            color={colors.text.secondary}
                                             fontWeight="medium"
                                             mb={2}
                                             textTransform="uppercase"
@@ -151,10 +154,11 @@ const UserDetailsModal = ({
                                             <NativeSelectField
                                                 value={selectedUser.userType}
                                                 onChange={handleRoleChange}
-                                                bg="white"
-                                                borderColor="gray.300"
+                                                bg={colors.input.bg}
+                                                color={colors.text.primary}
+                                                borderColor={colors.border.default}
                                                 borderWidth="1px"
-                                                _hover={{ borderColor: "#083951" }}
+                                                _hover={{ borderColor: colors.text.brand }}
                                                 borderRadius="md"
                                                 cursor="pointer"
                                             >
@@ -165,18 +169,18 @@ const UserDetailsModal = ({
                                         </NativeSelectRoot>
                                         {isUpdatingRole && (
                                             <HStack mt={2}>
-                                                <Spinner size="sm" color="#083951" />
-                                                <Text fontSize="xs" color="gray.600">
+                                                <Spinner size="sm" color={colors.text.brand} />
+                                                <Text fontSize="xs" color={colors.text.secondary}>
                                                     {t('details.updating')}
                                                 </Text>
                                             </HStack>
                                         )}
                                     </Box>
 
-                                    <Box p={4} bg="gray.50" borderRadius="lg">
+                                    <Box p={4} bg={colors.bg.tertiary} borderRadius="lg">
                                         <Text
                                             fontSize="xs"
-                                            color="gray.600"
+                                            color={colors.text.secondary}
                                             fontWeight="medium"
                                             mb={2}
                                             textTransform="uppercase"

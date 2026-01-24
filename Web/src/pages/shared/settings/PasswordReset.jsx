@@ -6,8 +6,10 @@ import { Fieldset } from "@chakra-ui/react";
 import { Field } from '../../../components/ui/field';
 import { useSnackbar } from 'notistack';
 import authService from "../../../services/authService";
+import { useThemeColors } from '../../../hooks/useThemeColors';
 const PasswordReset = () => {
     const { t } = useTranslation('settings');
+    const colors = useThemeColors();
     const { enqueueSnackbar } = useSnackbar();
     const [form, setForm] = useState({
         oldPassword: "",
@@ -85,7 +87,7 @@ const PasswordReset = () => {
     };
 
     return (
-        <Box p={8} maxW="1200px" mx="auto" bg="white" minH="calc(100vh - 73px)">
+        <Box p={8} maxW="1200px" mx="auto" bg={colors.bg.primary} minH="calc(100vh - 73px)">
             {isLoading && (
                 <Box
                     position="fixed"
@@ -93,20 +95,20 @@ const PasswordReset = () => {
                     left={0}
                     right={0}
                     bottom={0}
-                    bg="rgba(255,255,255,0.6)"
+                    bg={colors.modal.overlay}
                     display="flex"
                     alignItems="center"
                     justifyContent="center"
                     zIndex={10}
                 >
-                    <Spinner size="xl" thickness="4px" color="#083951" />
+                    <Spinner size="xl" thickness="4px" color={colors.text.brand} />
                 </Box>
             )}
 
             <form onSubmit={handleSubmit}>
                 <Fieldset.Root size="lg">
                     <Stack>
-                        <Fieldset.Legend fontSize="3xl" fontWeight="bold" color={'#083951'}>
+                        <Fieldset.Legend fontSize="3xl" fontWeight="bold" color={colors.text.brand}>
                             {t('passwordReset.title')}
                         </Fieldset.Legend>
                         <Fieldset.HelperText>
@@ -133,7 +135,7 @@ const PasswordReset = () => {
                                 type="password"
                                 value={form.oldPassword}
                                 onChange={handleChange}
-                                focusBorderColor="#083951"
+                                focusBorderColor={colors.text.brand}
                             />
                         </Field>
 
@@ -143,7 +145,7 @@ const PasswordReset = () => {
                                 type="password"
                                 value={form.newPassword}
                                 onChange={handleChange}
-                                focusBorderColor="#083951"
+                                focusBorderColor={colors.text.brand}
                             />
                         </Field>
 
@@ -153,21 +155,21 @@ const PasswordReset = () => {
                                 type="password"
                                 value={form.confirmNewPassword}
                                 onChange={handleChange}
-                                focusBorderColor="#083951"
+                                focusBorderColor={colors.text.brand}
                             />
                         </Field>
                     </Fieldset.Content>
 
                     <Button
                         type="submit"
-                        bg="#083951"
+                        bg={colors.button.primary.bg}
                         color="white"
                         width="full"
                         mt={4}
                         isLoading={isLoading}
                         spinnerPlacement="center"
                         isDisabled={isLoading}
-                        _hover={{ bg: "#0a4a63" }}
+                        _hover={{ bg: colors.button.primary.hover }}
                     >
                         {t('passwordReset.saveButton')}
                     </Button>

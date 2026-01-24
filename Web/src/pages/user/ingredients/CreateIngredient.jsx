@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useThemeColors } from '../../../hooks/useThemeColors';
 import { Box, Button, Input, Stack, Spinner } from "@chakra-ui/react";
 import { Fieldset } from "@chakra-ui/react";
 import { Field } from '../../../components/ui/field';
@@ -12,6 +13,7 @@ const CreateIngredient = () => {
     const { t } = useTranslation('ingredient');
     const navigate = useNavigate();
     const { enqueueSnackbar } = useSnackbar();
+    const colors = useThemeColors();
     const [form, setForm] = useState({
         name: "",
         description: "",
@@ -125,11 +127,11 @@ const CreateIngredient = () => {
     };
 
     return (
-        <Box p={8} maxW="1200px" mx="auto" bg="white" minH="calc(100vh - 73px)">
+        <Box p={8} maxW="1200px" mx="auto" bg={colors.bg.primary} minH="calc(100vh - 73px)">
             <Box mb={4}>
                 <Button
                     variant="ghost"
-                    color="#083951"
+                    color={colors.text.brand}
                     onClick={() => navigate('/ingredients')}
                     aria-label={t('common.backButton')}
                 >
@@ -144,19 +146,19 @@ const CreateIngredient = () => {
                     left={0}
                     right={0}
                     bottom={0}
-                    bg="rgba(255,255,255,0.6)"
+                    bg={colors.modal.overlay}
                     display="flex"
                     alignItems="center"
                     justifyContent="center"
                     zIndex={10}
                 >
-                    <Spinner size="xl" thickness="4px" color="#083951" />
+                    <Spinner size="xl" thickness="4px" color={colors.text.brand} />
                 </Box>
             )}
             <form onSubmit={handleSubmit}>
                 <Fieldset.Root size="lg">
                     <Stack>
-                        <Fieldset.Legend fontSize="3xl" fontWeight="bold" color={'#083951'}>
+                        <Fieldset.Legend fontSize="3xl" fontWeight="bold" color={colors.text.brand}>
                             {t('create.title')}
                         </Fieldset.Legend>
                         <Fieldset.HelperText>
@@ -198,7 +200,10 @@ const CreateIngredient = () => {
                                 value={form.name}
                                 onChange={handleChange}
                                 maxLength={100}
-                                focusBorderColor="#083951"
+                                focusBorderColor={colors.text.brand}
+                                bg={colors.input.bg}
+                                borderColor={colors.border.default}
+                                color={colors.text.primary}
                             />
                         </Field>
 
@@ -209,7 +214,10 @@ const CreateIngredient = () => {
                                 value={form.description}
                                 onChange={handleChange}
                                 maxLength={250}
-                                focusBorderColor="#083951"
+                                focusBorderColor={colors.text.brand}
+                                bg={colors.input.bg}
+                                borderColor={colors.border.default}
+                                color={colors.text.primary}
                             />
                         </Field>
 
@@ -222,7 +230,9 @@ const CreateIngredient = () => {
                                     width: '100%',
                                     padding: '0.5rem',
                                     borderRadius: '0.375rem',
-                                    border: '1px solid #E2E8F0',
+                                    border: `1px solid ${colors.border.default}`,
+                                    backgroundColor: colors.input.bg,
+                                    color: colors.text.primary,
                                     fontSize: '1rem'
                                 }}
                             >
@@ -244,7 +254,9 @@ const CreateIngredient = () => {
                                     width: '100%',
                                     padding: '0.5rem',
                                     borderRadius: '0.375rem',
-                                    border: '1px solid #E2E8F0',
+                                    border: `1px solid ${colors.border.default}`,
+                                    backgroundColor: colors.input.bg,
+                                    color: colors.text.primary,
                                     fontSize: '1rem'
                                 }}
                             >
@@ -259,16 +271,14 @@ const CreateIngredient = () => {
                     </Fieldset.Content>
                     <Button
                         type="submit"
-                        bg="#083951"
+                        bg={colors.button.primary.bg}
                         color="white"
                         width="full"
                         mt={4}
                         isLoading={isLoading}
                         spinnerPlacement="center"
                         isDisabled={isLoading}
-                        _hover={{
-                            bg: "#0a4a63"
-                        }}
+                        _hover={{ bg: colors.button.primary.hover }}
                     >
                         {t('create.submitButton')}
                     </Button>

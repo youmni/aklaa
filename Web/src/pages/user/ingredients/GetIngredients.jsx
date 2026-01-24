@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useThemeColors } from '../../../hooks/useThemeColors';
 import { Box, Button, Input, Stack, Spinner, Text, Grid, Badge, HStack, IconButton, VStack } from "@chakra-ui/react";
 import { useSnackbar } from 'notistack';
 import { FiEdit2, FiTrash2, FiPlus, FiSearch } from 'react-icons/fi';
@@ -12,6 +13,7 @@ const GetIngredients = () => {
     const { t } = useTranslation('ingredient');
     const navigate = useNavigate();
     const { enqueueSnackbar } = useSnackbar();
+    const colors = useThemeColors();
     const [ingredients, setIngredients] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [search, setSearch] = useState("");
@@ -156,14 +158,14 @@ const GetIngredients = () => {
     };
 
     return (
-        <Box p={{ base: 4, md: 6, lg: 8 }} maxW="1400px" mx="auto" bg="white" minH="calc(100vh - 73px)">
+        <Box p={{ base: 4, md: 6, lg: 8 }} maxW="1400px" mx="auto" bg={colors.bg.primary} minH="calc(100vh - 73px)">
             <Stack mb={{ base: 4, md: 6, lg: 8 }} gap={{ base: 4, md: 6 }}>
                 <Stack direction={{ base: "column", sm: "row" }} justify="space-between" align={{ base: "stretch", sm: "center" }} gap={3}>
-                    <Text fontSize={{ base: "2xl", md: "3xl" }} fontWeight="bold" color="#083951">
+                    <Text fontSize={{ base: "2xl", md: "3xl" }} fontWeight="bold" color={colors.text.brand}>
                         {t('list.title')}
                     </Text>
                     <Button
-                        bg="#083951"
+                        bg={colors.button.primary.bg}
                         color="white"
                         onClick={() => navigate('/ingredients/add')}
                         _hover={{ bg: "#0a4a63" }}
@@ -192,7 +194,10 @@ const GetIngredients = () => {
                             placeholder={t('list.searchPlaceholder')}
                             value={search}
                             onChange={handleSearchChange}
-                            focusBorderColor="#083951"
+                            focusBorderColor={colors.text.brand}
+                            bg={colors.input.bg}
+                            borderColor={colors.border.default}
+                            color={colors.text.primary}
                             pl="2.5rem"
                             size={{ base: "md", md: "lg" }}
                         />
@@ -205,9 +210,10 @@ const GetIngredients = () => {
                                 width: '100%',
                                 padding: window.innerWidth < 768 ? '0.5rem 0.75rem' : '0.75rem 1rem',
                                 borderRadius: '0.5rem',
-                                border: '1px solid #E2E8F0',
+                                border: `1px solid ${colors.border.default}`,
                                 fontSize: '1rem',
-                                backgroundColor: 'white',
+                                backgroundColor: colors.input.bg,
+                                color: colors.text.primary,
                                 cursor: 'pointer',
                                 height: window.innerWidth < 768 ? '2.5rem' : '3rem'
                             }}
@@ -222,14 +228,14 @@ const GetIngredients = () => {
                     </Box>
                 </Stack>
 
-                <Text fontSize="sm" color="gray.600" fontWeight="500">
+                <Text fontSize="sm" color={colors.text.secondary} fontWeight="500">
                     {t('list.ingredientsFound', { count: totalElements })}
                 </Text>
             </Stack>
 
             {isLoading ? (
                 <Box display="flex" justifyContent="center" alignItems="center" minH="400px">
-                    <Spinner size="xl" thickness="4px" color="#083951" />
+                    <Spinner size="xl" thickness="4px" color={colors.text.brand} />
                 </Box>
             ) : (
                 <>
@@ -251,12 +257,13 @@ const GetIngredients = () => {
                                     p={{ base: 4, md: 5, lg: 6 }}
                                     borderWidth="2px"
                                     borderRadius="xl"
-                                    borderColor="gray.200"
-                                    bg="white"
+                                    borderColor={colors.border.default}
+                                    bg={colors.card.bg}
                                     _hover={{
                                         shadow: "xl",
                                         transform: "translateY(-4px)",
-                                        borderColor: "#083951"
+                                        borderColor: colors.text.brand,
+                                        bg: colors.card.hover
                                     }}
                                     transition="all 0.3s"
                                 >
@@ -265,7 +272,7 @@ const GetIngredients = () => {
                                             <Text
                                                 fontSize={{ base: "lg", md: "xl" }}
                                                 fontWeight="bold"
-                                                color="#083951"
+                                                color={colors.text.brand}
                                                 flex={1}
                                                 isTruncated
                                                 title={ingredient.name}
@@ -300,7 +307,7 @@ const GetIngredients = () => {
 
                                         <Text
                                             fontSize="sm"
-                                            color={ingredient.description && ingredient.description.trim() ? "gray.600" : "gray.400"}
+                                            color={ingredient.description && ingredient.description.trim() ? colors.text.secondary : colors.text.placeholder}
                                             noOfLines={3}
                                             title={ingredient.description && ingredient.description.trim() ? ingredient.description : t('common.noDescription')}
                                             sx={{ overflowWrap: 'anywhere', wordBreak: 'break-word', whiteSpace: 'normal' }}
