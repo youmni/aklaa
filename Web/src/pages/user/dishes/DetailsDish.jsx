@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useThemeColors } from '../../../hooks/useThemeColors';
 import dishService from '../../../services/dishService';
+import { exportDishAsJSON, exportDishAsPDF } from '../../../utils/dishExport';
 import {
     Box,
     Button,
@@ -16,9 +17,12 @@ import {
     Spinner,
     HStack,
     Card,
-    Accordion
+    Accordion,
+    createListCollection,
+    Portal,
+    Select
 } from '@chakra-ui/react';
-import { FiArrowLeft, FiEdit } from 'react-icons/fi';
+import { FiArrowLeft, FiDownload } from 'react-icons/fi';
 import { FaUsers } from 'react-icons/fa';
 import { useSnackbar } from 'notistack';
 
@@ -62,6 +66,27 @@ const DetailsDish = () => {
         ).join(' ');
     };
 
+    const handleExport = async (details) => {
+        const exportType = details.value[0];
+        if (!exportType) return;
+
+        try {
+            if (exportType === 'json') {
+                exportDishAsJSON(dish);
+                enqueueSnackbar(t('details.exportSuccess'), { variant: 'success' });
+            } else if (exportType === 'pdf-light') {
+                await exportDishAsPDF(dish, t, 'light');
+                enqueueSnackbar(t('details.exportSuccess'), { variant: 'success' });
+            } else if (exportType === 'pdf-dark') {
+                await exportDishAsPDF(dish, t, 'dark');
+                enqueueSnackbar(t('details.exportSuccess'), { variant: 'success' });
+            }
+        } catch (error) {
+            console.error('Export error:', error);
+            enqueueSnackbar(t('details.exportError'), { variant: 'error' });
+        }
+    };
+
     if (isLoading) {
         return (
             <Box
@@ -90,6 +115,52 @@ const DetailsDish = () => {
                 >
                     <FiArrowLeft />
                 </Button>
+
+                <HStack gap={4}>
+                    <Select.Root
+                        collection={createListCollection({
+                            items: [
+                                { label: t('details.exportJSON'), value: 'json' },
+                                { label: 'PDF Light', value: 'pdf-light' },
+                                { label: 'PDF Dark', value: 'pdf-dark' }
+                            ]
+                        })}
+                        size="md"
+                        width="200px"
+                        onValueChange={handleExport}
+                    >
+                        <Select.HiddenSelect />
+                        <Select.Control>
+                            <Select.Trigger>
+                                <HStack>
+                                    <FiDownload />
+                                    <Select.ValueText placeholder={t('details.exportLabel')} />
+                                </HStack>
+                            </Select.Trigger>
+                            <Select.IndicatorGroup>
+                                <Select.Indicator />
+                            </Select.IndicatorGroup>
+                        </Select.Control>
+                        <Portal>
+                            <Select.Positioner>
+                                <Select.Content>
+                                    <Select.Item item={{ label: t('details.exportJSON'), value: 'json' }}>
+                                        {t('details.exportJSON')}
+                                        <Select.ItemIndicator />
+                                    </Select.Item>
+                                    <Select.Item item={{ label: 'PDF Light', value: 'pdf-light' }}>
+                                        PDF Light
+                                        <Select.ItemIndicator />
+                                    </Select.Item>
+                                    <Select.Item item={{ label: 'PDF Dark', value: 'pdf-dark' }}>
+                                        PDF Dark
+                                        <Select.ItemIndicator />
+                                    </Select.Item>
+                                </Select.Content>
+                            </Select.Positioner>
+                        </Portal>
+                    </Select.Root>
+                </HStack>
             </Flex>
 
             <VStack align="stretch" gap={8}>

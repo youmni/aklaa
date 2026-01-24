@@ -131,7 +131,12 @@
     "cookingSteps": "Bereidingsstappen",
     "step": "Stap",
     "editButton": "Gerecht Bewerken",
-    "fetchError": "Gerecht ophalen mislukt"
+    "fetchError": "Gerecht ophalen mislukt",
+    "exportLabel": "Exporteren",
+    "exportJSON": "Exporteren als JSON",
+    "exportPDF": "Exporteren als PDF",
+    "exportSuccess": "Gerecht succesvol geëxporteerd",
+    "exportError": "Exporteren mislukt"
   },
   "delete": {
     "noDishSelected": "Geen gerecht geselecteerd",

@@ -131,7 +131,12 @@
     "cookingSteps": "Cooking Steps",
     "step": "Step",
     "editButton": "Edit Dish",
-    "fetchError": "Failed to fetch dish"
+    "fetchError": "Failed to fetch dish",
+    "exportLabel": "Export",
+    "exportJSON": "Export as JSON",
+    "exportPDF": "Export as PDF",
+    "exportSuccess": "Dish exported successfully",
+    "exportError": "Failed to export dish"
   },
   "delete": {
     "noDishSelected": "No dish selected",

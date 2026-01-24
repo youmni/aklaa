@@ -131,7 +131,12 @@
     "cookingSteps": "Étapes de Cuisson",
     "step": "Étape",
     "editButton": "Modifier le Plat",
-    "fetchError": "Échec de la récupération du plat"
+    "fetchError": "Échec de la récupération du plat",
+    "exportLabel": "Exporter",
+    "exportJSON": "Exporter en JSON",
+    "exportPDF": "Exporter en PDF",
+    "exportSuccess": "Plat exporté avec succès",
+    "exportError": "Échec de l'exportation du plat"
   },
   "delete": {
     "noDishSelected": "Aucun plat sélectionné",

@@ -131,7 +131,12 @@
     "cookingSteps": "Pasos de Cocción",
     "step": "Paso",
     "editButton": "Editar Plato",
-    "fetchError": "Error al obtener plato"
+    "fetchError": "Error al obtener el plato",
+    "exportLabel": "Exportar",
+    "exportJSON": "Exportar como JSON",
+    "exportPDF": "Exportar como PDF",
+    "exportSuccess": "Plato exportado exitosamente",
+    "exportError": "Error al exportar el plato"
   },
   "delete": {
     "noDishSelected": "No se seleccionó ningún plato",
