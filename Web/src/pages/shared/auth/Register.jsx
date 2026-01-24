@@ -10,6 +10,9 @@ import {
   Stack,
   Box,
   Spinner,
+  Text,
+  Link,
+  Checkbox,
 } from "@chakra-ui/react"
 import { Field } from '../../../components/ui/field';
 
@@ -21,7 +24,8 @@ const Register = () => {
     lastName: "",
     email: "",
     password: "",
-    confirmPassword: ""
+    confirmPassword: "",
+    acceptTerms: false
   });
 
   const [errors, setErrors] = useState({});
@@ -58,6 +62,10 @@ const Register = () => {
 
     if (!form.confirmPassword || form.password !== form.confirmPassword) {
       newErrors.confirmPassword = t('register.passwordMismatch');
+    }
+
+    if (!form.acceptTerms) {
+      newErrors.acceptTerms = t('register.termsRequired');
     }
 
     setErrors(newErrors);
@@ -112,7 +120,8 @@ const Register = () => {
         lastName: "",
         email: "",
         password: "",
-        confirmPassword: ""
+        confirmPassword: "",
+        acceptTerms: false
       });
 
     } catch (error) {
@@ -247,6 +256,51 @@ const Register = () => {
                   _hover={{ borderColor: colors.border.hover }}
                 />
               </Field>
+
+              <Box mt={2}>
+                <Checkbox.Root
+                  checked={form.acceptTerms}
+                  onCheckedChange={(e) => {
+                    setForm({ ...form, acceptTerms: e.checked });
+                    if (errors.acceptTerms) {
+                      setErrors({ ...errors, acceptTerms: "" });
+                    }
+                  }}
+                  colorPalette="cyan"
+                >
+                  <Checkbox.HiddenInput />
+                  <Checkbox.Control />
+                  <Checkbox.Label>
+                    <Text fontSize="sm" color={colors.text.secondary}>
+                      {t('register.acceptTerms')}{' '}
+                      <Link
+                        href="/privacy-policy-en.html"
+                        target="_blank"
+                        color={colors.text.brand}
+                        textDecoration="underline"
+                        fontWeight="600"
+                      >
+                        {t('register.termsOfService')}
+                      </Link>
+                      {' '}{t('register.and')}{' '}
+                      <Link
+                        href="/terms-conditions-en.html"
+                        target="_blank"
+                        color={colors.text.brand}
+                        textDecoration="underline"
+                        fontWeight="600"
+                      >
+                        {t('register.privacyPolicy')}
+                      </Link>
+                    </Text>
+                  </Checkbox.Label>
+                </Checkbox.Root>
+                {errors.acceptTerms && (
+                  <Text fontSize="sm" color="red.500" mt={1}>
+                    {errors.acceptTerms}
+                  </Text>
+                )}
+              </Box>
             </Fieldset.Content>
             <Button
               type="submit"
