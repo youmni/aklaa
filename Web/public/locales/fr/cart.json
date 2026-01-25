@@ -28,6 +28,7 @@
     "endDate": "Date de Fin",
     "selectDates": "Sélectionnez les dates de semaine pour votre liste de courses"
   },
+  
   "addToCart": {
     "title": "Ajouter au Panier",
     "subtitle": "Planifiez quand vous cuisinerez {{dishName}}",
@@ -82,4 +83,6 @@
     "SATURDAY": "Samedi",
     "SUNDAY": "Dimanche"
   }
+,
+  "dateOrderError": "La date de début doit être antérieure ou égale à la date de fin."
 }

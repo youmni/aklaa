@@ -28,6 +28,7 @@
     "endDate": "Fecha de Fin",
     "selectDates": "Seleccione las fechas de la semana para su lista de compras"
   },
+  
   "addToCart": {
     "title": "Agregar al Carrito",
     "subtitle": "Planifique cuándo cocinará {{dishName}}",
@@ -82,4 +83,6 @@
     "SATURDAY": "Sábado",
     "SUNDAY": "Domingo"
   }
+,
+  "dateOrderError": "La fecha de inicio debe ser anterior o igual a la fecha de fin."
 }

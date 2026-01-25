@@ -28,6 +28,7 @@
     "endDate": "End Date",
     "selectDates": "Select week dates for your grocery list"
   },
+  
   "addToCart": {
     "title": "Add to Cart",
     "subtitle": "Plan when you'll cook {{dishName}}",
@@ -82,4 +83,6 @@
     "SATURDAY": "Saturday",
     "SUNDAY": "Sunday"
   }
+,
+  "dateOrderError": "Start date must be before or equal to end date."
 }
