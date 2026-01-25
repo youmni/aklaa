@@ -36,7 +36,7 @@ export const exportDishAsPDF = async (dish, t, theme = 'dark') => {
   if (theme === 'light') {
     bgColor = [255, 255, 255];
     boxBg = [243, 244, 246]; 
-    cyan = [14, 165, 233];
+    cyan = [25, 55, 109];
     textColor = [17, 24, 39];
     mediumGray = [107, 114, 128];
     white = [255, 255, 255];
@@ -271,16 +271,19 @@ export const exportDishAsPDF = async (dish, t, theme = 'dark') => {
   
   yPosition += 10;
 
-  checkPageBreak(35);
-  
-  doc.setTextColor(...cyan);
-  doc.setFontSize(12);
-  doc.setFont(undefined, 'bold');
-  doc.text(t('details.cookingSteps'), margin, yPosition);
-  
-  yPosition += 10;
-  
   const steps = dish.cookingSteps || [];
+  
+  if (steps.length > 0) {
+    checkPageBreak(35);
+    
+    doc.setTextColor(...cyan);
+    doc.setFontSize(12);
+    doc.setFont(undefined, 'bold');
+    doc.text(t('details.cookingSteps'), margin, yPosition);
+    
+    yPosition += 10;
+  }
+  
   steps.forEach((step, index) => {
     const stepLines = doc.splitTextToSize(step.recipeStep, contentWidth - 12);
     const stepHeight = stepLines.length * 5.5 + 12;

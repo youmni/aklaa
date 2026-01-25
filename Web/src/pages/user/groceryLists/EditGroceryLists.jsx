@@ -21,21 +21,8 @@ import { FiArrowLeft } from 'react-icons/fi';
 import { useSnackbar } from 'notistack';
 import groceryListService from '../../../services/groceryListService';
 import ingredientService from '../../../services/ingredientService';
+import SearchableIngredientSelect from '../../../components/ui/SearchableIngredientSelect';
 import { useThemeColors } from '../../../hooks/useThemeColors';
-
-const categoryColors = {
-    VEGETABLES: 'green',
-    FRUITS: 'red',
-    DAIRY: 'blue',
-    MEAT: 'red',
-    FISH: 'cyan',
-    GRAINS: 'orange',
-    SPICES: 'red',
-    BAKING: 'yellow',
-    DRINKS: 'purple',
-    HOUSEHOLD: 'teal',
-    OTHER: 'gray',
-};
 
 const EditGroceryLists = () => {
     const { id } = useParams();
@@ -51,8 +38,6 @@ const EditGroceryLists = () => {
     const [showAddIngredient, setShowAddIngredient] = useState(false);
     const [selectedIngredient, setSelectedIngredient] = useState(null);
     const [newQuantity, setNewQuantity] = useState('');
-    const [searchTerm, setSearchTerm] = useState('');
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
     useEffect(() => {
         fetchGroceryListDetails();
@@ -207,20 +192,6 @@ const EditGroceryLists = () => {
         return allIngredients.filter(ing => !ingredients[ing.id]);
     };
 
-    const getFilteredIngredients = () => {
-        return getAvailableIngredients()
-            .filter(ing =>
-                ing.name.toLowerCase().includes(searchTerm.toLowerCase())
-            )
-            .sort((a, b) => a.name.localeCompare(b.name));
-    };
-
-    const getSelectedIngredientName = () => {
-        if (!selectedIngredient) return '';
-        const ingredient = allIngredients.find(ing => ing.id === selectedIngredient);
-        return ingredient ? `${ingredient.name} (${t(`units.${ingredient.unit}`)})` : '';
-    };
-
     if (loading) {
         return (
             <Box bg={colors.bg.page} minH="100vh" py={12}>
@@ -255,7 +226,7 @@ const EditGroceryLists = () => {
                         <HStack gap={3}>
                             <Button
                                 variant="outline"
-                                colorScheme="gray"
+                                colorPalette="gray"
                                 onClick={() => navigate(`/grocerylists/${id}/ingredients`)}
                                 leftIcon={<FaTimes />}
                                 px={6}
@@ -311,7 +282,7 @@ const EditGroceryLists = () => {
                             <Button
                                 leftIcon={<FaPlus />}
                                 onClick={() => setShowAddIngredient(true)}
-                                colorScheme="blue"
+                                colorPalette="grey"
                                 variant="outline"
                                 w="100%"
                             >
@@ -327,76 +298,13 @@ const EditGroceryLists = () => {
                                         <Text fontSize="sm" fontWeight="500" mb={2} color={colors.text.primary}>
                                             {t('edit.selectIngredient')}
                                         </Text>
-                                        <VStack align="stretch" gap={2}>
-                                            <Input
-                                                placeholder={selectedIngredient ? getSelectedIngredientName() : t('edit.selectIngredient')}
-                                                value={searchTerm}
-                                                onChange={(e) => {
-                                                    setSearchTerm(e.target.value);
-                                                    setIsDropdownOpen(true);
-                                                }}
-                                                onFocus={() => setIsDropdownOpen(true)}
-                                            />
-                                            {isDropdownOpen && (
-                                                <Box
-                                                    position="relative"
-                                                    maxH="250px"
-                                                    overflowY="auto"
-                                                    border="1px solid"
-                                                    borderColor={colors.border.default}
-                                                    borderRadius="md"
-                                                    bg={colors.card.bg}
-                                                    boxShadow="md"
-                                                    css={{
-                                                        '&::-webkit-scrollbar': {
-                                                            width: '8px',
-                                                        },
-                                                        '&::-webkit-scrollbar-track': {
-                                                            background: '#f1f1f1',
-                                                        },
-                                                        '&::-webkit-scrollbar-thumb': {
-                                                            background: '#888',
-                                                            borderRadius: '10px',
-                                                        },
-                                                        '&::-webkit-scrollbar-thumb:hover': {
-                                                            background: '#555',
-                                                        },
-                                                    }}
-                                                >
-                                                    {getFilteredIngredients().length > 0 ? (
-                                                        getFilteredIngredients().map(ing => (
-                                                            <Box
-                                                                key={ing.id}
-                                                                p={3}
-                                                                cursor="pointer"
-                                                                bg={selectedIngredient === ing.id ? colors.bg.hover : colors.card.bg}
-                                                                borderBottom="1px solid"
-                                                                borderColor={colors.border.default}
-                                                                _hover={{ bg: colors.bg.hover }}
-                                                                onClick={() => {
-                                                                    setSelectedIngredient(ing.id);
-                                                                    setSearchTerm('');
-                                                                    setIsDropdownOpen(false);
-                                                                }}
-                                                                fontSize="sm"
-                                                                transition="all 0.2s"
-                                                            >
-                                                                <Text fontWeight="500" color={colors.text.primary}>{ing.name}</Text>
-                                                                <Text fontSize="xs" color={colors.text.secondary}>
-                                                                    Unit: {t(`units.${ing.unit}`)} • Category: {t(`categories.${ing.category}`)}
-                                                                </Text>
-                                                            </Box>
-                                                        ))
-                                                    ) : (
-                                                        <Box p={4} textAlign="center">
-                                                            <Text color={colors.text.secondary} fontSize="sm">
-                                                                {t('edit.noIngredients')}
-                                                            </Text>
-                                                        </Box>
-                                                    )}
-                                                </Box>
-                                            )}
-                                        </VStack>
+                                        <SearchableIngredientSelect
+                                            availableIngredients={getAvailableIngredients()}
+                                            selectedIngredientId={selectedIngredient}
+                                            onSelect={setSelectedIngredient}
+                                            placeholder={t('edit.selectIngredient')}
+                                            size="md"
+                                        />
                                     </Box>
                                     <Box>
                                         <Text fontSize="sm" fontWeight="500" mb={2} color={colors.text.primary}>
@@ -426,10 +334,8 @@ const EditGroceryLists = () => {
                                             variant="outline"
                                             onClick={() => {
                                                 setShowAddIngredient(false);
-                                                setSelectedIngredient('');
+                                                setSelectedIngredient(null);
                                                 setNewQuantity('');
-                                                setSearchTerm('');
-                                                setIsDropdownOpen(false);
                                             }}
                                             px={6}
                                             py={5}
@@ -464,7 +370,6 @@ const EditGroceryLists = () => {
                     >
                         <VStack align="stretch" gap={4}>
                             {Object.entries(groupedIngredients).map(([category, items]) => {
-                                const categoryColor = categoryColors[category] || categoryColors.OTHER;
                                 return (
                                     <Box
                                         key={category}
@@ -480,7 +385,7 @@ const EditGroceryLists = () => {
                                                 {t(`categories.${category}`)}
                                             </Heading>
                                             <Badge
-                                                colorScheme={categoryColor}
+                                                colorPalette="gray"
                                                 px={3}
                                                 py={1}
                                                 borderRadius="full"
@@ -523,7 +428,7 @@ const EditGroceryLists = () => {
                                                             color={colors.text.primary}
                                                         />
                                                         <Badge
-                                                            colorScheme="blue"
+                                                            colorPalette="blue"
                                                             px={3}
                                                             py={2}
                                                             borderRadius="md"
@@ -532,11 +437,12 @@ const EditGroceryLists = () => {
                                                             {t(`units.${item.ingredient.unit}`)}
                                                         </Badge>
                                                         <IconButton
-                                                            colorScheme="red"
+                                                            colorPalette="red"
                                                             variant="outline"
                                                             onClick={() => handleDeleteIngredient(item.ingredient.id)}
                                                             aria-label="Delete ingredient"
                                                             size="md"
+                                                            color="red.500"
                                                             _hover={{ bg: 'red.50' }}
                                                         >
                                                             <FaTrash />

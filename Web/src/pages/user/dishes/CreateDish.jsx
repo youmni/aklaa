@@ -27,6 +27,7 @@ import {
 import { Select } from '@chakra-ui/react';
 import { Field } from '../../../components/ui/field';
 import StepManager from '../../../components/dishes/StepManager';
+import SearchableIngredientSelect from '../../../components/ui/SearchableIngredientSelect';
 import { FaPlus, FaTrash, FaUpload, FaTimes } from 'react-icons/fa';
 import { FiArrowLeft } from 'react-icons/fi';
 import { useSnackbar } from 'notistack';
@@ -185,6 +186,13 @@ const CreateDish = () => {
         delete newErrors[`ingredient_${index}`];
         delete newErrors[`quantity_${index}`];
         setErrors(newErrors);
+        
+        const newSearchTerms = { ...searchTerms };
+        const newDropdownStates = { ...dropdownStates };
+        delete newSearchTerms[index];
+        delete newDropdownStates[index];
+        setSearchTerms(newSearchTerms);
+        setDropdownStates(newDropdownStates);
     };
 
     const handleIngredientChange = (index, field, value) => {
@@ -603,24 +611,14 @@ const CreateDish = () => {
                                                         invalid={!!errors[`ingredient_${index}`]}
                                                         errorText={errors[`ingredient_${index}`]}
                                                     >
-                                                        <NativeSelectRoot size="lg">
-                                                            <NativeSelectField
-                                                                value={ingredient.ingredientId}
-                                                                onChange={(e) => handleIngredientChange(index, 'ingredientId', e.target.value)}
-                                                                bg={colors.bg.tertiary}
-                                                                color={colors.text.primary}
-                                                                borderColor={colors.border.default}
-                                                                _hover={{ borderColor: colors.border.hover }}
-                                                                style={{ paddingLeft: 8 }}
-                                                            >
-                                                                <option value="" disabled style={{ color: '#A0AEC0' }}>{t('create.selectIngredient')}</option>
-                                                                {getAvailableIngredientsForIndex(index).map(ing => (
-                                                                    <option key={ing.id} value={ing.id} style={{ color: 'initial' }}>
-                                                                        {getIngredientDisplay(ing)}
-                                                                    </option>
-                                                                ))}
-                                                            </NativeSelectField>
-                                                        </NativeSelectRoot>
+                                                        <SearchableIngredientSelect
+                                                            availableIngredients={getAvailableIngredientsForIndex(index)}
+                                                            selectedIngredientId={ingredient.ingredientId}
+                                                            onSelect={(ingredientId) => handleIngredientChange(index, 'ingredientId', ingredientId)}
+                                                            placeholder={t('create.selectIngredient')}
+                                                            invalid={!!errors[`ingredient_${index}`]}
+                                                            size="lg"
+                                                        />
                                                     </Field>
                                                 </Box>
                                                 <Box flex={1}>
