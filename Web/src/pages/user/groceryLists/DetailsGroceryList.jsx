@@ -19,20 +19,6 @@ import { useTranslation } from 'react-i18next';
 import groceryListService from '../../../services/groceryListService';
 import { useThemeColors } from '../../../hooks/useThemeColors';
 
-const categoryColors = {
-    VEGETABLES: 'green',
-    FRUITS: 'red',
-    DAIRY: 'blue',
-    MEAT: 'red',
-    FISH: 'cyan',
-    GRAINS: 'orange',
-    SPICES: 'red',
-    BAKING: 'yellow',
-    DRINKS: 'purple',
-    HOUSEHOLD: 'teal',
-    OTHER: 'gray',
-};
-
 const DetailsGroceryList = () => {
     const { t } = useTranslation('grocerylist');
     const { id } = useParams();
@@ -174,7 +160,6 @@ const DetailsGroceryList = () => {
                     </Box>
 
                     {Object.entries(groupedIngredients).map(([category, items]) => {
-                        const categoryColor = categoryColors[category] || categoryColors.OTHER;
                         return (
                             <Box
                                 key={category}
@@ -190,7 +175,7 @@ const DetailsGroceryList = () => {
                                         {t(`categories.${category}`)}
                                     </Heading>
                                     <Badge
-                                        colorScheme={categoryColor}
+                                        colorPalette="gray"
                                         px={3}
                                         py={1}
                                         borderRadius="full"
@@ -242,7 +227,7 @@ const DetailsGroceryList = () => {
                                                     {item.ingredient.name}
                                                 </Text>
                                                 <Badge
-                                                    colorScheme="blue"
+                                                    colorPalette="black"
                                                     px={3}
                                                     py={1}
                                                     borderRadius="full"

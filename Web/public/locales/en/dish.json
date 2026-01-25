@@ -192,5 +192,22 @@
     "BAKED": "Baked",
     "FRIED": "Fried",
     "RAW": "Raw"
-  }
+  },
+  "importSuccess": "Dish imported successfully.",
+  "importTitle": "Import Dishes",
+  "importMultipleLabel": "Import multiple dishes at once",
+  "importError": "Failed to import dish.",
+  "importInvalid": "Invalid JSON file.",
+  "importMaxFiles": "Max {{max}} file(s) allowed.",
+  "importDropzoneLabel": "Drag and drop JSON file here",
+  "importFilesLeft": "file(s) left",
+  "importButton": "Upload",
+  "importSubtitle": "Import one or more dishes in JSON format.",
+  "importDropzoneSingle": "Select a JSON file to import.",
+  "importDropzoneMultiple": "Select one or more JSON files to import.",
+  "importFilesLeftMultiple": "files left",
+  "importSelectedFiles": "Selected files",
+  "importDocumentation": "How to prepare your JSON files",
+  "importMultipleMode": "Import multiple files",
+  "importing": "Importing..."
 }

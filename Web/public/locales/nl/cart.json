@@ -28,6 +28,7 @@
     "endDate": "Einddatum",
     "selectDates": "Selecteer weekdata voor uw boodschappenlijst"
   },
+  
   "addToCart": {
     "title": "Toevoegen aan Winkelwagen",
     "subtitle": "Plan wanneer u {{dishName}} gaat koken",
@@ -82,4 +83,6 @@
     "SATURDAY": "Zaterdag",
     "SUNDAY": "Zondag"
   }
+,
+  "dateOrderError": "Startdatum moet voor of gelijk aan de einddatum zijn."
 }

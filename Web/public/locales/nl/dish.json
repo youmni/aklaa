@@ -192,5 +192,22 @@
     "BAKED": "Gebakken",
     "FRIED": "Gefrituurd",
     "RAW": "Rauw"
-  }
+  },
+  "importSuccess": "Gerecht succesvol geïmporteerd.",
+  "importTitle": "Gerechten importeren",
+  "importMultipleLabel": "Meerdere gerechten tegelijk importeren",
+  "importError": "Importeren van gerecht mislukt.",
+  "importInvalid": "Ongeldig JSON-bestand.",
+  "importMaxFiles": "Maximaal {{max}} bestand(en) toegestaan.",
+  "importDropzoneLabel": "Sleep hier je JSON-bestand",
+  "importFilesLeft": "bestand(en) over",
+  "importButton": "Uploaden",
+  "importSubtitle": "Importeer één of meerdere gerechten in JSON-formaat.",
+  "importDropzoneSingle": "Selecteer een JSON-bestand om te importeren.",
+  "importDropzoneMultiple": "Selecteer één of meerdere JSON-bestanden om te importeren.",
+  "importFilesLeftMultiple": "bestanden over",
+  "importSelectedFiles": "Geselecteerde bestanden",
+  "importDocumentation": "Handleiding voor importeren",
+  "importMultipleMode": "Meerdere bestanden importeren ",
+  "importing": "Bezig met importeren..."
 }

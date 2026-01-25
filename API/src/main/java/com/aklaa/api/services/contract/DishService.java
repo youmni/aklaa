@@ -32,6 +32,20 @@ public interface DishService {
      * @throws NoSuchElementException if any ingredient ID in the request does not exist
      */
     DishResponseDTO create(DishRequestDTO dishRequestDTO, User user);
+
+    /**
+     * Creates a new dish with associated ingredients for the specified user from json upload.
+     * <p>
+     * This method creates a dish entity, validates and retrieves all ingredients by their IDs,
+     * creates dish-ingredient associations with specified quantities, and saves the dish to the database.
+     * </p>
+     *
+     * @param dishRequestDTO the dish data including name, description, cooking steps, ingredients, and metadata
+     * @param user the user who is creating the dish
+     * @return a {@link DishResponseDTO} containing the created dish with all its details
+     * @throws NoSuchElementException if any ingredient ID in the request does not exist
+     */
+    DishResponseDTO createFromJson(DishResponseDTO dishRequestDTO, User user);
     
     /**
      * Updates an existing dish and its ingredients.

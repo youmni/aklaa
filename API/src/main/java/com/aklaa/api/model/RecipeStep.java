@@ -1,6 +1,7 @@
 package com.aklaa.api.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,6 +23,7 @@ public class RecipeStep {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Positive
     private int orderIndex;
 
     @Size(min= 5, max = 255, message = "The step must be between 5 and 255 characters")

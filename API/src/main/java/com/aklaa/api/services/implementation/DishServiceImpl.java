@@ -4,13 +4,16 @@ import com.aklaa.api.dao.DishRepository;
 import com.aklaa.api.dao.IngredientRepository;
 import com.aklaa.api.dtos.request.DishRequestDTO;
 import com.aklaa.api.dtos.request.RecipeStepRequestDTO;
+import com.aklaa.api.dtos.response.DishIngredientResponseInfoDTO;
 import com.aklaa.api.dtos.response.DishListResponseDTO;
 import com.aklaa.api.dtos.response.DishResponseDTO;
 import com.aklaa.api.dtos.request.DishIngredientRequestInfoDTO;
+import com.aklaa.api.dtos.response.IngredientResponseDTO;
 import com.aklaa.api.mapper.DishIngredientMapper;
 import com.aklaa.api.mapper.DishMapper;
 import com.aklaa.api.model.*;
 import com.aklaa.api.model.enums.CuisineType;
+import com.aklaa.api.model.enums.MeasurementUnit;
 import com.aklaa.api.services.contract.DishService;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
@@ -24,6 +27,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -39,20 +44,86 @@ public class DishServiceImpl implements DishService {
     public DishResponseDTO create(DishRequestDTO dto, User user) {
         Dish dish = dishMapper.toEntity(dto, user);
 
+        List<Long> ingredientIds = dto.getIngredients().stream()
+                .map(DishIngredientRequestInfoDTO::getIngredientId)
+                .toList();
+
+        Map<Long, Ingredient> ingredientMap =
+                ingredientRepository.findAllById(ingredientIds).stream()
+                        .collect(Collectors.toMap(Ingredient::getId, Function.identity()));
+
         dto.getIngredients().forEach(info -> {
-            Ingredient ingredient = ingredientRepository.findById(info.getIngredientId())
-                    .orElseThrow(() -> new NoSuchElementException(
-                            "Ingredient not found with id: " + info.getIngredientId()
-                    ));
+            Ingredient ingredient = ingredientMap.get(info.getIngredientId());
+
+            if (ingredient == null) {
+                throw new NoSuchElementException(
+                        "Ingredient not found with id: " + info.getIngredientId()
+                );
+            }
+
+            dish.getDishIngredients().add(dishIngredientMapper.toEntity(dish, ingredient, info.getQuantity()));
+        });
+
+        dish.getSteps().addAll(dishMapper.fromRequestDTOs(dto.getSteps(), dish));
+
+        Dish savedDish = dishRepository.save(dish);
+
+        return dishMapper.toResponseDTO(savedDish);
+    }
+
+    @Override
+    @Transactional
+    public DishResponseDTO createFromJson(DishResponseDTO dto, User user) {
+
+        Dish dish = dishMapper.toEntity(dto, user);
+
+        Map<String, Ingredient> ingredientMap =
+                ingredientRepository.findAllByUser(user).stream()
+                        .collect(Collectors.toMap(
+                                ing -> ingredientKey(ing.getName(), ing.getUnit(), ing.getDescription()),
+                                Function.identity()
+                        ));
+
+        dto.getIngredients().forEach(info -> {
+            IngredientResponseDTO dishingredient = info.getIngredient();
+
+            String key = ingredientKey(
+                    dishingredient.getName(),
+                    dishingredient.getUnit(),
+                    dishingredient.getDescription()
+            );
+
+            Ingredient ingredient = ingredientMap.get(key);
+
+            if (ingredient == null) {
+                ingredient = ingredientRepository.save(
+                        Ingredient.builder()
+                                .name(dishingredient.getName())
+                                .unit(dishingredient.getUnit())
+                                .description(dishingredient.getDescription())
+                                .category(dishingredient.getCategory())
+                                .user(user)
+                                .build()
+                );
+
+                ingredientMap.put(key, ingredient);
+            }
 
             dish.getDishIngredients().add(
-                    dishIngredientMapper.toEntity(dish, ingredient, info.getQuantity())
+                    dishIngredientMapper.toEntity(
+                            dish,
+                            ingredient,
+                            info.getQuantity()
+                    )
             );
         });
 
-        dish.getSteps().addAll(dishMapper.toRecipeSteps(dto.getSteps(), dish));
+        dish.getSteps().addAll(
+                dishMapper.fromResponseDTOs(dto.getCookingSteps(), dish)
+        );
 
         Dish savedDish = dishRepository.save(dish);
+
         return dishMapper.toResponseDTO(savedDish);
     }
 
@@ -76,7 +147,7 @@ public class DishServiceImpl implements DishService {
                         ))
         );
 
-        dish.replaceSteps(dishMapper.toRecipeSteps(dto.getSteps(), dish));
+        dish.replaceSteps(dishMapper.fromRequestDTOs(dto.getSteps(), dish));
 
         return dishMapper.toResponseDTO(dish);
     }
@@ -184,4 +255,11 @@ public class DishServiceImpl implements DishService {
     private Specification<Dish> userSpec(User user) {
         return (root, query, builder) -> builder.equal(root.get("user"), user);
     }
+
+    private String ingredientKey(String name, MeasurementUnit unit, String description) {
+        return name.toLowerCase().trim()
+                + "|" + unit.name()
+                + "|" + (description == null ? "" : description.trim());
+    }
+
 }

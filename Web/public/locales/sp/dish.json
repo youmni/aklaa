@@ -192,5 +192,22 @@
     "BAKED": "Horneado",
     "FRIED": "Frito",
     "RAW": "Crudo"
-  }
+  },
+  "importSuccess": "Plato importado correctamente.",
+  "importTitle": "Importar platos",
+  "importMultipleLabel": "Importar varios platos a la vez",
+  "importError": "Error al importar el plato.",
+  "importInvalid": "Archivo JSON inválido.",
+  "importMaxFiles": "Máximo {{max}} archivo(s) permitido(s).",
+  "importDropzoneLabel": "Arrastra y suelta el archivo JSON aquí",
+  "importFilesLeft": "archivo(s) restante(s)",
+  "importButton": "Subir",
+  "importSubtitle": "Importa uno o más platos en formato JSON.",
+  "importDropzoneSingle": "Selecciona un archivo JSON para importar.",
+  "importDropzoneMultiple": "Selecciona uno o más archivos JSON para importar.",
+  "importFilesLeftMultiple": "archivos restantes",
+  "importSelectedFiles": "Archivos seleccionados",
+  "importDocumentation": "Guía de importación",
+  "importMultipleMode": "Importar varios archivos",
+  "importing": "Importando..."
 }

@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dish Import Guide - JSON Format</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #0f1724;
+            background: #f6f9fc;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 6px 18px rgba(11, 46, 78, 0.08);
+        }
+        
+        h1 {
+            color: #0b3a66;
+            margin-bottom: 10px;
+            font-size: 2em;
+            letter-spacing: -0.5px;
+        }
+        
+        h2 {
+            color: #072144;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+            border-bottom: 2px solid #e6eef8;
+            padding-bottom: 8px;
+        }
+        
+        h3 {
+            color: #374151;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+        
+        .intro {
+            background: #eef6fb;
+            padding: 20px;
+            border-radius: 6px;
+            margin-bottom: 30px;
+            border-left: 4px solid #0b3a66;
+        }
+        
+        code {
+            background: #f3f6fb;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #0b3a66;
+        }
+        
+        pre {
+            background: linear-gradient(180deg, #09324f 0%, #0b3a66 100%);
+            color: #eaf4ff;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 15px 0;
+            box-shadow: 0 6px 18px rgba(11, 58, 102, 0.08);
+        }
+
+        pre code {
+            background: none;
+            color: #eaf4ff;
+            padding: 0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #e6eef8;
+        }
+
+        th {
+            background: #f4f8fb;
+            font-weight: 600;
+            color: #072144;
+        }
+
+        tr:nth-child(even) {
+            background: #fbfdff;
+        }
+        
+        .required {
+            color: #dc2626;
+            font-weight: bold;
+        }
+        
+        .optional {
+            color: #059669;
+            font-style: italic;
+        }
+        
+        .note {
+            background: #fff8eb;
+            border-left: 4px solid #c77b00;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        
+        .success {
+            background: #eaf7f0;
+            border-left: 4px solid #10b981;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        
+        ul, ol {
+            margin-left: 30px;
+            margin-bottom: 15px;
+        }
+        
+        li {
+            margin-bottom: 8px;
+        }
+
+        a {
+            color: #0b3a66;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Dish Import Guide</h1>
+        
+        <div class="intro">
+            <p><strong>Welcome!</strong> This guide will help you prepare JSON files to import dishes into the system. Follow the format specifications below to ensure successful imports.</p>
+        </div>
+
+        <h2>Fields</h2>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Field</th>
+                    <th>Type</th>
+                    <th>Requirements</th>
+                    <th>Example</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>name</code> <span class="required">*</span></td>
+                    <td>String</td>
+                    <td>1-100 characters</td>
+                    <td>"Poké Bowl"</td>
+                </tr>
+                <tr>
+                    <td><code>description</code> <span class="required">*</span></td>
+                    <td>String</td>
+                    <td>10-500 characters</td>
+                    <td>"A fresh and healthy dish..."</td>
+                </tr>
+                <tr>
+                    <td><code>tags</code> <span class="required">*</span></td>
+                    <td>Array</td>
+                    <td>See valid tags below</td>
+                    <td>["HEALTHY", "VEGAN"]</td>
+                </tr>
+                <tr>
+                    <td><code>type</code> <span class="required">*</span></td>
+                    <td>String</td>
+                    <td>See valid cuisine types below</td>
+                    <td>"JAPANESE"</td>
+                </tr>
+                <tr>
+                    <td><code>imageUrl</code> <span class="required">*</span></td>
+                    <td>String</td>
+                    <td>Max 255 chars, valid URL or path</td>
+                    <td>"https://example.com/image.jpg"</td>
+                </tr>
+                <tr>
+                    <td><code>people</code> <span class="required">*</span></td>
+                    <td>Integer</td>
+                    <td>1-100</td>
+                    <td>4</td>
+                </tr>
+                <tr>
+                    <td><code>ingredients</code> <span class="required">*</span></td>
+                    <td>Array</td>
+                    <td>At least 1 ingredient</td>
+                    <td>See ingredient format below</td>
+                </tr>
+                <tr>
+                    <td><code>cookingSteps</code> <span class="optional">optional</span></td>
+                    <td>Array</td>
+                    <td>1-50 steps</td>
+                    <td>See cooking steps format below</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>Valid Enums</h2>
+        
+        <h3>Dish Tags</h3>
+        <p>Choose one or more from:</p>
+        <p>
+            <code>DESSERT</code>, <code>SNACK</code>, <code>APPETIZER</code>, <code>SIDE_DISH</code>, <code>MAIN_COURSE</code>, <code>BEVERAGE</code>, <code>VEGETARIAN</code>, <code>VEGAN</code>, <code>GLUTEN_FREE</code>, <code>HEALTHY</code>, <code>QUICK_MEAL</code>, <code>COMFORT_FOOD</code>, <code>GRILLED</code>, <code>BAKED</code>, <code>FRIED</code>, <code>RAW</code>
+        </p>
+
+        <h3>Cuisine Types</h3>
+        <p>Select one cuisine type:</p>
+        <p>
+            <code>ITALIAN</code>, <code>FRENCH</code>, <code>CHINESE</code>, <code>JAPANESE</code>, <code>MEXICAN</code>, <code>INDIAN</code>, <code>AMERICAN</code>, <code>THAI</code>, <code>SPANISH</code>, <code>MEDITERRANEAN</code>, <code>MIDDLE_EASTERN</code>, <code>KOREAN</code>, <code>AFRICAN</code>, <code>GREEK</code>, <code>TURKISH</code>, <code>MOROCCAN</code>
+        </p>
+
+        <h3>Ingredient Categories</h3>
+        <p>
+            <code>VEGETABLES</code>, <code>FRUITS</code>, <code>DAIRY</code>, <code>MEAT</code>, <code>FISH</code>, <code>GRAINS</code>, <code>SPICES</code>, <code>BAKING</code>, <code>DRINKS</code>, <code>HOUSEHOLD</code>, <code>OTHER</code>
+        </p>
+
+        <h3>Measurement Units</h3>
+        <p>
+            <code>G</code>, <code>KG</code>, <code>ML</code>, <code>L</code>, <code>PCS</code>, <code>TBSP</code>, <code>TSP</code>, <code>CUP</code>, <code>PINCH</code>
+        </p>
+
+        <h2>Ingredient Format</h2>
+        
+        <p>Each ingredient must include:</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Field</th>
+                    <th>Type</th>
+                    <th>Requirements</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>ingredient.name</code> <span class="required">*</span></td>
+                    <td>String</td>
+                    <td>1-100 characters</td>
+                </tr>
+                <tr>
+                    <td><code>ingredient.description</code></td>
+                    <td>String</td>
+                    <td>Max 250 characters (can be empty)</td>
+                </tr>
+                <tr>
+                    <td><code>ingredient.category</code> <span class="required">*</span></td>
+                    <td>String</td>
+                    <td>Valid category enum</td>
+                </tr>
+                <tr>
+                    <td><code>ingredient.unit</code> <span class="required">*</span></td>
+                    <td>String</td>
+                    <td>Valid measurement unit</td>
+                </tr>
+                <tr>
+                    <td><code>quantity</code> <span class="required">*</span></td>
+                    <td>Number</td>
+                    <td>0.001 - 1,000,000</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>Cooking Steps Format (Optional)</h2>
+        
+        <p>If you want to include cooking instructions:</p>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Field</th>
+                    <th>Type</th>
+                    <th>Requirements</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>orderIndex</code> <span class="required">*</span></td>
+                    <td>Integer</td>
+                    <td>Positive number (step order)</td>
+                </tr>
+                <tr>
+                    <td><code>recipeStep</code> <span class="required">*</span></td>
+                    <td>String</td>
+                    <td>5-255 characters</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>Complete Example</h2>
+        
+        <pre><code>{
+  "name": "Fresh Poké Bowl",
+  "description": "A delicious and fresh Hawaiian-inspired dish with salmon, avocado, and mango",
+  "tags": ["HEALTHY", "HIGH_PROTEIN"],
+  "type": "JAPANESE",
+  "imageUrl": "https://example.com/poke-bowl.jpg",
+  "people": 2,
+  "ingredients": [
+    {
+      "ingredient": {
+        "name": "Salmon",
+        "description": "Fresh sushi-grade salmon",
+        "category": "FISH",
+        "unit": "G"
+      },
+      "quantity": 400
+    },
+    {
+      "ingredient": {
+        "name": "Sushi Rice",
+        "description": "",
+        "category": "GRAINS",
+        "unit": "G"
+      },
+      "quantity": 300
+    },
+    {
+      "ingredient": {
+        "name": "Avocado",
+        "description": "",
+        "category": "FRUITS",
+        "unit": "PCS"
+      },
+      "quantity": 2
+    },
+    {
+      "ingredient": {
+        "name": "Mango",
+        "description": "",
+        "category": "FRUITS",
+        "unit": "PCS"
+      },
+      "quantity": 1
+    },
+    {
+      "ingredient": {
+        "name": "Soy Sauce",
+        "description": "",
+        "category": "CONDIMENTS",
+        "unit": "ML"
+      },
+      "quantity": 50
+    }
+  ],
+  "cookingSteps": [
+    {
+      "orderIndex": 1,
+      "recipeStep": "Cook the sushi rice according to package instructions and let it cool"
+    },
+    {
+      "orderIndex": 2,
+      "recipeStep": "Cut the salmon into small cubes and dice the avocado and mango"
+    },
+    {
+      "orderIndex": 3,
+      "recipeStep": "Assemble the bowl with rice as base, top with salmon, avocado, and mango"
+    },
+    {
+      "orderIndex": 4,
+      "recipeStep": "Drizzle with soy sauce and serve immediately"
+    }
+  ]
+}</code></pre>
+
+        <h2>Tips for Success</h2>
+        
+        <div class="success">
+            <strong>Best Practices:</strong>
+            <ul>
+                <li>Validate your JSON using an online JSON validator before importing</li>
+                <li>Use descriptive names for dishes and ingredients</li>
+                <li>Double-check that all enum values match the valid options listed above</li>
+                <li>Ensure quantities are realistic and properly scaled for the number of people</li>
+                <li>Keep descriptions informative but concise</li>
+            </ul>
+        </div>
+
+        <div class="note">
+            <strong>Common Mistakes:</strong>
+            <ul>
+                <li>Misspelling enum values (they are case-sensitive!)</li>
+                <li>Forgetting required fields like <code>name</code> or <code>ingredients</code></li>
+                <li>Using invalid measurement units</li>
+                <li>Setting <code>people</code> to 0 or negative numbers</li>
+                <li>Description too short (minimum 10 characters) or too long</li>
+            </ul>
+        </div>
+
+        <h2>Need Help?</h2>
+        <p>If you encounter any issues during import, check that:</p>
+        <ol>
+            <li>Your JSON file is properly formatted (no syntax errors)</li>
+            <li>All required fields are present</li>
+            <li>All values meet the validation requirements</li>
+            <li>Enum values match exactly (including capitalization)</li>
+        </ol>
+    </div>
+</body>
+</html>

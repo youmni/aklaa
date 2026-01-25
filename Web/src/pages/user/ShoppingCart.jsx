@@ -91,12 +91,19 @@ const ShoppingCart = () => {
 
     const handleSaveCart = async () => {
         if (!startOfWeek || !endOfWeek) {
-            enqueueSnackbar(t('cart.saveError'), { variant: 'error' });
+            enqueueSnackbar(t('cart.selectDatesError'), { variant: 'error' });
+            return;
+        }
+
+        const start = new Date(startOfWeek);
+        const end = new Date(endOfWeek);
+        if (start > end) {
+            enqueueSnackbar(t('dateOrderError'), { variant: 'error' });
             return;
         }
 
         if (cartItems.length === 0) {
-            enqueueSnackbar(t('cart.saveError'), { variant: 'error' });
+            enqueueSnackbar(t('cart.emptyCartError'), { variant: 'error' });
             return;
         }
 
