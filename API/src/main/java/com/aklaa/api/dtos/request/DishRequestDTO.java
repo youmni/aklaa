@@ -53,6 +53,5 @@ public class DishRequestDTO {
 
     @NotNull(message = "Ingredients cannot be null")
     @NotEmpty(message = "At least one ingredient is required")
-    @Valid
     private List<@Valid DishIngredientRequestInfoDTO> ingredients;
 }

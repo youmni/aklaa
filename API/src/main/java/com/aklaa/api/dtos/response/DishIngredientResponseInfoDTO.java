@@ -1,5 +1,6 @@
 package com.aklaa.api.dtos.response;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
@@ -15,6 +16,13 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Builder
 public class DishIngredientResponseInfoDTO {
+
+    @NotNull
+    @Valid
     private IngredientResponseDTO ingredient;
+
+    @NotNull(message = "Quantity is required")
+    @DecimalMin(value = "0.001", message = "Quantity must be at least 0.001")
+    @DecimalMax(value = "1000000", message = "Quantity must not exceed 1000000")
     private BigDecimal quantity;
 }

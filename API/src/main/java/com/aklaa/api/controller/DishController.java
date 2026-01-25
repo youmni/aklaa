@@ -53,6 +53,27 @@ public class DishController {
     }
 
     @AllowAuthenticated
+    @PostMapping("/json")
+    public ResponseEntity<DishResponseDTO> createFromJson(@RequestBody @Valid DishResponseDTO dishRequestDTO, @AuthenticationPrincipal UserDetails userDetails){
+        Optional<User> optionalUser = userRepository.findByEmail(userDetails.getUsername());
+
+        if (optionalUser.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(null);
+        }
+        User user = optionalUser.get();
+        DishResponseDTO dish = dishService.createFromJson(dishRequestDTO, user);
+
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentContextPath()
+                .path("/api/dishes/{id}")
+                .buildAndExpand(dish.getId())
+                .toUri();
+
+        return ResponseEntity.created(location).body(dish);
+    }
+
+    @AllowAuthenticated
     @PutMapping("/{id}")
     public ResponseEntity<DishResponseDTO> update(@PathVariable Long id, @RequestBody @Valid DishRequestDTO dishRequestDTO, @AuthenticationPrincipal UserDetails userDetails) {
         Optional<User> optionalUser = userRepository.findByEmail(userDetails.getUsername());

@@ -35,6 +35,18 @@ public class DishMapper {
                 .build();
     }
 
+    public Dish toEntity(DishResponseDTO dto, User user) {
+        return Dish.builder()
+                .name(dto.getName())
+                .description(dto.getDescription())
+                .tags(dto.getTags())
+                .type(dto.getType())
+                .imageUrl(dto.getImageUrl())
+                .people(dto.getPeople())
+                .user(user)
+                .build();
+    }
+
     public void updateEntity(Dish dish, DishRequestDTO dto) {
         dish.setName(dto.getName());
         dish.setDescription(dto.getDescription());
@@ -66,7 +78,7 @@ public class DishMapper {
                 .build();
     }
 
-    public List<RecipeStep> toRecipeSteps(List<RecipeStepRequestDTO> steps, Dish dish) {
+    public List<RecipeStep> fromRequestDTOs(List<RecipeStepRequestDTO> steps, Dish dish) {
         if (steps == null) {
             return List.of();
         }
@@ -74,6 +86,21 @@ public class DishMapper {
         return steps.stream()
                 .map(dto -> RecipeStep.builder()
                         .recipeStep(dto.getStepText())
+                        .orderIndex(dto.getOrderIndex())
+                        .dish(dish)
+                        .build()
+                )
+                .collect(Collectors.toList());
+    }
+
+    public List<RecipeStep> fromResponseDTOs(List<RecipeStepResponseDTO> steps, Dish dish) {
+        if (steps == null) {
+            return List.of();
+        }
+
+        return steps.stream()
+                .map(dto -> RecipeStep.builder()
+                        .recipeStep(dto.getRecipeStep())
                         .orderIndex(dto.getOrderIndex())
                         .dish(dish)
                         .build()
