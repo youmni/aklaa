@@ -192,5 +192,22 @@
     "BAKED": "Cuit au Four",
     "FRIED": "Frit",
     "RAW": "Cru"
-  }
+  },
+  "importSuccess": "Plat importé avec succès.",
+  "importTitle": "Importer des plats",
+  "importMultipleLabel": "Importer plusieurs plats à la fois",
+  "importError": "Échec de l'importation du plat.",
+  "importInvalid": "Fichier JSON invalide.",
+  "importMaxFiles": "Maximum {{max}} fichier(s) autorisé(s).",
+  "importDropzoneLabel": "Glissez-déposez le fichier JSON ici",
+  "importFilesLeft": "fichier(s) restant(s)",
+  "importButton": "Téléverser",
+  "importSubtitle": "Importer un ou plusieurs plats au format JSON.",
+  "importDropzoneSingle": "Sélectionnez un fichier JSON à importer.",
+  "importDropzoneMultiple": "Sélectionnez un ou plusieurs fichiers JSON à importer.",
+  "importFilesLeftMultiple": "fichiers restants",
+  "importSelectedFiles": "Fichiers sélectionnés",
+  "importDocumentation": "Guide d'importation",
+  "importMultipleMode": "Importer plusieurs fichiers",
+  "importing": "Importation en cours..."
 }

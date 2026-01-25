@@ -60,6 +60,15 @@ const dishService = {
     const response = await api.delete(`/dishes/${id}`);
     return response;
   },
+
+  /**
+   * Import dish from JSON
+   * @param {Object} dishJson - Dish JSON object
+   * @returns {Promise} Imported dish
+   */
+  importDishFromJson: async (dishJson) => {
+    return api.post('/dishes/json', dishJson);
+  },
 };
 
 export default dishService;

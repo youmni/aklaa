@@ -14,6 +14,7 @@ import UpdateIngredient from "./pages/user/ingredients/EditIngredient";
 import DeleteIngredient from "./pages/user/ingredients/DeleteIngredient";
 import GetIngredients from "./pages/user/ingredients/GetIngredients";
 import CreateDish from "./pages/user/dishes/CreateDish";
+import ImportDishes from "./pages/user/dishes/ImportDishes";
 import EditDish from "./pages/user/dishes/EditDish";
 import DetailsDish from "./pages/user/dishes/DetailsDish";
 import DeleteDish from "./pages/user/dishes/DeleteDish";
@@ -56,6 +57,7 @@ const App = () => {
             <Route path="/dishes">
               <Route index element={<GetDishes />} />
               <Route path="add" element={<CreateDish />} />
+              <Route path="import" element={<ImportDishes />} />
               <Route path="edit/:id" element={<EditDish />} />
               <Route path="details/:id" element={<DetailsDish />} />
               <Route path="delete/:id" element={<DeleteDish />} />

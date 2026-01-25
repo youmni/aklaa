@@ -9,6 +9,7 @@ import dishService from "../../../services/dishService";
 import ConfirmDialog from "../../../components/ui/ConfirmDialog";
 import AddToCartModal from "../../../components/shoppingcart/AddToCartModal";
 import Pagination from "../../../components/ui/Pagination";
+import { LuDownload } from "react-icons/lu";
 
 const GetDishes = () => {
     const { t } = useTranslation('dish');
@@ -198,22 +199,32 @@ const GetDishes = () => {
     return (
         <Box p={{ base: 4, md: 6, lg: 8 }} maxW="1400px" mx="auto" bg={colors.bg.primary} minH="calc(100vh - 73px)">
             <Stack mb={{ base: 4, md: 6, lg: 8 }} gap={{ base: 4, md: 6 }}>
-                <Stack direction={{ base: "column", sm: "row" }} justify="space-between" align={{ base: "stretch", sm: "center" }} gap={3}>
+                <Stack direction="row" justify="space-between" align="center" gap={3}>
                     <Text fontSize={{ base: "2xl", md: "3xl" }} fontWeight="bold" color={colors.text.brand}>
                         {t('list.title')}
                     </Text>
-                    <Button
-                        bg={colors.button.primary.bg}
-                        color="white"
-                        onClick={() => navigate('/dishes/add')}
-                        _hover={{ bg: colors.button.primary.hover }}
-                        size={{ base: "md", md: "lg" }}
-                        px={{ base: 4, md: 6 }}
-                        w={{ base: "full", sm: "auto" }}
-                    >
-                        <FiPlus style={{ marginRight: '8px' }} />
-                        {t('list.createButton')}
-                    </Button>
+                    <HStack spacing={3}>
+                        <Button
+                            bg={colors.button.primary.bg}
+                            color="white"
+                            onClick={() => navigate('/dishes/add')}
+                            _hover={{ bg: colors.button.primary.hover }}
+                            size={{ base: "md", md: "lg" }}
+                            px={{ base: 4, md: 6 }}
+                        >
+                            <FiPlus style={{ marginRight: '8px' }} />
+                            {t('list.createButton')}
+                        </Button>
+                        <Button
+                            bg={colors.button.primary.bg}
+                            color="white"
+                            onClick={() => navigate('/dishes/import')}
+                            _hover={{ bg: colors.button.primary.hover }}
+                            size={{ base: "md", md: "lg" }}
+                        >
+                            <LuDownload />
+                        </Button>
+                    </HStack>
                 </Stack>
 
                 <Stack direction={{ base: "column", md: "row" }} gap={4}>
