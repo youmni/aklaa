@@ -1,0 +1,52 @@
+{
+  "weekdays": {
+    "mon": "Ma",
+    "tue": "Di",
+    "wed": "Wo",
+    "thu": "Do",
+    "fri": "Vr",
+    "sat": "Za",
+    "sun": "Zo"
+  },
+  "months": {
+    "january": "Januari",
+    "february": "Februari",
+    "march": "Maart",
+    "april": "April",
+    "may": "Mei",
+    "june": "Juni",
+    "july": "Juli",
+    "august": "Augustus",
+    "september": "September",
+    "october": "Oktober",
+    "november": "November",
+    "december": "December"
+  },
+  "monthsShort": {
+    "january": "Jan",
+    "february": "Feb",
+    "march": "Mrt",
+    "april": "Apr",
+    "may": "Mei",
+    "june": "Jun",
+    "july": "Jul",
+    "august": "Aug",
+    "september": "Sep",
+    "october": "Okt",
+    "november": "Nov",
+    "december": "Dec"
+  },
+  "loading": "Laden...",
+  "save": "Opslaan",
+  "cancel": "Annuleren",
+  "delete": "Verwijderen",
+  "edit": "Bewerken",
+  "name": "Naam",
+  "description": "Beschrijving",
+  "cuisine": "Keuken",
+  "tags": "Tags",
+  "ingredients": "Ingrediënten",
+  "people": "Personen",
+  "total": "Totaal",
+  "groceryList": "Boodschappenlijst"
+}

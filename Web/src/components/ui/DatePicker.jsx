@@ -9,11 +9,13 @@ import {
   Portal,
 } from "@chakra-ui/react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { formatDateEU, isSameDay } from "../../utils/dateUtils";
 import { useThemeColors } from "../../hooks/useThemeColors";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 const DatePicker = ({ value, onChange, placeholder = "DD/MM/YYYY" }) => {
+  const { t } = useTranslation('common');
   const colors = useThemeColors();
   const [isOpen, setIsOpen] = useState(false);
   const [currentMonth, setCurrentMonth] = useState(
@@ -36,7 +38,15 @@ const DatePicker = ({ value, onChange, placeholder = "DD/MM/YYYY" }) => {
 
   const days = Array.from({ length: startDay + daysInMonth });
 
-  const weekDays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+  const weekDays = [
+    t('weekdays.mon'),
+    t('weekdays.tue'),
+    t('weekdays.wed'),
+    t('weekdays.thu'),
+    t('weekdays.fri'),
+    t('weekdays.sat'),
+    t('weekdays.sun')
+  ];
 
   return (
     <Popover.Root
@@ -63,7 +73,6 @@ const DatePicker = ({ value, onChange, placeholder = "DD/MM/YYYY" }) => {
         <Popover.Positioner>
           <Popover.Content width="300px" bg={colors.card.bg} borderColor={colors.border.default}>
             <Popover.Body>
-              {/* Header */}
               <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
                 <IconButton
                   aria-label="Previous month"
@@ -83,10 +92,7 @@ const DatePicker = ({ value, onChange, placeholder = "DD/MM/YYYY" }) => {
                   <FaChevronLeft />
                 </IconButton>
                 <Text fontWeight="bold" color={colors.text.primary}>
-                  {currentMonth.toLocaleString("default", {
-                    month: "long",
-                    year: "numeric",
-                  })}
+                  {t(`months.${currentMonth.toLocaleString('en', { month: 'long' }).toLowerCase()}`)} {currentMonth.getFullYear()}
                 </Text>
                 <IconButton
                   aria-label="Next month"
@@ -107,7 +113,6 @@ const DatePicker = ({ value, onChange, placeholder = "DD/MM/YYYY" }) => {
                 </IconButton>
               </Box>
 
-              {/* Weekdays */}
               <Grid templateColumns="repeat(7, 1fr)" mb={2}>
                 {weekDays.map((d) => (
                   <Text key={d} fontSize="xs" textAlign="center" fontWeight="semibold" color={colors.text.secondary}>
@@ -116,7 +121,6 @@ const DatePicker = ({ value, onChange, placeholder = "DD/MM/YYYY" }) => {
                 ))}
               </Grid>
 
-              {/* Days */}
               <Grid templateColumns="repeat(7, 1fr)" gap={1}>
                 {days.map((_, index) => {
                   const day = index - startDay + 1;
