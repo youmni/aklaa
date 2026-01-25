@@ -603,7 +603,7 @@ const EditDish = () => {
                                                 </Box>
                                                 <Box>
                                                     <IconButton
-                                                        colorScheme="red"
+                                                        colorPalette="red"
                                                         variant="ghost"
                                                         onClick={() => handleRemoveIngredient(index)}
                                                         aria-label="Remove ingredient"

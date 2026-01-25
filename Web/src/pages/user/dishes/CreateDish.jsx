@@ -543,7 +543,7 @@ const CreateDish = () => {
                                         position="absolute"
                                         top={4}
                                         right={4}
-                                        colorScheme="red"
+                                        colorPalette="red"
                                         onClick={handleRemoveImage}
                                         aria-label="Remove image"
                                         size="lg"
@@ -645,7 +645,7 @@ const CreateDish = () => {
                                                 </Box>
                                                 <Box>
                                                     <IconButton
-                                                        colorScheme="red"
+                                                        colorPalette="red"
                                                         variant="ghost"
                                                         onClick={() => handleRemoveIngredient(index)}
                                                         aria-label="Remove ingredient"
