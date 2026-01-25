@@ -37,7 +37,6 @@ const DetailsGroceryList = () => {
                 const checkedArray = JSON.parse(savedChecked);
                 setCheckedItems(new Set(checkedArray));
             } catch (error) {
-                console.error('Failed to parse checked items from localStorage:', error);
             }
         }
     }, [id]);
@@ -52,7 +51,6 @@ const DetailsGroceryList = () => {
             const response = await groceryListService.getGroceryListIngredients(id);
             setGroceryData(response.data);
         } catch (error) {
-            console.error('Error fetching grocery list details:', error);
             enqueueSnackbar(t('details.fetchError'), { variant: 'error' });
             navigate('/groceries');
         } finally {

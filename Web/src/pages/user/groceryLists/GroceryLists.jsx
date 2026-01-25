@@ -29,7 +29,6 @@ const GroceryLists = () => {
             const response = await groceryListService.getGroceryLists();
             setGroceryLists(response.data);
         } catch (error) {
-            console.error('Error fetching grocery lists:', error);
             enqueueSnackbar(t('list.fetchError'), { variant: 'error' });
         } finally {
             setLoading(false);

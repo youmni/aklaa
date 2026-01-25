@@ -52,7 +52,6 @@ const ShoppingCart = () => {
                 const dishPromises = dishIds.map(id => 
                     dishService.getDishById(id)
                         .catch(error => {
-                            console.error(`Failed to fetch dish with id ${id}:`, error);
                             return null;
                         })
                 );
@@ -69,7 +68,6 @@ const ShoppingCart = () => {
                 setDishes(dishMap);
             }
         } catch (error) {
-            console.error('Error fetching cart:', error);
             enqueueSnackbar(t('cart.fetchError'), { variant: 'error' });
         } finally {
             setLoading(false);

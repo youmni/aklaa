@@ -59,7 +59,6 @@ const EditGroceryLists = () => {
             });
             setIngredients(ingredientsMap);
         } catch (error) {
-            console.error('Error fetching grocery list details:', error);
             enqueueSnackbar(t('edit.fetchError'), { variant: 'error' });
             navigate('/groceries');
         } finally {
@@ -72,7 +71,6 @@ const EditGroceryLists = () => {
             const response = await ingredientService.getAllIngredients();
             setAllIngredients(response.data);
         } catch (error) {
-            console.error('Error fetching ingredients:', error);
             enqueueSnackbar(t('edit.fetchIngredientsError'), { variant: 'error' });
         }
     };
@@ -165,7 +163,6 @@ const EditGroceryLists = () => {
             enqueueSnackbar(t('edit.updateSuccess'), { variant: 'success' });
             navigate(`/grocerylists/${id}/ingredients`);
         } catch (error) {
-            console.error('Error updating grocery list:', error);
             enqueueSnackbar(t('edit.updateError'), { variant: 'error' });
         } finally {
             setSaving(false);
@@ -301,7 +298,7 @@ const EditGroceryLists = () => {
                                         <SearchableIngredientSelect
                                             availableIngredients={getAvailableIngredients()}
                                             selectedIngredientId={selectedIngredient}
-                                            onSelect={setSelectedIngredient}
+                                            onSelect={(id) => setSelectedIngredient(Number(id))}
                                             placeholder={t('edit.selectIngredient')}
                                             size="md"
                                         />

@@ -16,7 +16,7 @@ const Logout = () => {
                 navigate("/auth/login");
             })
             .catch((error) => {
-                console.error("Logout failed:", error);
+                
             });
     }, [navigate, setUser]);
 
