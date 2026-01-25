@@ -36,7 +36,7 @@ public class DishResponseDTO {
     @NotNull(message = "Cuisine type is required")
     private CuisineType type;
 
-    @Size(min = 1, max = 50, message = "A dish must have between 1 and 50 steps")
+    @Size(max = 50, message = "A dish must have between 1 and 50 steps")
     private List<@Valid RecipeStepResponseDTO> cookingSteps;
 
     @NotBlank(message = "Image URL is required")
