@@ -74,9 +74,15 @@ export const exportDishAsPDF = async (dish, t, theme = 'dark') => {
     doc.setTextColor(...mediumGray);
     doc.setFont(undefined, 'normal');
     
+    const today = new Date();
+    const day = String(today.getDate()).padStart(2, '0');
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const year = today.getFullYear();
+    const europeanDate = `${day}/${month}/${year}`;
+    
     doc.text('Aklaa', margin, pageHeight - 12);
     doc.text(`${pageNum}`, pageWidth / 2, pageHeight - 12, { align: 'center' });
-    doc.text(new Date().toLocaleDateString(), pageWidth - margin, pageHeight - 12, { align: 'right' });
+    doc.text(europeanDate, pageWidth - margin, pageHeight - 12, { align: 'right' });
   };
 
   doc.setFillColor(...bgColor);

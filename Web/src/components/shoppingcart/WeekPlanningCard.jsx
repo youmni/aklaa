@@ -1,10 +1,21 @@
-import { Box, HStack, Heading, Input, Text, VStack } from '@chakra-ui/react';
+import { Box, HStack, Heading, Text, VStack } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { useThemeColors } from '../../hooks/useThemeColors';
+import DatePicker from '../ui/DatePicker';
+import { dateToISO, isoToDate } from '../../utils/dateUtils';
 
 const WeekPlanningCard = ({ startOfWeek, endOfWeek, onStartChange, onEndChange }) => {
     const { t } = useTranslation('cart');
     const colors = useThemeColors();
+
+    const handleStartDateChange = (date) => {
+        onStartChange(dateToISO(date));
+    };
+
+    const handleEndDateChange = (date) => {
+        onEndChange(dateToISO(date));
+    };
+
     return (
         <Box
             bg={colors.card.bg}
@@ -22,32 +33,20 @@ const WeekPlanningCard = ({ startOfWeek, endOfWeek, onStartChange, onEndChange }
                     <Text fontSize="sm" fontWeight="600" color={colors.text.primary}>
                         {t('weekPlanning.startDate')}
                     </Text>
-                    <Input
-                        type="date"
-                        value={startOfWeek}
-                        onChange={(e) => onStartChange(e.target.value)}
-                        focusBorderColor={colors.text.brand}
-                        bg={colors.input.bg}
-                        borderColor={colors.border.default}
-                        color={colors.text.primary}
-                        size="md"
-                        borderRadius="lg"
+                    <DatePicker
+                        value={isoToDate(startOfWeek)}
+                        onChange={handleStartDateChange}
+                        placeholder="DD/MM/YYYY"
                     />
                 </VStack>
                 <VStack align="stretch" flex={1} gap={2}>
                     <Text fontSize="sm" fontWeight="600" color={colors.text.primary}>
                         {t('weekPlanning.endDate')}
                     </Text>
-                    <Input
-                        type="date"
-                        value={endOfWeek}
-                        onChange={(e) => onEndChange(e.target.value)}
-                        focusBorderColor={colors.text.brand}
-                        bg={colors.input.bg}
-                        borderColor={colors.border.default}
-                        color={colors.text.primary}
-                        size="md"
-                        borderRadius="lg"
+                    <DatePicker
+                        value={isoToDate(endOfWeek)}
+                        onChange={handleEndDateChange}
+                        placeholder="DD/MM/YYYY"
                     />
                 </VStack>
             </HStack>
