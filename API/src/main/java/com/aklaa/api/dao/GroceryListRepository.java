@@ -20,6 +20,12 @@ public interface GroceryListRepository extends JpaRepository<GroceryList, Long> 
     List<GroceryList> findByUser(User user);
     Optional<GroceryList> findByIdAndUser(Long id, User user);
 
+    @Query("SELECT DISTINCT g FROM GroceryList g " +
+           "LEFT JOIN FETCH g.groceryListIngredients gli " +
+           "LEFT JOIN FETCH gli.ingredient " +
+           "WHERE g.user = :user")
+    List<GroceryList> findByUserWithIngredients(@Param("user") User user);
+
     @Modifying
     @Query("DELETE FROM GroceryList g WHERE g.createdAt < :date")
     void deleteByCreatedAtBefore(@Param("date") LocalDateTime date);

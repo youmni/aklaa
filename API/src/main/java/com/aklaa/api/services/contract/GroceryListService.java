@@ -55,6 +55,18 @@ public interface GroceryListService {
     List<GroceryListResponseDTO> getAll(User user);
 
     /**
+     * Retrieves all grocery lists for a specific user with ingredients eagerly loaded.
+     * <p>
+     * This method fetches grocery lists with their ingredients in a single query,
+     * avoiding N+1 query problems. Optimized for bulk operations like data export.
+     * </p>
+     *
+     * @param user the user whose grocery lists should be retrieved
+     * @return a list of {@link GroceryListResponseDTO} containing grocery lists with ingredients
+     */
+    List<GroceryListResponseDTO> getAllWithIngredients(User user);
+
+    /**
      * Retrieves the ingredients of a specific grocery list with pagination.
      * <p>
      * This method fetches all ingredients in a grocery list, sorted by category and name,
