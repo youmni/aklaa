@@ -1,7 +1,6 @@
 package com.aklaa.api.dao;
 
 import com.aklaa.api.model.EmailResetToken;
-import com.aklaa.api.model.PasswordResetToken;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

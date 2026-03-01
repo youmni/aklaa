@@ -27,7 +27,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -47,7 +47,7 @@ public class GroceryListController {
 
     @AllowAuthenticated
     @PostMapping("/save")
-    public ResponseEntity<String> saveCart(@RequestParam LocalDateTime startOfWeek, @RequestParam LocalDateTime endOfWeek, HttpSession session, @AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<String> saveCart(@RequestParam OffsetDateTime startOfWeek, @RequestParam OffsetDateTime endOfWeek, HttpSession session, @AuthenticationPrincipal UserDetails userDetails) {
         List<CartDishRequestDTO> cartRequests = groceryListService.getCart(session);
         if (cartRequests.isEmpty()) {
             return ResponseEntity.badRequest().body(null);

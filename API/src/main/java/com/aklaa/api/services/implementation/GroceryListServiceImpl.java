@@ -19,7 +19,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -224,7 +225,7 @@ public class GroceryListServiceImpl implements GroceryListService {
     @Transactional
     public void deleteGroceryListsAfter1Month() {
         groceryListRepository.deleteByCreatedAtBefore(
-                LocalDateTime.now().minusMonths(1)
+                OffsetDateTime.now(ZoneOffset.UTC).minusMonths(1)
         );
     }
 }
