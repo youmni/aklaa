@@ -180,7 +180,7 @@ public class AuthServiceImpl implements AuthService {
     @Transactional
     public void deletePasswordResetTokenAutomatically() {
         resetPasswordRepository.deletePasswordResetTokenAutomatically(
-                LocalDateTime.now().minusMinutes(15)
+                OffsetDateTime.now(ZoneOffset.UTC)
         );
     }
 
@@ -188,7 +188,7 @@ public class AuthServiceImpl implements AuthService {
     @Transactional
     public void deleteEmailResetTokenAutomatically() {
         resetEmailRepository.deleteEmailResetTokenAutomatically(
-                LocalDateTime.now().minusHours(2)
+                OffsetDateTime.now(ZoneOffset.UTC)
         );
     }
 }
