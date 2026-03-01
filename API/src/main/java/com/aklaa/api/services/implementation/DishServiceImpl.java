@@ -3,8 +3,6 @@ package com.aklaa.api.services.implementation;
 import com.aklaa.api.dao.DishRepository;
 import com.aklaa.api.dao.IngredientRepository;
 import com.aklaa.api.dtos.request.DishRequestDTO;
-import com.aklaa.api.dtos.request.RecipeStepRequestDTO;
-import com.aklaa.api.dtos.response.DishIngredientResponseInfoDTO;
 import com.aklaa.api.dtos.response.DishListResponseDTO;
 import com.aklaa.api.dtos.response.DishResponseDTO;
 import com.aklaa.api.dtos.request.DishIngredientRequestInfoDTO;
@@ -84,6 +82,8 @@ public class DishServiceImpl implements DishService {
                                 Function.identity()
                         ));
 
+        List<Ingredient> newIngredients = new ArrayList<>();
+
         dto.getIngredients().forEach(info -> {
             IngredientResponseDTO dishingredient = info.getIngredient();
 
@@ -96,18 +96,34 @@ public class DishServiceImpl implements DishService {
             Ingredient ingredient = ingredientMap.get(key);
 
             if (ingredient == null) {
-                ingredient = ingredientRepository.save(
-                        Ingredient.builder()
-                                .name(dishingredient.getName())
-                                .unit(dishingredient.getUnit())
-                                .description(dishingredient.getDescription())
-                                .category(dishingredient.getCategory())
-                                .user(user)
-                                .build()
-                );
+                ingredient = Ingredient.builder()
+                        .name(dishingredient.getName())
+                        .unit(dishingredient.getUnit())
+                        .description(dishingredient.getDescription())
+                        .category(dishingredient.getCategory())
+                        .user(user)
+                        .build();
 
+                newIngredients.add(ingredient);
                 ingredientMap.put(key, ingredient);
             }
+        });
+
+        if (!newIngredients.isEmpty()) {
+            List<Ingredient> savedIngredients = ingredientRepository.saveAll(newIngredients);
+            savedIngredients.forEach(ing -> 
+                ingredientMap.put(ingredientKey(ing.getName(), ing.getUnit(), ing.getDescription()), ing)
+            );
+        }
+
+        dto.getIngredients().forEach(info -> {
+            IngredientResponseDTO dishingredient = info.getIngredient();
+            String key = ingredientKey(
+                    dishingredient.getName(),
+                    dishingredient.getUnit(),
+                    dishingredient.getDescription()
+            );
+            Ingredient ingredient = ingredientMap.get(key);
 
             dish.getDishIngredients().add(
                     dishIngredientMapper.toEntity(
@@ -139,12 +155,26 @@ public class DishServiceImpl implements DishService {
 
         dishMapper.updateEntity(dish, dto);
 
+        List<Long> ingredientIds = dto.getIngredients().stream()
+                .map(DishIngredientRequestInfoDTO::getIngredientId)
+                .toList();
+
+        Map<Long, Ingredient> ingredientMap = ingredientRepository
+                .findAllById(ingredientIds)
+                .stream()
+                .collect(Collectors.toMap(Ingredient::getId, Function.identity()));
+
         dish.replaceIngredients(
                 dto.getIngredients(),
-                ingredientId -> ingredientRepository.findById(ingredientId)
-                        .orElseThrow(() -> new NoSuchElementException(
+                ingredientId -> {
+                    Ingredient ingredient = ingredientMap.get(ingredientId);
+                    if (ingredient == null) {
+                        throw new NoSuchElementException(
                                 "Ingredient not found with id: " + ingredientId
-                        ))
+                        );
+                    }
+                    return ingredient;
+                }
         );
 
         dish.replaceSteps(dishMapper.fromRequestDTOs(dto.getSteps(), dish));

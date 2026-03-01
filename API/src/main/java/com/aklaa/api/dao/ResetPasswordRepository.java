@@ -6,13 +6,13 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.Optional;
 
 public interface ResetPasswordRepository extends JpaRepository<PasswordResetToken, Long> {
     Optional<PasswordResetToken> findByToken(String token);
 
     @Modifying
-    @Query("DELETE FROM PasswordResetToken t WHERE t.createdAt < :date")
-    void deletePasswordResetTokenAutomatically(@Param("date") LocalDateTime date);
+    @Query("DELETE FROM PasswordResetToken t WHERE t.expiresAt < :date")
+    void deletePasswordResetTokenAutomatically(@Param("date") OffsetDateTime date);
 }

@@ -19,8 +19,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static com.aklaa.api.services.implementation.UserServiceImpl.canDelete;
@@ -29,10 +31,8 @@ import static com.aklaa.api.services.implementation.UserServiceImpl.canDelete;
 @RequiredArgsConstructor
 public class GroceryListServiceImpl implements GroceryListService {
 
-    private final DishRepository dishRepository;
     private final IngredientRepository ingredientRepository;
     private final GroceryListRepository groceryListRepository;
-    private final DishMapper dishMapper;
     private final GroceryListMapper groceryListMapper;
 
     public List<CartDishRequestDTO> getCart(HttpSession session) {
@@ -72,6 +72,14 @@ public class GroceryListServiceImpl implements GroceryListService {
                         .endOfWeek(groceryList.getEndOfWeek())
                         .build()
                 )
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<GroceryListResponseDTO> getAllWithIngredients(User user) {
+        return groceryListRepository.findByUserWithIngredients(user)
+                .stream()
+                .map(groceryListMapper::toResponseDTO)
                 .collect(Collectors.toList());
     }
 
@@ -186,21 +194,28 @@ public class GroceryListServiceImpl implements GroceryListService {
 
             existingIngredients.removeAll(ingredientsToRemove);
 
-            updatedQuantities.forEach((ingredientId, quantity) -> {
-                ingredientRepository.findById(ingredientId).ifPresent(ingredient -> {
+            if (!updatedQuantities.isEmpty()) {
+                Map<Long, Ingredient> ingredientsMap = ingredientRepository
+                        .findAllById(updatedQuantities.keySet())
+                        .stream()
+                        .collect(Collectors.toMap(Ingredient::getId, Function.identity()));
 
-                    GroceryListIngredientKey key =
-                            new GroceryListIngredientKey(groceryList.getId(), ingredient.getId());
+                updatedQuantities.forEach((ingredientId, quantity) -> {
+                    Ingredient ingredient = ingredientsMap.get(ingredientId);
+                    if (ingredient != null) {
+                        GroceryListIngredientKey key =
+                                new GroceryListIngredientKey(groceryList.getId(), ingredient.getId());
 
-                    GroceryListIngredient newItem = new GroceryListIngredient();
-                    newItem.setId(key);
-                    newItem.setGroceryList(groceryList);
-                    newItem.setIngredient(ingredient);
-                    newItem.setQuantity(quantity);
+                        GroceryListIngredient newItem = new GroceryListIngredient();
+                        newItem.setId(key);
+                        newItem.setGroceryList(groceryList);
+                        newItem.setIngredient(ingredient);
+                        newItem.setQuantity(quantity);
 
-                    existingIngredients.add(newItem);
+                        existingIngredients.add(newItem);
+                    }
                 });
-            });
+            }
 
             groceryListRepository.save(groceryList);
         });
@@ -210,7 +225,7 @@ public class GroceryListServiceImpl implements GroceryListService {
     @Transactional
     public void deleteGroceryListsAfter1Month() {
         groceryListRepository.deleteByCreatedAtBefore(
-                LocalDateTime.now().minusMonths(1)
+                OffsetDateTime.now(ZoneOffset.UTC).minusMonths(1)
         );
     }
 }

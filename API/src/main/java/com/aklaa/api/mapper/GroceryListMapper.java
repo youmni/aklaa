@@ -13,7 +13,8 @@ import com.aklaa.api.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -34,8 +35,8 @@ public class GroceryListMapper {
 
     public GroceryList fromCartDishes(List<CartDishResponseDTO> cartDishes, User user) {
         GroceryList groceryList = GroceryList.builder()
-                .startOfWeek(LocalDateTime.now())
-                .endOfWeek(LocalDateTime.now().plusDays(7))
+                .startOfWeek(OffsetDateTime.now(ZoneOffset.UTC))
+                .endOfWeek(OffsetDateTime.now(ZoneOffset.UTC).plusDays(7))
                 .user(user)
                 .build();
 

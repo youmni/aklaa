@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @Data
 @AllArgsConstructor
@@ -13,6 +13,6 @@ import java.time.LocalDateTime;
 @Builder
 public class GroceryListResponseDTO {
     private Long id;
-    private LocalDateTime startOfWeek;
-    private LocalDateTime endOfWeek;
+    private OffsetDateTime startOfWeek;
+    private OffsetDateTime endOfWeek;
 }
