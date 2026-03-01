@@ -101,7 +101,7 @@ public class AuthController {
                 .ok().build();
     }
 
-    @AllowAnonymous
+    @AllowAuthenticated
     @GetMapping("/me")
     public ResponseEntity<UserDTO> getCurrentUser(@AuthenticationPrincipal UserDetails userDetails) {
         Optional<User> optionalUser = userRepository.findByEmail(userDetails.getUsername());
