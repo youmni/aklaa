@@ -76,6 +76,9 @@ public class AuthController {
         refreshTokenCookie.setMaxAge(7 * 24 * 60 * 60);
         response.addCookie(refreshTokenCookie);
 
+        auth.setAccessToken(null);
+        auth.setRefreshToken(null);
+
         return ResponseEntity
                 .ok(auth);
     }
@@ -198,6 +201,9 @@ public class AuthController {
         accessTokenCookie.setPath("/");
         accessTokenCookie.setMaxAge(10 * 60);
         response.addCookie(accessTokenCookie);
+
+        newAuthentication.setAccessToken(null);
+        newAuthentication.setRefreshToken(null);
 
         return ResponseEntity.ok(newAuthentication);
     }
