@@ -126,8 +126,8 @@ const ShoppingCart = () => {
         return (
             <Box bg={colors.bg.page} minH="100vh" py={12}>
                 <Flex justify="center" align="center" minH="60vh" direction="column" gap={4}>
-                    <Spinner size="xl" color="#083951" thickness="4px" />
-                    <Text fontSize="lg" color="gray.600">{t('common.loading')}</Text>
+                    <Spinner size="xl" color={colors.text.brand} thickness="4px" />
+                    <Text fontSize="lg" color={colors.text.secondary}>{t('common.loading')}</Text>
                 </Flex>
             </Box>
         );
