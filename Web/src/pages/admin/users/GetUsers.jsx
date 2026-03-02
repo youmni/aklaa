@@ -51,7 +51,6 @@ const GetUsers = () => {
 
             const response = await userService.getUsers(params);
             setUsers(response.data.users || []);
-            console.log(response.data);
             setTotalPages(response.data.totalPages || 0);
             setTotalElements(response.data.totalElements || 0);
         } catch (error) {

@@ -61,7 +61,9 @@
     "item": "artículo",
     "items": "artículos",
     "ingredient": "{{count}} ingrediente",
-    "ingredients": "{{count}} ingredientes"
+    "ingredients": "{{count}} ingredientes",
+    "exportSuccess": "Lista de compras exportada con éxito",
+    "exportError": "Error al exportar la lista de compras"
   },
   "edit": {
     "title": "Editar Lista de Compras",

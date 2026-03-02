@@ -192,13 +192,14 @@ const UpdateIngredient = () => {
                     left={0}
                     right={0}
                     bottom={0}
-                    bg="rgba(255,255,255,0.6)"
+                    bg={colors.bg.page}
+                    opacity={0.9}
                     display="flex"
                     alignItems="center"
                     justifyContent="center"
                     zIndex={10}
                 >
-                    <Spinner size="xl" thickness="4px" color="#083951" />
+                    <Spinner size="xl" thickness="4px" color={colors.text.brand} />
                 </Box>
             )}
             <form onSubmit={handleSubmit}>

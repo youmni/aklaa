@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface IngredientRepository extends JpaRepository<Ingredient, Long>, JpaSpecificationExecutor<Ingredient> {
     Optional<Ingredient> findByName(String name);
-    List<Ingredient> findAllByUser(User user);
-    List<Ingredient> findByUser(User user);
+    List<Ingredient> findAllByUserOrderByCategoryAscNameAsc(User user);
+    List<Ingredient> findByUserOrderByNameAsc(User user);
     Optional<Ingredient> findIngredientById(Long id);
 }

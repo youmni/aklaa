@@ -25,8 +25,8 @@ const Layout = () => {
 
   if (loading) {
     return (
-      <Flex justify="center" align="center" h="100vh">
-        <Spinner size="xl" />
+      <Flex justify="center" align="center" h="100vh" bg={colors.bg.page}>
+        <Spinner size="xl" color={colors.text.brand} thickness="4px" />
       </Flex>
     );
   }

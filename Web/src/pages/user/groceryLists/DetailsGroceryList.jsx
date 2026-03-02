@@ -10,14 +10,15 @@ import {
     Spinner,
     Flex,
     Badge,
-    Button,
+    Button
 } from '@chakra-ui/react';
-import { FaListUl, FaShoppingBasket, FaCheckCircle, FaEdit } from 'react-icons/fa';
-import { FiArrowLeft } from 'react-icons/fi';
+import { FaCheckCircle, FaEdit } from 'react-icons/fa';
+import { FiArrowLeft, FiDownload } from 'react-icons/fi';
 import { useSnackbar } from 'notistack';
 import { useTranslation } from 'react-i18next';
 import groceryListService from '../../../services/groceryListService';
 import { useThemeColors } from '../../../hooks/useThemeColors';
+import { exportGroceryListAsPDF } from '../../../utils/groceryListExport';
 
 const DetailsGroceryList = () => {
     const { t } = useTranslation('grocerylist');
@@ -37,7 +38,7 @@ const DetailsGroceryList = () => {
                 const checkedArray = JSON.parse(savedChecked);
                 setCheckedItems(new Set(checkedArray));
             } catch (error) {
-                console.error('Failed to parse checked items from localStorage:', error);
+                // Failed to parse checked items
             }
         }
     }, [id]);
@@ -52,7 +53,6 @@ const DetailsGroceryList = () => {
             const response = await groceryListService.getGroceryListIngredients(id);
             setGroceryData(response.data);
         } catch (error) {
-            console.error('Error fetching grocery list details:', error);
             enqueueSnackbar(t('details.fetchError'), { variant: 'error' });
             navigate('/groceries');
         } finally {
@@ -88,6 +88,15 @@ const DetailsGroceryList = () => {
     const formatQuantity = (quantity, unit) => {
         const formatted = quantity % 1 === 0 ? quantity.toFixed(0) : quantity.toFixed(2);
         return `${formatted} ${t(`units.${unit}`)}`;
+    };
+
+    const handleExport = async () => {
+        try {
+            await exportGroceryListAsPDF(groceryData, t, 'light');
+            enqueueSnackbar(t('details.exportSuccess'), { variant: 'success' });
+        } catch (error) {
+            enqueueSnackbar(t('details.exportError'), { variant: 'error' });
+        }
     };
 
     if (loading) {
@@ -128,6 +137,16 @@ const DetailsGroceryList = () => {
                                     {t('details.checkedItems', { checked: totalChecked, total: totalItems })}
                                 </Text>
                             </HStack>
+                            <Button
+                                variant="outline"
+                                color={colors.text.brand}
+                                borderColor={colors.border.default}
+                                onClick={handleExport}
+                                _hover={{ bg: colors.bg.tertiary }}
+                                aria-label="Export PDF"
+                            >
+                                <FiDownload />
+                            </Button>
                             <Button
                                 bg={colors.button.primary.bg}
                                 color="white"

@@ -61,7 +61,9 @@
     "item": "item",
     "items": "items",
     "ingredient": "{{count}} ingredient",
-    "ingredients": "{{count}} ingredients"
+    "ingredients": "{{count}} ingredients",
+    "exportSuccess": "Grocery list exported successfully",
+    "exportError": "Failed to export grocery list"
   },
   "edit": {
     "title": "Edit Grocery List",

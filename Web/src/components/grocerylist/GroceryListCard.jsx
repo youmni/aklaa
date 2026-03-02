@@ -69,7 +69,6 @@ const GroceryListCard = ({ list, status, onRefresh }) => {
             setIsConfirmOpen(false);
             if (onRefresh) onRefresh();
         } catch (err) {
-            console.error('Error deleting grocery list:', err);
             enqueueSnackbar(t('card.deleteError'), { variant: 'error' });
         } finally {
             setIsDeleting(false);

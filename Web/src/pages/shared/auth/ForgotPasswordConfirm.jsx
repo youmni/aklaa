@@ -104,8 +104,8 @@ const PasswordResetConfirm = () => {
 
     if (isLoading) {
         return (
-            <Box minH="100vh" display="flex" alignItems="center" justifyContent="center">
-                <Spinner size="xl" color="teal.500" />
+            <Box minH="100vh" bg={colors.bg.page} display="flex" alignItems="center" justifyContent="center">
+                <Spinner size="xl" color={colors.text.brand} thickness="4px" />
             </Box>
         );
     }
@@ -135,12 +135,12 @@ const PasswordResetConfirm = () => {
     }
 
     return (
-        <Box minH="100vh" bg="gray.50" display="flex" alignItems="center" justifyContent="center">
+        <Box minH="100vh" bg={colors.bg.page} display="flex" alignItems="center" justifyContent="center">
             <Box
                 p={8}
-                bg="white"
+                bg={colors.card.bg}
                 borderRadius="lg"
-                boxShadow="lg"
+                boxShadow={colors.card.shadow}
                 w="full"
                 maxW="md"
                 position="relative"
@@ -152,14 +152,15 @@ const PasswordResetConfirm = () => {
                         left={0}
                         right={0}
                         bottom={0}
-                        bg="rgba(255,255,255,0.6)"
+                        bg={colors.bg.page}
+                        opacity={0.9}
                         display="flex"
                         alignItems="center"
                         justifyContent="center"
                         borderRadius="lg"
                         zIndex={10}
                     >
-                        <Spinner size="xl" thickness="4px" color="teal.500" />
+                        <Spinner size="xl" thickness="4px" color={colors.text.brand} />
                     </Box>
                 )}
                 <form onSubmit={handleSubmit}>

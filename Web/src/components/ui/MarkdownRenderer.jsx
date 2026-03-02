@@ -2,8 +2,6 @@ import React from 'react';
 import { Box } from '@chakra-ui/react';
 
 const MarkdownRenderer = ({ content }) => {
-  console.log('Content:', content);
-
   return (
     <Box 
       p={6} 
