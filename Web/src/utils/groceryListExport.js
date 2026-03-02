@@ -72,7 +72,6 @@ export const exportGroceryListAsPDF = async (groceryData, t, theme = 'light') =>
 
   const formatDate = (dateInput) => {
     if (!dateInput) {
-      console.error('No date provided');
       return null;
     }
     
@@ -86,7 +85,6 @@ export const exportGroceryListAsPDF = async (groceryData, t, theme = 'light') =>
     }
     
     if (isNaN(date.getTime())) {
-      console.error('Invalid date:', dateInput);
       return null;
     }
     

@@ -82,7 +82,6 @@ const DetailsDish = () => {
                 enqueueSnackbar(t('details.exportSuccess'), { variant: 'success' });
             }
         } catch (error) {
-            console.error('Export error:', error);
             enqueueSnackbar(t('details.exportError'), { variant: 'error' });
         }
     };
