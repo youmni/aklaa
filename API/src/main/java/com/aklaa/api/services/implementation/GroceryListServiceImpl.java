@@ -120,6 +120,8 @@ public class GroceryListServiceImpl implements GroceryListService {
                             .ingredients(pagedIngredients)
                             .totalElements(totalElements)
                             .totalPages(totalPages)
+                            .startOfWeek(groceryList.getStartOfWeek() != null ? groceryList.getStartOfWeek().toLocalDate() : null)
+                            .endOfWeek(groceryList.getEndOfWeek() != null ? groceryList.getEndOfWeek().toLocalDate() : null)
                             .build();
                 })
                 .orElseGet(() -> GroceryListIngredientListResponseDTO.builder()

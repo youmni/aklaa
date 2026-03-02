@@ -61,7 +61,9 @@
     "item": "article",
     "items": "articles",
     "ingredient": "{{count}} ingrédient",
-    "ingredients": "{{count}} ingrédients"
+    "ingredients": "{{count}} ingrédients",
+    "exportSuccess": "Liste de courses exportée avec succès",
+    "exportError": "Échec de l'exportation de la liste de courses"
   },
   "edit": {
     "title": "Modifier la Liste de Courses",

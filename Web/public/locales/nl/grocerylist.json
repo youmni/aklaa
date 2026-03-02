@@ -61,7 +61,9 @@
     "item": "item",
     "items": "items",
     "ingredient": "{{count}} ingrediënt",
-    "ingredients": "{{count}} ingrediënten"
+    "ingredients": "{{count}} ingrediënten",
+    "exportSuccess": "Boodschappenlijst succesvol geëxporteerd",
+    "exportError": "Exporteren van boodschappenlijst mislukt"
   },
   "edit": {
     "title": "Boodschappenlijst Bewerken",

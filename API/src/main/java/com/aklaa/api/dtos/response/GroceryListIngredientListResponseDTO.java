@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -15,4 +16,6 @@ public class GroceryListIngredientListResponseDTO {
     private List<GroceryListIngredientResponseDTO> ingredients;
     private long totalElements;
     private int totalPages;
+    private LocalDate startOfWeek;
+    private LocalDate endOfWeek;
 }
