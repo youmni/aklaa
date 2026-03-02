@@ -76,7 +76,7 @@ public class DishServiceImpl implements DishService {
         Dish dish = dishMapper.toEntity(dto, user);
 
         Map<String, Ingredient> ingredientMap =
-                ingredientRepository.findAllByUser(user).stream()
+                ingredientRepository.findAllByUserOrderByCategoryAscNameAsc(user).stream()
                         .collect(Collectors.toMap(
                                 ing -> ingredientKey(ing.getName(), ing.getUnit(), ing.getDescription()),
                                 Function.identity()
@@ -242,7 +242,7 @@ public class DishServiceImpl implements DishService {
 
     @Override
     public List<DishResponseDTO> getAll(User user) {
-        List<Dish> dishes = dishRepository.findByUser(user);
+        List<Dish> dishes = dishRepository.findByUserOrderByNameAsc(user);
 
         return dishes.stream()
                 .map(dishMapper::toResponseDTO)

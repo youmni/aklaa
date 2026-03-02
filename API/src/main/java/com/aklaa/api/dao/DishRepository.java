@@ -8,5 +8,5 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import java.util.List;
 
 public interface DishRepository extends JpaRepository<Dish, Long>, JpaSpecificationExecutor<Dish> {
-    List<Dish> findByUser(User user);
+    List<Dish> findByUserOrderByNameAsc(User user);
 }
