@@ -1,15 +1,17 @@
 package com.aklaa.api.services.implementation;
 
-import com.aklaa.api.services.contract.MinioService;
+import com.aklaa.api.services.contract.FileStorageService;
 import io.minio.*;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
 
 @Service
-public class MinioServiceImpl implements MinioService {
+@ConditionalOnProperty(name = "storage.type", havingValue = "minio", matchIfMissing = true)
+public class MinioServiceImpl implements FileStorageService {
 
     private final MinioClient minioClient;
     private final String bucketName;
