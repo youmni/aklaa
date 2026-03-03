@@ -135,7 +135,8 @@ const CreateDish = () => {
         const file = e.target.files[0];
         if (!file) return;
 
-        if (!file.type.startsWith('image/')) {
+        const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/webp'];
+        if (!allowedTypes.includes(file.type)) {
             enqueueSnackbar(t('create.uploadImageTypeError'), { variant: 'error' });
             return;
         }
@@ -518,13 +519,13 @@ const CreateDish = () => {
                                         <VStack gap={2}>
                                             <FaUpload size={24} color={colors.text.brand} />
                                             <Text fontWeight="medium" color={colors.text.brand}>{t('create.uploadImageButton')}</Text>
-                                            <Text fontSize="sm" color={colors.text.secondary}>PNG, JPG up to 10MB</Text>
+                                            <Text fontSize="sm" color={colors.text.secondary}>PNG, JPG, WebP up to 10MB</Text>
                                         </VStack>
                                     </Button>
                                     <Input
                                         id="image-upload"
                                         type="file"
-                                        accept="image/*"
+                                        accept="image/png,image/jpeg,image/jpg,image/webp"
                                         onChange={handleImageUpload}
                                         display="none"
                                     />

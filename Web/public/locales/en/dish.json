@@ -64,7 +64,7 @@
     "addStepButton": "Add Step",
     "submitButton": "Create Dish",
     "fetchIngredientsError": "Failed to fetch ingredients",
-    "uploadImageTypeError": "Please upload an image file",
+    "uploadImageTypeError": "Only PNG, JPEG, and WebP images are allowed",
     "uploadImageSuccess": "Image uploaded successfully",
     "uploadImageError": "Failed to upload image",
     "duplicateIngredientWarning": "This ingredient has already been added",

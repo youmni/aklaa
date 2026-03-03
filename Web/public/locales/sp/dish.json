@@ -64,7 +64,7 @@
     "addStepButton": "Agregar Paso",
     "submitButton": "Crear Plato",
     "fetchIngredientsError": "Error al obtener ingredientes",
-    "uploadImageTypeError": "Por favor suba un archivo de imagen",
+    "uploadImageTypeError": "Solo se permiten imágenes PNG, JPEG y WebP",
     "uploadImageSuccess": "Imagen subida exitosamente",
     "uploadImageError": "Error al subir imagen",
     "duplicateIngredientWarning": "Este ingrediente ya ha sido agregado",

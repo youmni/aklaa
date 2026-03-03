@@ -159,12 +159,10 @@ export const exportDishAsPDF = async (dish, t, theme = 'dark') => {
             
             resolve();
           } catch (e) {
-            console.error('Error adding image to PDF:', e);
             resolve();
           }
         };
         img.onerror = (e) => {
-          console.error('Error loading image:', e);
           resolve();
         };
         img.src = imageDataURL;
@@ -172,7 +170,6 @@ export const exportDishAsPDF = async (dish, t, theme = 'dark') => {
       
       yPosition += imgHeight + 15;
     } catch (error) {
-      console.error('Error processing image for PDF:', error);
       // Continue without image if there's an error
     }
   }

@@ -64,7 +64,7 @@
     "addStepButton": "Stap Toevoegen",
     "submitButton": "Gerecht Aanmaken",
     "fetchIngredientsError": "Ingrediënten ophalen mislukt",
-    "uploadImageTypeError": "Upload een afbeeldingsbestand",
+    "uploadImageTypeError": "Alleen PNG, JPEG en WebP afbeeldingen zijn toegestaan",
     "uploadImageSuccess": "Afbeelding succesvol geüpload",
     "uploadImageError": "Afbeelding uploaden mislukt",
     "duplicateIngredientWarning": "Dit ingrediënt is al toegevoegd",

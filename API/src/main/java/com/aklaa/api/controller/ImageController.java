@@ -25,6 +25,16 @@ public class ImageController {
     @AllowAuthenticated
     @PostMapping("/upload")
     public ResponseEntity<?> uploadImage(@RequestParam("file") MultipartFile file) throws Exception {
+        // Validate file type
+        String contentType = file.getContentType();
+        if (contentType == null || 
+            (!contentType.equals("image/png") && 
+             !contentType.equals("image/jpeg") && 
+             !contentType.equals("image/jpg") && 
+             !contentType.equals("image/webp"))) {
+            throw new ImageProxyException("Only PNG, JPEG, and WebP images are allowed");
+        }
+        
         String publicUrl = fileStorageService.uploadFile(file);
         return ResponseEntity.ok(publicUrl);
     }

@@ -64,7 +64,7 @@
     "addStepButton": "Ajouter une Étape",
     "submitButton": "Créer le Plat",
     "fetchIngredientsError": "Échec de la récupération des ingrédients",
-    "uploadImageTypeError": "Veuillez télécharger un fichier image",
+    "uploadImageTypeError": "Seules les images PNG, JPEG et WebP sont autorisées",
     "uploadImageSuccess": "Image téléchargée avec succès",
     "uploadImageError": "Échec du téléchargement de l'image",
     "duplicateIngredientWarning": "Cet ingrédient a déjà été ajouté",
