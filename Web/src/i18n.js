@@ -2,7 +2,7 @@ import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import Backend from 'i18next-http-backend';
 
-const savedLanguage = localStorage.getItem('preferredLanguage') || 'sp';
+const savedLanguage = localStorage.getItem('preferredLanguage') || 'en';
 
 i18n
   .use(Backend)
