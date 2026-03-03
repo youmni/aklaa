@@ -98,6 +98,13 @@ public class GlobalExceptionHandler {
                 .body(new AuthResponseDTO(false, ex.getMessage(), null, null));
     }
 
+    @ExceptionHandler(ImageProxyException.class)
+    public ResponseEntity<String> handleImageProxyException(ImageProxyException ex) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_GATEWAY)
+                .body("Failed to proxy image: " + ex.getMessage());
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleGeneralException(Exception ex) {
         return ResponseEntity

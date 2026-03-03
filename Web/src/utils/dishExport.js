@@ -1,4 +1,5 @@
 import jsPDF from 'jspdf';
+import imageService from '../services/imageService';
 
 /**
  * Export dish data as JSON file
@@ -128,9 +129,11 @@ export const exportDishAsPDF = async (dish, t, theme = 'dark') => {
       const imgHeight = 90;
       const imgWidth = contentWidth;
       
+      // Fetch image as base64 data URL
+      const imageDataURL = await imageService.fetchImageAsDataURL(dish.imageUrl);
+      
       await new Promise((resolve, reject) => {
         const img = new Image();
-        img.crossOrigin = 'anonymous';
         img.onload = () => {
           try {
             const cornerRadius = 8;
@@ -156,18 +159,21 @@ export const exportDishAsPDF = async (dish, t, theme = 'dark') => {
             
             resolve();
           } catch (e) {
+            console.error('Error adding image to PDF:', e);
             resolve();
           }
         };
-        img.onerror = () => {
+        img.onerror = (e) => {
+          console.error('Error loading image:', e);
           resolve();
         };
-        img.src = dish.imageUrl;
+        img.src = imageDataURL;
       });
       
       yPosition += imgHeight + 15;
     } catch (error) {
-      // Error loading image
+      console.error('Error processing image for PDF:', error);
+      // Continue without image if there's an error
     }
   }
 
